@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["prepare_freethreaded_python","Prepares the use of python in a free-threaded context."]],"struct":[["GILGuard","RAII type that represents an acquired GIL."]]});

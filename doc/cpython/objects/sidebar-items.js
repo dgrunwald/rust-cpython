@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["exc","This module contains the python exception types."],["oldstyle","This module contains support for old-style classes. Only available in Python 2.x."]]});

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `py_module_initializer!` macro in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, py_module_initializer!">
+
+    <title>cpython::py_module_initializer! - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_module_initializer!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'><a href='index.html'>cpython</a>::<wbr><a class='macro' href=''>py_module_initializer!</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-19809' class='srclink' href='../src/cpython/lib.rs.html#155-167'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_module_initializer</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>init_funcname</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>init</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> {
+        <span class='attribute'>#[<span class='ident'>no_mangle</span>]</span>
+        <span class='kw'>pub</span> <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>init_funcname</span>() {
+            <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>Python</span>::<span class='ident'>assume_gil_acquired</span>() };
+            <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { ::<span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CStr</span>::<span class='ident'>from_ptr</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>, <span class='string'>&quot;\0&quot;</span>).<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> _) };
+            <span class='kw'>match</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>PyModule</span>::<span class='ident'>_init</span>(<span class='ident'>py</span>, <span class='ident'>name</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>init</span>) {
+                <span class='prelude-val'>Ok</span>(()) <span class='op'>=&gt;</span> (),
+                <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='ident'>e</span>.<span class='ident'>restore</span>()
+            }
+        }
+    }
+}
+</pre>
+<div class='docblock'><p>Expands to an <code>extern &quot;C&quot;</code> function that allows python to load
+the rust code as a python extension module.</p>
+
+<p>The macro takes three arguments:</p>
+
+<ol>
+<li>The module name as a string literal.</li>
+<li>The name of the init function as an identifier.
+The function must be named <code>init$module_name</code> so that python 2.7 can load the module.
+Note: this parameter will be removed in a future version
+(once Rust supports <code>concat_ident!</code> as function name).</li>
+<li>A function or lambda of type <code>Fn(Python&lt;&#39;p&gt;, &amp;PyModule&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, ()&gt;</code>.
+This function will be called when the module is imported, and is responsible
+for adding the module&#39;s members.</li>
+</ol>
+
+<h1 id="example" class='section-header'><a
+                           href="#example">Example</a></h1><pre id='rust-example-rendered' class='rust '>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_type</span> <span class='op'>=</span> <span class='string'>&quot;dylib&quot;</span>]</span>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>cpython</span>;
+<span class='kw'>use</span> <span class='ident'>cpython</span>::{<span class='ident'>Python</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>};
+
+<span class='macro'>py_module_initializer</span><span class='macro'>!</span>(<span class='string'>&quot;example&quot;</span>, <span class='ident'>initexample</span>, <span class='op'>|</span><span class='ident'>py</span>, <span class='ident'>m</span><span class='op'>|</span> {
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='string'>&quot;__doc__&quot;</span>, <span class='string'>&quot;Module documentation string&quot;</span>));
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='string'>&quot;run&quot;</span>, <span class='macro'>py_func</span><span class='macro'>!</span>(<span class='ident'>py</span>, <span class='ident'>run</span>)));
+    <span class='prelude-val'>Ok</span>(())
+});
+ 
+<span class='kw'>fn</span> <span class='ident'>run</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>args</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyTuple</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
+    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Rust says: Hello Python!&quot;</span>);
+    <span class='prelude-val'>Ok</span>(<span class='ident'>py</span>.<span class='prelude-val'>None</span>())
+}
+</pre>
+
+<p>The code must be compiled into a file <code>example.so</code>.</p>
+
+<pre><code class="language-bash">rustc example.rs -o example.so
+</code></pre>
+
+<p>It can then be imported into python:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; import example
+&gt;&gt;&gt; example.run()
+Rust says: Hello Python!
+</code></pre>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cpython";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

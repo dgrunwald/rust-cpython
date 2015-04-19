@@ -1,0 +1,10 @@
+(function() {var implementors = {};
+implementors['cpython'] = ["impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a>&lt;'p&gt;","impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;",];
+
+            if (window.register_implementors) {
+                window.register_implementors(implementors);
+            } else {
+                window.pending_implementors = implementors;
+            }
+        
+})()

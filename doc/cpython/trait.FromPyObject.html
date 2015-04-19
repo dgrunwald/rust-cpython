@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `FromPyObject` trait in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, FromPyObject">
+
+    <title>cpython::FromPyObject - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'FromPyObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>FromPyObject</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-1356' class='srclink' href='../src/cpython/conversion.rs.html#74-76'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait FromPyObject&lt;'p, 's&gt; {
+    fn <a href='#tymethod.from_py_object' class='fnname'>from_py_object</a>(s: &amp;'s <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, Self&gt;;
+}</pre><div class='docblock'><p>FromPyObject is implemented by various types that can be extracted from a python object.</p>
+</div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.from_py_object' class='method stab '><code>fn <a href='#tymethod.from_py_object' class='fnname'>from_py_object</a>(s: &amp;'s <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, Self&gt;</code></h3></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><code>impl&lt;'p, 's, T&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for T <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt;</span></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a class='enum' href='http://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'s, <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
+<li><code>impl&lt;'p, 'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 'a&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A,)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, E: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D, E)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, E: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, F: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D, E, F)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, E: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, F: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, G: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D, E, F, G)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, E: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, F: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, G: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, H: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D, E, F, G, H)</a></code></li>
+<li><code>impl&lt;'p, 's, A: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, B: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, C: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, D: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, E: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, F: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, G: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, H: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;, I: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(A, B, C, D, E, F, G, H, I)</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
+<li><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p, 's&gt; for <a href='http://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
+</ul><script type="text/javascript" async
+                              src="../implementors/cpython/trait.FromPyObject.js">
+                      </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cpython";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
