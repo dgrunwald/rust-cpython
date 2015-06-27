@@ -42,40 +42,46 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>Python</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-44' class='srclink' href='../src/cpython/python.rs.html#41'>[src]</a></span></h1>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-43' class='srclink' href='../src/cpython/python.rs.html#37' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Python&lt;'p&gt;(_);</pre><div class='docblock'><p>Marker type that indicates that the GIL is currently held.</p>
 
-<p>The &#39;Python&#39; struct is a zero-size marker struct that is required for most python operations.
-This is used to indicate that the operation accesses/modifies the python interpreter state,
-and thus can only be called if the python interpreter is initialized and the
-python global interpreter lock (GIL) is acquired.
-The lifetime <code>&#39;p</code> represents the lifetime of the python interpreter.</p>
+<p>The &#39;Python&#39; struct is a zero-size marker struct that is required for most Python operations.
+This is used to indicate that the operation accesses/modifies the Python interpreter state,
+and thus can only be called if the Python interpreter is initialized and the
+Python global interpreter lock (GIL) is acquired.
+The lifetime <code>&#39;p</code> represents the lifetime of the Python interpreter.</p>
 
 <p>You can imagine the GIL to be a giant <code>Mutex&lt;PythonInterpreterState&gt;</code>.
 The type <code>Python&lt;&#39;p&gt;</code> then acts like a reference <code>&amp;&#39;p PythonInterpreterState</code>.</p>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.assume_gil_acquired' class='method'><code>unsafe fn <a href='#method.assume_gil_acquired' class='fnname'>assume_gil_acquired</a>() -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Retrieve python instance under the assumption that the GIL is already acquired at this point,
-and stays acquired for the lifetime &#39;p</p>
+<div class='docblock'><p>Retrieve Python instance under the assumption that the GIL is already acquired at this point,
+and stays acquired for the lifetime <code>&#39;p</code>.</p>
+
+<p>Because the output lifetime <code>&#39;p</code> is not connected to any input parameter,
+care must be taken that the compiler infers an appropriate lifetime for <code>&#39;p</code>
+when calling this function.</p>
 </div><h4 id='method.acquire_gil' class='method'><code>fn <a href='#method.acquire_gil' class='fnname'>acquire_gil</a>() -&gt; <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h4>
-<div class='docblock'><p>Acquires the global interpreter lock, which allows access to the Python runtime.
-If the python runtime is not already initialized, this function will initialize it.
-Note that in this case, the python runtime will not have any main thread, and will
-not deliver signals like KeyboardInterrupt.</p>
+<div class='docblock'><p>Acquires the global interpreter lock, which allows access to the Python runtime.</p>
+
+<p>If the Python runtime is not already initialized, this function will initialize it.
+See <a href="fn.prepare_freethreaded_python.html">prepare_freethreaded_python()</a> for details.</p>
 </div><h4 id='method.allow_threads' class='method'><code>unsafe fn <a href='#method.allow_threads' class='fnname'>allow_threads</a>&lt;T, F&gt;(self, f: F) -&gt; T <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; T</span></code></h4>
-<div class='docblock'><p>Releases the GIL and allows the use of python on other threads.
-Unsafe because we do not ensure that existing references to python objects
+<div class='docblock'><p>Releases the GIL and allows the use of Python on other threads.
+Unsafe because we do not ensure that existing references to Python objects
 are not accessed within the closure.</p>
 </div><h4 id='method.None' class='method'><code>fn <a href='#method.None' class='fnname'>None</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Gets the python builtin value <code>None</code>.</p>
+<div class='docblock'><p>Gets the Python builtin value <code>None</code>.</p>
 </div><h4 id='method.True' class='method'><code>fn <a href='#method.True' class='fnname'>True</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Gets the python builtin value <code>True</code>.</p>
+<div class='docblock'><p>Gets the Python builtin value <code>True</code>.</p>
 </div><h4 id='method.False' class='method'><code>fn <a href='#method.False' class='fnname'>False</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Gets the python builtin value <code>False</code>.</p>
+<div class='docblock'><p>Gets the Python builtin value <code>False</code>.</p>
 </div><h4 id='method.get_type' class='method'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>&lt;T&gt;(self) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>&lt;'p&gt;</span></code></h4>
-<div class='docblock'><p>Gets the python type object for type T.</p>
+<div class='docblock'><p>Gets the Python type object for type T.</p>
 </div><h4 id='method.import' class='method'><code>fn <a href='#method.import' class='fnname'>import</a>(self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;&gt;</code></h4>
-<div class='docblock'><p>Import the python module with the specified name.</p>
+<div class='docblock'><p>Import the Python module with the specified name.</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
 <h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'></div></section>
@@ -110,6 +116,10 @@ are not accessed within the closure.</p>
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

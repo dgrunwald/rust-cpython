@@ -308,6 +308,7 @@
 <span id="266">266</span>
 <span id="267">267</span>
 <span id="268">268</span>
+<span id="269">269</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -334,7 +335,7 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>libc</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>ToPythonPointer</span>};
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>};
+<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>, <span class='ident'>PyString</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>, <span class='ident'>result_from_owned_ptr</span>, <span class='ident'>error_on_minusone</span>};
 
@@ -343,7 +344,7 @@
     <span class='doccomment'>/// Determines whether this object has the given attribute.</span>
     <span class='doccomment'>/// This is equivalent to the Python expression &#39;hasattr(self, attr_name)&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>hasattr</span><span class='op'>&lt;</span><span class='ident'>N</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>bool</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>hasattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>bool</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='ident'>attr_name</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='op'>|</span><span class='ident'>attr_name</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
             <span class='prelude-val'>Ok</span>(<span class='ident'>ffi</span>::<span class='ident'>PyObject_HasAttr</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>attr_name</span>) <span class='op'>!=</span> <span class='number'>0</span>)
         })
@@ -352,7 +353,7 @@
     <span class='doccomment'>/// Retrieves an attribute value.</span>
     <span class='doccomment'>/// This is equivalent to the Python expression &#39;self.attr_name&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>getattr</span><span class='op'>&lt;</span><span class='ident'>N</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>getattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
         <span class='ident'>attr_name</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>attr_name</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
             <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>,
@@ -363,7 +364,7 @@
     <span class='doccomment'>/// Sets an attribute value.</span>
     <span class='doccomment'>/// This is equivalent to the Python expression &#39;self.attr_name = value&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>setattr</span><span class='op'>&lt;</span><span class='ident'>N</span>: ?<span class='ident'>Sized</span>, <span class='ident'>V</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>N</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span><span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, ()<span class='op'>&gt;</span>
+    <span class='kw'>fn</span> <span class='ident'>setattr</span><span class='op'>&lt;</span><span class='ident'>N</span>, <span class='ident'>V</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='ident'>N</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, ()<span class='op'>&gt;</span>
         <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>V</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>
     {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
@@ -377,7 +378,7 @@
     <span class='doccomment'>/// Deletes an attribute.</span>
     <span class='doccomment'>/// This is equivalent to the Python expression &#39;del self.attr_name&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>delattr</span><span class='op'>&lt;</span><span class='ident'>N</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, ()<span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>delattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>attr_name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, ()<span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
         <span class='ident'>attr_name</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>attr_name</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
             <span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
@@ -385,13 +386,13 @@
         })
     }
 
-    <span class='doccomment'>/// Compares two python objects.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression &#39;cmp(self, other)&#39;.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>compare</span><span class='op'>&lt;</span><span class='ident'>O</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='ident'>O</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>Ordering</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>O</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='doccomment'>/// Compares two Python objects.</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression &#39;cmp(self, other)&#39;.</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
+    <span class='kw'>fn</span> <span class='ident'>compare</span><span class='op'>&lt;</span><span class='ident'>O</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='ident'>O</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>Ordering</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>O</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
         <span class='ident'>other</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>other</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> : <span class='ident'>libc</span>::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> : <span class='ident'>libc</span>::<span class='ident'>c_int</span> <span class='op'>=</span> <span class='op'>-</span><span class='number'>1</span>;
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
                 <span class='ident'>ffi</span>::<span class='ident'>PyObject_Cmp</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>other</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>result</span>)));
             <span class='prelude-val'>Ok</span>(<span class='kw'>if</span> <span class='ident'>result</span> <span class='op'>&lt;</span> <span class='number'>0</span> {
@@ -405,32 +406,33 @@
     }
 
     <span class='doccomment'>/// Compute the string representation of self.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression &#39;repr(self)&#39;.</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression &#39;repr(self)&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>repr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='ident'>result_from_owned_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='ident'>ffi</span>::<span class='ident'>PyObject_Repr</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
         }
     }
-    
+
     <span class='doccomment'>/// Compute the string representation of self.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression &#39;str(self)&#39;.</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression &#39;str(self)&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>str</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='ident'>result_from_owned_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='ident'>ffi</span>::<span class='ident'>PyObject_Str</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
         }
     }
-    
+
     <span class='doccomment'>/// Compute the unicode string representation of self.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression &#39;unistr(self)&#39;.</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression &#39;unistr(self)&#39;.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
     <span class='kw'>fn</span> <span class='ident'>unistr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='ident'>result_from_owned_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='ident'>ffi</span>::<span class='ident'>PyObject_Unicode</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
         }
     }
-    
+
     <span class='doccomment'>/// Determines whether this object is callable.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>is_callable</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
@@ -438,28 +440,28 @@
             <span class='ident'>ffi</span>::<span class='ident'>PyCallable_Check</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) <span class='op'>!=</span> <span class='number'>0</span>
         }
     }
-    
+
     <span class='doccomment'>/// Calls the object.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;self(*args, **kwargs)&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;self(*args, **kwargs)&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>call</span><span class='op'>&lt;</span><span class='ident'>A</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>args</span>: <span class='kw-2'>&amp;</span><span class='ident'>A</span>, <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
+    <span class='kw'>fn</span> <span class='ident'>call</span><span class='op'>&lt;</span><span class='ident'>A</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>args</span>: <span class='ident'>A</span>, <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
       <span class='kw'>where</span> <span class='ident'>A</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>ObjectType</span><span class='op'>=</span><span class='ident'>PyTuple</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
         <span class='ident'>args</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>args</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
             <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyObject_Call</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>args</span>, <span class='ident'>kwargs</span>.<span class='ident'>as_ptr</span>()))
         })
     }
-    
+
     <span class='doccomment'>/// Calls a method on the object.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;self.name(*args, **kwargs)&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;self.name(*args, **kwargs)&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>call_method</span><span class='op'>&lt;</span><span class='ident'>A</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>args</span>: <span class='kw-2'>&amp;</span><span class='ident'>A</span>, <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
+    <span class='kw'>fn</span> <span class='ident'>call_method</span><span class='op'>&lt;</span><span class='ident'>A</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>args</span>: <span class='ident'>A</span>, <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
       <span class='kw'>where</span> <span class='ident'>A</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>ObjectType</span><span class='op'>=</span><span class='ident'>PyTuple</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>getattr</span>(<span class='ident'>name</span>)).<span class='ident'>call</span>(<span class='ident'>args</span>, <span class='ident'>kwargs</span>)
     }
-    
+
     <span class='doccomment'>/// Retrieves the hash code of the object.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;hash(self)&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;hash(self)&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>libc</span>::<span class='ident'>c_long</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyObject_Hash</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) };
@@ -471,7 +473,7 @@
     }
     
     <span class='doccomment'>/// Returns whether the object is considered to be true.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;not not self&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;not not self&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>is_true</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>bool</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyObject_IsTrue</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) };
@@ -483,18 +485,18 @@
     }
     
     <span class='doccomment'>/// Returns the length of the sequence or mapping.</span>
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;len(self)&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;len(self)&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_ssize_t</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>usize</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyObject_Size</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) };
         <span class='kw'>if</span> <span class='ident'>v</span> <span class='op'>==</span> <span class='op'>-</span><span class='number'>1</span> {
             <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='self'>self</span>.<span class='ident'>python</span>()))
         } <span class='kw'>else</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>v</span>)
+            <span class='prelude-val'>Ok</span>(<span class='ident'>v</span> <span class='kw'>as</span> <span class='ident'>usize</span>)
         }
     }
     
-    <span class='doccomment'>/// This is equivalent to the python expression: &#39;self[key]&#39;</span>
+    <span class='doccomment'>/// This is equivalent to the Python expression: &#39;self[key]&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>get_item</span><span class='op'>&lt;</span><span class='ident'>K</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>key</span>: <span class='ident'>K</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> <span class='kw'>where</span> <span class='ident'>K</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
@@ -562,7 +564,7 @@ impl &lt;&#39;p&gt; PythonObject&lt;&#39;p&gt; for PyIterator&lt;&#39;p&gt; {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span> : <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>fmt</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>use</span> <span class='ident'>objectprotocol</span>::<span class='ident'>ObjectProtocol</span>;
         <span class='kw'>let</span> <span class='ident'>repr_obj</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>str</span>().<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
-        <span class='kw'>let</span> <span class='ident'>repr</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>repr_obj</span>.<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>Cow</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;&gt;</span>().<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
+        <span class='kw'>let</span> <span class='ident'>repr</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>PyString</span>::<span class='ident'>extract_lossy</span>(<span class='kw-2'>&amp;</span><span class='ident'>repr_obj</span>).<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
         <span class='ident'>f</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>repr</span>)
     }
 }
@@ -571,7 +573,7 @@ impl &lt;&#39;p&gt; PythonObject&lt;&#39;p&gt; for PyIterator&lt;&#39;p&gt; {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span> : <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>fmt</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>use</span> <span class='ident'>objectprotocol</span>::<span class='ident'>ObjectProtocol</span>;
         <span class='kw'>let</span> <span class='ident'>repr_obj</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>repr</span>().<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
-        <span class='kw'>let</span> <span class='ident'>repr</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>repr_obj</span>.<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>Cow</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;&gt;</span>().<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
+        <span class='kw'>let</span> <span class='ident'>repr</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>PyString</span>::<span class='ident'>extract_lossy</span>(<span class='kw-2'>&amp;</span><span class='ident'>repr_obj</span>).<span class='ident'>map_err</span>(<span class='op'>|</span>_<span class='op'>|</span> <span class='ident'>fmt</span>::<span class='ident'>Error</span>));
         <span class='ident'>f</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>repr</span>)
     }
 }
@@ -610,6 +612,10 @@ impl &lt;&#39;p&gt; PythonObject&lt;&#39;p&gt; for PyIterator&lt;&#39;p&gt; {
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

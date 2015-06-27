@@ -42,31 +42,46 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>PyModule</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-2611' class='srclink' href='../src/cpython/objects/mod.rs.html#34'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct PyModule&lt;'p&gt;(_);</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;&gt;</code></h4>
-<div class='docblock'><p>Create a new module object with the <strong>name</strong> attribute set to name.</p>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-2614' class='srclink' href='../src/cpython/objects/module.rs.html#30' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PyModule&lt;'p&gt;(_);</pre><div class='docblock'><p>Represents a Python module object.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;&gt;</code></h4>
+<div class='docblock'><p>Create a new module object with the <code>__name__</code> attribute set to name.</p>
 </div><h4 id='method.import' class='method'><code>fn <a href='#method.import' class='fnname'>import</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;&gt;</code></h4>
-<div class='docblock'><p>Import the python module with the specified name.</p>
+<div class='docblock'><p>Import the Python module with the specified name.</p>
 </div><h4 id='method.dict' class='method'><code>fn <a href='#method.dict' class='fnname'>dict</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Return the dictionary object that implements module‘s namespace;
-this object is the same as the <strong>dict</strong> attribute of the module object.</p>
+<div class='docblock'><p>Return the dictionary object that implements module&#39;s namespace;
+this object is the same as the <code>__dict__</code> attribute of the module object.</p>
 </div><h4 id='method.name' class='method'><code>fn <a href='#method.name' class='fnname'>name</a>&lt;'a&gt;(&amp;'a self) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, &amp;'a <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
 <div class='docblock'><p>Gets the module name.</p>
 
-<p>May fail if the module does not have a <strong>name</strong> attribute.</p>
+<p>May fail if the module does not have a <code>__name__</code> attribute.</p>
 </div><h4 id='method.filename' class='method'><code>fn <a href='#method.filename' class='fnname'>filename</a>&lt;'a&gt;(&amp;'a self) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, &amp;'a <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
 <div class='docblock'><p>Gets the module filename.</p>
 
-<p>May fail if the module does not have a <strong>file</strong> attribute.</p>
+<p>May fail if the module does not have a <code>__file__</code> attribute.</p>
 </div><h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt;</code></h4>
-<div class='docblock'><p>Gets a member from the module.</p>
+<div class='docblock'><p>Gets a member from the module.
+This is equivalent to the Python expression: <code>getattr(module, name)</code></p>
+</div><h4 id='method.call' class='method'><code>fn <a href='#method.call' class='fnname'>call</a>&lt;A&gt;(&amp;self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, args: A, kwargs: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt; <span class='where'>where A: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p, ObjectType=<a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;&gt;</span></code></h4>
+<div class='docblock'><p>Calls a function in the module.
+This is equivalent to the Python expression: <code>getattr(module, name)(*args, **kwargs)</code></p>
 </div><h4 id='method.add' class='method'><code>fn <a href='#method.add' class='fnname'>add</a>&lt;V&gt;(&amp;self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, value: V) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt; <span class='where'>where V: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p&gt;</span></code></h4>
 <div class='docblock'><p>Adds a member to the module.</p>
 
 <p>This is a convenience function which can be used from the module&#39;s initialization function.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.ToPythonPointer.html' title='cpython::ToPythonPointer'>ToPythonPointer</a> for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.as_ptr' class='method'><code>fn <a href='../cpython/trait.ToPythonPointer.html#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../python27_sys/object/struct.PyObject.html' title='python27_sys::object::PyObject'>PyObject</a></a></code></h4>
-<h4 id='method.steal_ptr' class='method'><code>fn <a href='../cpython/trait.ToPythonPointer.html#method.steal_ptr' class='fnname'>steal_ptr</a>(self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../python27_sys/object/struct.PyObject.html' title='python27_sys::object::PyObject'>PyObject</a></a></code></h4>
+</div><h4 id='method.add_type' class='method'><code>fn <a href='#method.add_type' class='fnname'>add_type</a>&lt;T&gt;(&amp;self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T&gt; <span class='where'>where T: 'p + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></h4>
+<div class='docblock'><p>Adds a new extension type to the module.</p>
+
+<p>This is a convenience function that creates a new <code>PyRustTypeBuilder</code> and
+sets <code>new_type.__module__</code> to this module&#39;s name.
+The new type will be added to this module when <code>finish()</code> is called on the builder.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Clone returns another reference to the Python object,
+thus incrementing the reference count by 1.</p>
+</div><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; Self</code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
 <h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
 <h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self</code></h4>
@@ -75,8 +90,6 @@ this object is the same as the <strong>dict</strong> attribute of the module obj
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.downcast_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_from' class='fnname'>downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
 <h4 id='method.downcast_borrow_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.type_object' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithTypeObject.html#method.type_object' class='fnname'>type_object</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></h4>
-<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -109,6 +122,10 @@ this object is the same as the <strong>dict</strong> attribute of the module obj
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

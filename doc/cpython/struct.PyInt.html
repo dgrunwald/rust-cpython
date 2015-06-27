@@ -42,14 +42,29 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>PyInt</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-8960' class='srclink' href='../src/cpython/objects/mod.rs.html#34'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct PyInt&lt;'p&gt;(_);</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, val: <a class='type' href='../libc/types/os/arch/c95/type.c_long.html' title='libc::types::os::arch::c95::c_long'>c_long</a>) -&gt; <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Creates a new python <code>int</code> object.</p>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-7545' class='srclink' href='../src/cpython/objects/num.rs.html#42' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PyInt&lt;'p&gt;(_);</pre><div class='docblock'><p>Represents a Python <code>int</code> object.</p>
+
+<p>Note that in Python 2.x, <code>int</code> and <code>long</code> are different types.
+When rust-cpython is compiled for Python 3.x,
+<code>PyInt</code> and <code>PyLong</code> are aliases for the same type, which
+corresponds to a Python <code>int</code>.</p>
+
+<p>You can usually avoid directly working with this type
+by using <a href="trait.ToPyObject.html">ToPyObject</a>
+and <a href="struct.PyObject.html#method.extract">extract</a>
+with the primitive Rust integer types.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, val: <a class='type' href='../libc/types/os/arch/c95/type.c_long.html' title='libc::types::os::arch::c95::c_long'>c_long</a>) -&gt; <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h4>
+<div class='docblock'><p>Creates a new Python <code>int</code> object.</p>
 </div><h4 id='method.value' class='method'><code>fn <a href='#method.value' class='fnname'>value</a>(&amp;self) -&gt; <a class='type' href='../libc/types/os/arch/c95/type.c_long.html' title='libc::types::os::arch::c95::c_long'>c_long</a></code></h4>
 <div class='docblock'><p>Gets the value of this integer.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.ToPythonPointer.html' title='cpython::ToPythonPointer'>ToPythonPointer</a> for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.as_ptr' class='method'><code>fn <a href='../cpython/trait.ToPythonPointer.html#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../python27_sys/object/struct.PyObject.html' title='python27_sys::object::PyObject'>PyObject</a></a></code></h4>
-<h4 id='method.steal_ptr' class='method'><code>fn <a href='../cpython/trait.ToPythonPointer.html#method.steal_ptr' class='fnname'>steal_ptr</a>(self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../python27_sys/object/struct.PyObject.html' title='python27_sys::object::PyObject'>PyObject</a></a></code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Clone returns another reference to the Python object,
+thus incrementing the reference count by 1.</p>
+</div><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; Self</code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
 <h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
 <h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self</code></h4>
@@ -58,8 +73,6 @@
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.downcast_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_from' class='fnname'>downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
 <h4 id='method.downcast_borrow_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
 </div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.type_object' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithTypeObject.html#method.type_object' class='fnname'>type_object</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a>&lt;'p&gt;</code></h4>
-<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -92,6 +105,10 @@
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

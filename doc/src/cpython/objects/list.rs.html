@@ -150,6 +150,48 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -177,6 +219,9 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='self'>self</span>, <span class='ident'>Py_ssize_t</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ToPyObject</span>, <span class='ident'>FromPyObject</span>};
 
+<span class='doccomment'>/// Represents a Python `list`.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>);
+
 <span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='ident'>PyList</span>, <span class='ident'>PyList_Check</span>, <span class='ident'>PyList_Type</span>);
 
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
@@ -186,7 +231,7 @@
             <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyList_New</span>(<span class='ident'>elements</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>);
             <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='ident'>err</span>::<span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>).<span class='ident'>unwrap</span>().<span class='ident'>unchecked_cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PyList</span><span class='op'>&gt;</span>();
             <span class='kw'>for</span> (<span class='ident'>i</span>, <span class='ident'>e</span>) <span class='kw'>in</span> <span class='ident'>elements</span>.<span class='ident'>iter</span>().<span class='ident'>enumerate</span>() {
-                <span class='ident'>ffi</span>::<span class='ident'>PyList_SET_ITEM</span>(<span class='ident'>ptr</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>e</span>.<span class='ident'>clone</span>().<span class='ident'>steal_ptr</span>());
+                <span class='ident'>ffi</span>::<span class='ident'>PyList_SetItem</span>(<span class='ident'>ptr</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>e</span>.<span class='ident'>clone</span>().<span class='ident'>steal_ptr</span>());
             }
             <span class='ident'>t</span>
         }
@@ -195,9 +240,9 @@
     <span class='doccomment'>/// Gets the length of the list.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-        <span class='comment'>// non-negative Py_ssize_t should always fit into Rust uint</span>
+        <span class='comment'>// non-negative Py_ssize_t should always fit into Rust usize</span>
         <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyList_GET_SIZE</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) <span class='kw'>as</span> <span class='ident'>usize</span>
+            <span class='ident'>ffi</span>::<span class='ident'>PyList_Size</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) <span class='kw'>as</span> <span class='ident'>usize</span>
         }
     }
 
@@ -207,7 +252,7 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_item</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>index</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>index</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>len</span>());
         <span class='kw'>unsafe</span> {
-            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='ident'>ffi</span>::<span class='ident'>PyList_GET_ITEM</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='self'>self</span>.<span class='ident'>python</span>(), <span class='ident'>ffi</span>::<span class='ident'>PyList_GetItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
         }
     }
 
@@ -218,7 +263,7 @@
         <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyList_SetItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>item</span>.<span class='ident'>steal_ptr</span>()) };
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>r</span> <span class='op'>==</span> <span class='number'>0</span>);
     }
-    
+
     <span class='doccomment'>/// Inserts an item at the specified index.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// Panics if the index is out of range.</span>
@@ -226,6 +271,50 @@
         <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyList_Insert</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>item</span>.<span class='ident'>as_ptr</span>()) };
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>r</span> <span class='op'>==</span> <span class='number'>0</span>);
     }
+}
+
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+    <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='ident'>PyListIterator</span> { <span class='ident'>list</span>: <span class='self'>self</span>, <span class='ident'>index</span>: <span class='number'>0</span> }
+    }
+}
+
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+    <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='ident'>PyListIterator</span> { <span class='ident'>list</span>: <span class='self'>self</span>.<span class='ident'>clone</span>(), <span class='ident'>index</span>: <span class='number'>0</span> }
+    }
+}
+
+<span class='doccomment'>/// Used by `impl IntoIterator for &amp;PyList`.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='ident'>list</span>: <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>,
+    <span class='ident'>index</span>: <span class='ident'>usize</span>
+}
+
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>Iterator</span> <span class='kw'>for</span> <span class='ident'>PyListIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
+        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>index</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>list</span>.<span class='ident'>len</span>() {
+            <span class='kw'>let</span> <span class='ident'>item</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>list</span>.<span class='ident'>get_item</span>(<span class='self'>self</span>.<span class='ident'>index</span>);
+            <span class='self'>self</span>.<span class='ident'>index</span> <span class='op'>+=</span> <span class='number'>1</span>;
+            <span class='prelude-val'>Some</span>(<span class='ident'>item</span>)
+        } <span class='kw'>else</span> {
+            <span class='prelude-val'>None</span>
+        }
+    }
+
+    <span class='comment'>// Note: we cannot implement size_hint because the length of the list</span>
+    <span class='comment'>// might change during the iteration.</span>
 }
 
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> [<span class='ident'>T</span>] <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
@@ -237,30 +326,25 @@
             <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='ident'>err</span>::<span class='ident'>cast_from_owned_ptr_or_panic</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>);
             <span class='kw'>for</span> (<span class='ident'>i</span>, <span class='ident'>e</span>) <span class='kw'>in</span> <span class='self'>self</span>.<span class='ident'>iter</span>().<span class='ident'>enumerate</span>() {
                 <span class='kw'>let</span> <span class='ident'>obj</span> <span class='op'>=</span> <span class='ident'>e</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-                <span class='ident'>ffi</span>::<span class='ident'>PyList_SET_ITEM</span>(<span class='ident'>ptr</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>obj</span>.<span class='ident'>steal_ptr</span>());
+                <span class='ident'>ffi</span>::<span class='ident'>PyList_SetItem</span>(<span class='ident'>ptr</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>obj</span>.<span class='ident'>steal_ptr</span>());
             }
             <span class='ident'>t</span>
         }
     }
 }
 
-<span class='comment'>/*
- This implementation is not possible, because we allow extracting python strings as CowString&lt;&#39;s&gt;,
- but there&#39;s no guarantee that the list isn&#39;t modified while the CowString borrow exists.
-impl &lt;&#39;p, &#39;s, T&gt; FromPyObject&lt;&#39;p, &#39;s&gt; for Vec&lt;T&gt; where T: FromPyObject&lt;&#39;p, &#39;s&gt; {
-    fn from_py_object(s: &amp;&#39;s PyObject&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, Vec&lt;T&gt;&gt; {
-        let py = s.python();
-        let list = try!(s.cast_as::&lt;PyList&gt;());
-        let ptr = list.as_ptr();
-        let mut v = Vec::with_capacity(list.len());
-        for i in 0..list.len() {
-            let obj = unsafe { PyObject::from_borrowed_ptr(py, ffi::PyList_GET_ITEM(ptr, i as Py_ssize_t)) };
-            v.push(try!(obj.extract::&lt;T&gt;()));
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>from_py_object</span>(<span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>s</span>.<span class='ident'>python</span>();
+        <span class='kw'>let</span> <span class='ident'>list</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyList</span><span class='op'>&gt;</span>());
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='ident'>list</span>.<span class='ident'>len</span>());
+        <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span> .. <span class='ident'>list</span>.<span class='ident'>len</span>() {
+            <span class='ident'>v</span>.<span class='ident'>push</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>list</span>.<span class='ident'>get_item</span>(<span class='ident'>i</span>).<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>()));
         }
-        Ok(v)
+        <span class='prelude-val'>Ok</span>(<span class='ident'>v</span>)
     }
 }
-*/</span>
+
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -294,6 +378,10 @@ impl &lt;&#39;p, &#39;s, T&gt; FromPyObject&lt;&#39;p, &#39;s&gt; for Vec&lt;T&g
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

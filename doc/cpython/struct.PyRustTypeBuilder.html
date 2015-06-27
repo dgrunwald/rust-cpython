@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `PyRustTypeBuilder` struct in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, PyRustTypeBuilder">
+
+    <title>cpython::PyRustTypeBuilder - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'PyRustTypeBuilder', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>PyRustTypeBuilder</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-17145' class='srclink' href='../src/cpython/rustobject/typebuilder.rs.html#30-35' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>#[must_use]
+pub struct PyRustTypeBuilder&lt;'p, T, B = <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span> {
+    // some fields omitted
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p, T&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T&gt;</code></h4>
+<div class='docblock'><p>Create a new type builder.</p>
+
+<p>py: proof that the GIL is held by the current thread.
+name: name of the new type</p>
+</div><h4 id='method.base' class='method'><code>fn <a href='#method.base' class='fnname'>base</a>&lt;T2, B2&gt;(self, base_type: &amp;<a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T2, B2&gt;) -&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T, <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T2, B2&gt;&gt; <span class='where'>where T2: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B2: PythonBaseObject&lt;'p&gt;</span></code></h4>
+<div class='docblock'><p>Sets the base class that this type is inheriting from.</p>
+</div></div><h3 class='impl'><code>impl&lt;'p, T, B&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></h3><div class='impl-items'><h4 id='method.dict' class='method'><code>fn <a href='#method.dict' class='fnname'>dict</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;</code></h4>
+<div class='docblock'><p>Retrieves the type dictionary of the type being built.</p>
+</div><h4 id='method.doc' class='method'><code>fn <a href='#method.doc' class='fnname'>doc</a>(self, doc_str: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; Self</code></h4>
+<div class='docblock'><p>Set the doc string on the type being built.</p>
+</div><h4 id='method.add' class='method'><code>fn <a href='#method.add' class='fnname'>add</a>&lt;M&gt;(self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, val: M) -&gt; Self <span class='where'>where M: TypeMember&lt;'p, <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T, B&gt;&gt;</span></code></h4>
+<div class='docblock'><p>Adds a new member to the type.</p>
+</div><h4 id='method.finish' class='method'><code>fn <a href='#method.finish' class='fnname'>finish</a>(self) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T, B&gt;&gt;</code></h4>
+<div class='docblock'><p>Finalize construction of the new type.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cpython";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PyModule",""]]});
+initSidebarItems({"struct":[["PyModule","Represents a Python module object."]]});

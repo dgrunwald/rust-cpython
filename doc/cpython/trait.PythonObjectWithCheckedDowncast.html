@@ -42,24 +42,26 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>PythonObjectWithCheckedDowncast</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-160' class='srclink' href='../src/cpython/python.rs.html#79-85'>[src]</a></span></h1>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-158' class='srclink' href='../src/cpython/python.rs.html#75-81' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait PythonObjectWithCheckedDowncast&lt;'p&gt;: <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; {
     fn <a href='#tymethod.downcast_from' class='fnname'>downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, PythonObjectDowncastError&lt;'p&gt;&gt;;
     fn <a href='#tymethod.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(&amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a Self, PythonObjectDowncastError&lt;'p&gt;&gt;;
-}</pre><div class='docblock'><p>Trait implemented by python object types that allow a checked downcast.</p>
+}</pre><div class='docblock'><p>Trait implemented by Python object types that allow a checked downcast.</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.downcast_from' class='method stab '><code>fn <a href='#tymethod.downcast_from' class='fnname'>downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h3><div class='docblock'><p>Cast from PyObject to a concrete python object type.</p>
-</div><h3 id='tymethod.downcast_borrow_from' class='method stab '><code>fn <a href='#tymethod.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(&amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a Self, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h3><div class='docblock'><p>Cast from PyObject to a concrete python object type.</p>
+        <h3 id='tymethod.downcast_from' class='method stab '><code>fn <a href='#tymethod.downcast_from' class='fnname'>downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h3><div class='docblock'><p>Cast from PyObject to a concrete Python object type.</p>
+</div><h3 id='tymethod.downcast_borrow_from' class='method stab '><code>fn <a href='#tymethod.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(&amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a Self, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h3><div class='docblock'><p>Cast from PyObject to a concrete Python object type.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></li>
-<li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&lt;'p&gt;</code></li>
+<li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyIterator.html' title='cpython::PyIterator'>PyIterator</a>&lt;'p&gt;</code></li>
@@ -135,6 +137,10 @@
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

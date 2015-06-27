@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["PyRustTypeBuilder",""]],"trait":[["TypeMember","Represents something that can be added as a member to a Python class/type."]]});

@@ -161,6 +161,9 @@
 <span id="119">119</span>
 <span id="120">120</span>
 <span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -195,8 +198,10 @@
 
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>exc_type</span>(
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>exc_name</span>:<span class='ident'>ident</span>) <span class='op'>=&gt;</span> (
+        <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>);
+
         <span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>);
-        
+
         <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>PythonObjectWithCheckedDowncast</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
             <span class='attribute'>#[<span class='ident'>inline</span>]</span>
             <span class='kw'>fn</span> <span class='ident'>downcast_from</span>(<span class='ident'>obj</span> : <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
@@ -208,7 +213,7 @@
                     }
                 }
             }
-            
+
             <span class='attribute'>#[<span class='ident'>inline</span>]</span>
             <span class='kw'>fn</span> <span class='ident'>downcast_borrow_from</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>obj</span> : <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> ::<span class='ident'>objects</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
                 <span class='kw'>unsafe</span> {
@@ -220,7 +225,7 @@
                 }
             }
         }
-        
+
         <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>PythonObjectWithTypeObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
             <span class='attribute'>#[<span class='ident'>inline</span>]</span>
             <span class='kw'>fn</span> <span class='ident'>type_object</span>(<span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
@@ -235,6 +240,7 @@
 
 <span class='macro'>exc_type</span><span class='macro'>!</span>(<span class='ident'>BaseException</span>, <span class='ident'>PyExc_BaseException</span>);
 <span class='macro'>exc_type</span><span class='macro'>!</span>(<span class='ident'>Exception</span>, <span class='ident'>PyExc_Exception</span>);
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
 <span class='macro'>exc_type</span><span class='macro'>!</span>(<span class='ident'>StandardError</span>, <span class='ident'>PyExc_StandardError</span>);
 <span class='macro'>exc_type</span><span class='macro'>!</span>(<span class='ident'>LookupError</span>, <span class='ident'>PyExc_LookupError</span>);
 <span class='macro'>exc_type</span><span class='macro'>!</span>(<span class='ident'>AssertionError</span>, <span class='ident'>PyExc_AssertionError</span>);
@@ -316,6 +322,10 @@
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

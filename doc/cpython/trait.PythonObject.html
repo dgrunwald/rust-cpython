@@ -42,21 +42,23 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>PythonObject</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-102' class='srclink' href='../src/cpython/python.rs.html#53-73'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait PythonObject&lt;'p&gt;: 'p + <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='../cpython/trait.ToPythonPointer.html' title='cpython::ToPythonPointer'>ToPythonPointer</a> {
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-101' class='srclink' href='../src/cpython/python.rs.html#49-69' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait PythonObject&lt;'p&gt;: 'p + <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> {
     fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;;
     fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;;
     unsafe fn <a href='#tymethod.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self;
     unsafe fn <a href='#tymethod.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(&amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; &amp;'a Self;
 
     fn <a href='#method.python' class='fnname'>python</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt; { ... }
-}</pre><div class='docblock'><p>Trait implemented by all python object types.</p>
+}</pre><div class='docblock'><p>Trait implemented by all Python object types.</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.as_object' class='method stab '><code>fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Casts the python object to PyObject.</p>
-</div><h3 id='tymethod.into_object' class='method stab '><code>fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Casts the python object to PyObject.</p>
+        <h3 id='tymethod.as_object' class='method stab '><code>fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
+</div><h3 id='tymethod.into_object' class='method stab '><code>fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
 </div><h3 id='tymethod.unchecked_downcast_from' class='method stab '><code>unsafe fn <a href='#tymethod.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self</code></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
 Undefined behavior if the input object does not have the expected type.</p>
 </div><h3 id='tymethod.unchecked_downcast_borrow_from' class='method stab '><code>unsafe fn <a href='#tymethod.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(&amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; &amp;'a Self</code></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
@@ -64,14 +66,14 @@ Undefined behavior if the input object does not have the expected type.</p>
 </div></div>
             <h2 id='provided-methods'>Provided Methods</h2>
             <div class='methods'>
-        <h3 id='method.python' class='method stab '><code>fn <a href='#method.python' class='fnname'>python</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Retrieve python instance from an existing python object.</p>
+        <h3 id='method.python' class='method stab '><code>fn <a href='#method.python' class='fnname'>python</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Retrieve Python instance from an existing Python object.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&lt;'p&gt;</code></li>
-<li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&lt;'p&gt;</code></li>
+<li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyIterator.html' title='cpython::PyIterator'>PyIterator</a>&lt;'p&gt;</code></li>
@@ -113,6 +115,8 @@ Undefined behavior if the input object does not have the expected type.</p>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a>&lt;'p&gt;</code></li>
 <li><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a>&lt;'p&gt;</code></li>
+<li><code>impl&lt;'p, T, B&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></li>
+<li><code>impl&lt;'p, T&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T&gt; <span class='where'>where T: 'p + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></li>
 </ul><script type="text/javascript" async
                               src="../implementors/cpython/trait.PythonObject.js">
                       </script></section>
@@ -147,6 +151,10 @@ Undefined behavior if the input object does not have the expected type.</p>
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

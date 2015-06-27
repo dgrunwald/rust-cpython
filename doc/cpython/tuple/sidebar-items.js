@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PyTuple",""]]});
+initSidebarItems({"struct":[["NoArgs","An empty struct that represents the empty argument list. Corresponds to the empty tuple `()` in Python."],["PyTuple","Represents a Python tuple object."]]});

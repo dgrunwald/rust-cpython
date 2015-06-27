@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PyClass",""],["PyInstance",""]]});
+initSidebarItems({"struct":[["PyClass","Represents an old-style Python class."],["PyInstance","Represents an old-style Python instance."]]});

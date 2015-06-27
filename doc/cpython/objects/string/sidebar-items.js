@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PyString",""],["PyUnicode",""]]});
+initSidebarItems({"struct":[["PyBytes","Represents a Python byte string. Corresponds to `str` in Python 2, and `bytes` in Python 3."],["PyUnicode","Represents a Python unicode string. Corresponds to `unicode` in Python 2, and `str` in Python 3."]]});

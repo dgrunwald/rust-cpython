@@ -230,7 +230,6 @@
 <span id="188">188</span>
 <span id="189">189</span>
 <span id="190">190</span>
-<span id="191">191</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -257,38 +256,34 @@
 <span class='kw'>use</span> <span class='ident'>err</span>::<span class='ident'>PyResult</span>;
 <span class='kw'>use</span> <span class='ident'>pythonrun</span>::<span class='ident'>GILGuard</span>;
 
-<span class='comment'>// Dummy struct representing the global state in the python interpreter.</span>
-<span class='kw'>struct</span> <span class='ident'>PythonInterpreterState</span>;
-<span class='kw'>impl</span> <span class='op'>!</span><span class='ident'>Sync</span> <span class='kw'>for</span> <span class='ident'>PythonInterpreterState</span> {}
-
 <span class='doccomment'>/// Marker type that indicates that the GIL is currently held.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// The &#39;Python&#39; struct is a zero-size marker struct that is required for most python operations.</span>
-<span class='doccomment'>/// This is used to indicate that the operation accesses/modifies the python interpreter state,</span>
-<span class='doccomment'>/// and thus can only be called if the python interpreter is initialized and the</span>
-<span class='doccomment'>/// python global interpreter lock (GIL) is acquired.</span>
-<span class='doccomment'>/// The lifetime `&#39;p` represents the lifetime of the python interpreter.</span>
+<span class='doccomment'>/// The &#39;Python&#39; struct is a zero-size marker struct that is required for most Python operations.</span>
+<span class='doccomment'>/// This is used to indicate that the operation accesses/modifies the Python interpreter state,</span>
+<span class='doccomment'>/// and thus can only be called if the Python interpreter is initialized and the</span>
+<span class='doccomment'>/// Python global interpreter lock (GIL) is acquired.</span>
+<span class='doccomment'>/// The lifetime `&#39;p` represents the lifetime of the Python interpreter.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// You can imagine the GIL to be a giant `Mutex&lt;PythonInterpreterState&gt;`.</span>
 <span class='doccomment'>/// The type `Python&lt;&#39;p&gt;` then acts like a reference `&amp;&#39;p PythonInterpreterState`.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;p</span> <span class='ident'>PythonInterpreterState</span><span class='op'>&gt;</span>);
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;p</span> <span class='ident'>GILGuard</span><span class='op'>&gt;</span>);
 
-<span class='doccomment'>/// This trait allows retrieving the underlying FFI pointer from python objects.</span>
+<span class='doccomment'>/// This trait allows retrieving the underlying FFI pointer from Python objects.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>ToPythonPointer</span> {
     <span class='doccomment'>/// Retrieves the underlying FFI pointer (as a borrowed pointer).</span>
     <span class='kw'>fn</span> <span class='ident'>as_ptr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>;
-    
+
     <span class='doccomment'>/// Retrieves the underlying FFI pointer as a &quot;stolen pointer&quot;.</span>
     <span class='kw'>fn</span> <span class='ident'>steal_ptr</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>;
 }
 
-<span class='doccomment'>/// Trait implemented by all python object types.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> : <span class='lifetime'>&#39;p</span> <span class='op'>+</span> <span class='ident'>Clone</span> <span class='op'>+</span> <span class='ident'>ToPythonPointer</span> {
-    <span class='doccomment'>/// Casts the python object to PyObject.</span>
+<span class='doccomment'>/// Trait implemented by all Python object types.</span>
+<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> : <span class='lifetime'>&#39;p</span> <span class='op'>+</span> <span class='ident'>Clone</span> {
+    <span class='doccomment'>/// Casts the Python object to PyObject.</span>
     <span class='kw'>fn</span> <span class='ident'>as_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
-    
-    <span class='doccomment'>/// Casts the python object to PyObject.</span>
+
+    <span class='doccomment'>/// Casts the Python object to PyObject.</span>
     <span class='kw'>fn</span> <span class='ident'>into_object</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
 
     <span class='doccomment'>/// Unchecked downcast from PyObject to Self.</span>
@@ -299,7 +294,7 @@
     <span class='doccomment'>/// Undefined behavior if the input object does not have the expected type.</span>
     <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>unchecked_downcast_borrow_from</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw'>Self</span>;
 
-    <span class='doccomment'>/// Retrieve python instance from an existing python object.</span>
+    <span class='doccomment'>/// Retrieve Python instance from an existing Python object.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>python</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='self'>self</span>.<span class='ident'>as_object</span>().<span class='ident'>python</span>()
@@ -309,34 +304,33 @@
 <span class='comment'>// Marker type that indicates an error while downcasting</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='kw'>pub</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>);
 
-<span class='doccomment'>/// Trait implemented by python object types that allow a checked downcast.</span>
+<span class='doccomment'>/// Trait implemented by Python object types that allow a checked downcast.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObjectWithCheckedDowncast</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> : <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// Cast from PyObject to a concrete python object type.</span>
+    <span class='doccomment'>/// Cast from PyObject to a concrete Python object type.</span>
     <span class='kw'>fn</span> <span class='ident'>downcast_from</span>(<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='kw'>Self</span>, <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>;
     
-    <span class='doccomment'>/// Cast from PyObject to a concrete python object type.</span>
+    <span class='doccomment'>/// Cast from PyObject to a concrete Python object type.</span>
     <span class='kw'>fn</span> <span class='ident'>downcast_borrow_from</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw'>Self</span>, <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>;
 }
 
-<span class='doccomment'>/// Trait implemented by python object types that have a corresponding type object.</span>
+<span class='doccomment'>/// Trait implemented by Python object types that have a corresponding type object.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObjectWithTypeObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> : <span class='ident'>PythonObjectWithCheckedDowncast</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// Retrieves the type object for this python object type.</span>
+    <span class='doccomment'>/// Retrieves the type object for this Python object type.</span>
     <span class='kw'>fn</span> <span class='ident'>type_object</span>(<span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
 }
 
-<span class='doccomment'>/// ToPythonPointer for borrowed python pointers.</span>
+<span class='doccomment'>/// ToPythonPointer for borrowed Python pointers.</span>
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>ToPythonPointer</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>T</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>as_ptr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
-        (<span class='op'>*</span><span class='op'>*</span><span class='self'>self</span>).<span class='ident'>as_ptr</span>()
+        <span class='self'>self</span>.<span class='ident'>as_object</span>().<span class='ident'>as_ptr</span>()
     }
     
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>steal_ptr</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
-        (<span class='op'>*</span><span class='self'>self</span>).<span class='ident'>clone</span>().<span class='ident'>steal_ptr</span>()
+        <span class='self'>self</span>.<span class='ident'>as_object</span>().<span class='ident'>clone</span>().<span class='ident'>steal_ptr</span>()
     }
 }
-
 
 <span class='doccomment'>/// Convert None into a null pointer.</span>
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>ToPythonPointer</span> <span class='kw'>for</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>ToPythonPointer</span> {
@@ -358,24 +352,28 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// Retrieve python instance under the assumption that the GIL is already acquired at this point,</span>
-    <span class='doccomment'>/// and stays acquired for the lifetime &#39;p</span>
+    <span class='doccomment'>/// Retrieve Python instance under the assumption that the GIL is already acquired at this point,</span>
+    <span class='doccomment'>/// and stays acquired for the lifetime `&#39;p`.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// Because the output lifetime `&#39;p` is not connected to any input parameter,</span>
+    <span class='doccomment'>/// care must be taken that the compiler infers an appropriate lifetime for `&#39;p`</span>
+    <span class='doccomment'>/// when calling this function.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>assume_gil_acquired</span>() <span class='op'>-&gt;</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='ident'>Python</span>(<span class='ident'>PhantomData</span>)
     }
-    
+
     <span class='doccomment'>/// Acquires the global interpreter lock, which allows access to the Python runtime.</span>
-    <span class='doccomment'>/// If the python runtime is not already initialized, this function will initialize it.</span>
-    <span class='doccomment'>/// Note that in this case, the python runtime will not have any main thread, and will</span>
-    <span class='doccomment'>/// not deliver signals like KeyboardInterrupt.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// If the Python runtime is not already initialized, this function will initialize it.</span>
+    <span class='doccomment'>/// See [prepare_freethreaded_python()](fn.prepare_freethreaded_python.html) for details.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>acquire_gil</span>() <span class='op'>-&gt;</span> <span class='ident'>GILGuard</span> {
         <span class='ident'>GILGuard</span>::<span class='ident'>acquire</span>()
     }
 
-    <span class='doccomment'>/// Releases the GIL and allows the use of python on other threads.</span>
-    <span class='doccomment'>/// Unsafe because we do not ensure that existing references to python objects</span>
+    <span class='doccomment'>/// Releases the GIL and allows the use of Python on other threads.</span>
+    <span class='doccomment'>/// Unsafe because we do not ensure that existing references to Python objects</span>
     <span class='doccomment'>/// are not accessed within the closure.</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>allow_threads</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>F</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>T</span> <span class='kw'>where</span> <span class='ident'>F</span> : <span class='ident'>FnOnce</span>() <span class='op'>-&gt;</span> <span class='ident'>T</span> {
         <span class='comment'>// TODO: we should use a type with destructor to be panic-safe, and avoid the unnecessary closure</span>
@@ -384,34 +382,34 @@
         <span class='ident'>ffi</span>::<span class='ident'>PyEval_RestoreThread</span>(<span class='ident'>save</span>);
         <span class='ident'>result</span>
     }
-    
-    <span class='doccomment'>/// Gets the python builtin value `None`.</span>
-    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the python keyword starts with uppercase</span>
+
+    <span class='doccomment'>/// Gets the Python builtin value `None`.</span>
+    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the Python keyword starts with uppercase</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='prelude-val'>None</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='self'>self</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_None</span>()) }
     }
-    
-    <span class='doccomment'>/// Gets the python builtin value `True`.</span>
-    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the python keyword starts with uppercase</span>
+
+    <span class='doccomment'>/// Gets the Python builtin value `True`.</span>
+    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the Python keyword starts with uppercase</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>True</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyBool</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='self'>self</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_True</span>()).<span class='ident'>unchecked_cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PyBool</span><span class='op'>&gt;</span>() }
     }
-    
-    <span class='doccomment'>/// Gets the python builtin value `False`.</span>
-    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the python keyword starts with uppercase</span>
+
+    <span class='doccomment'>/// Gets the Python builtin value `False`.</span>
+    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span> <span class='comment'>// the Python keyword starts with uppercase</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>False</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyBool</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='self'>self</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_False</span>()).<span class='ident'>unchecked_cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PyBool</span><span class='op'>&gt;</span>() }
     }
 
-    <span class='doccomment'>/// Gets the python type object for type T.</span>
+    <span class='doccomment'>/// Gets the Python type object for type T.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_type</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObjectWithTypeObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='ident'>T</span>::<span class='ident'>type_object</span>(<span class='self'>self</span>)
     }
 
-    <span class='doccomment'>/// Import the python module with the specified name.</span>
+    <span class='doccomment'>/// Import the Python module with the specified name.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>import</span>(<span class='self'>self</span>, <span class='ident'>name</span> : <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyModule</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='ident'>PyModule</span>::<span class='ident'>import</span>(<span class='self'>self</span>, <span class='ident'>name</span>)
     }
@@ -456,6 +454,10 @@
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>

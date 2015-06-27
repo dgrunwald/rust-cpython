@@ -42,21 +42,35 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>GILGuard</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-19747' class='srclink' href='../src/cpython/pythonrun.rs.html#65-67'>[src]</a></span></h1>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-16915' class='srclink' href='../src/cpython/pythonrun.rs.html#90-92' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>#[must_use]
 pub struct GILGuard {
     // some fields omitted
 }</pre><div class='docblock'><p>RAII type that represents an acquired GIL.</p>
+
+<h1 id="example" class='section-header'><a
+                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>cpython</span>::<span class='ident'>Python</span>;
+
+{
+    <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
+    <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
+} <span class='comment'>// GIL is released when gil_guard is dropped</span>
+</pre>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='impl-items'><h4 id='method.acquire' class='method'><code>fn <a href='#method.acquire' class='fnname'>acquire</a>() -&gt; <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h4>
-<div class='docblock'><p>Acquires the global interpreter lock, which allows access to the Python runtime.
-If the python runtime is not already initialized, this function will initialize it.
-Note that in this case, the python runtime will not have any main thread, and will
-not deliver signals like KeyboardInterrupt.</p>
+<div class='docblock'><p>Acquires the global interpreter lock, which allows access to the Python runtime.</p>
+
+<p>If the Python runtime is not already initialized, this function will initialize it.
+See <a href="fn.prepare_freethreaded_python.html">prepare_freethreaded_python()</a> for details.</p>
 </div><h4 id='method.python' class='method'><code>fn <a href='#method.python' class='fnname'>python</a>&lt;'p&gt;(&amp;'p self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
 <div class='docblock'><p>Retrieves the marker type that proves that the GIL was acquired.</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl !<a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>GILGuard is not Send because the GIL must be released
 by the same thread that acquired it.</p>
+</div><div class='impl-items'></div><h3 class='impl'><code>impl !<a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>GILGuard is not Sync because only the thread that
+acquired the GIL may access the Python interpreter.</p>
 </div><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>The Drop implementation for GILGuard will release the GIL.</p>
 </div><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 </div></section>
@@ -91,6 +105,10 @@ by the same thread that acquired it.</p>
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>
