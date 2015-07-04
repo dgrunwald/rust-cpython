@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-17145' class='srclink' href='../src/cpython/rustobject/typebuilder.rs.html#30-35' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-17048' class='srclink' href='../src/cpython/rustobject/typebuilder.rs.html#32-69' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>#[must_use]
 pub struct PyRustTypeBuilder&lt;'p, T, B = <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span> {
     // some fields omitted
@@ -56,9 +56,7 @@ pub struct PyRustTypeBuilder&lt;'p, T, B = <a class='struct' href='../cpython/st
 name: name of the new type</p>
 </div><h4 id='method.base' class='method'><code>fn <a href='#method.base' class='fnname'>base</a>&lt;T2, B2&gt;(self, base_type: &amp;<a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T2, B2&gt;) -&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T, <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T2, B2&gt;&gt; <span class='where'>where T2: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B2: PythonBaseObject&lt;'p&gt;</span></code></h4>
 <div class='docblock'><p>Sets the base class that this type is inheriting from.</p>
-</div></div><h3 class='impl'><code>impl&lt;'p, T, B&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></h3><div class='impl-items'><h4 id='method.dict' class='method'><code>fn <a href='#method.dict' class='fnname'>dict</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;</code></h4>
-<div class='docblock'><p>Retrieves the type dictionary of the type being built.</p>
-</div><h4 id='method.doc' class='method'><code>fn <a href='#method.doc' class='fnname'>doc</a>(self, doc_str: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; Self</code></h4>
+</div></div><h3 class='impl'><code>impl&lt;'p, T, B&gt; <a class='struct' href='../cpython/struct.PyRustTypeBuilder.html' title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a>&lt;'p, T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></h3><div class='impl-items'><h4 id='method.doc' class='method'><code>fn <a href='#method.doc' class='fnname'>doc</a>(self, doc_str: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; Self</code></h4>
 <div class='docblock'><p>Set the doc string on the type being built.</p>
 </div><h4 id='method.add' class='method'><code>fn <a href='#method.add' class='fnname'>add</a>&lt;M&gt;(self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, val: M) -&gt; Self <span class='where'>where M: TypeMember&lt;'p, <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T, B&gt;&gt;</span></code></h4>
 <div class='docblock'><p>Adds a new member to the type.</p>

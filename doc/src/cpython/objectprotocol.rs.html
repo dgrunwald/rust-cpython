@@ -307,8 +307,6 @@
 <span id="265">265</span>
 <span id="266">266</span>
 <span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -328,13 +326,11 @@
 <span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>fmt</span>, <span class='ident'>string</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cmp</span>::<span class='ident'>Ordering</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>libc</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>ToPythonPointer</span>};
+<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>};
 <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>, <span class='ident'>PyString</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>, <span class='ident'>result_from_owned_ptr</span>, <span class='ident'>error_on_minusone</span>};
@@ -463,7 +459,7 @@
     <span class='doccomment'>/// Retrieves the hash code of the object.</span>
     <span class='doccomment'>/// This is equivalent to the Python expression: &#39;hash(self)&#39;</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>libc</span>::<span class='ident'>c_long</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>hash</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, ::<span class='ident'>Py_hash_t</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyObject_Hash</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()) };
         <span class='kw'>if</span> <span class='ident'>v</span> <span class='op'>==</span> <span class='op'>-</span><span class='number'>1</span> {
             <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='self'>self</span>.<span class='ident'>python</span>()))

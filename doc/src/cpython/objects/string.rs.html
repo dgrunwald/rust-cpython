@@ -324,6 +324,23 @@
 <span id="282">282</span>
 <span id="283">283</span>
 <span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -344,7 +361,7 @@
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
 <span class='kw'>use</span> <span class='ident'>std</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>char</span>, <span class='ident'>str</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ascii</span>::<span class='ident'>AsciiExt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
 <span class='kw'>use</span> <span class='ident'>libc</span>::<span class='ident'>c_char</span>;
@@ -591,6 +608,23 @@
         <span class='ident'>PyUnicode</span>::<span class='ident'>new</span>(<span class='ident'>py</span>, <span class='self'>self</span>)
     }
 }
+
+<span class='doccomment'>/// Converts rust `String` to Python object:</span>
+<span class='doccomment'>/// ASCII-only strings are converted to Python `str` objects;</span>
+<span class='doccomment'>/// other strings are converted to Python `unicode` objects.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// Note that `str::ObjectType` differs based on Python version:</span>
+<span class='doccomment'>/// In Python 2.7, it is `PyObject` (`object` is the common base class of `str` and `unicode`).</span>
+<span class='doccomment'>/// In Python 3.x, it is `PyUnicode`.</span>
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>String</span> {
+    <span class='kw'>type</span> <span class='ident'>ObjectType</span> <span class='op'>=</span> <span class='op'>&lt;</span><span class='ident'>str</span> <span class='kw'>as</span> <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>::<span class='ident'>ObjectType</span>;
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>to_py_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Self</span>::<span class='ident'>ObjectType</span> {
+        <span class='op'>&lt;</span><span class='ident'>str</span> <span class='kw'>as</span> <span class='ident'>ToPyObject</span><span class='op'>&gt;</span>::<span class='ident'>to_py_object</span>(<span class='self'>self</span>, <span class='ident'>py</span>)
+    }
+}
+
 
 <span class='doccomment'>/// Allows extracting strings from Python objects.</span>
 <span class='doccomment'>/// Accepts Python `str` and `unicode` objects.</span>

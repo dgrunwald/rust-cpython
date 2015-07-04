@@ -373,7 +373,7 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>libc</span>;
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>CString</span>, <span class='ident'>CStr</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CString</span>;
 
 <span class='doccomment'>/// Represents a Python exception that was raised.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>)]</span>
@@ -593,7 +593,7 @@
     }
 }
 
-<span class='kw'>fn</span> <span class='ident'>panic_after_error</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='op'>!</span> {
+<span class='kw'>fn</span> <span class='ident'>panic_after_error</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='op'>!</span> {
     <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyErr_Print</span>(); }
     <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Python API called failed&quot;</span>);
 }
@@ -640,8 +640,8 @@
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
     <span class='kw'>use</span> {<span class='ident'>Python</span>, <span class='ident'>PyErr</span>};
-    <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>exc</span>};
-    
+    <span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>exc</span>;
+
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>set_typeerror</span>() {
         <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();

@@ -444,7 +444,6 @@
 <span id="402">402</span>
 <span id="403">403</span>
 <span id="404">404</span>
-<span id="405">405</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -467,12 +466,11 @@
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>num</span>;
 
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_long</span>, <span class='ident'>c_double</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyErr</span>};
 <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
 <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>exc</span>;
-<span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='self'>self</span>, <span class='ident'>Py_ssize_t</span>};
+<span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ToPyObject</span>, <span class='ident'>FromPyObject</span>};
 
 <span class='doccomment'>/// Represents a Python `int` object.</span>

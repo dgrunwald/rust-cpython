@@ -322,6 +322,7 @@
 <span id="280">280</span>
 <span id="281">281</span>
 <span id="282">282</span>
+<span id="283">283</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -342,11 +343,10 @@
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
-<span class='kw'>use</span> <span class='ident'>libc</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>PythonObjectWithTypeObject</span>, <span class='ident'>PythonObjectDowncastError</span>, <span class='ident'>ToPythonPointer</span>};
 <span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>PyType</span>;
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>};
+<span class='kw'>use</span> <span class='ident'>err</span>::<span class='ident'>PyErr</span>;
 
 <span class='doccomment'>/// Represents a reference to a Python object.</span>
 <span class='doccomment'>///</span>
@@ -500,21 +500,23 @@
         <span class='ident'>ptr</span>
     }
 
-    <span class='doccomment'>/// Transmutes an owned FFI pointer to `&amp;PyObject`.</span>
-    <span class='doccomment'>/// Undefined behavior if the pointer is NULL or invalid.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>borrow_from_owned_ptr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>py</span> : <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>ptr</span> : <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-        <span class='macro'>debug_assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>ptr</span>.<span class='ident'>is_null</span>() <span class='op'>&amp;&amp;</span> <span class='ident'>ffi</span>::<span class='ident'>Py_REFCNT</span>(<span class='op'>*</span><span class='ident'>ptr</span>) <span class='op'>&gt;</span> <span class='number'>0</span>);
-        <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>ptr</span>)
+<span class='comment'>/*
+    /// Transmutes an owned FFI pointer to `&amp;PyObject`.
+    /// Undefined behavior if the pointer is NULL or invalid.
+    #[inline]
+    pub unsafe fn borrow_from_owned_ptr&lt;&#39;a&gt;(py : Python&lt;&#39;p&gt;, ptr : &amp;&#39;a *mut ffi::PyObject) -&gt; &amp;&#39;a PyObject&lt;&#39;p&gt; {
+        debug_assert!(!ptr.is_null() &amp;&amp; ffi::Py_REFCNT(*ptr) &gt; 0);
+        mem::transmute(ptr)
     }
     
-    <span class='doccomment'>/// Transmutes a slice of owned FFI pointers to `&amp;[PyObject]`.</span>
-    <span class='doccomment'>/// Undefined behavior if the pointer is NULL or invalid.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>borrow_from_owned_ptr_slice</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>py</span> : <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>ptr</span> : <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>]) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>] {
-        <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>ptr</span>)
+    /// Transmutes a slice of owned FFI pointers to `&amp;[PyObject]`.
+    /// Undefined behavior if the pointer is NULL or invalid.
+    #[inline]
+    pub unsafe fn borrow_from_owned_ptr_slice&lt;&#39;a&gt;(py : Python&lt;&#39;p&gt;, ptr : &amp;&#39;a [*mut ffi::PyObject]) -&gt; &amp;&#39;a [PyObject&lt;&#39;p&gt;] {
+        mem::transmute(ptr)
     }
-    
+*/</span>
+
     <span class='doccomment'>/// Gets the reference count of this Python object.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_refcnt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {

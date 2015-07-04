@@ -250,6 +250,14 @@
 <span id="208">208</span>
 <span id="209">209</span>
 <span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -269,11 +277,9 @@
 <span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>ptr</span>, <span class='ident'>marker</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>marker</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
 <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyType</span>};
-<span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>super</span>::{<span class='ident'>PythonBaseObject</span>, <span class='ident'>PyRustObject</span>, <span class='ident'>PyRustType</span>};
 <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>typebuilder</span>::<span class='ident'>TypeMember</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>err</span>;
@@ -363,11 +369,16 @@
 
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>TypeMember</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>MethodDescriptor</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>into_descriptor</span>(<span class='self'>self</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>to_descriptor</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='ident'>err</span>::<span class='ident'>from_owned_ptr_or_panic</span>(<span class='ident'>ty</span>.<span class='ident'>python</span>(),
                 <span class='ident'>ffi</span>::<span class='ident'>PyDescr_NewMethod</span>(<span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>(), <span class='self'>self</span>.<span class='number'>0</span>))
         }
+    }
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>into_box</span>(<span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>TypeMember</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='op'>+</span> <span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='self'>self</span>)
     }
 }
 
@@ -453,11 +464,16 @@
 
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>TypeMember</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>ClassMethodDescriptor</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>into_descriptor</span>(<span class='self'>self</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>to_descriptor</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='ident'>err</span>::<span class='ident'>from_owned_ptr_or_panic</span>(<span class='ident'>ty</span>.<span class='ident'>python</span>(),
                 <span class='ident'>ffi</span>::<span class='ident'>PyDescr_NewClassMethod</span>(<span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>(), <span class='self'>self</span>.<span class='number'>0</span>))
         }
+    }
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>into_box</span>(<span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>TypeMember</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='op'>+</span> <span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='self'>self</span>)
     }
 }
 

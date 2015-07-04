@@ -159,7 +159,6 @@
 <span id="117">117</span>
 <span id="118">118</span>
 <span id="119">119</span>
-<span id="120">120</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -185,7 +184,7 @@
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>};
 <span class='kw'>use</span> <span class='ident'>objectprotocol</span>::<span class='ident'>ObjectProtocol</span>;
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>, <span class='ident'>exc</span>};
+<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>, <span class='ident'>exc</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyErr</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>CStr</span>, <span class='ident'>CString</span>};
 
@@ -273,7 +272,6 @@
     <span class='doccomment'>/// This is a convenience function that creates a new `PyRustTypeBuilder` and</span>
     <span class='doccomment'>/// sets `new_type.__module__` to this module&#39;s name.</span>
     <span class='doccomment'>/// The new type will be added to this module when `finish()` is called on the builder.</span>
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>add_type</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> ::<span class='ident'>rustobject</span>::<span class='ident'>typebuilder</span>::<span class='ident'>PyRustTypeBuilder</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span><span class='op'>&gt;</span>
             <span class='kw'>where</span> <span class='ident'>T</span>: <span class='lifetime'>&#39;p</span> <span class='op'>+</span> <span class='ident'>Send</span> {
         ::<span class='ident'>rustobject</span>::<span class='ident'>typebuilder</span>::<span class='ident'>new_typebuilder_for_module</span>(<span class='self'>self</span>, <span class='ident'>name</span>)

@@ -300,6 +300,10 @@
 <span id="258">258</span>
 <span id="259">259</span>
 <span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
 </pre><pre class='rust '>
  <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -323,7 +327,7 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PythonObject</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>, <span class='ident'>PyString</span>, <span class='ident'>PyModule</span>, <span class='ident'>PyDict</span>};
+<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>mem</span>, <span class='ident'>ops</span>, <span class='ident'>ptr</span>, <span class='ident'>marker</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>};
 
@@ -359,19 +363,24 @@
 
     <span class='kw'>type</span> <span class='ident'>InitType</span> <span class='op'>=</span> ();
 
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>init_val</span>: ()) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>_init_val</span>: ()) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>ty</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> ((<span class='op'>*</span><span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>()).<span class='ident'>tp_alloc</span>.<span class='ident'>unwrap</span>())(<span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>(), <span class='number'>0</span>);
+        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_GenericAlloc</span>(<span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>(), <span class='number'>0</span>);
         <span class='ident'>err</span>::<span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>)
     }
 
     <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>dealloc</span>(<span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) {
+        <span class='comment'>// Unfortunately, there is no PyType_GenericFree, so</span>
+        <span class='comment'>// we have to manually un-do the work of PyType_GenericAlloc:</span>
         <span class='kw'>let</span> <span class='ident'>ty</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_TYPE</span>(<span class='ident'>ptr</span>);
-        ((<span class='op'>*</span><span class='ident'>ty</span>).<span class='ident'>tp_free</span>.<span class='ident'>unwrap</span>())(<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>libc</span>::<span class='ident'>c_void</span>);
-        <span class='comment'>// For heap types, tp_alloc calls INCREF on the type objects,</span>
-        <span class='comment'>// but tp_free points directly to the memory deallocator and does not call DECREF.</span>
-        <span class='comment'>// So we&#39;ll do that manually here:</span>
-        <span class='kw'>if</span> ((<span class='op'>*</span><span class='ident'>ty</span>).<span class='ident'>tp_flags</span> <span class='kw-2'>&amp;</span> <span class='ident'>ffi</span>::<span class='ident'>Py_TPFLAGS_HEAPTYPE</span>) <span class='op'>!=</span> <span class='number'>0</span> {
+        <span class='kw'>if</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_IS_GC</span>(<span class='ident'>ty</span>) <span class='op'>!=</span> <span class='number'>0</span> {
+            <span class='ident'>ffi</span>::<span class='ident'>PyObject_GC_Del</span>(<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>libc</span>::<span class='ident'>c_void</span>);
+        } <span class='kw'>else</span> {
+            <span class='ident'>ffi</span>::<span class='ident'>PyObject_Free</span>(<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>libc</span>::<span class='ident'>c_void</span>);
+        }
+        <span class='comment'>// For heap types, PyType_GenericAlloc calls INCREF on the type objects,</span>
+        <span class='comment'>// so we need to call DECREF here:</span>
+        <span class='kw'>if</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_HasFeature</span>(<span class='ident'>ty</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_TPFLAGS_HEAPTYPE</span>) <span class='op'>!=</span> <span class='number'>0</span> {
             <span class='ident'>ffi</span>::<span class='ident'>Py_DECREF</span>(<span class='ident'>ty</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>);
         }
     }
@@ -459,7 +468,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>with_borrowed_ptr</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span>
+    <span class='kw'>fn</span> <span class='ident'>with_borrowed_ptr</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span>
       <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span> {
         <span class='ident'>f</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>())
     }
@@ -506,7 +515,6 @@
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span>, <span class='ident'>B</span><span class='op'>&gt;</span> <span class='ident'>PyRustType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span>, <span class='ident'>B</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='lifetime'>&#39;p</span> <span class='op'>+</span> <span class='ident'>Send</span>, <span class='ident'>B</span>: <span class='ident'>PythonBaseObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
     <span class='doccomment'>/// Creates a PyRustObject instance from a value.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>create_instance</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>val</span>: <span class='ident'>T</span>, <span class='ident'>base_val</span>: <span class='ident'>B</span>::<span class='ident'>InitType</span>) <span class='op'>-&gt;</span> <span class='ident'>PyRustObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span>, <span class='ident'>B</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>type_obj</span>.<span class='ident'>python</span>();
         <span class='kw'>unsafe</span> {
             <span class='ident'>PythonBaseObject</span>::<span class='ident'>alloc</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>type_obj</span>, (<span class='ident'>val</span>, <span class='ident'>base_val</span>)).<span class='ident'>unwrap</span>()
         }

@@ -201,8 +201,8 @@
 <span class='kw'>use</span> <span class='ident'>std</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>ToPythonPointer</span>};
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>exc</span>, <span class='ident'>PyObject</span>, <span class='ident'>PyBool</span>, <span class='ident'>PyTuple</span>};
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>};
+<span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='ident'>err</span>::<span class='ident'>PyResult</span>;
 
 <span class='doccomment'>/// Conversion trait that allows various objects to be converted into Python objects.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
@@ -273,7 +273,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>into_py_object</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>into_py_object</span>(<span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='comment'>// Transmute the lifetime.</span>
         <span class='comment'>// This is safe, because both lifetime variables represent the same lifetime:</span>
         <span class='comment'>// that of the python GIL acquisition.</span>
@@ -281,7 +281,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>with_borrowed_ptr</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span>
+    <span class='kw'>fn</span> <span class='ident'>with_borrowed_ptr</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span>
       <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>R</span> {
         <span class='ident'>f</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>())
     }
