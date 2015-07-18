@@ -1,8 +1,35 @@
-use libc::{c_char, c_int};
+use libc::{c_char, c_int, c_void};
 use object::*;
+use pyport::Py_ssize_t;
 
-#[allow(missing_copy_implementations)]
-pub enum PyCodeObject { /* hidden representation */ }
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct PyCodeObject {
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_next: *mut PyObject,
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_prev: *mut PyObject,
+    pub ob_refcnt: Py_ssize_t,
+    pub ob_type: *mut PyTypeObject,
+    pub co_argcount: c_int,		/* #arguments, except *args */
+    pub co_nlocals: c_int,		/* #local variables */
+    pub co_stacksize: c_int,		/* #entries needed for evaluation stack */
+    pub co_flags: c_int,		/* CO_..., see below */
+    pub co_code: *mut PyObject,		/* instruction opcodes */
+    pub co_consts: *mut PyObject,	/* list (constants used) */
+    pub co_names: *mut PyObject,		/* list of strings (names used) */
+    pub co_varnames: *mut PyObject,	/* tuple of strings (local variable names) */
+    pub co_freevars: *mut PyObject,	/* tuple of strings (free variable names) */
+    pub co_cellvars: *mut PyObject,      /* tuple of strings (cell variable names) */
+    /* The rest doesn't count for hash/cmp */
+    pub co_filename: *mut PyObject,	/* string (where it was loaded from) */
+    pub co_name: *mut PyObject,		/* string (name, for reference) */
+    pub co_firstlineno: c_int,		/* first source line number */
+    pub co_lnotab: *mut PyObject,	/* string (encoding addr<->lineno mapping) See
+				   Objects/lnotab_notes.txt for details. */
+    pub co_zombieframe: *mut c_void,     /* for optimization only (see frameobject.c) */
+    pub co_weakreflist: *mut PyObject   /* to support weakrefs to code objects */
+}
 
 /* Masks for co_flags */
 pub const CO_OPTIMIZED : c_int = 0x0001;
@@ -24,9 +51,11 @@ pub const CO_FUTURE_WITH_STATEMENT : c_int = 0x8000;
 pub const CO_FUTURE_PRINT_FUNCTION : c_int = 0x10000;
 pub const CO_FUTURE_UNICODE_LITERALS : c_int = 0x20000;
 
+pub const CO_MAXBLOCKS: usize = 20; /* Max static block nesting within a function */
+
 extern "C" {
     pub static mut PyCode_Type: PyTypeObject;
-    
+
     pub fn PyCode_New(arg1: c_int, arg2: c_int,
                       arg3: c_int, arg4: c_int,
                       arg5: *mut PyObject, arg6: *mut PyObject,
@@ -53,4 +82,3 @@ pub unsafe fn PyCode_Check(op : *mut PyObject) -> c_int {
     let u : *mut PyTypeObject = &mut PyCode_Type;
     (Py_TYPE(op) == u) as c_int
 }
-
