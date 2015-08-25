@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/cpython/lib.rs.html#19-293' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/cpython/lib.rs.html#19-301' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Rust bindings to the Python interpreter.</p>
 
 <h1 id="ownership-and-lifetimes" class='section-header'><a
@@ -85,19 +85,35 @@ also exposed as Python exceptions.</p>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>cpython</span>;
 
 <span class='kw'>use</span> <span class='ident'>cpython</span>::{<span class='ident'>PythonObject</span>, <span class='ident'>Python</span>};
- 
+<span class='kw'>use</span> <span class='ident'>cpython</span>::<span class='ident'>ObjectProtocol</span>; <span class='comment'>//for call method</span>
+
 <span class='kw'>fn</span> <span class='ident'>main</span>() {
-    <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-    <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
+    <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
+    <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
+
     <span class='kw'>let</span> <span class='ident'>sys</span> <span class='op'>=</span> <span class='ident'>py</span>.<span class='ident'>import</span>(<span class='string'>&quot;sys&quot;</span>).<span class='ident'>unwrap</span>();
-    <span class='kw'>let</span> <span class='ident'>version</span> <span class='op'>=</span> <span class='ident'>sys</span>.<span class='ident'>get</span>(<span class='string'>&quot;version&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>();
-    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Hello Python {}&quot;</span>, <span class='ident'>version</span>);
-}
-</pre>
+    <span class='kw'>let</span> <span class='ident'>version</span>: <span class='ident'>String</span> <span class='op'>=</span> <span class='ident'>sys</span>.<span class='ident'>get</span>(<span class='string'>&quot;version&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>().<span class='ident'>unwrap</span>();
+
+    <span class='kw'>let</span> <span class='ident'>os</span> <span class='op'>=</span> <span class='ident'>py</span>.<span class='ident'>import</span>(<span class='string'>&quot;os&quot;</span>).<span class='ident'>unwrap</span>();
+    <span class='kw'>let</span> <span class='ident'>getenv</span> <span class='op'>=</span> <span class='ident'>os</span>.<span class='ident'>get</span>(<span class='string'>&quot;getenv&quot;</span>).<span class='ident'>unwrap</span>();
+    <span class='kw'>let</span> <span class='ident'>user</span>: <span class='ident'>String</span> <span class='op'>=</span> <span class='ident'>getenv</span>.<span class='ident'>call</span>((<span class='string'>&quot;USER&quot;</span>,), <span class='prelude-val'>None</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>().<span class='ident'>unwrap</span>();
+
+    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Hello {}, I&#39;m Python {}&quot;</span>, <span class='ident'>user</span>, <span class='ident'>version</span>);
+}</pre>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
 <table><tr><td><code>pub use self::<a class='mod'
                                             href='./string/index.html'>string</a>::<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a> as PyString;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='argparse/index.html'
+                               title='cpython::argparse'>argparse</a></td>
+                        <td class='docblock short'>
+                             <p>This module contains logic for parsing a python argument list.
+See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_method</code>.</p>
+
+                        </td>
+                    </tr>
+                
                     <tr class=' module-item'>
                         <td><a class='mod' href='exc/index.html'
                                title='cpython::exc'>exc</a></td>
@@ -117,6 +133,15 @@ also exposed as Python exceptions.</p>
                     </tr>
                 </table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.py_argparse!.html'
+                               title='cpython::py_argparse!'>py_argparse!</a></td>
+                        <td class='docblock short'>
+                             <p>This macro is used to parse a parameter list into a set of variables.</p>
+
+                        </td>
+                    </tr>
+                
                     <tr class=' module-item'>
                         <td><a class='macro' href='macro.py_class_method!.html'
                                title='cpython::py_class_method!'>py_class_method!</a></td>
@@ -141,6 +166,14 @@ also exposed as Python exceptions.</p>
                         <td class='docblock short'>
                              <p>Creates a Python instance method descriptor that invokes a Rust function.</p>
 
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.py_method_call_impl!.html'
+                               title='cpython::py_method_call_impl!'>py_method_call_impl!</a></td>
+                        <td class='docblock short'>
+                             
                         </td>
                     </tr>
                 
@@ -354,8 +387,8 @@ Corresponds to <code>unicode</code> in Python 2, and <code>str</code> in Python 
                 </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='trait' href='trait.FromPyObject.html'
-                               title='cpython::FromPyObject'>FromPyObject</a></td>
+                        <td><a class='trait' href='trait.ExtractPyObject.html'
+                               title='cpython::ExtractPyObject'>ExtractPyObject</a></td>
                         <td class='docblock short'>
                              <p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
 
@@ -448,37 +481,44 @@ Corresponds to <code>unicode</code> in Python 2, and <code>str</code> in Python 
     <section class="footer"></section>
 
     <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
-        </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
+        <div>
+            <div class="shortcuts">
+                <h1>Keyboard Shortcuts</h1>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h1>Search Tricks</h1>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
     </div>
 

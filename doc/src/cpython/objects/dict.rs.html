@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -146,6 +146,50 @@
 <span id="104">104</span>
 <span id="105">105</span>
 <span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -168,8 +212,9 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PythonObject</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyList</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyErr</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>mem</span>, <span class='ident'>collections</span>, <span class='ident'>hash</span>, <span class='ident'>cmp</span>};
 
 <span class='doccomment'>/// Represents a Python `dict`.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>);
@@ -226,7 +271,7 @@
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_item</span><span class='op'>&lt;</span><span class='ident'>K</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>key</span>: <span class='ident'>K</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> <span class='kw'>where</span> <span class='ident'>K</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
         <span class='ident'>key</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>key</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr_opt</span>(<span class='ident'>py</span>, 
+            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr_opt</span>(<span class='ident'>py</span>,
                 <span class='ident'>ffi</span>::<span class='ident'>PyDict_GetItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>key</span>))
         })
     }
@@ -251,6 +296,49 @@
                 <span class='ident'>ffi</span>::<span class='ident'>PyDict_DelItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>key</span>))
         })
     }
+
+    <span class='comment'>// List of dict items.</span>
+    <span class='comment'>// This is equivalent to the python expression `list(dict.items())`.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>items_list</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>PyList</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
+        <span class='kw'>unsafe</span> {
+            <span class='ident'>err</span>::<span class='ident'>cast_from_owned_ptr_or_panic</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyDict_Items</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
+        }
+    }
+
+    <span class='doccomment'>/// Returns the list of (key,value) pairs in this dictionary.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>items</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
+        <span class='comment'>// Note that we don&#39;t provide an iterator because</span>
+        <span class='comment'>// PyDict_Next() is unsafe to use when the dictionary might be changed</span>
+        <span class='comment'>// by other python code.</span>
+        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>python</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='self'>self</span>.<span class='ident'>len</span>());
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>pos</span> <span class='op'>=</span> <span class='number'>0</span>;
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>key</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>value</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
+            <span class='kw'>while</span> <span class='ident'>ffi</span>::<span class='ident'>PyDict_Next</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>pos</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>key</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>value</span>) <span class='op'>!=</span> <span class='number'>0</span> {
+                <span class='ident'>vec</span>.<span class='ident'>push</span>((<span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>key</span>),
+                          <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>value</span>)));
+            }
+        }
+        <span class='ident'>vec</span>
+    }
+}
+
+<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>K</span>, <span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>collections</span>::<span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>K</span>, <span class='ident'>V</span><span class='op'>&gt;</span>
+    <span class='kw'>where</span> <span class='ident'>K</span>: <span class='ident'>hash</span>::<span class='ident'>Hash</span><span class='op'>+</span><span class='ident'>cmp</span>::<span class='ident'>Eq</span><span class='op'>+</span><span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>,
+          <span class='ident'>V</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>
+{
+    <span class='kw'>type</span> <span class='ident'>ObjectType</span> <span class='op'>=</span> <span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>;
+
+    <span class='kw'>fn</span> <span class='ident'>to_py_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyDict</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>dict</span> <span class='op'>=</span> <span class='ident'>PyDict</span>::<span class='ident'>new</span>(<span class='ident'>py</span>);
+        <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>value</span>) <span class='kw'>in</span> <span class='self'>self</span>.<span class='ident'>iter</span>() {
+            <span class='ident'>dict</span>.<span class='ident'>set_item</span>(<span class='ident'>key</span>, <span class='ident'>value</span>).<span class='ident'>unwrap</span>();
+        };
+        <span class='ident'>dict</span>
+    }
 }
 
 </pre>
@@ -260,37 +348,44 @@
     <section class="footer"></section>
 
     <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
-        </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
+        <div>
+            <div class="shortcuts">
+                <h1>Keyboard Shortcuts</h1>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h1>Search Tricks</h1>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
     </div>
 

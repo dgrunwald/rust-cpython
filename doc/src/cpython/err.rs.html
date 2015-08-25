@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -346,6 +346,29 @@
 <span id="304">304</span>
 <span id="305">305</span>
 <span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -366,7 +389,7 @@
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
 <span class='kw'>use</span> <span class='ident'>std</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>PythonObject</span>, <span class='ident'>Python</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PythonObjectDowncastError</span>};
+<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>PythonObject</span>, <span class='ident'>Python</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PythonObjectDowncastError</span>, <span class='ident'>PythonObjectWithTypeObject</span>};
 <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>, <span class='ident'>exc</span>};
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>oldstyle</span>::<span class='ident'>PyClass</span>;
@@ -429,16 +452,39 @@
         }
     }
 
-    <span class='doccomment'>/// Creates a new PyErr.</span>
+    <span class='doccomment'>/// Creates a new PyErr of type `T`.</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// If `obj` is a Python exception instance, the PyErr will use that instance.</span>
-    <span class='doccomment'>/// If `obj` is a Python exception type object, the PyErr will (lazily) create a new instance of that type.</span>
-    <span class='doccomment'>/// Otherwise, a `TypeError` is created instead.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='ident'>O</span><span class='op'>&gt;</span>(<span class='ident'>obj</span>: <span class='ident'>O</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>O</span>: <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-        <span class='ident'>PyErr</span>::<span class='ident'>new_from_object</span>(<span class='ident'>obj</span>.<span class='ident'>into_object</span>())
+    <span class='doccomment'>/// `value` can be:</span>
+    <span class='doccomment'>/// * `NoArgs`: the exception instance will be created using python `T()`</span>
+    <span class='doccomment'>/// * a tuple: the exception instance will be created using python `T(*tuple)`</span>
+    <span class='doccomment'>/// * any other value: the exception instance will be created using python `T(value)`</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// Panics if `T` is not a python class derived from `BaseException`.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>V</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>
+        <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObjectWithTypeObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>V</span>: <span class='ident'>ToPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>
+    {
+        <span class='ident'>PyErr</span>::<span class='ident'>new_helper</span>(<span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(), <span class='ident'>value</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>())
     }
 
-    <span class='kw'>fn</span> <span class='ident'>new_from_object</span>(<span class='ident'>obj</span>: <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>new_helper</span>(<span class='ident'>ty</span>: <span class='ident'>PyType</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>value</span>: <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyExceptionClass_Check</span>(<span class='ident'>ty</span>.<span class='ident'>as_object</span>().<span class='ident'>as_ptr</span>()) } <span class='op'>!=</span> <span class='number'>0</span>);
+        <span class='ident'>PyErr</span> {
+            <span class='ident'>ptype</span>: <span class='ident'>ty</span>.<span class='ident'>into_object</span>(),
+            <span class='ident'>pvalue</span>: <span class='prelude-val'>Some</span>(<span class='ident'>value</span>),
+            <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
+        }
+    }
+
+    <span class='doccomment'>/// Creates a new PyErr.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// `obj` must be an Python exception instance, the PyErr will use that instance.</span>
+    <span class='doccomment'>/// If `obj` is a Python exception type object, the PyErr will (lazily) create a new instance of that type.</span>
+    <span class='doccomment'>/// Otherwise, a `TypeError` is created instead.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>from_instance</span><span class='op'>&lt;</span><span class='ident'>O</span><span class='op'>&gt;</span>(<span class='ident'>obj</span>: <span class='ident'>O</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>O</span>: <span class='ident'>PythonObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
+        <span class='ident'>PyErr</span>::<span class='ident'>from_instance_helper</span>(<span class='ident'>obj</span>.<span class='ident'>into_object</span>())
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>from_instance_helper</span>(<span class='ident'>obj</span>: <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>obj</span>.<span class='ident'>python</span>();
         <span class='kw'>if</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyExceptionInstance_Check</span>(<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>()) } <span class='op'>!=</span> <span class='number'>0</span> {
             <span class='ident'>PyErr</span> {
@@ -660,37 +706,44 @@
     <section class="footer"></section>
 
     <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
-        </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
+        <div>
+            <div class="shortcuts">
+                <h1>Keyboard Shortcuts</h1>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h1>Search Tricks</h1>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
     </div>
 

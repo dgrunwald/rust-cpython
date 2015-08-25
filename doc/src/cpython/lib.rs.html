@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -334,6 +334,14 @@
 <span id="292">292</span>
 <span id="293">293</span>
 <span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -399,13 +407,20 @@
 <span class='doccomment'>//! extern crate cpython;</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! use cpython::{PythonObject, Python};</span>
-<span class='doccomment'>//! </span>
+<span class='doccomment'>//! use cpython::ObjectProtocol; //for call method</span>
+<span class='doccomment'>//!</span>
 <span class='doccomment'>//! fn main() {</span>
-<span class='doccomment'>//!     let gil_guard = Python::acquire_gil();</span>
-<span class='doccomment'>//!     let py = gil_guard.python();</span>
+<span class='doccomment'>//!     let gil = Python::acquire_gil();</span>
+<span class='doccomment'>//!     let py = gil.python();</span>
+<span class='doccomment'>//!</span>
 <span class='doccomment'>//!     let sys = py.import(&quot;sys&quot;).unwrap();</span>
-<span class='doccomment'>//!     let version = sys.get(&quot;version&quot;).unwrap().extract::&lt;String&gt;().unwrap();</span>
-<span class='doccomment'>//!     println!(&quot;Hello Python {}&quot;, version);</span>
+<span class='doccomment'>//!     let version: String = sys.get(&quot;version&quot;).unwrap().extract().unwrap();</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     let os = py.import(&quot;os&quot;).unwrap();</span>
+<span class='doccomment'>//!     let getenv = os.get(&quot;getenv&quot;).unwrap();</span>
+<span class='doccomment'>//!     let user: String = getenv.call((&quot;USER&quot;,), None).unwrap().extract().unwrap();</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     println!(&quot;Hello {}, I&#39;m Python {}&quot;, user, version);</span>
 <span class='doccomment'>//! }</span>
 <span class='doccomment'>//! ```</span>
 
@@ -425,7 +440,7 @@
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>objects</span>::<span class='op'>*</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>PythonObjectWithTypeObject</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>pythonrun</span>::{<span class='ident'>GILGuard</span>, <span class='ident'>GILProtected</span>, <span class='ident'>prepare_freethreaded_python</span>};
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>FromPyObject</span>, <span class='ident'>ToPyObject</span>};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ExtractPyObject</span>, <span class='ident'>ToPyObject</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>objectprotocol</span>::{<span class='ident'>ObjectProtocol</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>rustobject</span>::{<span class='ident'>PyRustType</span>, <span class='ident'>PyRustObject</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>rustobject</span>::<span class='ident'>typebuilder</span>::<span class='ident'>PyRustTypeBuilder</span>;
@@ -456,6 +471,7 @@
 <span class='kw'>mod</span> <span class='ident'>objects</span>;
 <span class='kw'>mod</span> <span class='ident'>objectprotocol</span>;
 <span class='kw'>mod</span> <span class='ident'>pythonrun</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>argparse</span>;
 <span class='kw'>mod</span> <span class='ident'>function</span>;
 <span class='kw'>mod</span> <span class='ident'>rustobject</span>;
 
@@ -498,15 +514,15 @@
 <span class='doccomment'>/// #![feature(plugin)]</span>
 <span class='doccomment'>/// #![plugin(interpolate_idents)]</span>
 <span class='doccomment'>/// #[macro_use] extern crate cpython;</span>
-<span class='doccomment'>/// use cpython::{Python, PyResult, PyObject, PyTuple};</span>
+<span class='doccomment'>/// use cpython::{Python, PyResult, PyObject};</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// py_module_initializer!(example, |py, m| {</span>
 <span class='doccomment'>///     try!(m.add(&quot;__doc__&quot;, &quot;Module documentation string&quot;));</span>
-<span class='doccomment'>///     try!(m.add(&quot;run&quot;, py_fn!(run)));</span>
+<span class='doccomment'>///     try!(m.add(&quot;run&quot;, py_fn!(run())));</span>
 <span class='doccomment'>///     Ok(())</span>
 <span class='doccomment'>/// });</span>
-<span class='doccomment'>/// </span>
-<span class='doccomment'>/// fn run&lt;&#39;p&gt;(py: Python&lt;&#39;p&gt;, args: &amp;PyTuple&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, PyObject&lt;&#39;p&gt;&gt; {</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// fn run&lt;&#39;p&gt;(py: Python&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, PyObject&lt;&#39;p&gt;&gt; {</span>
 <span class='doccomment'>///     println!(&quot;Rust says: Hello Python!&quot;);</span>
 <span class='doccomment'>///     Ok(py.None())</span>
 <span class='doccomment'>/// }</span>
@@ -524,7 +540,7 @@
 <span class='doccomment'>/// &gt;&gt;&gt; example.run()</span>
 <span class='doccomment'>/// Rust says: Hello Python!</span>
 <span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// </span>
+<span class='doccomment'>///</span>
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_module_initializer</span> {
@@ -636,37 +652,44 @@
     <section class="footer"></section>
 
     <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
-        </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
+        <div>
+            <div class="shortcuts">
+                <h1>Keyboard Shortcuts</h1>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h1>Search Tricks</h1>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
     </div>
 

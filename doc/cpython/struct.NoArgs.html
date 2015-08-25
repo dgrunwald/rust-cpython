@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6603' class='srclink' href='../src/cpython/objects/tuple.rs.html#209' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-7738' class='srclink' href='../src/cpython/objects/tuple.rs.html#209' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct NoArgs;</pre><div class='docblock'><p>An empty struct that represents the empty argument list.
 Corresponds to the empty tuple <code>()</code> in Python.</p>
 
@@ -54,53 +54,59 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
 <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>cpython</span>::<span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
 <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
 <span class='kw'>let</span> <span class='ident'>os</span> <span class='op'>=</span> <span class='ident'>py</span>.<span class='ident'>import</span>(<span class='string'>&quot;os&quot;</span>).<span class='ident'>unwrap</span>();
-<span class='kw'>let</span> <span class='ident'>pid</span> <span class='op'>=</span> <span class='ident'>os</span>.<span class='ident'>call</span>(<span class='string'>&quot;get_pid&quot;</span>, <span class='ident'>cpython</span>::<span class='ident'>NoArgs</span>, <span class='prelude-val'>None</span>);
-</pre>
+<span class='kw'>let</span> <span class='ident'>pid</span> <span class='op'>=</span> <span class='ident'>os</span>.<span class='ident'>call</span>(<span class='string'>&quot;get_pid&quot;</span>, <span class='ident'>cpython</span>::<span class='ident'>NoArgs</span>, <span class='prelude-val'>None</span>);</pre>
 </div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='docblock'><p>Converts <code>NoArgs</code> to an empty Python tuple.</p>
 </div><div class='impl-items'><h4 id='assoc_type.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;</code></h4>
 <h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; Self::<a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ObjectType</a> <span class='where'>where Self: <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></h4>
-<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../python27_sys/object/struct.PyObject.html' title='python27_sys::object::PyObject'>PyObject</a></a>) -&gt; R</span></code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='docblock'><p>Returns <code>Ok(NoArgs)</code> if the input is an empty Python tuple.
-Otherwise, returns an error.</p>
-</div><div class='impl-items'><h4 id='method.from_py_object' class='method'><code>fn <a href='../cpython/trait.FromPyObject.html#method.from_py_object' class='fnname'>from_py_object</a>(s: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a>&gt;</code></h4>
+<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; Self::<a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ObjectType</a> <span class='where'>where Self: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></h4>
+<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../ffi/object/struct.PyObject.html' title='ffi::object::PyObject'>PyObject</a></a>) -&gt; R</span></code></h4>
+</div><h3 class='impl'><code>impl&lt;'python, 'source, 'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'python, 'source, 'prepared&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a> <span class='where'>where 'python: 'source</span></code></h3><div class='impl-items'><h4 id='assoc_type.Prepared' class='type'><code>type Prepared = &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;</code></h4>
+<h4 id='method.prepare_extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.prepare_extract' class='fnname'>prepare_extract</a>(obj: &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'python, Self::Prepared&gt;</code></h4>
+<h4 id='method.extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.extract' class='fnname'>extract</a>(obj: &amp;'prepared &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'python, Self&gt;</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
     <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
-        </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
+        <div>
+            <div class="shortcuts">
+                <h1>Keyboard Shortcuts</h1>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h1>Search Tricks</h1>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
     </div>
 
