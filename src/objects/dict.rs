@@ -148,3 +148,17 @@ impl <'p, K, V> ToPyObject<'p> for collections::HashMap<K, V>
     }
 }
 
+impl <'p, K, V> ToPyObject<'p> for collections::BTreeMap<K, V>
+    where K: cmp::Eq+ToPyObject<'p>,
+          V: ToPyObject<'p>
+{
+    type ObjectType = PyDict<'p>;
+
+    fn to_py_object(&self, py: Python<'p>) -> PyDict<'p> {
+        let dict = PyDict::new(py);
+        for (key, value) in self.iter() {
+            dict.set_item(key, value).unwrap();
+        };
+        dict
+    }
+}
