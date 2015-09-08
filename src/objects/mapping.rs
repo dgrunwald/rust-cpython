@@ -67,6 +67,18 @@ impl <'p> PyMapping<'p> {
     }
 
     /// Check if a string item is in the mapping. Equivalent to Python `o[key]`
+    #[cfg(feature="python27-sys")]
+    #[inline]
+    pub fn has_key_string(&self, key : &str) -> bool {
+        let c_key = CString::new(key).unwrap();
+        let v = unsafe { 
+            ffi::PyMapping_HasKeyString(self.as_ptr(), c_key.as_ptr() as *mut c_char)
+        };
+        return v == 1;
+    }
+
+    /// Check if a string item is in the mapping. Equivalent to Python `o[key]`
+    #[cfg(feature="python3-sys")]
     #[inline]
     pub fn has_key_string(&self, key : &str) -> bool {
         let c_key = CString::new(key).unwrap();
@@ -75,6 +87,7 @@ impl <'p> PyMapping<'p> {
         };
         return v == 1;
     }
+
 
     /// Check if an item is in the mapping. Equivalent to Python `o[key]`
     #[inline]
@@ -117,6 +130,24 @@ impl <'p> PyMapping<'p> {
     }
 
     /// Return the string item. Equivalent to Python `o[key]`
+    #[cfg(feature="python27-sys")]
+    #[inline]
+    pub fn get_item_string(&self, key: &str) -> PyResult<'p, PyObject<'p>> {
+        let py = self.python();
+        let v = unsafe {
+            let c_key = CString::new(key).unwrap();
+            ffi::PyMapping_GetItemString(self.as_ptr(), c_key.as_ptr() as *mut c_char)
+        };
+        if v.is_null() {
+            Err(PyErr::fetch(py))
+        } else {
+            Ok(unsafe{ PyObject::from_owned_ptr(py, v)})
+        }
+    }
+
+
+    /// Return the string item. Equivalent to Python `o[key]`
+    #[cfg(feature="python3-sys")]
     #[inline]
     pub fn get_item_string(&self, key: &str) -> PyResult<'p, PyObject<'p>> {
         let py = self.python();
@@ -132,6 +163,19 @@ impl <'p> PyMapping<'p> {
     }
 
     /// Set the string item. Equivalent to Python `o[key] = value`
+    #[cfg(feature="python27-sys")]
+    #[inline]
+    pub fn set_item_string<V>(&self, key: &str, value: V) -> PyResult<'p, ()> where V: ToPyObject<'p>{
+        let py = self.python();
+        let c_key = CString::new(key).unwrap();
+        value.with_borrowed_ptr(py, |value| unsafe {
+            err::error_on_minusone(py, 
+                ffi::PyMapping_SetItemString(self.as_ptr(), c_key.as_ptr() as *mut c_char, value))
+        })
+    }
+
+    /// Set the string item. Equivalent to Python `o[key] = value`
+    #[cfg(feature="python3-sys")]
     #[inline]
     pub fn set_item_string<V>(&self, key: &str, value: V) -> PyResult<'p, ()> where V: ToPyObject<'p>{
         let py = self.python();
