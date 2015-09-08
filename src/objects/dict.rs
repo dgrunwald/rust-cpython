@@ -212,8 +212,8 @@ mod test {
         let mut v = HashMap::new();
         v.insert(7, 32);
         let dict = v.to_py_object(py);
-        dict.set_item(7i32, 42i32); // change
-        dict.set_item(8i32, 123i32); // insert
+        assert!(dict.set_item(7i32, 42i32).is_ok()); // change
+        assert!(dict.set_item(8i32, 123i32).is_ok()); // insert
         assert_eq!(42i32, dict.get_item(7i32).unwrap().extract::<i32>().unwrap());
         assert_eq!(123i32, dict.get_item(8i32).unwrap().extract::<i32>().unwrap());
     }
@@ -225,8 +225,8 @@ mod test {
         let mut v = HashMap::new();
         v.insert(7, 32);
         let dict = v.to_py_object(py);
-        dict.set_item(7i32, 42i32); // change
-        dict.set_item(8i32, 123i32); // insert
+        assert!(dict.set_item(7i32, 42i32).is_ok()); // change
+        assert!(dict.set_item(8i32, 123i32).is_ok()); // insert
         assert_eq!(32i32, *v.get(&7i32).unwrap()); // not updated!
         assert_eq!(None, v.get(&8i32));
     }
@@ -239,7 +239,7 @@ mod test {
         let mut v = HashMap::new();
         v.insert(7, 32);
         let dict = v.to_py_object(py);
-        dict.del_item(7i32);
+        assert!(dict.del_item(7i32).is_ok());
         assert_eq!(0, dict.len());
         assert_eq!(None, dict.get_item(7i32));
     }
@@ -251,7 +251,7 @@ mod test {
         let mut v = HashMap::new();
         v.insert(7, 32);
         let dict = v.to_py_object(py);
-        dict.del_item(7i32); // change
+        assert!(dict.del_item(7i32).is_ok()); // change
         assert_eq!(32i32, *v.get(&7i32).unwrap()); // not updated!
     }
 
