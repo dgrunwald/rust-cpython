@@ -33,6 +33,7 @@ pub use self::boolobject::PyBool;
 pub use self::tuple::{PyTuple, NoArgs};
 pub use self::dict::PyDict;
 pub use self::list::PyList;
+pub use self::mapping::PyMapping;
 #[cfg(feature="python27-sys")]
 pub use self::num::PyInt;
 #[cfg(feature="python3-sys")]
@@ -184,6 +185,7 @@ mod iterator;
 mod boolobject;
 mod tuple;
 mod list;
+mod mapping;
 mod num;
 mod sequence;
 pub mod exc;
