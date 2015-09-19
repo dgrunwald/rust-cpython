@@ -1,11 +1,68 @@
 use libc::{c_int, c_long};
-use object::PyObject;
+use object::{PyObject, PyTypeObject};
+
+use code::{PyCodeObject, CO_MAXBLOCKS};
+use pyport::Py_ssize_t;
+
 
 #[allow(missing_copy_implementations)]
 pub enum PyInterpreterState { }
 
-#[allow(missing_copy_implementations)]
-pub enum PyFrameObject { }
+#[repr(C)]
+#[derive(Copy)]
+pub struct PyFrameObject {
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_next: *mut PyObject,
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_prev: *mut PyObject,
+    pub ob_refcnt: Py_ssize_t,
+    pub ob_type: *mut PyTypeObject,
+    pub ob_size: Py_ssize_t,
+    pub f_back: *mut PyFrameObject,	/* previous frame, or NULL */
+    pub f_code: *mut PyCodeObject,	/* code segment */
+    pub f_builtins: *mut PyObject,	/* builtin symbol table (PyDictObject) */
+    pub f_globals: *mut PyObject,	/* global symbol table (PyDictObject) */
+    pub f_locals: *mut PyObject,		/* local symbol table (any mapping) */
+    pub f_valuestack: *mut PyObject,	/* points after the last local */
+    /* Next free slot in f_valuestack.  Frame creation sets to f_valuestack.
+       Frame evaluation usually NULLs it, but a frame that yields sets it
+       to the current stack top. */
+    pub f_stacktop: Option<PyObject>,
+    pub f_trace: Option<Py_tracefunc>,		/* Trace function */
+
+    /* If an exception is raised in this frame, the next three are used to
+     * record the exception info (if any) originally in the thread state.  See
+     * comments before set_exc_info() -- it's not obvious.
+     * Invariant:  if _type is NULL, then so are _value and _traceback.
+     * Desired invariant:  all three are NULL, or all three are non-NULL.  That
+     * one isn't currently true, but "should be".
+     */
+    pub f_exc_type: *mut PyObject,
+    pub f_exc_value: *mut PyObject,
+    pub f_exc_traceback: *mut PyObject,
+
+    pub f_tstate: *mut PyThreadState,
+
+    pub f_lasti: c_int,		/* Last instruction if called */
+    /* Call PyFrame_GetLineNumber() instead of reading this field
+       directly.  As of 2.3 f_lineno is only valid when tracing is
+       active (i.e. when f_trace is set).  At other times we use
+       PyCode_Addr2Line to calculate the line from the current
+       bytecode index. */
+    pub f_lineno: c_int,		/* Current line number */
+    pub f_iblock: c_int,		/* index in f_blockstack */
+    pub f_blockstack: [PyObject; CO_MAXBLOCKS], /* for try and loop blocks */
+    pub  f_localsplus: [PyObject; 1]	/* locals+stack, dynamically sized */
+}
+
+#[inline(always)]
+pub unsafe fn PyFrameObject_Check(op : *mut PyObject) -> c_int {
+    1
+}
+
+impl Clone for PyFrameObject {
+    #[inline] fn clone(&self) -> PyFrameObject { *self }
+}
 
 pub type Py_tracefunc =
     unsafe extern "C" fn
@@ -93,6 +150,8 @@ extern "C" {
     pub fn PyInterpreterState_ThreadHead(arg1: *mut PyInterpreterState)
      -> *mut PyThreadState;
     pub fn PyThreadState_Next(arg1: *mut PyThreadState) -> *mut PyThreadState;
+
+    pub fn PyFrame_GetLineNumber(f: *mut PyFrameObject) -> c_int;
 }
 
 #[cfg(py_sys_config="Py_DEBUG")]
@@ -106,5 +165,3 @@ pub unsafe fn PyThreadState_GET() -> *mut PyThreadState {
 pub unsafe fn PyThreadState_GET() -> *mut PyThreadState {
     _PyThreadState_Current
 }
-
-
