@@ -408,6 +408,7 @@
 <span id="365">365</span>
 <span id="366">366</span>
 <span id="367">367</span>
+<span id="368">368</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -474,6 +475,7 @@
     <span class='doccomment'>/// The module to which the new type should be added.</span>
     <span class='ident'>target_module</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyModule</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Whether PyTypeBuilder::base() might be called</span>
+    <span class='doccomment'>/// Gets set to false when members depending on type B are added.</span>
     <span class='ident'>can_change_base</span>: <span class='ident'>bool</span>,
     <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>,
     <span class='ident'>phantom</span>: <span class='ident'>marker</span>::<span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;p</span> (<span class='ident'>B</span>, <span class='ident'>T</span>)<span class='op'>&gt;</span>

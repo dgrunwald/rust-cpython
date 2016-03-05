@@ -483,6 +483,7 @@
 <span id="440">440</span>
 <span id="441">441</span>
 <span id="442">442</span>
+<span id="443">443</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -511,6 +512,7 @@
 <span class='kw'>use</span> <span class='ident'>err</span>;
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>, <span class='ident'>result_from_owned_ptr</span>, <span class='ident'>result_cast_from_owned_ptr</span>};
 
+<span class='doccomment'>/// Represents a reference to a python object supporting the sequence protocol.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PySequence</span>(<span class='ident'>PyObject</span>);
 
 <span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='ident'>PySequence</span>, <span class='ident'>PySequence_Check</span>);

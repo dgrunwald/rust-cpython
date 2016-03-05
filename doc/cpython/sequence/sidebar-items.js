@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PySequence",""]]});
+initSidebarItems({"struct":[["PySequence","Represents a reference to a python object supporting the sequence protocol."]]});
