@@ -9,6 +9,7 @@
 
     <title>cpython::py_module_initializer! - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_module_initializer!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,21 +46,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-24224' class='srclink' href='../src/cpython/lib.rs.html#201-214' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-4033' class='srclink' href='../src/cpython/src/lib.rs.html#201-214' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_module_initializer</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='ident'>ident</span><span class='op'>|</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> ( <span class='macro'>interpolate_idents</span><span class='macro'>!</span> {
-        <span class='attribute'>#[[<span class='ident'>no_mangle</span>]</span>]
-        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_snake_case</span>)]</span>
-        <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> [ <span class='ident'>init</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> ]() {
-            <span class='comment'>// Nest init function so that $body isn&#39;t in unsafe context</span>
-            <span class='kw'>fn</span> <span class='ident'>init</span><span class='op'>&lt;</span><span class='lifetime'>&#39;pmisip</span><span class='op'>&gt;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;pmisip</span><span class='op'>&gt;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>PyModule</span><span class='op'>&lt;</span><span class='lifetime'>&#39;pmisip</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;pmisip</span>, ()<span class='op'>&gt;</span> {
-                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>
-            }
-            <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>), <span class='string'>&quot;\0&quot;</span>).<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> _;
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>py_module_initializer_impl</span>(<span class='ident'>name</span>, <span class='ident'>init</span>)
-        }
-    })
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='ident'>ident</span><span class='op'>|</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
 the rust code as a Python extension module.</p>
@@ -67,18 +57,14 @@ the rust code as a Python extension module.</p>
 <p>Macro syntax: <code>py_module_initializer!($name, |$py, $m| $body)</code></p>
 
 <ol>
-<li>The module name as a string literal.</li>
-<li>The name of the init function as an identifier.
-The function must be named <code>init$module_name</code> so that Python 2.7 can load the module.
-Note: this parameter will be removed in a future version
-(once Rust supports <code>concat_ident!</code> as function name).</li>
-<li>A function or lambda of type <code>Fn(Python&lt;&#39;p&gt;, &amp;PyModule&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, ()&gt;</code>.
+<li><code>name</code>: The module name as a Rust identifier.</li>
+<li>A lambda of type <code>Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;</code>.
 This function will be called when the module is imported, and is responsible
 for adding the module&#39;s members.</li>
 </ol>
 
-<h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre class='rust rust-example-rendered'>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_type</span> <span class='op'>=</span> <span class='string'>&quot;dylib&quot;</span>]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>plugin</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>plugin</span>(<span class='ident'>interpolate_idents</span>)]</span>
@@ -86,12 +72,12 @@ for adding the module&#39;s members.</li>
 <span class='kw'>use</span> <span class='ident'>cpython</span>::{<span class='ident'>Python</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyObject</span>};
 
 <span class='macro'>py_module_initializer</span><span class='macro'>!</span>(<span class='ident'>example</span>, <span class='op'>|</span><span class='ident'>py</span>, <span class='ident'>m</span><span class='op'>|</span> {
-    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='string'>&quot;__doc__&quot;</span>, <span class='string'>&quot;Module documentation string&quot;</span>));
-    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='string'>&quot;run&quot;</span>, <span class='macro'>py_fn</span><span class='macro'>!</span>(<span class='ident'>run</span>())));
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;__doc__&quot;</span>, <span class='string'>&quot;Module documentation string&quot;</span>));
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;run&quot;</span>, <span class='macro'>py_fn</span><span class='macro'>!</span>(<span class='ident'>run</span>())));
     <span class='prelude-val'>Ok</span>(())
 });
 
-<span class='kw'>fn</span> <span class='ident'>run</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>PyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
+<span class='kw'>fn</span> <span class='ident'>run</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
     <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Rust says: Hello Python!&quot;</span>);
     <span class='prelude-val'>Ok</span>(<span class='ident'>py</span>.<span class='prelude-val'>None</span>())
 }</pre>
@@ -112,10 +98,12 @@ Rust says: Hello Python!
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -132,7 +120,7 @@ Rust says: Hello Python!
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -148,11 +136,11 @@ Rust says: Hello Python!
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -164,6 +152,6 @@ Rust says: Hello Python!
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

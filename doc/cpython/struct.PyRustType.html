@@ -9,6 +9,7 @@
 
     <title>cpython::PyRustType - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'PyRustType', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,45 +46,44 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-23837' class='srclink' href='../src/cpython/rustobject/mod.rs.html#203-206' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct PyRustType&lt;'p, T, B = <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt; <span class='where'>where T: 'p + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span> {
+        </span><a id='src-3946' class='srclink' href='../src/cpython/src/rustobject/mod.rs.html#202-205' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PyRustType&lt;T, B = <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt; <span class='where'>where T: 'static + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject</span> {
     // some fields omitted
 }</pre><div class='docblock'><p>A Python class that contains rust values of type T.
 Serves as a Python type object, and can be used to construct
 <code>PyRustObject&lt;T&gt;</code> instances.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p, T, B&gt; <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T, B&gt; <span class='where'>where T: 'p + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></h3><div class='impl-items'><h4 id='method.create_instance' class='method'><code>fn <a href='#method.create_instance' class='fnname'>create_instance</a>(&amp;self, val: T, base_val: B::InitType) -&gt; <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;'p, T, B&gt;</code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;T, B&gt; <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject</span></code></h3><div class='impl-items'><h4 id='method.create_instance' class='method'><code>fn <a href='#method.create_instance' class='fnname'>create_instance</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, val: T, base_val: B::InitType) -&gt; <a class='struct' href='../cpython/struct.PyRustObject.html' title='cpython::PyRustObject'>PyRustObject</a>&lt;T, B&gt;</code></h4>
 <div class='docblock'><p>Creates a PyRustObject instance from a value.</p>
-</div></div><h2 id='deref-methods'>Methods from <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;&gt;</h2><div class='impl-items'><h4 id='method.as_type_ptr' class='method'><code>fn <a href='#method.as_type_ptr' class='fnname'>as_type_ptr</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../ffi/object/struct.PyTypeObject.html' title='ffi::object::PyTypeObject'>PyTypeObject</a></a></code></h4>
+</div></div><h2 id='deref-methods'>Methods from <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&gt;</h2><div class='impl-items'><h4 id='method.as_type_ptr' class='method'><code>fn <a href='#method.as_type_ptr' class='fnname'>as_type_ptr</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyTypeObject</code></h4>
 <div class='docblock'><p>Retrieves the underlying FFI pointer associated with this Python object.</p>
-</div><h4 id='method.is_subtype_of' class='method'><code>fn <a href='#method.is_subtype_of' class='fnname'>is_subtype_of</a>(&amp;self, b: &amp;<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<div class='docblock'><p>Return true if self is a subtype of b.</p>
-</div><h4 id='method.is_instance' class='method'><code>fn <a href='#method.is_instance' class='fnname'>is_instance</a>(&amp;self, obj: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<div class='docblock'><p>Return true if obj is an instance of self.</p>
-</div><h4 id='method.call' class='method'><code>fn <a href='#method.call' class='fnname'>call</a>&lt;A&gt;(&amp;self, args: A, kwargs: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&lt;'p&gt;&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;&gt; <span class='where'>where A: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p, ObjectType=<a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;&gt;</span></code></h4>
+</div><h4 id='method.is_subtype_of' class='method'><code>fn <a href='#method.is_subtype_of' class='fnname'>is_subtype_of</a>(&amp;self, _: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, b: &amp;<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Return true if <code>self</code> is a subtype of <code>b</code>.</p>
+</div><h4 id='method.is_instance' class='method'><code>fn <a href='#method.is_instance' class='fnname'>is_instance</a>(&amp;self, _: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Return true if <code>obj</code> is an instance of <code>self</code>.</p>
+</div><h4 id='method.call' class='method'><code>fn <a href='#method.call' class='fnname'>call</a>&lt;A&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, args: A, kwargs: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt; <span class='where'>where A: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;ObjectType=<a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&gt;</span></code></h4>
 <div class='docblock'><p>Calls the type object, thus creating a new instance.
 This is equivalent to the Python expression: <code>self(*args, **kwargs)</code></p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p, T, B&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T, B&gt; <span class='where'>where T: 'p + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject&lt;'p&gt;</span></code></h3><div class='impl-items'><h4 id='assoc_type.Target' class='type'><code>type Target = <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-<h4 id='method.deref' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p, T&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T&gt; <span class='where'>where T: 'p + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; Self</code></h4>
-<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p, 's, T&gt; <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'s, T&gt; <span class='where'>where T: 's + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></h3><div class='impl-items'><h4 id='assoc_type.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
-<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../ffi/object/struct.PyObject.html' title='ffi::object::PyObject'>PyObject</a></a>) -&gt; R</span></code></h4>
-</div><h3 class='impl'><code>impl&lt;'p, T&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;'p, T&gt; <span class='where'>where T: 'p + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></span></code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
-<h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self</code></h4>
-<h4 id='method.unchecked_downcast_borrow_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; &amp;'a Self</code></h4>
-<h4 id='method.python' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.python' class='fnname'>python</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;T, B&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject</span></code></h3><div class='impl-items'><h4 id='associatedtype.Target' class='type'><code>type Target = <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+<h4 id='method.deref' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;T, B&gt; <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a> for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject</span></code></h3><div class='impl-items'><h4 id='associatedtype.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyObject) -&gt; R</span></code></h4>
+</div><h3 class='impl'><code>impl&lt;T, B&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyRustType.html' title='cpython::PyRustType'>PyRustType</a>&lt;T, B&gt; <span class='where'>where T: 'static + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>, B: PythonBaseObject</span></code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+<h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+<h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; Self</code></h4>
+<h4 id='method.unchecked_downcast_borrow_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; &amp;'a Self</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -100,7 +100,7 @@ This is equivalent to the Python expression: <code>self(*args, **kwargs)</code><
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -116,11 +116,11 @@ This is equivalent to the Python expression: <code>self(*args, **kwargs)</code><
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -132,6 +132,6 @@ This is equivalent to the Python expression: <code>self(*args, **kwargs)</code><
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

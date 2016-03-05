@@ -9,6 +9,7 @@
 
     <title>cpython::argparse::ParamDescription - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='../index.html'>cpython</a>::<wbr><a href='index.html'>argparse</a></p><script>window.sidebarCurrent = {name: 'ParamDescription', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,10 +46,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-21431' class='srclink' href='../../src/cpython/argparse.rs.html#30-35' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-3548' class='srclink' href='../../src/cpython/src/argparse.rs.html#30-35' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ParamDescription&lt;'a&gt; {
-    pub name: &amp;'a <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,
-    pub is_optional: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub name: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,
+    pub is_optional: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
 }</pre><div class='docblock'><p>Description of a python parameter; used for <code>parse_args()</code>.</p>
 </div><h2 class='fields'>Fields</h2>
 <table><tr class='stab '>
@@ -60,10 +61,12 @@
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -80,7 +83,7 @@
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -96,11 +99,11 @@
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -112,6 +115,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

@@ -9,6 +9,7 @@
 
     <title>cpython::PyBytes - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'PyBytes', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,17 +46,17 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-3377' class='srclink' href='../src/cpython/objects/string.rs.html#32' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct PyBytes&lt;'p&gt;(_);</pre><div class='docblock'><p>Represents a Python byte string.
+        </span><a id='src-695' class='srclink' href='../src/cpython/src/objects/string.rs.html#32' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PyBytes(_);</pre><div class='docblock'><p>Represents a Python byte string.
 Corresponds to <code>str</code> in Python 2, and <code>bytes</code> in Python 3.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, s: <a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, s: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h4>
 <div class='docblock'><p>Creates a new Python byte string object.
 The byte string is initialized by copying the data from the <code>&amp;[u8]</code>.</p>
 
 <p>Panics if out of memory.</p>
-</div><h4 id='method.as_slice' class='method'><code>fn <a href='#method.as_slice' class='fnname'>as_slice</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></h4>
+</div><h4 id='method.as_slice' class='method'><code>fn <a href='#method.as_slice' class='fnname'>as_slice</a>(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></h4>
 <div class='docblock'><p>Gets the Python string data as byte slice.</p>
-</div></div><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.extract' class='method'><code>fn <a href='#method.extract' class='fnname'>extract</a>&lt;'a&gt;(o: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'a, <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
+</div></div><h3 class='impl'><code>impl <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a></code></h3><div class='impl-items'><h4 id='method.extract' class='method'><code>fn <a href='#method.extract' class='fnname'>extract</a>&lt;'a&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, o: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'a, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
 <div class='docblock'><p>Extract a rust string from the Python object.</p>
 
 <p>In Python 2.7, accepts both byte strings and unicode strings.
@@ -65,7 +66,7 @@ Byte strings will be decoded using UTF-8.</p>
 
 <p>Returns <code>TypeError</code> if the input is not one of the accepted types.
 Returns <code>UnicodeDecodeError</code> if the input is not valid unicode.</p>
-</div><h4 id='method.extract_lossy' class='method'><code>fn <a href='#method.extract_lossy' class='fnname'>extract_lossy</a>&lt;'a&gt;(o: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'a, <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
+</div><h4 id='method.extract_lossy' class='method'><code>fn <a href='#method.extract_lossy' class='fnname'>extract_lossy</a>&lt;'a&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, o: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'a, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
 <div class='docblock'><p>Extract a rust string from the Python object.</p>
 
 <p>In Python 2.7, accepts both byte strings and unicode strings.
@@ -75,45 +76,42 @@ Byte strings will be decoded using UTF-8.</p>
 
 <p>Returns <code>TypeError</code> if the input is not one of the accepted types.
 Any invalid code points are replaced with U+FFFD REPLACEMENT CHARACTER.</p>
-</div><h4 id='method.to_string' class='method'><code>fn <a href='#method.to_string' class='fnname'>to_string</a>(&amp;self) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'p, <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
+</div><h4 id='method.to_string' class='method'><code>fn <a href='#method.to_string' class='fnname'>to_string</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
 <div class='docblock'><p>Convert the <code>PyString</code> into a rust string.</p>
 
 <p>In Python 2.7, <code>PyString</code> is a byte string and will be decoded using UTF-8.
 In Python 3.x, <code>PyString</code> is a unicode string.</p>
 
 <p>Returns a <code>UnicodeDecodeError</code> if the input is not valid unicode.</p>
-</div><h4 id='method.to_string_lossy' class='method'><code>fn <a href='#method.to_string_lossy' class='fnname'>to_string_lossy</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
+</div><h4 id='method.to_string_lossy' class='method'><code>fn <a href='#method.to_string_lossy' class='fnname'>to_string_lossy</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
 <div class='docblock'><p>Convert the <code>PyString</code> into a rust string.</p>
 
 <p>In Python 2.7, <code>PyString</code> is a byte string and will be decoded using UTF-8.
 In Python 3.x, <code>PyString</code> is a unicode string.</p>
 
 <p>Any invalid UTF-8 sequences are replaced with U+FFFD REPLACEMENT CHARACTER.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h3><div class='docblock'><p>Clone returns another reference to the Python object,
-thus incrementing the reference count by 1.</p>
-</div><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; Self</code></h4>
-<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p, 's&gt; <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'s&gt;</code></h3><div class='impl-items'><h4 id='assoc_type.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h4>
-<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h4>
-<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../ffi/object/struct.PyObject.html' title='ffi::object::PyObject'>PyObject</a></a>) -&gt; R</span></code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;</code></h4>
-<h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; Self</code></h4>
-<h4 id='method.unchecked_downcast_borrow_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; &amp;'a Self</code></h4>
-<h4 id='method.python' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.python' class='fnname'>python</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.downcast_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_from' class='fnname'>downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
-<h4 id='method.downcast_borrow_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'p&gt;) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.type_object' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithTypeObject.html#method.type_object' class='fnname'>type_object</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>&lt;'p&gt;</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h3><div class='impl-items'><h4 id='associatedtype.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h4>
+<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h4>
+<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h4>
+<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyObject) -&gt; R</span></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h3><div class='impl-items'><h4 id='method.as_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+<h4 id='method.into_object' class='method'><code>fn <a href='../cpython/trait.PythonObject.html#method.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+<h4 id='method.unchecked_downcast_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; Self</code></h4>
+<h4 id='method.unchecked_downcast_borrow_from' class='method'><code>unsafe fn <a href='../cpython/trait.PythonObject.html#method.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>&lt;'a&gt;(obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; &amp;'a Self</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h3><div class='impl-items'><h4 id='method.downcast_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_from' class='fnname'>downcast_from</a>&lt;'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, obj: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
+<h4 id='method.downcast_borrow_from' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithCheckedDowncast.html#method.downcast_borrow_from' class='fnname'>downcast_borrow_from</a>&lt;'a, 'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;&amp;'a <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a>, PythonObjectDowncastError&lt;'p&gt;&gt;</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></h3><div class='impl-items'><h4 id='method.type_object' class='method'><code>fn <a href='../cpython/trait.PythonObjectWithTypeObject.html#method.type_object' class='fnname'>type_object</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -130,7 +128,7 @@ thus incrementing the reference count by 1.</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -146,11 +144,11 @@ thus incrementing the reference count by 1.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -162,6 +160,6 @@ thus incrementing the reference count by 1.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

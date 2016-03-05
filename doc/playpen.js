@@ -12,6 +12,8 @@
 /*globals $: true, rootPath: true */
 
 document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+
     if (!window.playgroundUrl) {
         return;
     }
@@ -26,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             var a = document.createElement('a');
-            a.textContent = '⇱';
             a.setAttribute('class', 'test-arrow');
+            a.textContent = 'Run';
 
             var code = el.previousElementSibling.textContent;
 

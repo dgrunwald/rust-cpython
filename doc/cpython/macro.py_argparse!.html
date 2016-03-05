@@ -9,6 +9,7 @@
 
     <title>cpython::py_argparse! - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_argparse!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,37 +46,17 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-24219' class='srclink' href='../src/cpython/argparse.rs.html#151-174' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-4024' class='srclink' href='../src/cpython/src/argparse.rs.html#152-176' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, ($( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> ),<span class='op'>*</span>) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>const</span> <span class='ident'>PARAMS</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> [<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>argparse</span>::<span class='ident'>ParamDescription</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span><span class='op'>&gt;</span>] <span class='op'>=</span> <span class='kw-2'>&amp;</span>[
-            $(
-                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>argparse</span>::<span class='ident'>ParamDescription</span> {
-                    <span class='ident'>name</span>: <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>),
-                    <span class='ident'>is_optional</span>: <span class='boolval'>false</span>
-                }
-            ),<span class='op'>*</span>
-        ];
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>output</span> <span class='op'>=</span> [$( <span class='macro'>py_argparse_snd</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>, <span class='prelude-val'>None</span>) ),<span class='op'>*</span>];
-        <span class='kw'>match</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>argparse</span>::<span class='ident'>parse_args</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>, <span class='ident'>PARAMS</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>output</span>) {
-            <span class='prelude-val'>Ok</span>(()) <span class='op'>=&gt;</span> {
-                <span class='comment'>// We can&#39;t use experimental slice pattern syntax in macros</span>
-                <span class='comment'>//let &amp;[$(ref $pname),*] = &amp;output;</span>
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>output</span>.<span class='ident'>iter</span>();
-                <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='macro'>py_argparse_extract</span><span class='macro'>!</span>( <span class='ident'>iter</span>, ( $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> ),<span class='op'>*</span> ) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span> );
-                <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>() <span class='op'>==</span> <span class='prelude-val'>None</span>);
-                <span class='ident'>ret</span>
-            },
-            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
-        }
-    }}
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, ($( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> ),<span class='op'>*</span>) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>This macro is used to parse a parameter list into a set of variables.</p>
 
-<p>Syntax: <code>py_argparse!(fname, args, kwargs, (parameter-list) { body })</code></p>
+<p>Syntax: <code>py_argparse!(py, fname, args, kwargs, (parameter-list) { body })</code></p>
 
 <ul>
+<li><code>py</code>: the <code>Python</code> token</li>
 <li><code>fname</code>: expression of type <code>Option&lt;&amp;str&gt;</code>: Name of the function used in error messages.</li>
 <li><code>args</code>: expression of type <code>&amp;PyTuple</code>: The position arguments</li>
 <li><code>kwargs</code>: expression of type <code>Option&lt;&amp;PyDict&gt;</code>: The named arguments</li>
@@ -94,10 +75,12 @@ If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -114,7 +97,7 @@ If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -130,11 +113,11 @@ If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -146,6 +129,6 @@ If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

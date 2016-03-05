@@ -9,6 +9,7 @@
 
     <title>cpython::GILGuard - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'GILGuard', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,14 +46,14 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-21292' class='srclink' href='../src/cpython/pythonrun.rs.html#89-91' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-3510' class='srclink' href='../src/cpython/src/pythonrun.rs.html#89-91' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>#[must_use]
 pub struct GILGuard {
     // some fields omitted
-}</pre><div class='docblock'><p>RAII type that represents an acquired GIL.</p>
+}</pre><div class='docblock'><p>RAII type that represents the Global Interpreter Lock acquisition.</p>
 
-<h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>cpython</span>::<span class='ident'>Python</span>;
 
 {
@@ -77,10 +78,12 @@ acquired the GIL may access the Python interpreter.</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -97,7 +100,7 @@ acquired the GIL may access the Python interpreter.</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -113,11 +116,11 @@ acquired the GIL may access the Python interpreter.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -129,6 +132,6 @@ acquired the GIL may access the Python interpreter.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

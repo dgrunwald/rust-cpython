@@ -9,6 +9,7 @@
 
     <title>cpython::argparse - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='../index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'argparse', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,9 +46,9 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-21414' class='srclink' href='../../src/cpython/argparse.rs.html#19-195' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-3540' class='srclink' href='../../src/cpython/src/argparse.rs.html#19-197' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This module contains logic for parsing a python argument list.
-See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_method</code>.</p>
+See also the macros <code>py_argparse!</code>, <code>py_fn!</code> and <code>py_method!</code>.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -55,7 +56,6 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
                                title='cpython::argparse::ParamDescription'>ParamDescription</a></td>
                         <td class='docblock short'>
                              <p>Description of a python parameter; used for <code>parse_args()</code>.</p>
-
                         </td>
                     </tr>
                 </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
@@ -65,7 +65,6 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
                                title='cpython::argparse::parse_args'>parse_args</a></td>
                         <td class='docblock short'>
                              <p>Parse argument list</p>
-
                         </td>
                     </tr>
                 </table></section>
@@ -73,10 +72,12 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -93,7 +94,7 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -109,11 +110,11 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -125,6 +126,6 @@ See also the macros <code>py_argparse!</code>, <code>py_fn</code> and <code>py_m
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

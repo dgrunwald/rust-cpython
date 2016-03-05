@@ -9,6 +9,7 @@
 
     <title>cpython::NoArgs - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'NoArgs', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,33 +46,38 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-7738' class='srclink' href='../src/cpython/objects/tuple.rs.html#209' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-1357' class='srclink' href='../src/cpython/src/objects/tuple.rs.html#220' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct NoArgs;</pre><div class='docblock'><p>An empty struct that represents the empty argument list.
 Corresponds to the empty tuple <code>()</code> in Python.</p>
 
-<h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>cpython</span>::<span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
 <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
 <span class='kw'>let</span> <span class='ident'>os</span> <span class='op'>=</span> <span class='ident'>py</span>.<span class='ident'>import</span>(<span class='string'>&quot;os&quot;</span>).<span class='ident'>unwrap</span>();
-<span class='kw'>let</span> <span class='ident'>pid</span> <span class='op'>=</span> <span class='ident'>os</span>.<span class='ident'>call</span>(<span class='string'>&quot;get_pid&quot;</span>, <span class='ident'>cpython</span>::<span class='ident'>NoArgs</span>, <span class='prelude-val'>None</span>);</pre>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;'p&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='docblock'><p>Converts <code>NoArgs</code> to an empty Python tuple.</p>
-</div><div class='impl-items'><h4 id='assoc_type.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;</code></h4>
-<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&lt;'p&gt;</code></h4>
-<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;) -&gt; Self::<a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ObjectType</a> <span class='where'>where Self: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></h4>
-<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../ffi/object/struct.PyObject.html' title='ffi::object::PyObject'>PyObject</a></a>) -&gt; R</span></code></h4>
-</div><h3 class='impl'><code>impl&lt;'python, 'source, 'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'python, 'source, 'prepared&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a> <span class='where'>where 'python: 'source</span></code></h3><div class='impl-items'><h4 id='assoc_type.Prepared' class='type'><code>type Prepared = &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;</code></h4>
-<h4 id='method.prepare_extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.prepare_extract' class='fnname'>prepare_extract</a>(obj: &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'python, Self::Prepared&gt;</code></h4>
-<h4 id='method.extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.extract' class='fnname'>extract</a>(obj: &amp;'prepared &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&lt;'python&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;'python, Self&gt;</code></h4>
-</div></section>
+<span class='kw'>let</span> <span class='ident'>pid</span> <span class='op'>=</span> <span class='ident'>os</span>.<span class='ident'>call</span>(<span class='ident'>py</span>, <span class='string'>&quot;get_pid&quot;</span>, <span class='ident'>cpython</span>::<span class='ident'>NoArgs</span>, <span class='prelude-val'>None</span>);</pre>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a> for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='docblock'><p>Converts <code>NoArgs</code> to an empty Python tuple.</p>
+</div><div class='impl-items'><h4 id='associatedtype.ObjectType' class='type'><code>type ObjectType = <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></h4>
+<h4 id='method.to_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.to_py_object' class='fnname'>to_py_object</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></h4>
+<h4 id='method.into_py_object' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.into_py_object' class='fnname'>into_py_object</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; Self::<a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ObjectType</a> <span class='where'>where Self: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></h4>
+<h4 id='method.with_borrowed_ptr' class='method'><code>fn <a href='../cpython/trait.ToPyObject.html#method.with_borrowed_ptr' class='fnname'>with_borrowed_ptr</a>&lt;F, R&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, f: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyObject) -&gt; R</span></code></h4>
+</div><h3 class='impl'><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='impl-items'><h4 id='associatedtype.Prepared' class='type'><code>type Prepared = <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+<h4 id='method.prepare_extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.prepare_extract' class='fnname'>prepare_extract</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self::<a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>Prepared</a>&gt;</code></h4>
+<h4 id='method.extract' class='method'><code>fn <a href='../cpython/trait.ExtractPyObject.html#method.extract' class='fnname'>extract</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;'prepared <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self&gt;</code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h4>
+<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></h3><div class='impl-items'></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -88,7 +94,7 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -104,11 +110,11 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -120,6 +126,6 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PyIterator",""]]});
+initSidebarItems({"struct":[["PyIterator","A python iterator object."]]});

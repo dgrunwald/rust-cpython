@@ -9,6 +9,7 @@
 
     <title>cpython::py_method_call_impl! - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_method_call_impl!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,29 +46,26 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-24222' class='srclink' href='../src/cpython/rustobject/method.rs.html#176-187' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-4030' class='srclink' href='../src/cpython/src/rustobject/method.rs.html#141-152' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_method_call_impl</span> {
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( ) )
-            <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>py_method_impl</span>::<span class='ident'>py_method_impl_0</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>) };
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span> ) )
-            <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>py_method_impl</span>::<span class='ident'>py_method_impl_1</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>) };
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span> ) )
-            <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>py_method_impl</span>::<span class='ident'>py_method_impl_2</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>) };
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n3</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t3</span>:<span class='ident'>ty</span> ) )
-            <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>py_method_impl</span>::<span class='ident'>py_method_impl_3</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>) };
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n3</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t3</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n4</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t4</span>:<span class='ident'>ty</span> ) )
-            <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>py_method_impl</span>::<span class='ident'>py_method_impl_3</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>) };
-    }</pre>
+    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( ) ) <span class='op'>=&gt;</span> { ... };
+    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span> ) ) <span class='op'>=&gt;</span> { ... };
+    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span> ) ) <span class='op'>=&gt;</span> { ... };
+    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n3</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t3</span>:<span class='ident'>ty</span> ) ) <span class='op'>=&gt;</span> { ... };
+    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>def</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>f</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n1</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t1</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n2</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t2</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n3</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t3</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n4</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t4</span>:<span class='ident'>ty</span> ) ) <span class='op'>=&gt;</span> { ... };
+}</pre>
 </section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -84,7 +82,7 @@
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -100,11 +98,11 @@
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -116,6 +114,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

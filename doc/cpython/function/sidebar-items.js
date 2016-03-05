@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["py_fn_impl",""]]});
+initSidebarItems({"fn":[["get_kwargs",""],["py_fn_impl",""],["result_to_ptr",""]]});
