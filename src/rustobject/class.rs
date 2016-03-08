@@ -30,7 +30,7 @@ pub trait PythonObjectFromPyClassMacro : python::PythonObjectWithTypeObject {
 # Example
 ```
 #[macro_use] extern crate cpython;
-use cpython::{Python, PyResult, PyType, PyDict};
+use cpython::{Python, PyResult, PyType, PyDict, PyObject};
 
 py_class!(class MyType, data: i32, |py| {
     def __new__(_cls: &PyType, arg: i32) -> PyResult<MyType> {
@@ -39,6 +39,11 @@ py_class!(class MyType, data: i32, |py| {
     def half(&self) -> PyResult<i32> {
         println!("half() was called with self={:?}", self.data(py));
         Ok(self.data(py) / 2)
+    }
+
+    def set(&self, data: i32) -> PyResult<PyObject> {
+        *self.inner_mut(py) = data;
+        Ok(py.None())
     }
 });
 
@@ -95,6 +100,10 @@ macro_rules! py_class_impl {
         impl $name {
             pub fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> &'a $data_ty {
                 self.0.get(py)
+            }
+
+            pub fn inner_mut<'a>(&'a self, py: $crate::Python<'a>) -> &'a mut $data_ty {
+                self.0.get_mut(py)
             }
 
             pub fn create_instance(py: $crate::Python, $( $param_name : $param_ty ),* ) -> $name {
@@ -305,4 +314,3 @@ macro_rules! py_class_parse_body {
         py_class_parse_body!($class, $py, $b, $($remainder)*);
     );
 }
-

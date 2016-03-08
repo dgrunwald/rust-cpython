@@ -127,6 +127,18 @@ impl <T, B> PyRustObject<T, B> where T: 'static + Send, B: BaseObject {
             &*ptr
         }
     }
+
+    /// Gets a mutable reference to the rust value stored in this Python object.
+    #[inline]
+    pub fn get_mut<'a>(&'a self, _py: Python<'a>) -> &'a mut T {
+        // We require the `Python` token to access the contained value,
+        // because `PyRustObject` is `Sync` even if `T` is `!Sync`.
+        let offset = PyRustObject::<T, B>::offset() as isize;
+        unsafe {
+            let ptr = (self.obj.as_ptr() as *mut u8).offset(offset) as *mut T;
+            &mut *ptr
+        }
+    }
 }
 
 impl <T, B> BaseObject for PyRustObject<T, B> where T: 'static + Send, B: BaseObject {
@@ -283,4 +295,3 @@ impl <T, B> PythonObject for PyRustType<T, B> where T: 'static + Send, B: BaseOb
         mem::transmute(obj)
     }
 }
-
