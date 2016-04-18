@@ -87,7 +87,7 @@ fn new_with_two_args() {
     assert_eq!(*obj._data2(py), 20);
 }
 
-struct TestDropCall {
+pub struct TestDropCall {
     drop_called: Arc<AtomicBool>
 }
 impl Drop for TestDropCall {

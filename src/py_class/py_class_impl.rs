@@ -39,7 +39,7 @@ macro_rules! py_class_impl {
         }
         $slots:tt { $( $imp:item )* } $members:tt;
     } => {
-        struct $class { _unsafe_inner: $crate::PyObject }
+        pub struct $class { _unsafe_inner: $crate::PyObject }
 
         pyobject_to_pyobject!($class);
 

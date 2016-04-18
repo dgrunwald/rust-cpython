@@ -14,7 +14,7 @@ py_module_initializer!(btree, initbtree, PyInit_btree, |py, m| {
 
 /// Newtype around PyObject that implements Ord using python value comparisons.
 /// Python exceptions are converted into Rust panics.
-struct OrdPyObject(PyObject);
+pub struct OrdPyObject(PyObject);
 
 impl PartialEq for OrdPyObject {
     fn eq(&self, _other: &Self) -> bool {
