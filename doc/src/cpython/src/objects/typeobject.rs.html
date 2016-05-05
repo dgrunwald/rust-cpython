@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
 
     
     
@@ -117,6 +118,15 @@
 <span id="74">74</span>
 <span id="75">75</span>
 <span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -141,6 +151,8 @@
 <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyResult</span>, <span class='ident'>result_from_owned_ptr</span>};
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CStr</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
 
 <span class='doccomment'>/// Represents a reference to a Python type object.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyType</span>(<span class='ident'>PyObject</span>);
@@ -160,6 +172,13 @@
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_type_ptr</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>p</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyTypeObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span> {
         <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>p</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>).<span class='ident'>unchecked_cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PyType</span><span class='op'>&gt;</span>()
+    }
+
+    <span class='doccomment'>/// Gets the name of the PyType.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>name</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Cow</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>str</span><span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='ident'>CStr</span>::<span class='ident'>from_ptr</span>((<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>as_type_ptr</span>()).<span class='ident'>tp_name</span>).<span class='ident'>to_string_lossy</span>()
+        }
     }
 
     <span class='doccomment'>/// Return true if `self` is a subtype of `b`.</span>

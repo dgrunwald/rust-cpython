@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get_kwargs",""],["py_fn_impl",""],["result_to_ptr",""]]});
+initSidebarItems({"fn":[["handle_callback",""],["py_fn_impl",""]],"struct":[["AbortOnDrop",""],["PyObjectCallbackConverter",""],["PythonObjectCallbackConverter",""]]});

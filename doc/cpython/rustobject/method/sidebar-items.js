@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["py_class_method_impl",""]]});

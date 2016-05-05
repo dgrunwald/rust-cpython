@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["create_class_method_descriptor",""],["create_instance_method_descriptor",""]],"struct":[["ClassMethodDescriptor",""],["InstanceMethodDescriptor",""]],"trait":[["TypeMember","Represents something that can be added as a member to a Python class/type."]]});

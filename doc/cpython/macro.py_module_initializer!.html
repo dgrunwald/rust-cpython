@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,21 +44,23 @@
 
     <section id='main' class="content macro">
 <h1 class='fqn'><span class='in-band'><a href='index.html'>cpython</a>::<wbr><a class='macro' href=''>py_module_initializer!</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-4033' class='srclink' href='../src/cpython/src/lib.rs.html#201-214' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-4075' class='srclink' href='../src/cpython/src/lib.rs.html#204-217' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_module_initializer</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='ident'>ident</span><span class='op'>|</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py2</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py3</span>: <span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='ident'>ident</span><span class='op'>|</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
 the rust code as a Python extension module.</p>
 
-<p>Macro syntax: <code>py_module_initializer!($name, |$py, $m| $body)</code></p>
+<p>Macro syntax: <code>py_module_initializer!($name, $py2_init, $py3_init, |$py, $m| $body)</code></p>
 
 <ol>
 <li><code>name</code>: The module name as a Rust identifier.</li>
+<li><code>py2_init</code>: &quot;init&quot; + $name. Necessary because macros can&#39;t use concat_idents!().</li>
+<li><code>py3_init</code>: &quot;PyInit_&quot; + $name. Necessary because macros can&#39;t use concat_idents!().</li>
 <li>A lambda of type <code>Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;</code>.
 This function will be called when the module is imported, and is responsible
 for adding the module&#39;s members.</li>
@@ -66,14 +69,12 @@ for adding the module&#39;s members.</li>
 <h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
 <pre class='rust rust-example-rendered'>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_type</span> <span class='op'>=</span> <span class='string'>&quot;dylib&quot;</span>]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>plugin</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>plugin</span>(<span class='ident'>interpolate_idents</span>)]</span>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>cpython</span>;
 <span class='kw'>use</span> <span class='ident'>cpython</span>::{<span class='ident'>Python</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyObject</span>};
 
-<span class='macro'>py_module_initializer</span><span class='macro'>!</span>(<span class='ident'>example</span>, <span class='op'>|</span><span class='ident'>py</span>, <span class='ident'>m</span><span class='op'>|</span> {
+<span class='macro'>py_module_initializer</span><span class='macro'>!</span>(<span class='ident'>example</span>, <span class='ident'>initexample</span>, <span class='ident'>PyInit_example</span>, <span class='op'>|</span><span class='ident'>py</span>, <span class='ident'>m</span><span class='op'>|</span> {
     <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;__doc__&quot;</span>, <span class='string'>&quot;Module documentation string&quot;</span>));
-    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;run&quot;</span>, <span class='macro'>py_fn</span><span class='macro'>!</span>(<span class='ident'>run</span>())));
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;run&quot;</span>, <span class='macro'>py_fn</span><span class='macro'>!</span>(<span class='ident'>py</span>, <span class='ident'>run</span>())));
     <span class='prelude-val'>Ok</span>(())
 });
 

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>cpython</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-0' class='srclink' href='../src/cpython/src/lib.rs.html#19-301' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/cpython/src/lib.rs.html#19-314' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Rust bindings to the Python interpreter.</p>
 
 <h1 id='ownership-and-lifetimes' class='section-header'><a href='#ownership-and-lifetimes'>Ownership and Lifetimes</a></h1>
@@ -98,373 +99,317 @@ also exposed as Python exceptions.</p>
 }</pre>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='mod' href='argparse/index.html'
-                               title='cpython::argparse'>argparse</a></td>
-                        <td class='docblock short'>
-                             <p>This module contains logic for parsing a python argument list.
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='argparse/index.html'
+                                  title='cpython::argparse'>argparse</a></td>
+                           <td class='docblock short'>
+                                <p>This module contains logic for parsing a python argument list.
 See also the macros <code>py_argparse!</code>, <code>py_fn!</code> and <code>py_method!</code>.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='mod' href='exc/index.html'
-                               title='cpython::exc'>exc</a></td>
-                        <td class='docblock short'>
-                             <p>This module contains the python exception types.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='mod' href='oldstyle/index.html'
-                               title='cpython::oldstyle'>oldstyle</a></td>
-                        <td class='docblock short'>
-                             <p>This module contains support for old-style classes. Only available in Python 2.x.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='exc/index.html'
+                                  title='cpython::exc'>exc</a></td>
+                           <td class='docblock short'>
+                                <p>This module contains the python exception types.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='oldstyle/index.html'
+                                  title='cpython::oldstyle'>oldstyle</a></td>
+                           <td class='docblock short'>
+                                <p>This module contains support for old-style classes. Only available in Python 2.x.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='py_class/index.html'
+                                  title='cpython::py_class'>py_class</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.py_argparse!.html'
-                               title='cpython::py_argparse!'>py_argparse!</a></td>
-                        <td class='docblock short'>
-                             <p>This macro is used to parse a parameter list into a set of variables.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.py_class_method!.html'
-                               title='cpython::py_class_method!'>py_class_method!</a></td>
-                        <td class='docblock short'>
-                             <p>Creates a Python class method descriptor that invokes a Rust function.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.py_fn!.html'
-                               title='cpython::py_fn!'>py_fn!</a></td>
-                        <td class='docblock short'>
-                             <p>Creates a Python callable object that invokes a Rust function.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.py_method!.html'
-                               title='cpython::py_method!'>py_method!</a></td>
-                        <td class='docblock short'>
-                             <p>Creates a Python instance method descriptor that invokes a Rust function.
-There are two forms of this macro:
-1) py_method!(f)
-    <code>f</code> is the name of a rust function with the signature
-    <code>fn(Python, &amp;SelfType, &amp;PyTuple, Option&lt;&amp;PyDict&gt;) -&gt; PyResult&lt;R&gt;</code>
-     for some <code>R</code> that implements <code>ToPyObject</code>.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.py_module_initializer!.html'
-                               title='cpython::py_module_initializer!'>py_module_initializer!</a></td>
-                        <td class='docblock short'>
-                             <p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.py_argparse!.html'
+                                  title='cpython::py_argparse!'>py_argparse!</a></td>
+                           <td class='docblock short'>
+                                <p>This macro is used to parse a parameter list into a set of variables.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.py_class!.html'
+                                  title='cpython::py_class!'>py_class!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines new python extension class.
+A <code>py_class!</code> macro invocation generates code that declares a new Python class.
+Additionally, it generates a Rust struct of the same name, which allows accessing
+instances of that Python class from Rust.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.py_fn!.html'
+                                  title='cpython::py_fn!'>py_fn!</a></td>
+                           <td class='docblock short'>
+                                <p>Creates a Python callable object that invokes a Rust function.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.py_module_initializer!.html'
+                                  title='cpython::py_module_initializer!'>py_module_initializer!</a></td>
+                           <td class='docblock short'>
+                                <p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
 the rust code as a Python extension module.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.GILGuard.html'
-                               title='cpython::GILGuard'>GILGuard</a></td>
-                        <td class='docblock short'>
-                             <p>RAII type that represents the Global Interpreter Lock acquisition.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.GILProtected.html'
-                               title='cpython::GILProtected'>GILProtected</a></td>
-                        <td class='docblock short'>
-                             <p>Mutex-like wrapper object for data that is protected by the Python GIL.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.NoArgs.html'
-                               title='cpython::NoArgs'>NoArgs</a></td>
-                        <td class='docblock short'>
-                             <p>An empty struct that represents the empty argument list.
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GILGuard.html'
+                                  title='cpython::GILGuard'>GILGuard</a></td>
+                           <td class='docblock short'>
+                                <p>RAII type that represents the Global Interpreter Lock acquisition.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GILProtected.html'
+                                  title='cpython::GILProtected'>GILProtected</a></td>
+                           <td class='docblock short'>
+                                <p>Mutex-like wrapper object for data that is protected by the Python GIL.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NoArgs.html'
+                                  title='cpython::NoArgs'>NoArgs</a></td>
+                           <td class='docblock short'>
+                                <p>An empty struct that represents the empty argument list.
 Corresponds to the empty tuple <code>()</code> in Python.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyBool.html'
-                               title='cpython::PyBool'>PyBool</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python <code>bool</code>.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyBytes.html'
-                               title='cpython::PyBytes'>PyBytes</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python byte string.
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyBool.html'
+                                  title='cpython::PyBool'>PyBool</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python <code>bool</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyBytes.html'
+                                  title='cpython::PyBytes'>PyBytes</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python byte string.
 Corresponds to <code>str</code> in Python 2, and <code>bytes</code> in Python 3.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyDict.html'
-                               title='cpython::PyDict'>PyDict</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python <code>dict</code>.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyErr.html'
-                               title='cpython::PyErr'>PyErr</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python exception that was raised.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyFloat.html'
-                               title='cpython::PyFloat'>PyFloat</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python <code>float</code> object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyInt.html'
-                               title='cpython::PyInt'>PyInt</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python <code>int</code> object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyIterator.html'
-                               title='cpython::PyIterator'>PyIterator</a></td>
-                        <td class='docblock short'>
-                             <p>A python iterator object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyList.html'
-                               title='cpython::PyList'>PyList</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python <code>list</code>.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyLong.html'
-                               title='cpython::PyLong'>PyLong</a></td>
-                        <td class='docblock short'>
-                             <p>In Python 2.x, represents a Python <code>long</code> object.
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyDict.html'
+                                  title='cpython::PyDict'>PyDict</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python <code>dict</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyErr.html'
+                                  title='cpython::PyErr'>PyErr</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python exception that was raised.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyFloat.html'
+                                  title='cpython::PyFloat'>PyFloat</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python <code>float</code> object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyInt.html'
+                                  title='cpython::PyInt'>PyInt</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python <code>int</code> object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyIterator.html'
+                                  title='cpython::PyIterator'>PyIterator</a></td>
+                           <td class='docblock short'>
+                                <p>A python iterator object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyList.html'
+                                  title='cpython::PyList'>PyList</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python <code>list</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyLong.html'
+                                  title='cpython::PyLong'>PyLong</a></td>
+                           <td class='docblock short'>
+                                <p>In Python 2.x, represents a Python <code>long</code> object.
 In Python 3.x, represents a Python <code>int</code> object.
 Both <code>PyInt</code> and <code>PyLong</code> refer to the same type on Python 3.x.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyModule.html'
-                               title='cpython::PyModule'>PyModule</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python module object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyObject.html'
-                               title='cpython::PyObject'>PyObject</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a reference to a Python object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyRustObject.html'
-                               title='cpython::PyRustObject'>PyRustObject</a></td>
-                        <td class='docblock short'>
-                             <p>A Python object that contains a rust value of type T,
-and is derived from base class B.
-Note that this type effectively acts like <code>Rc&lt;T&gt;</code>,
-except that the reference counting is done by the Python runtime.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyRustType.html'
-                               title='cpython::PyRustType'>PyRustType</a></td>
-                        <td class='docblock short'>
-                             <p>A Python class that contains rust values of type T.
-Serves as a Python type object, and can be used to construct
-<code>PyRustObject&lt;T&gt;</code> instances.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyRustTypeBuilder.html'
-                               title='cpython::PyRustTypeBuilder'>PyRustTypeBuilder</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PySequence.html'
-                               title='cpython::PySequence'>PySequence</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a reference to a python object supporting the sequence protocol.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyString.html'
-                               title='cpython::PyString'>PyString</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python byte string.
-Corresponds to <code>str</code> in Python 2, and <code>bytes</code> in Python 3.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyTuple.html'
-                               title='cpython::PyTuple'>PyTuple</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python tuple object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyType.html'
-                               title='cpython::PyType'>PyType</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a reference to a Python type object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PyUnicode.html'
-                               title='cpython::PyUnicode'>PyUnicode</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a Python unicode string.
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyModule.html'
+                                  title='cpython::PyModule'>PyModule</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python module object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyObject.html'
+                                  title='cpython::PyObject'>PyObject</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a reference to a Python object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PySequence.html'
+                                  title='cpython::PySequence'>PySequence</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a reference to a python object supporting the sequence protocol.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyString.html'
+                                  title='cpython::PyString'>PyString</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python string.
+Corresponds to <code>basestring</code> in Python 2, and <code>str</code> in Python 3.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyTuple.html'
+                                  title='cpython::PyTuple'>PyTuple</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python tuple object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyType.html'
+                                  title='cpython::PyType'>PyType</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a reference to a Python type object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PyUnicode.html'
+                                  title='cpython::PyUnicode'>PyUnicode</a></td>
+                           <td class='docblock short'>
+                                <p>Represents a Python unicode string.
 Corresponds to <code>unicode</code> in Python 2, and <code>str</code> in Python 3.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Python.html'
-                               title='cpython::Python'>Python</a></td>
-                        <td class='docblock short'>
-                             <p>Marker type that indicates that the GIL is currently held.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Python.html'
+                                  title='cpython::Python'>Python</a></td>
+                           <td class='docblock short'>
+                                <p>Marker type that indicates that the GIL is currently held.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PythonObjectDowncastError.html'
+                                  title='cpython::PythonObjectDowncastError'>PythonObjectDowncastError</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.ExtractPyObject.html'
-                               title='cpython::ExtractPyObject'>ExtractPyObject</a></td>
-                        <td class='docblock short'>
-                             <p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.ObjectProtocol.html'
-                               title='cpython::ObjectProtocol'>ObjectProtocol</a></td>
-                        <td class='docblock short'>
-                             <p>Trait that contains methods</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.PyClone.html'
-                               title='cpython::PyClone'>PyClone</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.PyDrop.html'
-                               title='cpython::PyDrop'>PyDrop</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.PythonObject.html'
-                               title='cpython::PythonObject'>PythonObject</a></td>
-                        <td class='docblock short'>
-                             <p>Trait implemented by all Python object types.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.PythonObjectWithCheckedDowncast.html'
-                               title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a></td>
-                        <td class='docblock short'>
-                             <p>Trait implemented by Python object types that allow a checked downcast.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.PythonObjectWithTypeObject.html'
-                               title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a></td>
-                        <td class='docblock short'>
-                             <p>Trait implemented by Python object types that have a corresponding type object.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='trait' href='trait.ToPyObject.html'
-                               title='cpython::ToPyObject'>ToPyObject</a></td>
-                        <td class='docblock short'>
-                             <p>Conversion trait that allows various objects to be converted into Python objects.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.PyStringData.html'
+                                  title='cpython::PyStringData'>PyStringData</a></td>
+                           <td class='docblock short'>
+                                <p>Enum of possible Python string representations.</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='fn' href='fn.prepare_freethreaded_python.html'
-                               title='cpython::prepare_freethreaded_python'>prepare_freethreaded_python</a></td>
-                        <td class='docblock short'>
-                             <p>Prepares the use of Python in a free-threaded context.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ExtractPyObject.html'
+                                  title='cpython::ExtractPyObject'>ExtractPyObject</a></td>
+                           <td class='docblock short'>
+                                <p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ObjectProtocol.html'
+                                  title='cpython::ObjectProtocol'>ObjectProtocol</a></td>
+                           <td class='docblock short'>
+                                <p>Trait that contains methods</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.PyClone.html'
+                                  title='cpython::PyClone'>PyClone</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.PyDrop.html'
+                                  title='cpython::PyDrop'>PyDrop</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.PythonObject.html'
+                                  title='cpython::PythonObject'>PythonObject</a></td>
+                           <td class='docblock short'>
+                                <p>Trait implemented by all Python object types.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.PythonObjectWithCheckedDowncast.html'
+                                  title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a></td>
+                           <td class='docblock short'>
+                                <p>Trait implemented by Python object types that allow a checked downcast.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.PythonObjectWithTypeObject.html'
+                                  title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a></td>
+                           <td class='docblock short'>
+                                <p>Trait implemented by Python object types that have a corresponding type object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.ToPyObject.html'
+                                  title='cpython::ToPyObject'>ToPyObject</a></td>
+                           <td class='docblock short'>
+                                <p>Conversion trait that allows various objects to be converted into Python objects.</p>
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='type' href='type.PyResult.html'
-                               title='cpython::PyResult'>PyResult</a></td>
-                        <td class='docblock short'>
-                             <p>Represents the result of a Python call.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='type' href='type.Py_hash_t.html'
-                               title='cpython::Py_hash_t'>Py_hash_t</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='type' href='type.Py_ssize_t.html'
-                               title='cpython::Py_ssize_t'>Py_ssize_t</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                </table></section>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.prepare_freethreaded_python.html'
+                                  title='cpython::prepare_freethreaded_python'>prepare_freethreaded_python</a></td>
+                           <td class='docblock short'>
+                                <p>Prepares the use of Python in a free-threaded context.</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PyResult.html'
+                                  title='cpython::PyResult'>PyResult</a></td>
+                           <td class='docblock short'>
+                                <p>Represents the result of a Python call.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Py_hash_t.html'
+                                  title='cpython::Py_hash_t'>Py_hash_t</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Py_ssize_t.html'
+                                  title='cpython::Py_ssize_t'>Py_ssize_t</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

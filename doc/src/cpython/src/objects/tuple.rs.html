@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
 
     
     
@@ -298,6 +299,9 @@
 <span id="255">255</span>
 <span id="256">256</span>
 <span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -319,8 +323,8 @@
 
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>};
-<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
-<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>exc</span>;
+<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>exc</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='self'>self</span>, <span class='ident'>Py_ssize_t</span>};
 <span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ToPyObject</span>, <span class='ident'>ExtractPyObject</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
@@ -373,6 +377,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>as_slice</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>PyObject</span>] {
         <span class='comment'>// This is safe because PyObject has the same memory layout as *mut ffi::PyObject,</span>
         <span class='comment'>// and because tuples are immutable.</span>
@@ -398,6 +403,7 @@
     }
 }
 
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
 <span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Index</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>PyTuple</span> {
     <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='ident'>PyObject</span>;
 
@@ -407,12 +413,13 @@
     }
 }
 
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
 <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyTuple</span> {
     <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span>;
     <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>slice</span>::<span class='ident'>Iter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>PyObject</span><span class='op'>&gt;</span>;
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Self</span>::<span class='ident'>IntoIter</span> {
+    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span>::<span class='ident'>IntoIter</span> {
         <span class='self'>self</span>.<span class='ident'>as_slice</span>().<span class='ident'>iter</span>()
     }
 }

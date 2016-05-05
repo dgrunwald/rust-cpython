@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,18 +44,18 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>ObjectProtocol</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-3360' class='srclink' href='../src/cpython/src/objectprotocol.rs.html#29-222' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-3511' class='srclink' href='../src/cpython/src/objectprotocol.rs.html#29-222' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ObjectProtocol: <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> {
     fn <a href='#method.hasattr' class='fnname'>hasattr</a>&lt;N&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
     fn <a href='#method.getattr' class='fnname'>getattr</a>&lt;N&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
     fn <a href='#method.setattr' class='fnname'>setattr</a>&lt;N, V&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N, value: V) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>, V: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
     fn <a href='#method.delattr' class='fnname'>delattr</a>&lt;N&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
     fn <a href='#method.compare' class='fnname'>compare</a>&lt;O&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, other: O) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html' title='core::cmp::Ordering'>Ordering</a>&gt; <span class='where'>where O: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
-    fn <a href='#method.repr' class='fnname'>repr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a>&gt; { ... }
-    fn <a href='#method.str' class='fnname'>str</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a>&gt; { ... }
+    fn <a href='#method.repr' class='fnname'>repr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&gt; { ... }
+    fn <a href='#method.str' class='fnname'>str</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&gt; { ... }
     fn <a href='#method.unistr' class='fnname'>unistr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a>&gt; { ... }
     fn <a href='#method.is_callable' class='fnname'>is_callable</a>(&amp;self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> { ... }
     fn <a href='#method.call' class='fnname'>call</a>&lt;A&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, args: A, kwargs: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt; <span class='where'>where A: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a>&lt;ObjectType=<a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a>&gt;</span> { ... }
@@ -80,9 +81,9 @@ This is equivalent to the Python expression &#39;self.attr_name = value&#39;.</p
 This is equivalent to the Python expression &#39;del self.attr_name&#39;.</p>
 </div><h3 id='method.compare' class='method stab '><code>fn <a href='#method.compare' class='fnname'>compare</a>&lt;O&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, other: O) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html' title='core::cmp::Ordering'>Ordering</a>&gt; <span class='where'>where O: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span></code></h3><div class='docblock'><p>Compares two Python objects.
 This is equivalent to the Python expression &#39;cmp(self, other)&#39;.</p>
-</div><h3 id='method.repr' class='method stab '><code>fn <a href='#method.repr' class='fnname'>repr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a>&gt;</code></h3><div class='docblock'><p>Compute the string representation of self.
+</div><h3 id='method.repr' class='method stab '><code>fn <a href='#method.repr' class='fnname'>repr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&gt;</code></h3><div class='docblock'><p>Compute the string representation of self.
 This is equivalent to the Python expression &#39;repr(self)&#39;.</p>
-</div><h3 id='method.str' class='method stab '><code>fn <a href='#method.str' class='fnname'>str</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyString</a>&gt;</code></h3><div class='docblock'><p>Compute the string representation of self.
+</div><h3 id='method.str' class='method stab '><code>fn <a href='#method.str' class='fnname'>str</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a>&gt;</code></h3><div class='docblock'><p>Compute the string representation of self.
 This is equivalent to the Python expression &#39;str(self)&#39;.</p>
 </div><h3 id='method.unistr' class='method stab '><code>fn <a href='#method.unistr' class='fnname'>unistr</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a>&gt;</code></h3><div class='docblock'><p>Compute the unicode string representation of self.
 This is equivalent to the Python expression &#39;unistr(self)&#39;.</p>
@@ -108,10 +109,10 @@ is an iterator, this returns itself.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl <a class='trait' href='../cpython/trait.ObjectProtocol.html' title='cpython::ObjectProtocol'>ObjectProtocol</a> for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+    <li><code>impl ObjectProtocol for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
 </ul><script type="text/javascript" async
-                              src="../implementors/cpython/trait.ObjectProtocol.js">
-                      </script></section>
+                         src="../implementors/cpython/trait.ObjectProtocol.js">
+                 </script></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cpython</a>::<wbr><a class='struct' href=''>GILGuard</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-3510' class='srclink' href='../src/cpython/src/pythonrun.rs.html#89-91' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-3661' class='srclink' href='../src/cpython/src/pythonrun.rs.html#89-94' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>#[must_use]
 pub struct GILGuard {
     // some fields omitted
@@ -67,12 +68,8 @@ pub struct GILGuard {
 See <a href="fn.prepare_freethreaded_python.html">prepare_freethreaded_python()</a> for details.</p>
 </div><h4 id='method.python' class='method'><code>fn <a href='#method.python' class='fnname'>python</a>&lt;'p&gt;(&amp;'p self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
 <div class='docblock'><p>Retrieves the marker type that proves that the GIL was acquired.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl !<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>GILGuard is not Send because the GIL must be released
-by the same thread that acquired it.</p>
-</div><div class='impl-items'></div><h3 class='impl'><code>impl !<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>GILGuard is not Sync because only the thread that
-acquired the GIL may access the Python interpreter.</p>
-</div><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>The Drop implementation for GILGuard will release the GIL.</p>
-</div><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h3><div class='docblock'><p>The Drop implementation for GILGuard will release the GIL.</p>
+</div><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

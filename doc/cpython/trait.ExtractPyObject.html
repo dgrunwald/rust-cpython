@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,12 +44,12 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>ExtractPyObject</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-333' class='srclink' href='../src/cpython/src/conversion.rs.html#94-100' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-341' class='srclink' href='../src/cpython/src/conversion.rs.html#94-100' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ExtractPyObject&lt;'prepared&gt;: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> {
-    type Prepared: 'static;
+    type <a href='#associatedtype.Prepared' class='type'>Prepared</a>: 'static;
     fn <a href='#tymethod.prepare_extract' class='fnname'>prepare_extract</a>&lt;'a, 'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self::<a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>Prepared</a>&gt;;
     fn <a href='#tymethod.extract' class='fnname'>extract</a>&lt;'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, prepared: &amp;'prepared Self::<a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>Prepared</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self&gt;;
 }</pre><div class='docblock'><p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
@@ -71,33 +72,15 @@ the inherent method <code>PyObject::extract()</code> can be used.</p>
 </div>
             <h2 id='associated-types'>Associated Types</h2>
             <div class='methods'>
-        <h3 id='associatedtype.Prepared' class='method stab '><code>type Prepared: 'static</code></h3></div>
+        <h3 id='associatedtype.Prepared' class='method stab '><code>type <a href='#associatedtype.Prepared' class='type'>Prepared</a>: 'static</code></h3></div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
         <h3 id='tymethod.prepare_extract' class='method stab '><code>fn <a href='#tymethod.prepare_extract' class='fnname'>prepare_extract</a>&lt;'a, 'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, obj: &amp;'a <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self::<a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>Prepared</a>&gt;</code></h3><h3 id='tymethod.extract' class='method stab '><code>fn <a href='#tymethod.extract' class='fnname'>extract</a>&lt;'p&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;, prepared: &amp;'prepared Self::<a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>Prepared</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self&gt;</code></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'prepared, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for &amp;'prepared <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></li>
-<li><code>impl&lt;'prepared, T&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt;</span></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
-<li><code>impl&lt;'prepared&gt; <a class='trait' href='../cpython/trait.ExtractPyObject.html' title='cpython::ExtractPyObject'>ExtractPyObject</a>&lt;'prepared&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
-</ul><script type="text/javascript" async
-                              src="../implementors/cpython/trait.ExtractPyObject.js">
-                      </script></section>
+    </ul><script type="text/javascript" async
+                         src="../implementors/cpython/trait.ExtractPyObject.js">
+                 </script></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

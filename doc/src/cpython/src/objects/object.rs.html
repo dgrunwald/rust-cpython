@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
 
     
     
@@ -314,6 +315,42 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -359,12 +396,15 @@
 <span class='doccomment'>/// on `PyObject` to convert to more specific object types.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// Most of the interesting methods are provided by the [ObjectProtocol trait](trait.ObjectProtocol.html).</span>
-<span class='attribute'>#[<span class='ident'>unsafe_no_drop_flag</span>]</span>
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg_attr</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>, <span class='ident'>unsafe_no_drop_flag</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg_attr</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>, <span class='ident'>repr</span>(<span class='ident'>C</span>))]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyObject</span> {
     <span class='comment'>// PyObject owns one reference to the *PyObject</span>
     <span class='comment'>// ptr is not null</span>
-    <span class='ident'>ptr</span>: <span class='ident'>ptr</span>::<span class='ident'>Shared</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>PyObject</span><span class='op'>&gt;</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
+    <span class='ident'>ptr</span>: <span class='ident'>ptr</span>::<span class='ident'>Shared</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>PyObject</span><span class='op'>&gt;</span>,
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
+    <span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>,
 }
 
 <span class='comment'>// PyObject is thread-safe, because all operations on it require a Python&lt;&#39;p&gt; token.</span>
@@ -374,13 +414,46 @@
 <span class='doccomment'>/// Dropping a `PyObject` decrements the reference count on the object by 1.</span>
 <span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>PyObject</span> {
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
     <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
         <span class='comment'>// TODO: remove `if` when #[unsafe_no_drop_flag] disappears</span>
-        <span class='kw'>if</span> <span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='ident'>usize</span> <span class='op'>!=</span> <span class='ident'>mem</span>::<span class='ident'>POST_DROP_USIZE</span> {
+        <span class='kw'>if</span> <span class='ident'>unpack_shared</span>(<span class='self'>self</span>.<span class='ident'>ptr</span>) <span class='kw'>as</span> <span class='ident'>usize</span> <span class='op'>!=</span> <span class='ident'>mem</span>::<span class='ident'>POST_DROP_USIZE</span> {
             <span class='kw'>let</span> <span class='ident'>_gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-            <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>Py_DECREF</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ptr</span>); }
+            <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>Py_DECREF</span>(<span class='ident'>unpack_shared</span>(<span class='self'>self</span>.<span class='ident'>ptr</span>)); }
         }
     }
+
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
+    <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='kw'>let</span> <span class='ident'>_gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>Py_DECREF</span>(<span class='ident'>unpack_shared</span>(<span class='self'>self</span>.<span class='ident'>ptr</span>)); }
+    }
+
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
+<span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>make_shared</span>(<span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>ptr</span>::<span class='ident'>Shared</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>PyObject</span><span class='op'>&gt;</span> {
+    <span class='ident'>ptr</span>::<span class='ident'>Shared</span>::<span class='ident'>new</span>(<span class='ident'>ptr</span>)
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
+<span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>make_shared</span>(<span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
+    <span class='ident'>ptr</span>
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
+<span class='kw'>fn</span> <span class='ident'>unpack_shared</span>(<span class='ident'>ptr</span>: <span class='ident'>ptr</span>::<span class='ident'>Shared</span><span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>PyObject</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
+    <span class='op'>*</span><span class='ident'>ptr</span>
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
+<span class='kw'>fn</span> <span class='ident'>unpack_shared</span>(<span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
+    <span class='ident'>ptr</span>
 }
 
 <span class='macro'>pyobject_to_pyobject</span><span class='macro'>!</span>(<span class='ident'>PyObject</span>);
@@ -431,9 +504,9 @@
     <span class='doccomment'>/// This moves ownership over the pointer into the PyObject.</span>
     <span class='doccomment'>/// Undefined behavior if the pointer is NULL or invalid.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_owned_ptr</span>(<span class='ident'>_py</span> : <span class='ident'>Python</span>, <span class='ident'>ptr</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
+    <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_owned_ptr</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>, <span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
         <span class='macro'>debug_assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>ptr</span>.<span class='ident'>is_null</span>() <span class='op'>&amp;&amp;</span> <span class='ident'>ffi</span>::<span class='ident'>Py_REFCNT</span>(<span class='ident'>ptr</span>) <span class='op'>&gt;</span> <span class='number'>0</span>);
-        <span class='ident'>PyObject</span> { <span class='ident'>ptr</span>: <span class='ident'>ptr</span>::<span class='ident'>Shared</span>::<span class='ident'>new</span>(<span class='ident'>ptr</span>) }
+        <span class='ident'>PyObject</span> { <span class='ident'>ptr</span>: <span class='ident'>make_shared</span>(<span class='ident'>ptr</span>) }
     }
 
     <span class='doccomment'>/// Creates a PyObject instance for the given FFI pointer.</span>
@@ -443,7 +516,7 @@
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_borrowed_ptr</span>(<span class='ident'>_py</span> : <span class='ident'>Python</span>, <span class='ident'>ptr</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
         <span class='macro'>debug_assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>ptr</span>.<span class='ident'>is_null</span>() <span class='op'>&amp;&amp;</span> <span class='ident'>ffi</span>::<span class='ident'>Py_REFCNT</span>(<span class='ident'>ptr</span>) <span class='op'>&gt;</span> <span class='number'>0</span>);
         <span class='ident'>ffi</span>::<span class='ident'>Py_INCREF</span>(<span class='ident'>ptr</span>);
-        <span class='ident'>PyObject</span> { <span class='ident'>ptr</span>: <span class='ident'>ptr</span>::<span class='ident'>Shared</span>::<span class='ident'>new</span>(<span class='ident'>ptr</span>) }
+        <span class='ident'>PyObject</span> { <span class='ident'>ptr</span>: <span class='ident'>make_shared</span>(<span class='ident'>ptr</span>) }
     }
 
     <span class='doccomment'>/// Creates a PyObject instance for the given FFI pointer.</span>
@@ -472,7 +545,7 @@
     <span class='doccomment'>/// Returns a borrowed pointer.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>as_ptr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> {
-        <span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ptr</span>
+        <span class='ident'>unpack_shared</span>(<span class='self'>self</span>.<span class='ident'>ptr</span>)
     }
 
     <span class='doccomment'>/// Gets the underlying FFI pointer.</span>
@@ -488,6 +561,7 @@
     <span class='doccomment'>/// Transmutes an FFI pointer to `&amp;PyObject`.</span>
     <span class='doccomment'>/// Undefined behavior if the pointer is NULL or invalid.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>borrow_from_ptr</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>ptr</span> : <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span> {
         <span class='macro'>debug_assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>ptr</span>.<span class='ident'>is_null</span>());
         <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>ptr</span>)
@@ -496,6 +570,7 @@
     <span class='doccomment'>/// Transmutes a slice of owned FFI pointers to `&amp;[PyObject]`.</span>
     <span class='doccomment'>/// Undefined behavior if any pointer in the slice is NULL or invalid.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>borrow_from_owned_ptr_slice</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>ptr</span> : <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>]) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>PyObject</span>] {
         <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>ptr</span>)
     }
@@ -507,12 +582,9 @@
     }
 
     <span class='doccomment'>/// Gets the Python type object for this object&#39;s type.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>PyType</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span> {
         <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>t</span> : <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyTypeObject</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>as_ptr</span>()).<span class='ident'>ob_type</span>;
-            <span class='kw'>let</span> <span class='ident'>t</span> : <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>t</span>);
-            <span class='ident'>PyObject</span>::<span class='ident'>borrow_from_ptr</span>(<span class='ident'>t</span>).<span class='ident'>unchecked_cast_as</span>()
+            <span class='ident'>PyType</span>::<span class='ident'>from_type_ptr</span>(<span class='ident'>py</span>, (<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>as_ptr</span>()).<span class='ident'>ob_type</span>)
         }
     }
 
@@ -581,6 +653,7 @@
 <span class='kw'>impl</span> <span class='ident'>Eq</span> <span class='kw'>for</span> <span class='ident'>PyObject</span> { }
 
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span> <span class='comment'>// needs unsafe_no_drop_flag</span>
 <span class='kw'>fn</span> <span class='ident'>test_sizeof</span>() {
     <span class='comment'>// should be a static_assert, but size_of is not a compile-time const</span>
     <span class='comment'>// these are necessary for the transmutes in this module</span>

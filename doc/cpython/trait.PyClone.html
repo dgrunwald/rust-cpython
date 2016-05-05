@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>PyClone</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-65' class='srclink' href='../src/cpython/src/python.rs.html#76-78' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-62' class='srclink' href='../src/cpython/src/python.rs.html#76-78' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait PyClone: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> {
     fn <a href='#tymethod.clone_ref' class='fnname'>clone_ref</a>(&amp;self, <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; Self;
 }</pre>
@@ -55,10 +56,11 @@
         <h3 id='tymethod.clone_ref' class='method stab '><code>fn <a href='#tymethod.clone_ref' class='fnname'>clone_ref</a>(&amp;self, <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; Self</code></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T&gt; <a class='trait' href='../cpython/trait.PyClone.html' title='cpython::PyClone'>PyClone</a> for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.PyClone.html' title='cpython::PyClone'>PyClone</a></span></code></li>
+    <li><code>impl&lt;T&gt; PyClone for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.PyClone.html' title='cpython::PyClone'>PyClone</a></span></code></li>
+<li><code>impl PyClone for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></li>
 </ul><script type="text/javascript" async
-                              src="../implementors/cpython/trait.PyClone.js">
-                      </script></section>
+                         src="../implementors/cpython/trait.PyClone.js">
+                 </script></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

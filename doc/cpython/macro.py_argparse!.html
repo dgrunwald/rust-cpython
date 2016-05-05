@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,13 +44,13 @@
 
     <section id='main' class="content macro">
 <h1 class='fqn'><span class='in-band'><a href='index.html'>cpython</a>::<wbr><a class='macro' href=''>py_argparse!</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-4024' class='srclink' href='../src/cpython/src/argparse.rs.html#152-176' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-4050' class='srclink' href='../src/cpython/src/argparse.rs.html#136-140' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, ($( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> ),<span class='op'>*</span>) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> { ... };
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span>:<span class='ident'>tt</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>This macro is used to parse a parameter list into a set of variables.</p>
 
@@ -60,15 +61,29 @@
 <li><code>fname</code>: expression of type <code>Option&lt;&amp;str&gt;</code>: Name of the function used in error messages.</li>
 <li><code>args</code>: expression of type <code>&amp;PyTuple</code>: The position arguments</li>
 <li><code>kwargs</code>: expression of type <code>Option&lt;&amp;PyDict&gt;</code>: The named arguments</li>
-<li><code>parameter-list</code>: a comma-separated list of Rust parameter declarations (<code>name: type</code>).
-The types used must implement the <code>ExtractPyObject</code> trait.</li>
-<li><code>body</code>: expression of type <code>PyResult&lt;_&gt;</code>.</li>
+<li><code>parameter-list</code>: a comma-separated list of parameter declarations.
+Parameter declarations have one of these formats:
+
+<ol>
+<li><code>name</code></li>
+<li><code>name: ty</code></li>
+<li><code>name: ty = default_value</code></li>
+<li><code>*name</code></li>
+<li><code>*name : ty</code></li>
+<li><code>**name</code></li>
+<li><code>**name : ty</code>
+The types used must implement the <code>ExtractPyObject</code> trait.
+If no type is specified, the parameter implicitly uses
+<code>&amp;PyObject</code> (format 1), <code>&amp;PyTuple</code> (format 4) or <code>&amp;PyDict</code> (format 6).
+If a default value is specified, it must be a compile-time constant</li>
+</ol></li>
+<li><code>body</code>: expression of type <code>PyResult&lt;_&gt;</code>.
+The extracted argument values are available in this scope.</li>
 </ul>
 
 <p><code>py_argparse!()</code> expands to code that extracts values from <code>args</code> and <code>kwargs</code> and assigns
 them to the parameters. If the extraction is successful, <code>py_argparse!()</code> evaluates
-the body expression (where the extracted parameters are available) and returns the result
-value of the body expression.
+the body expression and returns of that evaluation.
 If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult</code> without evaluating <code>body</code>.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
