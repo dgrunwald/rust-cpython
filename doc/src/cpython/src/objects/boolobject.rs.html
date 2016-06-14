@@ -119,8 +119,8 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::<span class='ident'>Python</span>;
 <span class='kw'>use</span> <span class='ident'>err</span>::<span class='ident'>PyResult</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>PyObject</span>;
-<span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ExtractPyObject</span>, <span class='ident'>ToPyObject</span>};
+<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ToPyObject</span>};
 
 <span class='doccomment'>/// Represents a Python `bool`.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyBool</span>(<span class='ident'>PyObject</span>);

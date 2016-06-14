@@ -181,6 +181,19 @@
 <span id="137">137</span>
 <span id="138">138</span>
 <span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2016 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -201,7 +214,10 @@
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
 <span class='kw'>mod</span> <span class='ident'>py_class</span>;
-<span class='kw'>mod</span> <span class='ident'>py_class_impl</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
+<span class='kw'>mod</span> <span class='ident'>py_class_impl2</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python3-sys&quot;</span>)]</span>
+<span class='kw'>mod</span> <span class='ident'>py_class_impl3</span>;
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span> <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>slots</span>;
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span> <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>members</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>gc</span>;
@@ -212,6 +228,16 @@
 <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>};
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
+
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>CompareOp</span> {
+    <span class='ident'>Lt</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_LT</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
+    <span class='ident'>Le</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_LE</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
+    <span class='ident'>Eq</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_EQ</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
+    <span class='ident'>Ne</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_NE</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
+    <span class='ident'>Gt</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_GT</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
+    <span class='ident'>Ge</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_GE</span> <span class='kw'>as</span> <span class='ident'>isize</span>
+}
 
 <span class='doccomment'>/// Trait implemented by the types produced by the `py_class!()` macro.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObjectFromPyClassMacro</span> : <span class='ident'>python</span>::<span class='ident'>PythonObjectWithTypeObject</span> {
@@ -281,7 +307,7 @@
     <span class='doccomment'>/// and initializes it using init_val.</span>
     <span class='doccomment'>/// `ty` must be derived from the Self type, and the resulting object</span>
     <span class='doccomment'>/// must be of type `ty`.</span>
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span>, <span class='ident'>init_val</span>: <span class='kw'>Self</span>::<span class='ident'>InitType</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>;
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span>, <span class='ident'>init_val</span>: <span class='ident'>Self</span>::<span class='ident'>InitType</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>;
 
     <span class='doccomment'>/// Calls the rust destructor for the object and frees the memory</span>
     <span class='doccomment'>/// (usually by calling ptr-&gt;ob_type-&gt;tp_free).</span>

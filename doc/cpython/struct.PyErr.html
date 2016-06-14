@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-193' class='srclink' href='../src/cpython/src/err.rs.html#32-44' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-198' class='srclink' href='../src/cpython/src/err.rs.html#125-137' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct PyErr {
     pub ptype: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>,
     pub pvalue: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;,
@@ -67,6 +67,12 @@ Call <code>PyErr::instance()</code> to get the exception instance in all cases.<
                              <td id='structfield.ptraceback'><code>ptraceback</code></td><td><div class='docblock'><p>The <code>PyTraceBack</code> object associated with the error.</p>
 </div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='impl-items'><h4 id='method.occurred' class='method'><code>fn <a href='#method.occurred' class='fnname'>occurred</a>(_: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Gets whether an error is present in the Python interpreter&#39;s global state.</p>
+</div><h4 id='method.new_type' class='method'><code>fn <a href='#method.new_type' class='fnname'>new_type</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, base: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;, dict: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+<div class='docblock'><p>Creates a new exception type with the given name, which must be of the form
+<code>&lt;module&gt;.&lt;ExceptionName&gt;</code>, as required by <code>PyErr_NewException</code>.</p>
+
+<p><code>base</code> can be an existing exception type to subclass, or a tuple of classes
+<code>dict</code> specifies an optional dictionary of class variables and methods</p>
 </div><h4 id='method.fetch' class='method'><code>fn <a href='#method.fetch' class='fnname'>fetch</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h4>
 <div class='docblock'><p>Retrieves the current error from the Python interpreter&#39;s global state.
 The error is cleared from the Python interpreter.

@@ -192,8 +192,8 @@
 <span class='kw'>use</span> <span class='ident'>ffi</span>;
 <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>PythonObjectWithCheckedDowncast</span>, <span class='ident'>PythonObjectDowncastError</span>, <span class='ident'>PythonObjectWithTypeObject</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>};
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>typeobject</span>::<span class='ident'>PyType</span>;
+<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>typeobject</span>::<span class='ident'>PyType</span>;
 
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>exc_type</span>(
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>exc_name</span>:<span class='ident'>ident</span>) <span class='op'>=&gt;</span> (

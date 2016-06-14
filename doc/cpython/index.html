@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/cpython/src/lib.rs.html#19-314' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-0' class='srclink' href='../src/cpython/src/lib.rs.html#19-363' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Rust bindings to the Python interpreter.</p>
 
 <h1 id='ownership-and-lifetimes' class='section-header'><a href='#ownership-and-lifetimes'>Ownership and Lifetimes</a></h1>
@@ -97,7 +97,8 @@ also exposed as Python exceptions.</p>
 
     <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Hello {}, I&#39;m Python {}&quot;</span>, <span class='ident'>user</span>, <span class='ident'>version</span>);
 }</pre>
-</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use py_class::{<a class='enum' href='../cpython/py_class/enum.CompareOp.html' title='cpython::py_class::CompareOp'>CompareOp</a>};</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='mod' href='argparse/index.html'
@@ -147,6 +148,13 @@ instances of that Python class from Rust.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='macro' href='macro.py_exception!.html'
+                                  title='cpython::py_exception!'>py_exception!</a></td>
+                           <td class='docblock short'>
+                                <p>Defines a new exception type.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='macro' href='macro.py_fn!.html'
                                   title='cpython::py_fn!'>py_fn!</a></td>
                            <td class='docblock short'>
@@ -159,6 +167,13 @@ instances of that Python class from Rust.</p>
                            <td class='docblock short'>
                                 <p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
 the rust code as a Python extension module.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.pyobject_newtype!.html'
+                                  title='cpython::pyobject_newtype!'>pyobject_newtype!</a></td>
+                           <td class='docblock short'>
+                                
                            </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
@@ -325,8 +340,8 @@ Corresponds to <code>unicode</code> in Python 2, and <code>str</code> in Python 
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ExtractPyObject.html'
-                                  title='cpython::ExtractPyObject'>ExtractPyObject</a></td>
+                           <td><a class='trait' href='trait.FromPyObject.html'
+                                  title='cpython::FromPyObject'>FromPyObject</a></td>
                            <td class='docblock short'>
                                 <p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
                            </td>
@@ -371,6 +386,13 @@ Corresponds to <code>unicode</code> in Python 2, and <code>str</code> in Python 
                                   title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a></td>
                            <td class='docblock short'>
                                 <p>Trait implemented by Python object types that have a corresponding type object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.RefFromPyObject.html'
+                                  title='cpython::RefFromPyObject'>RefFromPyObject</a></td>
+                           <td class='docblock short'>
+                                
                            </td>
                        </tr>
                        <tr class=' module-item'>

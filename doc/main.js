@@ -981,7 +981,7 @@
         $(".method").each(function() {
             if ($(this).next().is(".docblock") ||
                 ($(this).next().is(".stability") && $(this).next().next().is(".docblock"))) {
-                    $(this).children().last().after(toggle.clone());
+                    $(this).children().first().after(toggle.clone());
             }
         });
 

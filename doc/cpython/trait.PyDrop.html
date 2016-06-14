@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-79' class='srclink' href='../src/cpython/src/python.rs.html#100-102' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-80' class='srclink' href='../src/cpython/src/python.rs.html#100-102' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait PyDrop: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> {
     fn <a href='#tymethod.release_ref' class='fnname'>release_ref</a>(self, <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>);
 }</pre>
@@ -56,8 +56,8 @@
         <h3 id='tymethod.release_ref' class='method stab '><code>fn <a href='#tymethod.release_ref' class='fnname'>release_ref</a>(self, <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T&gt; PyDrop for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a></span></code></li>
-<li><code>impl PyDrop for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></li>
+    <li><code>impl&lt;T&gt; <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a> for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a></span></code></li>
+<li><code>impl <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/cpython/trait.PyDrop.js">
                  </script></section>

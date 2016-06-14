@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `FromPyObject` trait in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, FromPyObject">
+
+    <title>cpython::FromPyObject - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'FromPyObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>FromPyObject</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-372' class='srclink' href='../src/cpython/src/conversion.rs.html#97-100' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait FromPyObject&lt;'source&gt;: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> {
+    fn <a href='#tymethod.extract' class='fnname'>extract</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self&gt;;
+}</pre><div class='docblock'><p>FromPyObject is implemented by various types that can be extracted from a Python object.</p>
+
+<p>Normal usage is through the <code>PyObject::extract</code> helper method:
+<code>let obj: PyObject = ...; let value = try!(obj.extract::&lt;TargetType&gt;(py));</code></p>
+
+<p>TODO: update this documentation
+Note: depending on the implementation, the lifetime of the extracted result may
+depend on the lifetime of the <code>obj</code> or the <code>prepared</code> variable.</p>
+
+<p>For example, when extracting <code>&amp;str</code> from a python byte string, the resulting string slice will
+point to the existing string data (lifetime: <code>&#39;source</code>).
+On the other hand, when extracting <code>&amp;str</code> from a python unicode string, the preparation step
+will convert the string to UTF-8, and the resulting string slice will have lifetime <code>&#39;prepared</code>.
+Since only which of these cases applies depends on the runtime type of the python object,
+both the <code>obj</code> and <code>prepared</code> variables must outlive the resulting string slice.</p>
+
+<p>In cases where the result does not depend on the <code>&#39;prepared</code> lifetime,
+the inherent method <code>PyObject::extract()</code> can be used.</p>
+</div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.extract' class='method stab '><code>fn <a href='#tymethod.extract' class='fnname'>extract</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Extracts <code>Self</code> from the source <code>PyObject</code>.</p>
+</div></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+<li><code>impl&lt;'source, T&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt;</span></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'source, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A,<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, E: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D, E<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, E: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, F: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D, E, F<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, E: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, F: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, G: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D, E, F, G<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, E: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, F: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, G: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, H: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D, E, F, G, H<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'s, A: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, B: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, C: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, D: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, E: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, F: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, G: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, H: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;, I: for&lt;'a&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'s&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>A, B, C, D, E, F, G, H, I<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.NoArgs.html' title='cpython::NoArgs'>NoArgs</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyList.html' title='cpython::PyList'>PyList</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyList.html' title='cpython::PyList'>PyList</a></code></li>
+<li><code>impl&lt;'source, T&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;</span></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyLong.html' title='cpython::PyLong'>PyLong</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyLong.html' title='cpython::PyLong'>PyLong</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PyFloat.html' title='cpython::PyFloat'>PyFloat</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PyFloat.html' title='cpython::PyFloat'>PyFloat</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/struct.PySequence.html' title='cpython::PySequence'>PySequence</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/struct.PySequence.html' title='cpython::PySequence'>PySequence</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.BaseException.html' title='cpython::exc::BaseException'>BaseException</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.BaseException.html' title='cpython::exc::BaseException'>BaseException</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.Exception.html' title='cpython::exc::Exception'>Exception</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.Exception.html' title='cpython::exc::Exception'>Exception</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.StandardError.html' title='cpython::exc::StandardError'>StandardError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.StandardError.html' title='cpython::exc::StandardError'>StandardError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.LookupError.html' title='cpython::exc::LookupError'>LookupError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.LookupError.html' title='cpython::exc::LookupError'>LookupError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.AssertionError.html' title='cpython::exc::AssertionError'>AssertionError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.AssertionError.html' title='cpython::exc::AssertionError'>AssertionError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.AttributeError.html' title='cpython::exc::AttributeError'>AttributeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.AttributeError.html' title='cpython::exc::AttributeError'>AttributeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.EOFError.html' title='cpython::exc::EOFError'>EOFError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.EOFError.html' title='cpython::exc::EOFError'>EOFError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.EnvironmentError.html' title='cpython::exc::EnvironmentError'>EnvironmentError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.EnvironmentError.html' title='cpython::exc::EnvironmentError'>EnvironmentError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.FloatingPointError.html' title='cpython::exc::FloatingPointError'>FloatingPointError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.FloatingPointError.html' title='cpython::exc::FloatingPointError'>FloatingPointError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.IOError.html' title='cpython::exc::IOError'>IOError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.IOError.html' title='cpython::exc::IOError'>IOError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.ImportError.html' title='cpython::exc::ImportError'>ImportError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.ImportError.html' title='cpython::exc::ImportError'>ImportError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.IndexError.html' title='cpython::exc::IndexError'>IndexError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.IndexError.html' title='cpython::exc::IndexError'>IndexError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.KeyError.html' title='cpython::exc::KeyError'>KeyError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.KeyError.html' title='cpython::exc::KeyError'>KeyError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.KeyboardInterrupt.html' title='cpython::exc::KeyboardInterrupt'>KeyboardInterrupt</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.KeyboardInterrupt.html' title='cpython::exc::KeyboardInterrupt'>KeyboardInterrupt</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.MemoryError.html' title='cpython::exc::MemoryError'>MemoryError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.MemoryError.html' title='cpython::exc::MemoryError'>MemoryError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.NameError.html' title='cpython::exc::NameError'>NameError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.NameError.html' title='cpython::exc::NameError'>NameError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.NotImplementedError.html' title='cpython::exc::NotImplementedError'>NotImplementedError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.NotImplementedError.html' title='cpython::exc::NotImplementedError'>NotImplementedError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.OSError.html' title='cpython::exc::OSError'>OSError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.OSError.html' title='cpython::exc::OSError'>OSError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.OverflowError.html' title='cpython::exc::OverflowError'>OverflowError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.OverflowError.html' title='cpython::exc::OverflowError'>OverflowError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.ReferenceError.html' title='cpython::exc::ReferenceError'>ReferenceError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.ReferenceError.html' title='cpython::exc::ReferenceError'>ReferenceError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.RuntimeError.html' title='cpython::exc::RuntimeError'>RuntimeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.RuntimeError.html' title='cpython::exc::RuntimeError'>RuntimeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.SyntaxError.html' title='cpython::exc::SyntaxError'>SyntaxError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.SyntaxError.html' title='cpython::exc::SyntaxError'>SyntaxError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.SystemError.html' title='cpython::exc::SystemError'>SystemError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.SystemError.html' title='cpython::exc::SystemError'>SystemError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.SystemExit.html' title='cpython::exc::SystemExit'>SystemExit</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.SystemExit.html' title='cpython::exc::SystemExit'>SystemExit</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.TypeError.html' title='cpython::exc::TypeError'>TypeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.TypeError.html' title='cpython::exc::TypeError'>TypeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.ValueError.html' title='cpython::exc::ValueError'>ValueError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.ValueError.html' title='cpython::exc::ValueError'>ValueError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.ZeroDivisionError.html' title='cpython::exc::ZeroDivisionError'>ZeroDivisionError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.ZeroDivisionError.html' title='cpython::exc::ZeroDivisionError'>ZeroDivisionError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.UnicodeDecodeError.html' title='cpython::exc::UnicodeDecodeError'>UnicodeDecodeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.UnicodeDecodeError.html' title='cpython::exc::UnicodeDecodeError'>UnicodeDecodeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.UnicodeEncodeError.html' title='cpython::exc::UnicodeEncodeError'>UnicodeEncodeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.UnicodeEncodeError.html' title='cpython::exc::UnicodeEncodeError'>UnicodeEncodeError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a></code></li>
+<li><code>impl&lt;'source&gt; <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'source&gt; for &amp;'source <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a></code></li>
+</ul><script type="text/javascript" async
+                         src="../implementors/cpython/trait.FromPyObject.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cpython";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

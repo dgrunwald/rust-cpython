@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3511' class='srclink' href='../src/cpython/src/objectprotocol.rs.html#29-222' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-4485' class='srclink' href='../src/cpython/src/objectprotocol.rs.html#29-222' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ObjectProtocol: <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> {
     fn <a href='#method.hasattr' class='fnname'>hasattr</a>&lt;N&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
     fn <a href='#method.getattr' class='fnname'>getattr</a>&lt;N&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, attr_name: N) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt; <span class='where'>where N: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span> { ... }
@@ -109,7 +109,7 @@ is an iterator, this returns itself.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl ObjectProtocol for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+    <li><code>impl <a class='trait' href='../cpython/trait.ObjectProtocol.html' title='cpython::ObjectProtocol'>ObjectProtocol</a> for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/cpython/trait.ObjectProtocol.js">
                  </script></section>

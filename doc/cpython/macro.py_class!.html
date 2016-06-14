@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-4060' class='srclink' href='../src/cpython/src/py_class/py_class.rs.html#257-281' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-5129' class='srclink' href='../src/cpython/src/py_class/py_class.rs.html#376-405' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class</span> {
     (<span class='ident'>class</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span>:<span class='ident'>ident</span> <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>: <span class='ident'>ident</span><span class='op'>|</span> { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>tt</span> )<span class='op'>*</span> }) <span class='op'>=&gt;</span> { ... };
@@ -166,7 +166,7 @@ be a shared reference (<code>&amp;self</code>).</li>
 </ul>
 
 <h2 id='class-methods' class='section-header'><a href='#class-methods'>Class methods</a></h2>
-<p>`@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</p>
+<p><code>@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 
 <p>Declares a class method callable from Python.</p>
 
@@ -179,7 +179,7 @@ This may be the type object of a derived class.</li>
 </ul>
 
 <h2 id='static-methods' class='section-header'><a href='#static-methods'>Static methods</a></h2>
-<p>`@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</p>
+<p><code>@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 
 <p>Declares a static method callable from Python.</p>
 
@@ -262,12 +262,11 @@ that use <code>RefCell::borrow_mut</code>.</p>
 <p>Iterators can be defined using the Python special methods <code>__iter__</code> and <code>__next__</code>:</p>
 
 <ul>
-<li><code>def __iter__(&amp;self) -&gt; PyResult&lt;T&gt;</code></li>
-<li><code>def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;T&gt;&gt;</code></li>
-</ul>
+<li><code>def __iter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><p><code>def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;impl ToPyObject&gt;&gt;</code></p>
 
-<p>In both cases, <code>T</code> must be a type that implements <code>ToPyObject</code>.
-Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
+<p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p></li>
+</ul>
 
 <p>Example:</p>
 
@@ -287,6 +286,120 @@ Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that t
         <span class='prelude-val'>Ok</span>(<span class='self'>self</span>.<span class='ident'>iter</span>(<span class='ident'>py</span>).<span class='ident'>borrow_mut</span>().<span class='ident'>next</span>())
     }
 });</pre>
+
+<h2 id='string-conversions' class='section-header'><a href='#string-conversions'>String Conversions</a></h2>
+<ul>
+<li><code>def __repr__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></li>
+<li><p><code>def __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
+
+<p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
+
+<p>In Python 2.7, Unicode strings returned by <code>__str__</code> and <code>__repr__</code> will be converted to byte strings
+by the Python runtime, which results in an exception if the string contains non-ASCII characters.</p></li>
+<li><p><code>def __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;</code></p>
+
+<p>On Python 3.x, provides the conversion to <code>bytes</code>.
+On Python 2.7, <code>__bytes__</code> is allowed but has no effect.</p></li>
+<li><p><code>def __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;</code></p>
+
+<p>On Python 2.7, provides the conversion to <code>unicode</code>.
+On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p></li>
+<li><p><code>def __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
+
+<p>Special method that is used by the <code>format()</code> builtin and the <code>str.format()</code> method.
+Possible return types are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p></li>
+</ul>
+
+<h2 id='comparison-operators' class='section-header'><a href='#comparison-operators'>Comparison operators</a></h2>
+<ul>
+<li><p><code>def __richcmp__(&amp;self, other: impl ToPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+
+<p>Overloads Python comparison operations (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, and <code>&gt;=</code>). The <code>op</code>
+argument indicates the comparison operation being performed.
+The return type will normally be <code>PyResult&lt;bool&gt;</code>, but any Python object can be returned.</p></li>
+<li><p><code>def __hash__(&amp;self) -&gt; PyResult&lt;impl PrimInt&gt;</code></p>
+
+<p>Objects that compare equal must have the same hash value.
+The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is one of Rust&#39;s primitive integer types.</p></li>
+</ul>
+
+<h2 id='emulating-container-types' class='section-header'><a href='#emulating-container-types'>Emulating Container Types</a></h2>
+<ul>
+<li><p><code>def __len__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
+
+<p>Called by the built-in Python function <code>len()</code>.</p></li>
+<li><p><code>def __length_hint__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
+
+<p>Should return an estimated length for the object.
+This method is purely an optimization and is never required for correctness.</p>
+
+<p><code>__length_hint__</code> is new in Python 3.4; older versions will ignore the method.</p></li>
+<li><p><code>def __getitem__(&amp;self, key: impl ExtractPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+
+<p>Called by the Python subscript operator <code>self[key]</code>.</p></li>
+<li><p><code>def __setitem__(&amp;self, key: impl ExtractPyObject, value: impl ExtractPyObject) -&gt; PyResult&lt;()&gt;</code></p>
+
+<p>Called by Python <code>self[key] = value</code>.</p></li>
+<li><p><code>def __delitem__(&amp;self, key: impl ExtractPyObject) -&gt; PyResult&lt;()&gt;</code></p>
+
+<p>Called by Python <code>del self[key]</code>.</p></li>
+<li><p><code>def __reversed__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+
+<p>Called by the <code>reversed()</code> built-in.
+It should return a new iterator object that iterates over all the objects in the container in reverse order.</p></li>
+<li><p><code>def __contains__(&amp;self, item: impl ExtractPyObject) -&gt; PyResult&lt;bool&gt;</code></p>
+
+<p>Called by Python <code>item in self</code>.
+For mapping types, this should consider the keys of the mapping rather than the values
+or the key-item pairs.</p>
+
+<p>If extraction of the <code>item</code> parameter fails with <code>TypeError</code>,
+<code>__contains__</code> will return <code>Ok(false)</code>.</p></li>
+</ul>
+
+<h2 id='arithmetic-methods' class='section-header'><a href='#arithmetic-methods'>Arithmetic methods</a></h2>
+<ul>
+<li><code>def __add__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __sub__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __mul__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __lshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __rshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __and__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __xor__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><p><code>def __or__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+
+<p>The parameters <code>lhs</code> and <code>rhs</code> must not be given an explicit type.
+Within the method bodies, both parameters will implicitly have type <code>&amp;PyObject</code>.</p>
+
+<p>There are no separate &quot;reversed&quot; versions of these methods (<code>__radd__()</code>, etc.)
+Instead, if the first operand cannot perform the operation,
+the same method of the second operand is called, with the operands in the same order.</p>
+
+<p>This means that you can&#39;t rely on the first parameter of these methods being <code>self</code>
+or being the right type, and you should test the types of both operands before deciding what to do.
+If you can&#39;t handle the combination of types you&#39;ve been given,
+you should return <code>Ok(py.NotImplemented())</code>.</p></li>
+</ul>
+
+<h2 id='context-manager' class='section-header'><a href='#context-manager'>Context Manager</a></h2>
+<ul>
+<li><code>def __enter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
+<li><code>def __exit__(&amp;self, ty: Option&lt;PyType&gt;, value: PyObject, traceback: PyObject) -&gt; PyResult&lt;bool&gt;</code></li>
+</ul>
+
+<h2 id='other-special-methods' class='section-header'><a href='#other-special-methods'>Other Special Methods</a></h2>
+<ul>
+<li><p><code>def __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
+
+<p>Determines the &quot;truthyness&quot; of the object.</p>
+
+<p>Note that <code>py_class!</code> always expects this member to be called <code>__bool__</code>,
+even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p></li>
+<li><p><code>def __call__(&amp;self, parameter-list) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+
+<p>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.
+The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</p></li>
+</ul>
 </div></section>
     <section id='search' class="content hidden"></section>
 

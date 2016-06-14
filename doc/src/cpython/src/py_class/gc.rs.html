@@ -290,12 +290,12 @@
         <span class='comment'>/* traverse_data: */</span> []
     }) <span class='op'>=&gt;</span> {{
         <span class='kw'>unsafe</span> <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> <span class='ident'>tp_traverse</span>(
-            <span class='ident'>slf</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyObject</span>,
-            <span class='ident'>visit</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>visitproc</span>,
-            <span class='ident'>arg</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_void</span>
-        ) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_int</span>
+            <span class='ident'>slf</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyObject</span>,
+            <span class='ident'>visit</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>visitproc</span>,
+            <span class='ident'>arg</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_void</span>
+        ) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_int</span>
         {
-            <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>py_class</span>::<span class='ident'>gc</span>::<span class='ident'>tp_traverse</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>, _<span class='op'>&gt;</span>(
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>py_class</span>::<span class='ident'>gc</span>::<span class='ident'>tp_traverse</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>, _<span class='op'>&gt;</span>(
                 <span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>), <span class='string'>&quot;.__traverse__&quot;</span>),
                 <span class='ident'>slf</span>, <span class='ident'>visit</span>, <span class='ident'>arg</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>traverse_proc</span>)
         }
@@ -332,10 +332,10 @@
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class_tp_clear</span> {
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>:<span class='ident'>ident</span>) <span class='op'>=&gt;</span> {{
         <span class='kw'>unsafe</span> <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span> <span class='ident'>tp_clear</span>(
-            <span class='ident'>slf</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyObject</span>
-        ) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_int</span>
+            <span class='ident'>slf</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyObject</span>
+        ) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>_detail</span>::<span class='ident'>libc</span>::<span class='ident'>c_int</span>
         {
-            <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>py_class</span>::<span class='ident'>gc</span>::<span class='ident'>tp_clear</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>, _<span class='op'>&gt;</span>(
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>py_class</span>::<span class='ident'>gc</span>::<span class='ident'>tp_clear</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>, _<span class='op'>&gt;</span>(
                 <span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>), <span class='string'>&quot;.__clear__&quot;</span>),
                 <span class='ident'>slf</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class_name</span>::<span class='ident'>__clear__</span>)
         }

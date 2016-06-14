@@ -302,6 +302,26 @@
 <span id="258">258</span>
 <span id="259">259</span>
 <span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
 <span class='comment'>//</span>
@@ -321,12 +341,12 @@
 <span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>};
+<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PyDrop</span>};
 <span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>};
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>exc</span>;
+<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
+<span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>exc</span>;
 <span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='self'>self</span>, <span class='ident'>Py_ssize_t</span>};
-<span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>ToPyObject</span>, <span class='ident'>ExtractPyObject</span>};
+<span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>FromPyObject</span>, <span class='ident'>ToPyObject</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
 
 <span class='doccomment'>/// Represents a Python tuple object.</span>
@@ -419,7 +439,7 @@
     <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>slice</span>::<span class='ident'>Iter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>PyObject</span><span class='op'>&gt;</span>;
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span>::<span class='ident'>IntoIter</span> {
+    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Self</span>::<span class='ident'>IntoIter</span> {
         <span class='self'>self</span>.<span class='ident'>as_slice</span>().<span class='ident'>iter</span>()
     }
 }
@@ -464,38 +484,57 @@
     <span class='ident'>PyErr</span>::<span class='ident'>new_lazy_init</span>(<span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>ValueError</span><span class='op'>&gt;</span>(), <span class='prelude-val'>Some</span>(<span class='ident'>msg</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>()))
 }
 
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>id</span> ((<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>));
-
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>tuple_conversion</span> ({<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>:<span class='ident'>expr</span>,$((<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>refN</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>:<span class='ident'>ident</span>)),<span class='op'>+</span>} <span class='op'>=&gt;</span> (
-    <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='ident'>ToPyObject</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>tuple_conversion</span> ({<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>:<span class='ident'>expr</span>,$((<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>refN</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>:<span class='ident'>ident</span>)),<span class='op'>+</span>} <span class='op'>=&gt;</span> {
+    <span class='kw'>impl</span> <span class='op'>&lt;</span>$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='ident'>ToPyObject</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
         <span class='kw'>type</span> <span class='ident'>ObjectType</span> <span class='op'>=</span> <span class='ident'>PyTuple</span>;
 
         <span class='kw'>fn</span> <span class='ident'>to_py_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
             <span class='ident'>PyTuple</span>::<span class='ident'>new</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span>[
-                $(<span class='macro'>id</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
+                $(<span class='macro'>py_coerce_expr</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
             ])
         }
 
         <span class='kw'>fn</span> <span class='ident'>into_py_object</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
             <span class='ident'>PyTuple</span>::<span class='ident'>new</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span>[
-                $(<span class='macro'>id</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>into_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
+                $(<span class='macro'>py_coerce_expr</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>into_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
             ])
         }
     }
 
-    <span class='comment'>/*TODO: reimplement this without slice matching
-    impl &lt;&#39;p, &#39;s, $($T: FromPyObject&lt;&#39;p, &#39;s&gt;),+&gt; FromPyObject&lt;&#39;p, &#39;s&gt; for ($($T,)+) {
-        fn from_py_object(s : &amp;&#39;s PyObject&lt;&#39;p&gt;) -&gt; PyResult&lt;&#39;p, ($($T,)+)&gt; {
-            let t = try!(s.cast_as::&lt;PyTuple&gt;());
-            match t.as_slice() {
-                [$(ref $refN,)+] =&gt; Ok((
-                    $(try!($refN.extract::&lt;$T&gt;()),)+
-                )),
-                _ =&gt; Err(wrong_tuple_length(t, 2))
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
+    <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;s</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='kw'>for</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;s</span><span class='op'>&gt;</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
+        <span class='kw'>fn</span> <span class='ident'>extract</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;s</span> <span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='kw'>Self</span><span class='op'>&gt;</span> {
+            <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>obj</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>));
+            <span class='kw'>if</span> <span class='ident'>t</span>.<span class='ident'>len</span>(<span class='ident'>py</span>) <span class='op'>==</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span> {
+                <span class='prelude-val'>Ok</span>((
+                    $( <span class='macro'>py_coerce_expr</span><span class='macro'>!</span> {{
+                        <span class='kw'>let</span> <span class='ident'>item</span> <span class='op'>=</span> <span class='ident'>t</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>);
+                        <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>item</span>.<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span>));
+                        <span class='ident'>item</span>.<span class='ident'>release_ref</span>(<span class='ident'>py</span>);
+                        <span class='ident'>r</span>
+                    }} ,)<span class='op'>+</span>
+                ))
+            } <span class='kw'>else</span> {
+                <span class='prelude-val'>Err</span>(<span class='ident'>wrong_tuple_length</span>(<span class='ident'>py</span>, <span class='ident'>t</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>))
             }
         }
-    }*/</span>
-));
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
+    <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;s</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;s</span><span class='op'>&gt;</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;s</span><span class='op'>&gt;</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
+        <span class='kw'>fn</span> <span class='ident'>extract</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;s</span> <span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='kw'>Self</span><span class='op'>&gt;</span> {
+            <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>obj</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>));
+            <span class='kw'>let</span> <span class='ident'>slice</span> <span class='op'>=</span> <span class='ident'>t</span>.<span class='ident'>as_slice</span>();
+            <span class='kw'>if</span> <span class='ident'>slice</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span> {
+                <span class='prelude-val'>Ok</span>((
+                    $( <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>slice</span>[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>].<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span>)), )<span class='op'>+</span>
+                ))
+            } <span class='kw'>else</span> {
+                <span class='prelude-val'>Err</span>(<span class='ident'>wrong_tuple_length</span>(<span class='ident'>py</span>, <span class='ident'>t</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>))
+            }
+        }
+    }
+});
 
 <span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>1</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>));
 <span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>2</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>));
@@ -560,6 +599,7 @@
         <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
         <span class='kw'>let</span> <span class='ident'>tuple</span> <span class='op'>=</span> (<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>).<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>tuple</span>.<span class='ident'>len</span>(<span class='ident'>py</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>((<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>), <span class='ident'>tuple</span>.<span class='ident'>into_object</span>().<span class='ident'>extract</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
     }
 }
 
