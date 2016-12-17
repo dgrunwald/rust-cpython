@@ -47,10 +47,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-4647' class='srclink' href='../src/cpython/src/pythonrun.rs.html#136-138' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct GILProtected&lt;T&gt; {
-    // some fields omitted
-}</pre><div class='docblock'><p>Mutex-like wrapper object for data that is protected by the Python GIL.</p>
+               </span><a class='srclink' href='../src/cpython/pythonrun.rs.html#136-138' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct GILProtected&lt;T&gt; { /* fields omitted */ }</pre><div class='docblock'><p>Mutex-like wrapper object for data that is protected by the Python GIL.</p>
 
 <h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
 <pre class='rust rust-example-rendered'>
@@ -64,15 +62,18 @@
     <span class='kw'>let</span> <span class='ident'>cell</span> <span class='op'>=</span> <span class='ident'>data</span>.<span class='ident'>get</span>(<span class='ident'>gil_guard</span>.<span class='ident'>python</span>());
     <span class='ident'>cell</span>.<span class='ident'>set</span>(<span class='ident'>cell</span>.<span class='ident'>get</span>() <span class='op'>+</span> <span class='number'>1</span>);
 }</pre>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;T&gt; <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(data: T) -&gt; <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/pythonrun.rs.html#148-176' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>const fn <a href='#method.new' class='fnname'>new</a>(data: T) -&gt; <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></span></h4>
 <div class='docblock'><p>Creates a new instance of <code>GILProtected</code>.</p>
-</div><h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>&lt;'a&gt;(&amp;'a self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'a&gt;) -&gt; &amp;'a T</code></h4>
+</div><h4 id='method.get' class='method'><span id='get.v' class='invisible'><code>fn <a href='#method.get' class='fnname'>get</a>&lt;'a&gt;(&amp;'a self, _py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'a&gt;) -&gt; &amp;'a T</code></span></h4>
 <div class='docblock'><p>Returns a shared reference to the data stored in the <code>GILProtected</code>.</p>
 
 <p>Requires a <code>Python</code> instance as proof that the GIL is acquired.</p>
-</div><h4 id='method.into_inner' class='method'><code>fn <a href='#method.into_inner' class='fnname'>into_inner</a>(self) -&gt; T</code></h4>
+</div><h4 id='method.into_inner' class='method'><span id='into_inner.v' class='invisible'><code>fn <a href='#method.into_inner' class='fnname'>into_inner</a>(self) -&gt; T</code></span></h4>
 <div class='docblock'><p>Consumes the <code>GILProtected</code>, returning the wrapped value.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> for <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></h3><div class='impl-items'></div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a> for <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></h3><div class='docblock'><p>Because <code>GILProtected</code> ensures that the contained data
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> for <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/pythonrun.rs.html#140' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a> for <a class='struct' href='../cpython/struct.GILProtected.html' title='cpython::GILProtected'>GILProtected</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/pythonrun.rs.html#146' title='goto source code'>[src]</a></span></h3>
+<div class='docblock'><p>Because <code>GILProtected</code> ensures that the contained data
 is only accessed while the GIL is acquired,
 it can implement <code>Sync</code> even if the contained data
 does not.</p>
@@ -99,6 +100,8 @@ does not.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -130,11 +133,9 @@ does not.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "cpython";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

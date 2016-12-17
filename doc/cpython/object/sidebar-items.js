@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["PyObject","Represents a reference to a Python object."]]});

@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-26' class='srclink' href='../src/cpython/src/python.rs.html#39' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/cpython/python.rs.html#39' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Python&lt;'p&gt;(_);</pre><div class='docblock'><p>Marker type that indicates that the GIL is currently held.</p>
 
 <p>The &#39;Python&#39; struct is a zero-size marker struct that is required for most Python operations.
@@ -58,45 +58,50 @@ The lifetime <code>&#39;p</code> represents the lifetime of the Python interpret
 
 <p>You can imagine the GIL to be a giant <code>Mutex&lt;PythonInterpreterState&gt;</code>.
 The type <code>Python&lt;&#39;p&gt;</code> then acts like a reference <code>&amp;&#39;p PythonInterpreterState</code>.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.assume_gil_acquired' class='method'><code>unsafe fn <a href='#method.assume_gil_acquired' class='fnname'>assume_gil_acquired</a>() -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'p&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/python.rs.html#178-304' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.assume_gil_acquired' class='method'><span id='assume_gil_acquired.v' class='invisible'><code>unsafe fn <a href='#method.assume_gil_acquired' class='fnname'>assume_gil_acquired</a>() -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></span></h4>
 <div class='docblock'><p>Retrieve Python instance under the assumption that the GIL is already acquired at this point,
 and stays acquired for the lifetime <code>&#39;p</code>.</p>
 
 <p>Because the output lifetime <code>&#39;p</code> is not connected to any input parameter,
 care must be taken that the compiler infers an appropriate lifetime for <code>&#39;p</code>
 when calling this function.</p>
-</div><h4 id='method.acquire_gil' class='method'><code>fn <a href='#method.acquire_gil' class='fnname'>acquire_gil</a>() -&gt; <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></h4>
+</div><h4 id='method.acquire_gil' class='method'><span id='acquire_gil.v' class='invisible'><code>fn <a href='#method.acquire_gil' class='fnname'>acquire_gil</a>() -&gt; <a class='struct' href='../cpython/struct.GILGuard.html' title='cpython::GILGuard'>GILGuard</a></code></span></h4>
 <div class='docblock'><p>Acquires the global interpreter lock, which allows access to the Python runtime.</p>
 
 <p>If the Python runtime is not already initialized, this function will initialize it.
 See <a href="fn.prepare_freethreaded_python.html">prepare_freethreaded_python()</a> for details.</p>
-</div><h4 id='method.allow_threads' class='method'><code>fn <a href='#method.allow_threads' class='fnname'>allow_threads</a>&lt;T, F&gt;(self, f: F) -&gt; T <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; T</span></code></h4>
+</div><h4 id='method.allow_threads' class='method'><span id='allow_threads.v' class='invisible'><code>fn <a href='#method.allow_threads' class='fnname'>allow_threads</a>&lt;T, F&gt;(self, f: F) -&gt; T <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; T</span></code></span></h4>
 <div class='docblock'><p>Temporarily releases the GIL, thus allowing other Python threads to run.</p>
-</div><h4 id='method.eval' class='method'><code>fn <a href='#method.eval' class='fnname'>eval</a>(self, code: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, globals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;, locals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;</code></h4>
+</div><h4 id='method.eval' class='method'><span id='eval.v' class='invisible'><code>fn <a href='#method.eval' class='fnname'>eval</a>(self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; code: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; globals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; locals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;</code></span></h4>
 <div class='docblock'><p>Evaluates a Python expression in the given context and returns the result.</p>
 
 <p>If <code>globals</code> is <code>None</code>, it defaults to Python module <code>__main__</code>.
 If <code>locals</code> is <code>None</code>, it defaults to the value of <code>globals</code>.</p>
-</div><h4 id='method.run' class='method'><code>fn <a href='#method.run' class='fnname'>run</a>(self, code: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, globals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;, locals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.run' class='method'><span id='run.v' class='invisible'><code>fn <a href='#method.run' class='fnname'>run</a>(self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; code: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; globals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; locals: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a>&gt;)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></span></h4>
 <div class='docblock'><p>Executes one or more Python statements in the given context.</p>
 
 <p>If <code>globals</code> is <code>None</code>, it defaults to Python module <code>__main__</code>.
 If <code>locals</code> is <code>None</code>, it defaults to the value of <code>globals</code>.</p>
-</div><h4 id='method.None' class='method'><code>fn <a href='#method.None' class='fnname'>None</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+</div><h4 id='method.None' class='method'><span id='None.v' class='invisible'><code>fn <a href='#method.None' class='fnname'>None</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></span></h4>
 <div class='docblock'><p>Gets the Python builtin value <code>None</code>.</p>
-</div><h4 id='method.True' class='method'><code>fn <a href='#method.True' class='fnname'>True</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></h4>
+</div><h4 id='method.True' class='method'><span id='True.v' class='invisible'><code>fn <a href='#method.True' class='fnname'>True</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></span></h4>
 <div class='docblock'><p>Gets the Python builtin value <code>True</code>.</p>
-</div><h4 id='method.False' class='method'><code>fn <a href='#method.False' class='fnname'>False</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></h4>
+</div><h4 id='method.False' class='method'><span id='False.v' class='invisible'><code>fn <a href='#method.False' class='fnname'>False</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></span></h4>
 <div class='docblock'><p>Gets the Python builtin value <code>False</code>.</p>
-</div><h4 id='method.NotImplemented' class='method'><code>fn <a href='#method.NotImplemented' class='fnname'>NotImplemented</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+</div><h4 id='method.NotImplemented' class='method'><span id='NotImplemented.v' class='invisible'><code>fn <a href='#method.NotImplemented' class='fnname'>NotImplemented</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></span></h4>
 <div class='docblock'><p>Gets the Python builtin value <code>NotImplemented</code>.</p>
-</div><h4 id='method.get_type' class='method'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>&lt;T&gt;(self) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a></span></code></h4>
+</div><h4 id='method.get_type' class='method'><span id='get_type.v' class='invisible'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>&lt;T&gt;(self) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a></span></code></span></h4>
 <div class='docblock'><p>Gets the Python type object for type T.</p>
-</div><h4 id='method.import' class='method'><code>fn <a href='#method.import' class='fnname'>import</a>(self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&gt;</code></h4>
+</div><h4 id='method.import' class='method'><span id='import.v' class='invisible'><code>fn <a href='#method.import' class='fnname'>import</a>(self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a>&gt;</code></span></h4>
 <div class='docblock'><p>Import the Python module with the specified name.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h4>
-<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></h3><div class='impl-items'></div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/python.rs.html#38' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/python.rs.html#38' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>&lt;'p&gt;</code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -119,6 +124,8 @@ If <code>locals</code> is <code>None</code>, it defaults to the value of <code>g
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -150,11 +157,9 @@ If <code>locals</code> is <code>None</code>, it defaults to the value of <code>g
     <script>
         window.rootPath = "../";
         window.currentCrate = "cpython";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-37' class='srclink' href='../src/cpython/src/python.rs.html#42-56' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/cpython/python.rs.html#42-56' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait PythonObject: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + 'static {
     fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>;
     fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>;
@@ -57,61 +57,61 @@
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.as_object' class='method stab '><code>fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
-</div><h3 id='tymethod.into_object' class='method stab '><code>fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
-</div><h3 id='tymethod.unchecked_downcast_from' class='method stab '><code>unsafe fn <a href='#tymethod.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; Self</code></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
+        <h3 id='tymethod.as_object' class='method stab '><span id='as_object.v' class='invisible'><code>fn <a href='#tymethod.as_object' class='fnname'>as_object</a>(&amp;self) -&gt; &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></span></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
+</div><h3 id='tymethod.into_object' class='method stab '><span id='into_object.v' class='invisible'><code>fn <a href='#tymethod.into_object' class='fnname'>into_object</a>(self) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></span></h3><div class='docblock'><p>Casts the Python object to PyObject.</p>
+</div><h3 id='tymethod.unchecked_downcast_from' class='method stab '><span id='unchecked_downcast_from.v' class='invisible'><code>unsafe fn <a href='#tymethod.unchecked_downcast_from' class='fnname'>unchecked_downcast_from</a>(<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; Self</code></span></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
 Undefined behavior if the input object does not have the expected type.</p>
-</div><h3 id='tymethod.unchecked_downcast_borrow_from' class='method stab '><code>unsafe fn <a href='#tymethod.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>(&amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; &amp;Self</code></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
+</div><h3 id='tymethod.unchecked_downcast_borrow_from' class='method stab '><span id='unchecked_downcast_borrow_from.v' class='invisible'><code>unsafe fn <a href='#tymethod.unchecked_downcast_borrow_from' class='fnname'>unchecked_downcast_borrow_from</a>(&amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>) -&gt; &amp;Self</code></span></h3><div class='docblock'><p>Unchecked downcast from PyObject to Self.
 Undefined behavior if the input object does not have the expected type.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyList.html' title='cpython::PyList'>PyList</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyLong.html' title='cpython::PyLong'>PyLong</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PyFloat.html' title='cpython::PyFloat'>PyFloat</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/struct.PySequence.html' title='cpython::PySequence'>PySequence</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.BaseException.html' title='cpython::exc::BaseException'>BaseException</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.Exception.html' title='cpython::exc::Exception'>Exception</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.StandardError.html' title='cpython::exc::StandardError'>StandardError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.LookupError.html' title='cpython::exc::LookupError'>LookupError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.AssertionError.html' title='cpython::exc::AssertionError'>AssertionError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.AttributeError.html' title='cpython::exc::AttributeError'>AttributeError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.EOFError.html' title='cpython::exc::EOFError'>EOFError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.EnvironmentError.html' title='cpython::exc::EnvironmentError'>EnvironmentError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.FloatingPointError.html' title='cpython::exc::FloatingPointError'>FloatingPointError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.IOError.html' title='cpython::exc::IOError'>IOError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.ImportError.html' title='cpython::exc::ImportError'>ImportError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.IndexError.html' title='cpython::exc::IndexError'>IndexError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.KeyError.html' title='cpython::exc::KeyError'>KeyError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.KeyboardInterrupt.html' title='cpython::exc::KeyboardInterrupt'>KeyboardInterrupt</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.MemoryError.html' title='cpython::exc::MemoryError'>MemoryError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.NameError.html' title='cpython::exc::NameError'>NameError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.NotImplementedError.html' title='cpython::exc::NotImplementedError'>NotImplementedError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.OSError.html' title='cpython::exc::OSError'>OSError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.OverflowError.html' title='cpython::exc::OverflowError'>OverflowError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.ReferenceError.html' title='cpython::exc::ReferenceError'>ReferenceError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.RuntimeError.html' title='cpython::exc::RuntimeError'>RuntimeError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.SyntaxError.html' title='cpython::exc::SyntaxError'>SyntaxError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.SystemError.html' title='cpython::exc::SystemError'>SystemError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.SystemExit.html' title='cpython::exc::SystemExit'>SystemExit</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.TypeError.html' title='cpython::exc::TypeError'>TypeError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.ValueError.html' title='cpython::exc::ValueError'>ValueError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.ZeroDivisionError.html' title='cpython::exc::ZeroDivisionError'>ZeroDivisionError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.UnicodeDecodeError.html' title='cpython::exc::UnicodeDecodeError'>UnicodeDecodeError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.UnicodeEncodeError.html' title='cpython::exc::UnicodeEncodeError'>UnicodeEncodeError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a></code></li>
-<li><code>impl <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> for <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a></code></li>
+    <li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyList.html' title='cpython::PyList'>PyList</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyLong.html' title='cpython::PyLong'>PyLong</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PyFloat.html' title='cpython::PyFloat'>PyFloat</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/struct.PySequence.html' title='cpython::PySequence'>PySequence</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.BaseException.html' title='cpython::exc::BaseException'>BaseException</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.Exception.html' title='cpython::exc::Exception'>Exception</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.StandardError.html' title='cpython::exc::StandardError'>StandardError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.LookupError.html' title='cpython::exc::LookupError'>LookupError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.AssertionError.html' title='cpython::exc::AssertionError'>AssertionError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.AttributeError.html' title='cpython::exc::AttributeError'>AttributeError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.EOFError.html' title='cpython::exc::EOFError'>EOFError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.EnvironmentError.html' title='cpython::exc::EnvironmentError'>EnvironmentError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.FloatingPointError.html' title='cpython::exc::FloatingPointError'>FloatingPointError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.IOError.html' title='cpython::exc::IOError'>IOError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.ImportError.html' title='cpython::exc::ImportError'>ImportError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.IndexError.html' title='cpython::exc::IndexError'>IndexError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.KeyError.html' title='cpython::exc::KeyError'>KeyError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.KeyboardInterrupt.html' title='cpython::exc::KeyboardInterrupt'>KeyboardInterrupt</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.MemoryError.html' title='cpython::exc::MemoryError'>MemoryError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.NameError.html' title='cpython::exc::NameError'>NameError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.NotImplementedError.html' title='cpython::exc::NotImplementedError'>NotImplementedError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.OSError.html' title='cpython::exc::OSError'>OSError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.OverflowError.html' title='cpython::exc::OverflowError'>OverflowError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.ReferenceError.html' title='cpython::exc::ReferenceError'>ReferenceError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.RuntimeError.html' title='cpython::exc::RuntimeError'>RuntimeError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.SyntaxError.html' title='cpython::exc::SyntaxError'>SyntaxError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.SystemError.html' title='cpython::exc::SystemError'>SystemError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.SystemExit.html' title='cpython::exc::SystemExit'>SystemExit</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.TypeError.html' title='cpython::exc::TypeError'>TypeError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.ValueError.html' title='cpython::exc::ValueError'>ValueError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.ZeroDivisionError.html' title='cpython::exc::ZeroDivisionError'>ZeroDivisionError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.UnicodeDecodeError.html' title='cpython::exc::UnicodeDecodeError'>UnicodeDecodeError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.UnicodeEncodeError.html' title='cpython::exc::UnicodeEncodeError'>UnicodeEncodeError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a></code></li>
+<li><code>impl PythonObject for <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/cpython/trait.PythonObject.js">
                  </script></section>
@@ -137,6 +137,8 @@ Undefined behavior if the input object does not have the expected type.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -168,11 +170,9 @@ Undefined behavior if the input object does not have the expected type.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "cpython";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

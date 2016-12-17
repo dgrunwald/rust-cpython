@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["PyDict","Represents a Python `dict`."]]});

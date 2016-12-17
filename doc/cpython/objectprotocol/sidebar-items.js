@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["ObjectProtocol","Trait that contains methods"]]});

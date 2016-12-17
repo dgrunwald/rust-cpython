@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["FromPyObject","FromPyObject is implemented by various types that can be extracted from a Python object."],["RefFromPyObject",""],["ToPyObject","Conversion trait that allows various objects to be converted into Python objects."]]});

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `py_argparse` macro in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, py_argparse">
+
+    <title>cpython::py_argparse - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_argparse', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class='macro' href=''>py_argparse</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/cpython/argparse.rs.html#136-140' title='goto source code'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span>:<span class='ident'>tt</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> { ... };
+}</pre>
+<div class='docblock'><p>This macro is used to parse a parameter list into a set of variables.</p>
+
+<p>Syntax: <code>py_argparse!(py, fname, args, kwargs, (parameter-list) { body })</code></p>
+
+<ul>
+<li><code>py</code>: the <code>Python</code> token</li>
+<li><code>fname</code>: expression of type <code>Option&lt;&amp;str&gt;</code>: Name of the function used in error messages.</li>
+<li><code>args</code>: expression of type <code>&amp;PyTuple</code>: The position arguments</li>
+<li><code>kwargs</code>: expression of type <code>Option&lt;&amp;PyDict&gt;</code>: The named arguments</li>
+<li><code>parameter-list</code>: a comma-separated list of parameter declarations.
+Parameter declarations have one of these formats:
+
+<ol>
+<li><code>name</code></li>
+<li><code>name: ty</code></li>
+<li><code>name: ty = default_value</code></li>
+<li><code>*name</code></li>
+<li><code>*name : ty</code></li>
+<li><code>**name</code></li>
+<li><code>**name : ty</code>
+The types used must implement the <code>FromPyObject</code> trait.
+If no type is specified, the parameter implicitly uses
+<code>&amp;PyObject</code> (format 1), <code>&amp;PyTuple</code> (format 4) or <code>&amp;PyDict</code> (format 6).
+If a default value is specified, it must be a compile-time constant</li>
+</ol></li>
+<li><code>body</code>: expression of type <code>PyResult&lt;_&gt;</code>.
+The extracted argument values are available in this scope.</li>
+</ul>
+
+<p><code>py_argparse!()</code> expands to code that extracts values from <code>args</code> and <code>kwargs</code> and assigns
+them to the parameters. If the extraction is successful, <code>py_argparse!()</code> evaluates
+the body expression and returns of that evaluation.
+If extraction fails, <code>py_argparse!()</code> returns a failed <code>PyResult</code> without evaluating <code>body</code>.</p>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cpython";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

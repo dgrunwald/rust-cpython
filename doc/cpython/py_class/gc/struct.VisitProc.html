@@ -47,13 +47,16 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-4965' class='srclink' href='../../../src/cpython/src/py_class/gc.rs.html#31-38' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct VisitProc&lt;'a&gt; {
-    // some fields omitted
-}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.call' class='method'><code>fn <a href='#method.call' class='fnname'>call</a>&lt;T&gt;(&amp;self, obj: &amp;T) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../../../cpython/py_class/gc/struct.TraverseError.html' title='cpython::py_class::gc::TraverseError'>TraverseError</a>&gt; <span class='where'>where T: <a class='trait' href='../../../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a></span></code></h4>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></h4>
-<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></h3><div class='impl-items'></div></section>
+               </span><a class='srclink' href='../../../src/cpython/py_class/gc.rs.html#31-38' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct VisitProc&lt;'a&gt; { /* fields omitted */ }</pre><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/cpython/py_class/gc.rs.html#40-51' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.call' class='method'><span id='call.v' class='invisible'><code>fn <a href='#method.call' class='fnname'>call</a>&lt;T&gt;(&amp;self, obj: &amp;T) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../../../cpython/py_class/gc/struct.TraverseError.html' title='cpython::py_class::gc::TraverseError'>TraverseError</a>&gt; <span class='where'>where T: <a class='trait' href='../../../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a></span></code></span></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/cpython/py_class/gc.rs.html#30' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/cpython/py_class/gc.rs.html#30' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../cpython/py_class/gc/struct.VisitProc.html' title='cpython::py_class::gc::VisitProc'>VisitProc</a>&lt;'a&gt;</code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -76,6 +79,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -107,11 +112,9 @@
     <script>
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
-        window.playgroundUrl = "";
     </script>
     <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
-    
     <script defer src="../../../search-index.js"></script>
 </body>
 </html>

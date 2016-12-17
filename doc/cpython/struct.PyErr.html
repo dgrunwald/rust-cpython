@@ -47,37 +47,43 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-198' class='srclink' href='../src/cpython/src/err.rs.html#125-137' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/cpython/err.rs.html#125-137' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct PyErr {
     pub ptype: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>,
     pub pvalue: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;,
     pub ptraceback: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;,
 }</pre><div class='docblock'><p>Represents a Python exception that was raised.</p>
-</div><h2 class='fields'>Fields</h2>
-<table><tr class='stab '>
-                             <td id='structfield.ptype'><code>ptype</code></td><td><div class='docblock'><p>The type of the exception. This should be either a <code>PyClass</code> or a <code>PyType</code>.</p>
-</div></td></tr><tr class='stab '>
-                             <td id='structfield.pvalue'><code>pvalue</code></td><td><div class='docblock'><p>The value of the exception.</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.ptype' class='structfield'>
+                           <span id='ptype.v' class='invisible'>
+                           <code>ptype: <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The type of the exception. This should be either a <code>PyClass</code> or a <code>PyType</code>.</p>
+</div><span id='structfield.pvalue' class='structfield'>
+                           <span id='pvalue.v' class='invisible'>
+                           <code>pvalue: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The value of the exception.</p>
 
 <p>This can be either an instance of <code>ptype</code>,
 a tuple of arguments to be passed to <code>ptype</code>&#39;s constructor,
 or a single argument to be passed to <code>ptype</code>&#39;s constructor.
 Call <code>PyErr::instance()</code> to get the exception instance in all cases.</p>
-</div></td></tr><tr class='stab '>
-                             <td id='structfield.ptraceback'><code>ptraceback</code></td><td><div class='docblock'><p>The <code>PyTraceBack</code> object associated with the error.</p>
-</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='impl-items'><h4 id='method.occurred' class='method'><code>fn <a href='#method.occurred' class='fnname'>occurred</a>(_: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><span id='structfield.ptraceback' class='structfield'>
+                           <span id='ptraceback.v' class='invisible'>
+                           <code>ptraceback: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The <code>PyTraceBack</code> object associated with the error.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/err.rs.html#143-367' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.occurred' class='method'><span id='occurred.v' class='invisible'><code>fn <a href='#method.occurred' class='fnname'>occurred</a>(_: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
 <div class='docblock'><p>Gets whether an error is present in the Python interpreter&#39;s global state.</p>
-</div><h4 id='method.new_type' class='method'><code>fn <a href='#method.new_type' class='fnname'>new_type</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, base: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;, dict: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+</div><h4 id='method.new_type' class='method'><span id='new_type.v' class='invisible'><code>fn <a href='#method.new_type' class='fnname'>new_type</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; base: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dict: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></span></h4>
 <div class='docblock'><p>Creates a new exception type with the given name, which must be of the form
 <code>&lt;module&gt;.&lt;ExceptionName&gt;</code>, as required by <code>PyErr_NewException</code>.</p>
 
 <p><code>base</code> can be an existing exception type to subclass, or a tuple of classes
 <code>dict</code> specifies an optional dictionary of class variables and methods</p>
-</div><h4 id='method.fetch' class='method'><code>fn <a href='#method.fetch' class='fnname'>fetch</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h4>
+</div><h4 id='method.fetch' class='method'><span id='fetch.v' class='invisible'><code>fn <a href='#method.fetch' class='fnname'>fetch</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span></h4>
 <div class='docblock'><p>Retrieves the current error from the Python interpreter&#39;s global state.
 The error is cleared from the Python interpreter.
 If no error is set, returns a <code>SystemError</code>.</p>
-</div><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;T, V&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, value: V) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>, V: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span></code></h4>
+</div><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;T, V&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, value: V) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.PythonObjectWithTypeObject.html' title='cpython::PythonObjectWithTypeObject'>PythonObjectWithTypeObject</a>, V: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span></code></span></h4>
 <div class='docblock'><p>Creates a new PyErr of type <code>T</code>.</p>
 
 <p><code>value</code> can be:
@@ -86,46 +92,52 @@ If no error is set, returns a <code>SystemError</code>.</p>
 * any other value: the exception instance will be created using python <code>T(value)</code></p>
 
 <p>Panics if <code>T</code> is not a python class derived from <code>BaseException</code>.</p>
-</div><h4 id='method.from_instance' class='method'><code>fn <a href='#method.from_instance' class='fnname'>from_instance</a>&lt;O&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: O) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a> <span class='where'>where O: <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a></span></code></h4>
+</div><h4 id='method.from_instance' class='method'><span id='from_instance.v' class='invisible'><code>fn <a href='#method.from_instance' class='fnname'>from_instance</a>&lt;O&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: O) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a> <span class='where'>where O: <a class='trait' href='../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a></span></code></span></h4>
 <div class='docblock'><p>Creates a new PyErr.</p>
 
 <p><code>obj</code> must be an Python exception instance, the PyErr will use that instance.
 If <code>obj</code> is a Python exception type object, the PyErr will (lazily) create a new instance of that type.
 Otherwise, a <code>TypeError</code> is created instead.</p>
-</div><h4 id='method.new_lazy_init' class='method'><code>fn <a href='#method.new_lazy_init' class='fnname'>new_lazy_init</a>(exc: <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>, value: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h4>
+</div><h4 id='method.new_lazy_init' class='method'><span id='new_lazy_init.v' class='invisible'><code>fn <a href='#method.new_lazy_init' class='fnname'>new_lazy_init</a>(exc: <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>, value: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span></h4>
 <div class='docblock'><p>Construct a new error, with the usual lazy initialization of Python exceptions.
 <code>exc</code> is the exception type; usually one of the standard exceptions like <code>PyExc::runtime_error()</code>.
 <code>value</code> is the exception instance, or a tuple of arguments to pass to the exception constructor.</p>
-</div><h4 id='method.print' class='method'><code>fn <a href='#method.print' class='fnname'>print</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h4>
+</div><h4 id='method.print' class='method'><span id='print.v' class='invisible'><code>fn <a href='#method.print' class='fnname'>print</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></span></h4>
 <div class='docblock'><p>Print a standard traceback to sys.stderr.</p>
-</div><h4 id='method.print_and_set_sys_last_vars' class='method'><code>fn <a href='#method.print_and_set_sys_last_vars' class='fnname'>print_and_set_sys_last_vars</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h4>
+</div><h4 id='method.print_and_set_sys_last_vars' class='method'><span id='print_and_set_sys_last_vars.v' class='invisible'><code>fn <a href='#method.print_and_set_sys_last_vars' class='fnname'>print_and_set_sys_last_vars</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></span></h4>
 <div class='docblock'><p>Print a standard traceback to sys.stderr.</p>
-</div><h4 id='method.matches' class='method'><code>fn <a href='#method.matches' class='fnname'>matches</a>&lt;T&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, exc: T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span></code></h4>
+</div><h4 id='method.matches' class='method'><span id='matches.v' class='invisible'><code>fn <a href='#method.matches' class='fnname'>matches</a>&lt;T&gt;(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, exc: T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where T: <a class='trait' href='../cpython/trait.ToPyObject.html' title='cpython::ToPyObject'>ToPyObject</a></span></code></span></h4>
 <div class='docblock'><p>Return true if the current exception matches the exception in <code>exc</code>.
 If <code>exc</code> is a class object, this also returns <code>true</code> when <code>self</code> is an instance of a subclass.
 If <code>exc</code> is a tuple, all exceptions in the tuple (and recursively in subtuples) are searched for a match.</p>
-</div><h4 id='method.normalize' class='method'><code>fn <a href='#method.normalize' class='fnname'>normalize</a>(&amp;mut self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h4>
+</div><h4 id='method.normalize' class='method'><span id='normalize.v' class='invisible'><code>fn <a href='#method.normalize' class='fnname'>normalize</a>(&amp;mut self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></span></h4>
 <div class='docblock'><p>Normalizes the error. This ensures that the exception value is an instance of the exception type.</p>
-</div><h4 id='method.get_type' class='method'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></h4>
+</div><h4 id='method.get_type' class='method'><span id='get_type.v' class='invisible'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></span></h4>
 <div class='docblock'><p>Retrieves the exception type.</p>
 
 <p>If the exception type is an old-style class, returns <code>oldstyle::PyClass</code>.</p>
-</div><h4 id='method.instance' class='method'><code>fn <a href='#method.instance' class='fnname'>instance</a>(&amp;mut self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></h4>
+</div><h4 id='method.instance' class='method'><span id='instance.v' class='invisible'><code>fn <a href='#method.instance' class='fnname'>instance</a>(&amp;mut self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></span></h4>
 <div class='docblock'><p>Retrieves the exception instance for this error.
 This method takes <code>&amp;mut self</code> because the error might need
 to be normalized in order to create the exception instance.</p>
-</div><h4 id='method.restore' class='method'><code>fn <a href='#method.restore' class='fnname'>restore</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h4>
+</div><h4 id='method.restore' class='method'><span id='restore.v' class='invisible'><code>fn <a href='#method.restore' class='fnname'>restore</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></span></h4>
 <div class='docblock'><p>Writes the error back to the Python interpreter&#39;s global state.
 This is the opposite of <code>PyErr::fetch()</code>.</p>
-</div><h4 id='method.warn' class='method'><code>fn <a href='#method.warn' class='fnname'>warn</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, category: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>, message: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, stacklevel: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.warn' class='method'><span id='warn.v' class='invisible'><code>fn <a href='#method.warn' class='fnname'>warn</a>(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; category: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; message: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stacklevel: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></span></h4>
 <div class='docblock'><p>Issue a warning message.
 May return a PyErr if warnings-as-errors is enabled.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='impl-items'><h4 id='method.release_ref' class='method'><code>fn <a href='../cpython/trait.PyDrop.html#tymethod.release_ref' class='fnname'>release_ref</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='../cpython/trait.PyClone.html' title='cpython::PyClone'>PyClone</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='impl-items'><h4 id='method.clone_ref' class='method'><code>fn <a href='../cpython/trait.PyClone.html#tymethod.clone_ref' class='fnname'>clone_ref</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../cpython/struct.PythonObjectDowncastError.html' title='cpython::PythonObjectDowncastError'>PythonObjectDowncastError</a>&lt;'p&gt;&gt; for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='docblock'><p>Converts <code>PythonObjectDowncastError</code> to Python <code>TypeError</code>.</p>
-</div><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(err: <a class='struct' href='../cpython/struct.PythonObjectDowncastError.html' title='cpython::PythonObjectDowncastError'>PythonObjectDowncastError</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h4>
-</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
-</div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/err.rs.html#124' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../cpython/trait.PyDrop.html' title='cpython::PyDrop'>PyDrop</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/err.rs.html#369-375' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.release_ref' class='method'><span id='release_ref.v' class='invisible'><code>fn <a href='../cpython/trait.PyDrop.html#tymethod.release_ref' class='fnname'>release_ref</a>(self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>)</code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../cpython/trait.PyClone.html' title='cpython::PyClone'>PyClone</a> for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/err.rs.html#377-385' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone_ref' class='method'><span id='clone_ref.v' class='invisible'><code>fn <a href='../cpython/trait.PyClone.html#tymethod.clone_ref' class='fnname'>clone_ref</a>(&amp;self, py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span></h4>
+</div><h3 class='impl'><span class='in-band'><code>impl&lt;'p&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../cpython/struct.PythonObjectDowncastError.html' title='cpython::PythonObjectDowncastError'>PythonObjectDowncastError</a>&lt;'p&gt;&gt; for <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/err.rs.html#388-392' title='goto source code'>[src]</a></span></h3>
+<div class='docblock'><p>Converts <code>PythonObjectDowncastError</code> to Python <code>TypeError</code>.</p>
+</div><div class='impl-items'><h4 id='method.from' class='method'><span id='from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(err: <a class='struct' href='../cpython/struct.PythonObjectDowncastError.html' title='cpython::PythonObjectDowncastError'>PythonObjectDowncastError</a>&lt;'p&gt;) -&gt; <a class='struct' href='../cpython/struct.PyErr.html' title='cpython::PyErr'>PyErr</a></code></span></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -148,6 +160,8 @@ May return a PyErr if warnings-as-errors is enabled.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -179,11 +193,9 @@ May return a PyErr if warnings-as-errors is enabled.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "cpython";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>

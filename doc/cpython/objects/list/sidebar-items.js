@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["PyList","Represents a Python `list`."]]});

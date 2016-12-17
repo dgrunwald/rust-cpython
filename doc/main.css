@@ -26,8 +26,15 @@ h1.fqn {
 h2, h3:not(.impl):not(.method):not(.type):not(.tymethod), h4:not(.method):not(.type):not(.tymethod) {
     border-bottom-color: #DDDDDD;
 }
+.in-band {
+    background-color: white;
+}
 
-.docblock code {
+div.stability > em > code {
+    background-color: initial;
+}
+
+.docblock code, .docblock-short code {
     background-color: #F5F5F5;
 }
 pre {
@@ -81,8 +88,9 @@ pre {
     border-bottom-color: #ddd;
 }
 
-.content a.primitive { color: #39a7bf; }
-.content span.externcrate, span.mod, .content a.mod, block a.current.mod { color: #4d76ae; }
+.content span.primitive, .content a.primitive, .block a.current.primitive { color: #39a7bf; }
+.content span.externcrate,
+.content span.mod, .content a.mod, .block a.current.mod { color: #4d76ae; }
 .content span.fn, .content a.fn, .block a.current.fn,
 .content span.method, .content a.method, .block a.current.method,
 .content span.tymethod, .content a.tymethod, .block a.current.tymethod,
@@ -99,13 +107,13 @@ nav.main .current {
     border-bottom-color: #000;
 }
 nav.main .separator {
-    border-color: 1px solid #000;
+    border: 1px solid #000;
 }
 a {
     color: #000;
 }
 
-.docblock a, .stability a {
+.docblock a, .docblock-short a, .stability a {
     color: #3873AD;
 }
 

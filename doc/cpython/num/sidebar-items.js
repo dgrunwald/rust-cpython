@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["PyFloat","Represents a Python `float` object."],["PyInt","Represents a Python `int` object."],["PyLong","In Python 2.x, represents a Python `long` object. In Python 3.x, represents a Python `int` object. Both `PyInt` and `PyLong` refer to the same type on Python 3.x."]]});

@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="Source to the Rust file `src/py_class/py_class.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
+
+    <title>py_class.rs.html -- source</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+</pre><pre class='rust '>
+<span class='comment'>// Copyright (c) 2016 Daniel Grunwald</span>
+<span class='comment'>//</span>
+<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class='comment'>//</span>
+<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class='comment'>// substantial portions of the Software.</span>
+<span class='comment'>//</span>
+<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+
+<span class='doccomment'>/**
+Defines new python extension class.
+A `py_class!` macro invocation generates code that declares a new Python class.
+Additionally, it generates a Rust struct of the same name, which allows accessing
+instances of that Python class from Rust.
+
+# Syntax
+`py_class!(class MyType |py| { ... })`
+
+* `MyType` is the name of the Python class.
+* `py` is an identifier that will be made available as a variable of type `Python`
+in all function bodies.
+* `{ ... }` is the class body, described in more detail below.
+
+# Example
+```
+#[macro_use] extern crate cpython;
+use cpython::{Python, PyResult, PyDict};
+
+py_class!(class MyType |py| {
+    data number: i32;
+    def __new__(_cls, arg: i32) -&gt; PyResult&lt;MyType&gt; {
+        MyType::create_instance(py, arg)
+    }
+    def half(&amp;self) -&gt; PyResult&lt;i32&gt; {
+        println!(&quot;half() was called with self={:?}&quot;, self.number(py));
+        Ok(self.number(py) / 2)
+    }
+});
+
+fn main() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let dict = PyDict::new(py);
+    dict.set_item(py, &quot;MyType&quot;, py.get_type::&lt;MyType&gt;()).unwrap();
+    py.run(&quot;assert MyType(42).half() == 21&quot;, None, Some(&amp;dict)).unwrap();
+}
+```
+
+# Generated Rust type
+
+The above example generates the following Rust type:
+
+```ignore
+struct MyType { ... }
+
+impl ToPythonObject for MyType { ... }
+impl PythonObject for MyType { ... }
+impl PythonObjectWithCheckedDowncast for MyType { ... }
+impl PythonObjectWithTypeObject for MyType { ... }
+impl PythonObjectFromPyClassMacro for MyType { ... }
+
+impl MyType {
+    fn create_instance(py: Python, number: i32) -&gt; PyResult&lt;MyType&gt; { ... }
+
+    // data accessors
+    fn number&lt;&#39;a&gt;(&amp;&#39;a self, py: Python&lt;&#39;a&gt;) -&gt; &amp;&#39;a i32 { ... }
+
+    // functions callable from python
+    pub fn __new__(_cls: &amp;PyType, py: Python, arg: i32) -&gt; PyResult&lt;MyType&gt; {
+        MyType::create_instance(py, arg)
+    }
+
+    pub fn half(&amp;self, py: Python) -&gt; PyResult&lt;i32&gt; {
+        println!(&quot;half() was called with self={:?}&quot;, self.number(py));
+        Ok(self.number(py) / 2)
+    }
+}
+```
+
+* The generated type implements a number of traits from the `cpython` crate.
+* The inherent `create_instance` method can create new Python objects
+  given the values for the data fields.
+* Private accessors functions are created for the data fields.
+* All functions callable from Python are also exposed as public Rust functions.
+* To convert from `MyType` to `PyObject`, use `as_object()` or `into_object()` (from the `PythonObject` trait).
+* To convert `PyObject` to `MyType`, use `obj.cast_as::&lt;MyType&gt;(py)` or `obj.cast_into::&lt;MyType&gt;(py)`.
+
+# py_class body
+The body of a `py_class!` supports the following definitions:
+
+## Data declarations
+`data data_name: data_type;`
+
+Declares a data field within the Python class.
+Used to store Rust data directly in the Python object instance.
+
+Because Python code can pass all Python objects to other threads,
+`data_type` must be `Send + &#39;static`.
+
+Because Python object instances can be freely shared (Python has no concept of &quot;ownership&quot;),
+data fields cannot be declared as `mut`.
+If mutability is required, you have to use interior mutability (`Cell` or `RefCell`).
+
+If data members are used to store references to other Python objects, make sure
+to read the section &quot;Garbage Collector Integration&quot;.
+
+Data declarations are not accessible from Python.
+On the Rust side, data is accessed through the automatically generated accessor functions:
+```ignore
+impl MyType {
+    fn data_name&lt;&#39;a&gt;(&amp;&#39;a self, py: Python&lt;&#39;a&gt;) -&gt; &amp;&#39;a data_type { ... }
+}
+```
+
+## Instance methods
+`def method_name(&amp;self, parameter-list) -&gt; PyResult&lt;...&gt; { ... }`
+
+Declares an instance method callable from Python.
+
+* Because Python objects are potentially shared, the self parameter must always
+  be a shared reference (`&amp;self`).
+* For details on `parameter-list`, see the documentation of `py_argparse!()`.
+* The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
+
+## Class methods
+`@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }`
+
+Declares a class method callable from Python.
+
+* The first parameter is the type object of the class on which the method is called.
+  This may be the type object of a derived class.
+* The first parameter implicitly has type `&amp;PyType`. This type must not be explicitly specified.
+* For details on `parameter-list`, see the documentation of `py_argparse!()`.
+* The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
+
+## Static methods
+`@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }`
+
+Declares a static method callable from Python.
+
+* For details on `parameter-list`, see the documentation of `py_argparse!()`.
+* The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
+
+## __new__
+`def __new__(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }`
+
+Declares a constructor method callable from Python.
+
+* If no `__new__` method is declared, object instances can only be created from Rust (via `MyType::create_instance`),
+  but not from Python.
+* The first parameter is the type object of the class to create.
+  This may be the type object of a derived class declared in Python.
+* The first parameter implicitly has type `&amp;PyType`. This type must not be explicitly specified.
+* For details on `parameter-list`, see the documentation of `py_argparse!()`.
+* The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
+  Usually, `T` will be `MyType`.
+
+## Garbage Collector Integration
+
+If your type owns references to other python objects, you will need to
+integrate with Python&#39;s garbage collector so that the GC is aware of
+those references.
+To do this, implement the special member functions `__traverse__` and `__clear__`.
+These correspond to the slots `tp_traverse` and `tp_clear` in the Python C API.
+
+`__traverse__` must call `visit.call()` for each reference to another python object.
+
+`__clear__` must clear out any mutable references to other python objects
+(thus breaking reference cycles). Immutable references do not have to be cleared,
+as every cycle must contain at least one mutable reference.
+
+Example:
+
+```
+#[macro_use] extern crate cpython;
+use std::{mem, cell};
+use cpython::{PyObject, PyDrop};
+
+py_class!(class ClassWithGCSupport |py| {
+    data obj: cell::RefCell&lt;Option&lt;PyObject&gt;&gt;;
+
+    def __traverse__(&amp;self, visit) {
+        if let Some(ref obj) = *self.obj(py).borrow() {
+            try!(visit.call(obj))
+        }
+        Ok(())
+    }
+
+    def __clear__(&amp;self) {
+        let old_obj = mem::replace(&amp;mut *self.obj(py).borrow_mut(), None);
+        // Release reference only after the mutable borrow has expired,
+        // see Caution note below.
+        old_obj.release_ref(py);
+    }
+});
+# fn main() {}
+```
+
+Caution: `__traverse__` may be called by the garbage collector:
+  * during any python operation that takes a `Python` token as argument
+  * indirectly from the `PyObject` (or derived type) `Drop` implementation
+  * if your code releases the GIL, at any time by other threads.
+
+If you are using `RefCell&lt;PyObject&gt;`, you must not perform any of the above
+operations while your code holds a mutable borrow, or you may cause the borrow
+in `__traverse__` to panic.
+
+This is why the example above uses the `mem::replace`/`release_ref` dance:
+`release_ref` (or the implicit `Drop`) can only be called safely in a separate
+statement, after the mutable borrow on the `RefCell` has expired.
+
+Note that this restriction applies not only to `__clear__`, but to all methods
+that use `RefCell::borrow_mut`.
+
+## Iterator Types
+
+Iterators can be defined using the Python special methods `__iter__` and `__next__`:
+
+  * `def __iter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;impl ToPyObject&gt;&gt;`
+
+    Returning `Ok(None)` from `__next__` indicates that that there are no further items.
+
+Example:
+
+```
+#[macro_use] extern crate cpython;
+use std::cell::RefCell;
+use cpython::{PyObject, PyClone, PyResult};
+
+py_class!(class MyIterator |py| {
+    data iter: RefCell&lt;Box&lt;Iterator&lt;Item=PyObject&gt; + Send&gt;&gt;;
+
+    def __iter__(&amp;self) -&gt; PyResult&lt;Self&gt; {
+        Ok(self.clone_ref(py))
+    }
+
+    def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;PyObject&gt;&gt; {
+        Ok(self.iter(py).borrow_mut().next())
+    }
+});
+# fn main() {}
+```
+
+## String Conversions
+
+  * `def __repr__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;`
+  * `def __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;`
+
+    Possible return types for `__str__` and `__repr__` are `PyResult&lt;String&gt;` or `PyResult&lt;PyString&gt;`.
+
+    In Python 2.7, Unicode strings returned by `__str__` and `__repr__` will be converted to byte strings
+    by the Python runtime, which results in an exception if the string contains non-ASCII characters.
+
+  * `def __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;`
+
+    On Python 3.x, provides the conversion to `bytes`.
+    On Python 2.7, `__bytes__` is allowed but has no effect.
+
+  * `def __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;`
+
+    On Python 2.7, provides the conversion to `unicode`.
+    On Python 3.x, `__unicode__` is allowed but has no effect.
+
+  * `def __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;`
+
+    Special method that is used by the `format()` builtin and the `str.format()` method.
+    Possible return types are `PyResult&lt;String&gt;` or `PyResult&lt;PyString&gt;`.
+
+## Comparison operators
+
+  * `def __richcmp__(&amp;self, other: impl ToPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    Overloads Python comparison operations (`==`, `!=`, `&lt;`, `&lt;=`, `&gt;`, and `&gt;=`). The `op`
+    argument indicates the comparison operation being performed.
+    The return type will normally be `PyResult&lt;bool&gt;`, but any Python object can be returned.
+
+  * `def __hash__(&amp;self) -&gt; PyResult&lt;impl PrimInt&gt;`
+
+    Objects that compare equal must have the same hash value.
+    The return type must be `PyResult&lt;T&gt;` where `T` is one of Rust&#39;s primitive integer types.
+
+## Emulating Container Types
+
+  * `def __len__(&amp;self) -&gt; PyResult&lt;usize&gt;`
+
+    Called by the built-in Python function `len()`.
+
+  * `def __length_hint__(&amp;self) -&gt; PyResult&lt;usize&gt;`
+
+    Should return an estimated length for the object.
+    This method is purely an optimization and is never required for correctness.
+
+    `__length_hint__` is new in Python 3.4; older versions will ignore the method.
+
+  * `def __getitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    Called by the Python subscript operator `self[key]`.
+
+  * `def __setitem__(&amp;self, key: impl FromPyObject, value: impl FromPyObject) -&gt; PyResult&lt;()&gt;`
+
+    Called by Python `self[key] = value`.
+
+  * `def __delitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;()&gt;`
+
+    Called by Python `del self[key]`.
+
+  * `def __reversed__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    Called by the `reversed()` built-in.
+    It should return a new iterator object that iterates over all the objects in the container in reverse order.
+
+  * `def __contains__(&amp;self, item: impl FromPyObject) -&gt; PyResult&lt;bool&gt;`
+
+    Called by Python `item in self`.
+    For mapping types, this should consider the keys of the mapping rather than the values
+    or the key-item pairs.
+
+    If extraction of the `item` parameter fails with `TypeError`,
+    `__contains__` will return `Ok(false)`.
+
+## Arithmetic methods
+
+  * `def __add__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __sub__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __mul__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __lshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __rshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __and__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __xor__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __or__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    The parameters `lhs` and `rhs` must not be given an explicit type.
+    Within the method bodies, both parameters will implicitly have type `&amp;PyObject`.
+
+    There are no separate &quot;reversed&quot; versions of these methods (`__radd__()`, etc.)
+    Instead, if the first operand cannot perform the operation,
+    the same method of the second operand is called, with the operands in the same order.
+
+    This means that you can&#39;t rely on the first parameter of these methods being `self`
+    or being the correct type, and you should test the types of both operands before deciding what to do.
+    If you can&#39;t handle the combination of types you&#39;ve been given,
+    you should return `Ok(py.NotImplemented())`.
+
+  * `def __iadd__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __isub__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __imul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __imatmul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __itruediv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __ifloordiv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __imod__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __ilshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __irshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __iand__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __ixor__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __ior__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    Handles inplace operations if possible, falling back to the non-inplace versions.
+    These methods must return a new reference! In the common case of returning the
+    same (mutated) object, you will want to return `Ok(self.clone_ref(py))`.
+
+    If you can&#39;t handle the combination of types you&#39;ve been given,
+    you should return `Ok(py.NotImplemented())`.
+
+## Context Manager
+
+  * `def __enter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __exit__(&amp;self, ty: Option&lt;PyType&gt;, value: PyObject, traceback: PyObject) -&gt; PyResult&lt;bool&gt;`
+
+## Other Special Methods
+
+  * `def __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;`
+
+    Determines the &quot;truthyness&quot; of the object.
+
+    Note that `py_class!` always expects this member to be called `__bool__`,
+    even on Python 2.7 where the Python spelling was `__nonzero__`.
+
+  * `def __call__(&amp;self, parameter-list) -&gt; PyResult&lt;impl ToPyObject&gt;`
+
+    For details on `parameter-list`, see the documentation of `py_argparse!()`.
+    The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
+
+
+*/</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class</span> {
+    (<span class='ident'>class</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span>:<span class='ident'>ident</span> <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>: <span class='ident'>ident</span><span class='op'>|</span> { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>tt</span> )<span class='op'>*</span> }) <span class='op'>=&gt;</span> (
+        <span class='macro'>py_class_impl</span><span class='macro'>!</span> {
+            { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span> )<span class='op'>*</span> }
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>
+            <span class='comment'>/* info: */</span> {
+                <span class='comment'>/* base_type: */</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>,
+                <span class='comment'>/* size: */</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>py_class</span>::<span class='ident'>BaseObject</span><span class='op'>&gt;</span>::<span class='ident'>size</span>(),
+                <span class='comment'>/* gc: */</span> {
+                    <span class='comment'>/* traverse_proc: */</span> <span class='prelude-val'>None</span>,
+                    <span class='comment'>/* traverse_data: */</span> [ <span class='comment'>/*name*/</span> ]
+                },
+                <span class='comment'>/* data: */</span> [ <span class='comment'>/* { offset, name, type } */</span> ]
+                <span class='comment'>// TODO: base type, documentation, ...</span>
+            }
+            <span class='comment'>/* slots: */</span> {
+                <span class='comment'>/* type_slots */</span>  [ <span class='comment'>/* slot: expr, */</span> ]
+                <span class='comment'>/* as_number */</span>   [ <span class='comment'>/* slot: expr, */</span> ]
+                <span class='comment'>/* as_sequence */</span> [ <span class='comment'>/* slot: expr, */</span> ]
+                <span class='comment'>/* as_mapping */</span>  [ <span class='comment'>/* slot: expr, */</span> ]
+                <span class='comment'>/* setitem_delitem */</span> [
+                    <span class='ident'>sdi_setitem</span>: {},
+                    <span class='ident'>sdi_delitem</span>: {},
+                ]
+            }
+            <span class='comment'>/* impls: */</span> { <span class='comment'>/* impl body */</span> }
+            <span class='comment'>/* members: */</span> { <span class='comment'>/* ident = expr; */</span> }
+        }
+    );
+}
+
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class_impl_item</span> {
+    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span>( $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>selfarg</span>:<span class='ident'>tt</span> )<span class='op'>*</span> )
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>res_type</span>:<span class='ident'>ty</span>; <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span> [ $( { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>detail</span>:<span class='ident'>tt</span> } )<span class='op'>*</span> ]
+    } <span class='op'>=&gt;</span> { <span class='macro'>py_coerce_item</span><span class='macro'>!</span> {
+        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span> {
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>($( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>selfarg</span> )<span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span> $( , <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> )<span class='op'>*</span> )
+            <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>res_type</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>
+        }
+    }}
+}
+
+</pre>
+</section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "cpython";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>
