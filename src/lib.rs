@@ -306,6 +306,7 @@ pub unsafe fn py_module_initializer_impl(
 #[cfg(feature="python3-sys")]
 macro_rules! py_module_initializer {
     ($name: ident, $py2: ident, $py3: ident, |$py_id: ident, $m_id: ident| $body: expr) => {
+        /// Python lib entry point
         #[no_mangle]
         #[allow(non_snake_case)]
         pub unsafe extern "C" fn $py3() -> *mut $crate::_detail::ffi::PyObject {
@@ -322,6 +323,7 @@ macro_rules! py_module_initializer {
     }
 }
 
+/// Python lib entry point
 #[doc(hidden)]
 #[cfg(feature="python3-sys")]
 pub unsafe fn py_module_initializer_impl(
@@ -355,4 +357,3 @@ pub unsafe fn py_module_initializer_impl(
     mem::forget(guard);
     ret
 }
-
