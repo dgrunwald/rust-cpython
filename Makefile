@@ -35,7 +35,8 @@ src/py_class/py_class_impl2.rs: src/py_class/py_class_impl.py
 src/py_class/py_class_impl3.rs: src/py_class/py_class_impl.py
 	PY=3 python $< >$@
 
-cog: python27-sys/build.rs .travis.yml
+# To use this target: pip install cogapp
+cog: python27-sys/build.rs
 	cog.py -r $^
 
 build: src/py_class/py_class_impl2.rs src/py_class/py_class_impl3.rs

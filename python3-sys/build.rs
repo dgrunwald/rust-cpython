@@ -157,6 +157,13 @@ fn cfg_line_for_var(key: &str, val: &str) -> Option<String> {
     }
 }
 
+fn is_not_none_or_zero(val: Option<&String>) -> bool {
+    match val {
+        Some(v) => v != "0",
+        None => false
+    }
+}
+
 /// Run a python script using the specified interpreter binary.
 fn run_python_script(interpreter: &str, script: &str) -> Result<String, String> {
     let mut cmd = Command::new(interpreter);
@@ -294,7 +301,7 @@ fn get_config_from_interpreter(interpreter: &str) -> Result<(PythonVersion, Vec<
     let script = "import sys; import sysconfig; print(sys.version_info[0:2]); \
 print(sysconfig.get_config_var('LIBDIR')); \
 print(sysconfig.get_config_var('Py_ENABLE_SHARED')); \
-print(sysconfig.get_config_var('LDVERSION') or sysconfig.get_config_var('py_version_short')); \
+print(sysconfig.get_config_var('LDVERSION') or '%s%s' % (sysconfig.get_config_var('py_version_short'), sysconfig.get_config_var('DEBUG_EXT') or '')); \
 print(sys.exec_prefix);";
     let out = try!(run_python_script(interpreter, script));
     let lines: Vec<String> = out.split(NEWLINE_SEQUENCE).map(|line| line.to_owned()).collect();
@@ -381,7 +388,13 @@ fn main() {
     // match the pkg-config package name, which is going to have a . in it).
     let version = version_from_env().unwrap();
     let python_interpreter_path = configure_from_path(&version).unwrap();
-    let config_map = get_config_vars(&python_interpreter_path).unwrap();
+    let mut config_map = get_config_vars(&python_interpreter_path).unwrap();
+    if is_not_none_or_zero(config_map.get("Py_DEBUG")) {
+        config_map.insert("Py_TRACE_REFS".to_owned(), "1".to_owned()); // Py_DEBUG implies Py_TRACE_REFS.
+    }
+    if is_not_none_or_zero(config_map.get("Py_TRACE_REFS")) {
+        config_map.insert("Py_REF_DEBUG".to_owned(), "1".to_owned()); // Py_TRACE_REFS implies Py_REF_DEBUG.
+    }
     for (key, val) in &config_map {
         match cfg_line_for_var(key, val) {
             Some(line) => println!("{}", line),

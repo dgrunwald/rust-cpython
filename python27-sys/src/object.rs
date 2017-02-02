@@ -428,6 +428,10 @@ pub type allocfunc =
 #[repr(C)]
 #[derive(Copy)]
 pub struct PyTypeObject {
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_next: *mut PyObject,
+    #[cfg(py_sys_config="Py_TRACE_REFS")]
+    pub _ob_prev: *mut PyObject,
     pub ob_refcnt: Py_ssize_t,
     pub ob_type: *mut PyTypeObject,
     pub ob_size: Py_ssize_t,
@@ -477,6 +481,16 @@ pub struct PyTypeObject {
     pub tp_weaklist: *mut PyObject,
     pub tp_del: Option<destructor>,
     pub tp_version_tag: c_uint,
+    #[cfg(py_sys_config="COUNT_ALLOCS")]
+    pub tp_allocs: Py_ssize_t,
+    #[cfg(py_sys_config="COUNT_ALLOCS")]
+    pub tp_frees: Py_ssize_t,
+    #[cfg(py_sys_config="COUNT_ALLOCS")]
+    pub tp_maxalloc: Py_ssize_t,
+    #[cfg(py_sys_config="COUNT_ALLOCS")]
+    pub tp_prev: *mut PyTypeObject,
+    #[cfg(py_sys_config="COUNT_ALLOCS")]
+    pub tp_next: *mut PyTypeObject,
 }
 
 impl Clone for PyTypeObject {

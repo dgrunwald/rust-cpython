@@ -3,12 +3,23 @@ use pyport::Py_ssize_t;
 use object::*;
 
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+    #[cfg(not(all(py_sys_config="Py_DEBUG", not(Py_3_4))))]
     pub fn PyObject_Malloc(size: size_t) -> *mut c_void;
     #[cfg(Py_3_5)]
     pub fn PyObject_Calloc(nelem: size_t, elsize: size_t) -> *mut c_void;
+    #[cfg(not(all(py_sys_config="Py_DEBUG", not(Py_3_4))))]
     pub fn PyObject_Realloc(ptr: *mut c_void, new_size: size_t)
      -> *mut c_void;
+     #[cfg(not(all(py_sys_config="Py_DEBUG", not(Py_3_4))))]
     pub fn PyObject_Free(ptr: *mut c_void) -> ();
+
+    #[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+    pub fn _PyObject_DebugMalloc(arg1: size_t) -> *mut c_void;
+    #[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+    pub fn _PyObject_DebugRealloc(arg1: *mut c_void, arg2: size_t)
+     -> *mut c_void;
+    #[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+    pub fn _PyObject_DebugFree(arg1: *mut c_void);
 
     #[cfg(all(not(Py_LIMITED_API), Py_3_4))]
     pub fn _Py_GetAllocatedBlocks() -> Py_ssize_t;
@@ -22,6 +33,13 @@ use object::*;
 
     pub fn PyGC_Collect() -> Py_ssize_t;
 }
+
+#[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+pub use self::_PyObject_DebugMalloc as PyObject_Malloc;
+#[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+pub use self::_PyObject_DebugRealloc as PyObject_Realloc;
+#[cfg(all(py_sys_config="Py_DEBUG", not(Py_3_4)))]
+pub use self::_PyObject_DebugFree as PyObject_Free;
 
 #[repr(C)]
 #[derive(Copy)]
