@@ -1,15 +1,173 @@
+# #####################################################################
+# Note: Revert to a simpler matrix definition once the travis builtin
+#       osx python build will be correctly configured.
+# #####################################################################
+#
+# Execute this code installing *cogapp* from PyPI and then:
+# `cog.py -r .travis.yml` to update inplace.
+#[[[cog
+#import cog
+#PYTHON_VERSIONS = ('2.7', '3.3', '3.4', '3.5', '3.6')
+#RUST_VERSIONS = {'1.13.0', 'nightly'}
+#allowed_failures = {'nightly'}
+#includes = """\
+#- os: osx
+#  language: generic
+#  python: {pyver}
+#  env: RUST_VERSION={rustver} BREW_PYTHON={brew_python}
+#  sudo: false\
+#"""
+#]]]
+#[[[end]]]
+
+os: linux
 language: python
 python:
+  #[[[cog
+  #for pyver in PYTHON_VERSIONS:
+  #    cog.outl('- "{pyver}"'.format(**locals()))
+  #]]]
   - "2.7"
   - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
+  #[[[end]]]
 env:
+  #[[[cog
+  #for rustver in RUST_VERSIONS:
+  #    cog.outl("- RUST_VERSION={rustver}".format(**locals()))
+  #]]]
   - RUST_VERSION=1.13.0
   - RUST_VERSION=nightly
+  - RUST_VERSION=1.15.0
+  #[[[end]]]
 sudo: false
+
+matrix:
+  include:
+    #[[[cog
+    #for pyver in sorted(PYTHON_VERSIONS):
+    #    brew_python = "python{v}".format(v=pyver.replace(".", ""))
+    #    for rustver in sorted(RUST_VERSIONS):
+    #        cog.outl(includes.format(**locals()))
+    #]]]
+    - os: osx
+      language: generic
+      python: 2.7
+      env: RUST_VERSION=1.13.0 BREW_PYTHON=python27
+      sudo: false
+    - os: osx
+      language: generic
+      python: 2.7
+      env: RUST_VERSION=1.15.0 BREW_PYTHON=python27
+      sudo: false
+    - os: osx
+      language: generic
+      python: 2.7
+      env: RUST_VERSION=nightly BREW_PYTHON=python27
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.3
+      env: RUST_VERSION=1.13.0 BREW_PYTHON=python33
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.3
+      env: RUST_VERSION=1.15.0 BREW_PYTHON=python33
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.3
+      env: RUST_VERSION=nightly BREW_PYTHON=python33
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.4
+      env: RUST_VERSION=1.13.0 BREW_PYTHON=python34
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.4
+      env: RUST_VERSION=1.15.0 BREW_PYTHON=python34
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.4
+      env: RUST_VERSION=nightly BREW_PYTHON=python34
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.5
+      env: RUST_VERSION=1.13.0 BREW_PYTHON=python35
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.5
+      env: RUST_VERSION=1.15.0 BREW_PYTHON=python35
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.5
+      env: RUST_VERSION=nightly BREW_PYTHON=python35
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.6
+      env: RUST_VERSION=1.13.0 BREW_PYTHON=python36
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.6
+      env: RUST_VERSION=1.15.0 BREW_PYTHON=python36
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.6
+      env: RUST_VERSION=nightly BREW_PYTHON=python36
+      sudo: false
+    #[[[end]]]
+  allow_failures:
+    #[[[cog
+    #for pyver in sorted(PYTHON_VERSIONS):
+    #    brew_python = "python{v}".format(v=pyver.replace(".", ""))
+    #    for rustver in sorted(RUST_VERSIONS & allowed_failures):
+    #        cog.outl(includes.format(**locals()))
+    #]]]
+    - os: osx
+      language: generic
+      python: 2.7
+      env: RUST_VERSION=nightly BREW_PYTHON=python27
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.3
+      env: RUST_VERSION=nightly BREW_PYTHON=python33
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.4
+      env: RUST_VERSION=nightly BREW_PYTHON=python34
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.5
+      env: RUST_VERSION=nightly BREW_PYTHON=python35
+      sudo: false
+    - os: osx
+      language: generic
+      python: 3.6
+      env: RUST_VERSION=nightly BREW_PYTHON=python36
+      sudo: false
+    #[[[end]]]
+
+#  Manually install python on osx
+before_install:
+  - if [[ $TRAVIS_OS_NAME == 'osx' && $BREW_PYTHON != 'python27' ]]; then ci/osx-install.sh; fi
+
 install:
+  - python -V
   - python -c "import sysconfig; print('\n'.join(map(repr,sorted(sysconfig.get_config_vars().items()))))"
   - mkdir ~/rust-installer
   - curl -sL https://static.rust-lang.org/rustup.sh -o ~/rust-installer/rustup.sh
@@ -20,6 +178,6 @@ install:
   - export LIBRARY_PATH="$LIBRARY_PATH:$PYTHON_LIB"
   - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PYTHON_LIB:$HOME/rust/lib"
   - rustc -V
+
 script:
   - make test extensions
-
