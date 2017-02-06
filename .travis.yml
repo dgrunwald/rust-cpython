@@ -9,6 +9,8 @@
 #import cog
 #PYTHON_VERSIONS = ('2.7', '3.3', '3.4', '3.5', '3.6')
 #RUST_VERSIONS = {'1.13.0', 'nightly'}
+#stable = open('.rust.stable').read().strip()
+#RUST_VERSIONS.add(stable)
 #allowed_failures = {'nightly'}
 #includes = """\
 #- os: osx
