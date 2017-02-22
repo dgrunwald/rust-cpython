@@ -14,7 +14,8 @@ if platform.system() == 'Windows' or platform.system().startswith('CYGWIN'):
 
 so_files = [
     sysconfig.get_config_var("LIBDIR")+"/"+sysconfig.get_config_var("LDLIBRARY"),
-    sysconfig.get_config_var("LIBPL")+"/"+sysconfig.get_config_var("LDLIBRARY")
+    sysconfig.get_config_var("LIBPL")+"/"+sysconfig.get_config_var("LDLIBRARY"),
+    sysconfig.get_config_var("PYTHONFRAMEWORKPREFIX")+"/"+sysconfig.get_config_var("LDLIBRARY"),
 ]
 so_file = None
 for name in so_files:
@@ -88,4 +89,3 @@ if names:
     sys.exit(1)
 else:
     print('Symbols in {} OK.'.format(so_file))
-
