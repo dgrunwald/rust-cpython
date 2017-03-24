@@ -10,6 +10,8 @@
 - [Added support for optional parameters][81] to `py_argparse!`, `py_fn!` and `py_class!` macros. (PR by [@Luthaf])
 
   Example: `py_fn!(py, function(i: i32 = 0))`
+- Made `ObjectProtocol::compare()` available on Python 3.
+- Added `ObjectProtocol::rich_compare()`.
 
 [Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.1.0...HEAD
 [81]: https://github.com/dgrunwald/rust-cpython/pull/81

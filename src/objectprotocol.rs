@@ -180,6 +180,11 @@ pub trait ObjectProtocol : PythonObject {
 
     /// Calls the object.
     /// This is equivalent to the Python expression: 'self(*args, **kwargs)'
+    ///
+    /// `args` should be a value that, when converted to Python, results in a tuple.
+    /// For this purpose, you can use:
+    ///  * `cpython::NoArgs` when calling a method without any arguments
+    ///  * otherwise, a Rust tuple with 1 or more elements
     #[inline]
     fn call<A>(&self, py: Python, args: A, kwargs: Option<&PyDict>) -> PyResult<PyObject>
         where A: ToPyObject<ObjectType=PyTuple>
@@ -191,6 +196,24 @@ pub trait ObjectProtocol : PythonObject {
 
     /// Calls a method on the object.
     /// This is equivalent to the Python expression: 'self.name(*args, **kwargs)'
+    ///
+    /// `args` should be a value that, when converted to Python, results in a tuple.
+    /// For this purpose, you can use:
+    ///  * `cpython::NoArgs` when calling a method without any arguments
+    ///  * otherwise, a Rust tuple with 1 or more elements
+    ///
+    /// # Example
+    /// ```no_run
+    /// use cpython::{NoArgs, ObjectProtocol};
+    /// # use cpython::Python;
+    /// # let gil = Python::acquire_gil();
+    /// # let py = gil.python();
+    /// # let obj = py.None();
+    /// // Call method without arguments:
+    /// let value = obj.call_method(py, "method0", NoArgs, None).unwrap();
+    /// // Call method with a single argument:
+    /// obj.call_method(py, "method1", (true,), None).unwrap();
+    /// ```
     #[inline]
     fn call_method<A>(&self, py: Python, name: &str, args: A, kwargs: Option<&PyDict>) -> PyResult<PyObject>
         where A: ToPyObject<ObjectType=PyTuple>
