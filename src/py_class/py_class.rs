@@ -426,6 +426,7 @@ macro_rules! py_class {
             }
             /* impls: */ { /* impl body */ }
             /* members: */ { /* ident = expr; */ }
+            /* properties: */ { /* expr; */ }
         }
     );
     (pub class $class:ident |$py: ident| { $( $body:tt )* }) => (
@@ -455,9 +456,11 @@ macro_rules! py_class {
             }
             /* impls: */ { /* impl body */ }
             /* members: */ { /* ident = expr; */ }
+            /* properties: */ { /* expr; */ }
         }
     );
 }
+
 
 #[macro_export]
 #[doc(hidden)]
