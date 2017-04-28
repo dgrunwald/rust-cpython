@@ -607,12 +607,13 @@ mod test {
         let mut arr = [0; 5];
         buffer.copy_to_slice(py, &mut arr).unwrap();
         assert_eq!(arr, b"abcde" as &[u8]);
+        assert_eq!(buffer.to_vec::<u8>(py).unwrap(), b"abcde");
 
         assert!(buffer.copy_from_slice(py, &[0u8; 5]).is_err());
         
         assert!(buffer.to_vec::<i8>(py).is_err());
         assert!(buffer.to_vec::<u16>(py).is_err());
-        assert_eq!(buffer.to_vec::<u8>(py).unwrap(), b"abcde");
+        assert_eq!(buffer.to_vec::<u8>(py).unwrap(), [0; 5]);
     }
 
     #[test]
