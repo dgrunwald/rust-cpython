@@ -126,9 +126,10 @@ impl PyDict {
     }
 }
 
-impl <K, V> ToPyObject for collections::HashMap<K, V>
+impl <K, V, H> ToPyObject for collections::HashMap<K, V, H>
     where K: hash::Hash+cmp::Eq+ToPyObject,
-          V: ToPyObject
+          V: ToPyObject,
+          H: hash::BuildHasher
 {
     type ObjectType = PyDict;
 
