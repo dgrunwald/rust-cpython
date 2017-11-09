@@ -91,6 +91,7 @@ macro_rules! py_class_type_object_dynamic_init {
         }
     ) => {
         unsafe {
+            $type_object.init_ob_type(&mut $crate::_detail::ffi::PyType_Type);
             $type_object.tp_name = $crate::py_class::slots::build_tp_name($module_name, stringify!($class));
             $type_object.tp_basicsize = <$class as $crate::py_class::BaseObject>::size()
                                         as $crate::_detail::ffi::Py_ssize_t;
