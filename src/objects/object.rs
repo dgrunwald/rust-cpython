@@ -67,7 +67,7 @@ impl Drop for PyObject {
 #[inline]
 #[cfg(feature="nightly")]
 unsafe fn make_shared(ptr: *mut ffi::PyObject) -> ptr::Shared<ffi::PyObject> {
-    ptr::Shared::new(ptr)
+    ptr::Shared::new(ptr).expect("ptr should not be null")
 }
 
 #[inline]
