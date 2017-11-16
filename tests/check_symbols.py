@@ -32,13 +32,14 @@ for line in subprocess.check_output(['readelf', '-Ws', so_file]).splitlines():
 assert 'PyList_Type' in so_symbols
 assert 'PyList_New' in so_symbols
 
+cargo_cmd = ['cargo', 'rustc']
 cfgs = []
 if sys.version_info.major == 3:
-    sys_lib = 'python3-sys'
+    cargo_cmd += ['--manifest-path', '../python3-sys/Cargo.toml']
     for i in range(4, sys.version_info.minor+1):
         cfgs += ['--cfg', 'Py_3_{}'.format(i)]
 else:
-    sys_lib = 'python27-sys'
+    cargo_cmd += ['--manifest-path', '../python27-sys/Cargo.toml']
 
 interesting_config_flags = [
     "Py_USING_UNICODE",
@@ -57,7 +58,7 @@ for name in interesting_config_values:
     cfgs += ['--cfg', 'py_sys_config="{}_{}"'.format(name, sysconfig.get_config_var(name))]
 
 
-json_output = subprocess.check_output(['rustc', '-Z', 'ast-json', '../{}/src/lib.rs'.format(sys_lib)] + cfgs)
+json_output = subprocess.check_output(cargo_cmd + ['--', '-Z', 'ast-json'] + cfgs)
 doc = json.loads(json_output.decode('utf-8'))
 foreign_symbols = set()
 def visit(node, foreign):
