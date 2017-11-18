@@ -605,6 +605,13 @@ pub const PyTypeObject_INIT : PyTypeObject = PyTypeObject {
     tp_version_tag: 0,
 };
 
+impl PyTypeObject {
+    #[inline]
+    pub fn init_ob_type(&mut self, type_object: *mut PyTypeObject) {
+        self.ob_type = type_object;
+    }
+}
+
 #[repr(C)]
 #[derive(Copy)]
 pub struct PyHeapTypeObject {

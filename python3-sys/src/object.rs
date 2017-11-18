@@ -596,6 +596,13 @@ mod typeobject {
         tp_reserved,
     );
 
+    impl PyTypeObject {
+        #[inline]
+        pub fn init_ob_type(&mut self, type_object: *mut PyTypeObject) {
+            self.ob_base.ob_base.ob_type = type_object;
+        }
+    }
+
     #[repr(C)]
     #[derive(Copy)]
     pub struct PyHeapTypeObject {
