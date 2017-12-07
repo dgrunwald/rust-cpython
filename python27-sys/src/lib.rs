@@ -48,6 +48,7 @@ pub use pyarena::*;
 pub use modsupport::*;
 pub use pythonrun::*;
 pub use ceval::*;
+pub use sysmodule::*;
 pub use import::*;
 pub use objectabstract::*;
 pub use code::*;
@@ -104,7 +105,7 @@ mod pyarena;
 mod modsupport;
 mod pythonrun;
 mod ceval;
-// mod sysmodule; // TODO: incomplete
+mod sysmodule;
 // mod intrcheck; // TODO: incomplete
 mod import;
 
