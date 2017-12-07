@@ -304,8 +304,9 @@ print(sysconfig.get_config_var('Py_ENABLE_SHARED')); \
 print(sysconfig.get_config_var('LDVERSION') or '%s%s' % (sysconfig.get_config_var('py_version_short'), sysconfig.get_config_var('DEBUG_EXT') or '')); \
 print(sys.exec_prefix);";
     let out = try!(run_python_script(interpreter, script));
-    let lines: Vec<String> = out.split(NEWLINE_SEQUENCE).map(|line| line.to_owned()).collect();
+    let mut lines: Vec<String> = out.split(NEWLINE_SEQUENCE).map(|line| line.to_owned()).collect();
     let interpreter_version = try!(get_interpreter_version(&lines[0]));
+    lines.remove(0);
     Ok((interpreter_version, lines))
 }
 
@@ -316,10 +317,10 @@ print(sys.exec_prefix);";
 fn configure_from_path(expected_version: &PythonVersion) -> Result<String, String> {
     let (interpreter_version, interpreter_path, lines) = 
         try!(find_interpreter_and_get_config(expected_version));
-    let libpath: &str = &lines[1];
-    let enable_shared: &str = &lines[2];
-    let ld_version: &str = &lines[3];
-    let exec_prefix: &str = &lines[4];
+    let libpath: &str = &lines[0];
+    let enable_shared: &str = &lines[1];
+    let ld_version: &str = &lines[2];
+    let exec_prefix: &str = &lines[3];
 
     let is_extension_module = env::var_os("CARGO_FEATURE_EXTENSION_MODULE").is_some();
     if !is_extension_module || cfg!(target_os="windows") {
