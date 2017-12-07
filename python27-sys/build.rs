@@ -438,5 +438,9 @@ fn main() {
     });
     println!("cargo:python_flags={}", 
         if flags.len() > 0 { &flags[..flags.len()-1] } else { "" });
+// ~~~~~~~~~~ generated file, modify `python3-sys/build.rs` ~~~~~~~~~~
+    // 3. Export Python interpreter path as a Cargo variable so dependent build
+    // scripts can use invoke it.
+    println!("cargo:python_interpreter={}", python_interpreter_path);
 }
 //[[[end]]]

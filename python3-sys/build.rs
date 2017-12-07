@@ -428,4 +428,8 @@ fn main() {
     });
     println!("cargo:python_flags={}", 
         if flags.len() > 0 { &flags[..flags.len()-1] } else { "" });
+
+    // 3. Export Python interpreter path as a Cargo variable so dependent build
+    // scripts can use invoke it.
+    println!("cargo:python_interpreter={}", python_interpreter_path);
 }
