@@ -266,40 +266,39 @@ fn find_interpreter_and_get_config(expected_version: &PythonVersion) ->
     if let Some(sys_executable) = env::var_os("PYTHON_SYS_EXECUTABLE") {
         let interpreter_path = sys_executable.to_str()
             .expect("Unable to get PYTHON_SYS_EXECUTABLE value");
-        let (interpreter_version, lines) = try!(get_config_from_interpreter(interpreter_path));
+        let (executable, interpreter_version, lines) = try!(get_config_from_interpreter(interpreter_path));
         if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, interpreter_path.to_owned(), lines));
+            return Ok((interpreter_version, executable.to_owned(), lines));
         } else {
             return Err(format!("Wrong python version in PYTHON_SYS_EXECUTABLE={}\n\
                                 \texpected {} != found {}",
-                               interpreter_path,
+                               executable,
                                expected_version,
                                interpreter_version));
         }
     }
     {
-        let interpreter_path = "python";
-        let (interpreter_version, lines) =
-            try!(get_config_from_interpreter(interpreter_path));
+        let (executable, interpreter_version, lines) =
+            try!(get_config_from_interpreter("python"));
         if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, interpreter_path.to_owned(), lines));
+            return Ok((interpreter_version, executable.to_owned(), lines));
         }
     }
     {
         let major_interpreter_path = &format!("python{}", expected_version.major);
-        let (interpreter_version, lines) = try!(get_config_from_interpreter(
+        let (executable, interpreter_version, lines) = try!(get_config_from_interpreter(
             major_interpreter_path));
         if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, major_interpreter_path.to_owned(), lines));
+            return Ok((interpreter_version, executable.to_owned(), lines));
         }
     }
     if let Some(minor) = expected_version.minor {
         let minor_interpreter_path = &format!("python{}.{}", 
             expected_version.major, minor);
-        let (interpreter_version, lines) = try!(get_config_from_interpreter(
+        let (executable, interpreter_version, lines) = try!(get_config_from_interpreter(
             minor_interpreter_path));
         if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, minor_interpreter_path.to_owned(), lines));
+            return Ok((interpreter_version, executable.to_owned(), lines));
         }
     }
     Err(format!("No python interpreter found of version {}",
@@ -307,16 +306,19 @@ fn find_interpreter_and_get_config(expected_version: &PythonVersion) ->
 }
 // ~~~~~~~~~~ generated file, modify `python3-sys/build.rs` ~~~~~~~~~~
 /// Extract compilation vars from the specified interpreter.
-fn get_config_from_interpreter(interpreter: &str) -> Result<(PythonVersion, Vec<String>), String> {
-    let script = "import sys; import sysconfig; print(sys.version_info[0:2]); \
+fn get_config_from_interpreter(interpreter: &str) -> Result<(String, PythonVersion, Vec<String>), String> {
+    let script = "import sys; import sysconfig; print(sys.executable); \
+print(sys.version_info[0:2]); \
 print(sysconfig.get_config_var('LIBDIR')); \
 print(sysconfig.get_config_var('Py_ENABLE_SHARED')); \
 print(sysconfig.get_config_var('LDVERSION') or '%s%s' % (sysconfig.get_config_var('py_version_short'), sysconfig.get_config_var('DEBUG_EXT') or '')); \
 print(sys.exec_prefix);";
     let out = try!(run_python_script(interpreter, script));
-    let lines: Vec<String> = out.split(NEWLINE_SEQUENCE).map(|line| line.to_owned()).collect();
-    let interpreter_version = try!(get_interpreter_version(&lines[0]));
-    Ok((interpreter_version, lines))
+    let mut lines: Vec<String> = out.split(NEWLINE_SEQUENCE).map(|line| line.to_owned()).collect();
+    let executable = lines.remove(0);
+    let interpreter_version = lines.remove(0);
+    let interpreter_version = try!(get_interpreter_version(&interpreter_version));
+    Ok((executable, interpreter_version, lines))
 }
 // ~~~~~~~~~~ generated file, modify `python3-sys/build.rs` ~~~~~~~~~~
 /// Deduce configuration from the 'python' in the current PATH and print
@@ -326,10 +328,10 @@ print(sys.exec_prefix);";
 fn configure_from_path(expected_version: &PythonVersion) -> Result<String, String> {
     let (interpreter_version, interpreter_path, lines) = 
         try!(find_interpreter_and_get_config(expected_version));
-    let libpath: &str = &lines[1];
-    let enable_shared: &str = &lines[2];
-    let ld_version: &str = &lines[3];
-    let exec_prefix: &str = &lines[4];
+    let libpath: &str = &lines[0];
+    let enable_shared: &str = &lines[1];
+    let ld_version: &str = &lines[2];
+    let exec_prefix: &str = &lines[3];
 // ~~~~~~~~~~ generated file, modify `python3-sys/build.rs` ~~~~~~~~~~
     let is_extension_module = env::var_os("CARGO_FEATURE_EXTENSION_MODULE").is_some();
     if !is_extension_module || cfg!(target_os="windows") {
@@ -436,5 +438,9 @@ fn main() {
     });
     println!("cargo:python_flags={}", 
         if flags.len() > 0 { &flags[..flags.len()-1] } else { "" });
+// ~~~~~~~~~~ generated file, modify `python3-sys/build.rs` ~~~~~~~~~~
+    // 3. Export Python interpreter path as a Cargo variable so dependent build
+    // scripts can use invoke it.
+    println!("cargo:python_interpreter={}", python_interpreter_path);
 }
 //[[[end]]]
