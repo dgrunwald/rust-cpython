@@ -397,15 +397,12 @@ impl <'p> std::convert::From<PythonObjectDowncastError<'p>> for PyErr {
 }
 
 impl Error for PyErr {
-
     fn description(&self) -> &str {
         "Error originating from the rust-cpython bindings."
     }
-
 }
 
 impl fmt::Display for PyErr {
-
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "PyErr: ptype {:?} pvalue {:?}", self.ptype, self.pvalue)
     }
