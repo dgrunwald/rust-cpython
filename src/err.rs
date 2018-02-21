@@ -28,6 +28,8 @@ use std::ptr;
 use libc::c_char;
 use conversion::ToPyObject;
 use std::ffi::CString;
+use std::error::Error;
+use std::fmt;
 
 /**
 Defines a new exception type.
@@ -391,6 +393,21 @@ impl PyClone for PyErr {
 impl <'p> std::convert::From<PythonObjectDowncastError<'p>> for PyErr {
     fn from(err: PythonObjectDowncastError<'p>) -> PyErr {
         PyErr::new_lazy_init(err.0.get_type::<exc::TypeError>(), None)
+    }
+}
+
+impl Error for PyErr {
+
+    fn description(&self) -> &str {
+        "Error originating from the rust-cpython bindings."
+    }
+
+}
+
+impl fmt::Display for PyErr {
+
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PyErr: ptype {:?} pvalue {:?}", self.ptype, self.pvalue)
     }
 }
 
