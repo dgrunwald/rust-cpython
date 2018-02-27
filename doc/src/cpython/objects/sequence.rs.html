@@ -9,6 +9,7 @@
 
     <title>sequence.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -485,448 +487,600 @@
 <span id="441">441</span>
 <span id="442">442</span>
 <span id="443">443</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
-<span class='kw'>use</span> <span class='ident'>ffi</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PyClone</span>};
-<span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyList</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyIterator</span>};
-<span class='kw'>use</span> <span class='ident'>ffi</span>::<span class='ident'>Py_ssize_t</span>;
-<span class='kw'>use</span> <span class='ident'>err</span>;
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>, <span class='ident'>result_from_owned_ptr</span>, <span class='ident'>result_cast_from_owned_ptr</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>, <span class="ident">ToPythonPointer</span>, <span class="ident">PyClone</span>, <span class="ident">PyDrop</span>};
+<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="ident">objects</span>::{<span class="ident">PyObject</span>, <span class="ident">PyList</span>, <span class="ident">PyTuple</span>, <span class="ident">PyIterator</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span>;
+<span class="kw">use</span> <span class="ident">err</span>;
+<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>, <span class="ident">result_from_owned_ptr</span>, <span class="ident">result_cast_from_owned_ptr</span>};
+<span class="kw">use</span> <span class="ident">buffer</span>;
 
-<span class='doccomment'>/// Represents a reference to a python object supporting the sequence protocol.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PySequence</span>(<span class='ident'>PyObject</span>);
+<span class="doccomment">/// Represents a reference to a python object supporting the sequence protocol.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PySequence</span>(<span class="ident">PyObject</span>);
 
-<span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='ident'>PySequence</span>, <span class='ident'>PySequence_Check</span>);
+<span class="macro">pyobject_newtype</span><span class="macro">!</span>(<span class="ident">PySequence</span>, <span class="ident">PySequence_Check</span>);
 
-<span class='kw'>impl</span> <span class='ident'>PySequence</span> {
-    <span class='doccomment'>/// Returns the number of objects in sequence. This is equivalent to Python `len()`.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>isize</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PySequence_Size</span>(<span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_ptr</span>()) };
-        <span class='kw'>if</span> <span class='ident'>v</span> <span class='op'>==</span> <span class='op'>-</span><span class='number'>1</span> {
-            <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
-        } <span class='kw'>else</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>v</span> <span class='kw'>as</span> <span class='ident'>isize</span>)
+<span class="kw">impl</span> <span class="ident">PySequence</span> {
+    <span class="doccomment">/// Returns the number of objects in sequence. This is equivalent to Python `len()`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PySequence_Size</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) };
+        <span class="kw">if</span> <span class="ident">v</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">v</span> <span class="kw">as</span> <span class="ident">isize</span>)
         }
     }
 
-    <span class='doccomment'>/// Return the concatenation of o1 and o2. Equivalent to python `o1 + o2`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>concat</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='ident'>PySequence</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>err</span>::<span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PySequence_Concat</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>other</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Return the concatenation of o1 and o2. Equivalent to python `o1 + o2`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">concat</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">PySequence</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">err</span>::<span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySequence_Concat</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">other</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='doccomment'>/// Return the result of repeating sequence object o count times.</span>
-    <span class='doccomment'>/// Equivalent to python `o * count`</span>
-    <span class='doccomment'>/// NB: Python accepts negative counts; it returns an empty Sequence.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>repeat</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>count</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>err</span>::<span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PySequence_Repeat</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>count</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Return the result of repeating sequence object o count times.</span>
+    <span class="doccomment">/// Equivalent to python `o * count`</span>
+    <span class="doccomment">/// NB: Python accepts negative counts; it returns an empty Sequence.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">repeat</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">count</span>: <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">err</span>::<span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySequence_Repeat</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">count</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Return the concatenation of o1 and o2 on success. Equivalent to python `o1 += o2`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>in_place_concat</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='ident'>PySequence</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PySequence_InPlaceConcat</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>other</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Return the concatenation of o1 and o2 on success. Equivalent to python `o1 += o2`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">in_place_concat</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">PySequence</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySequence_InPlaceConcat</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">other</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='doccomment'>/// Return the result of repeating sequence object o count times.</span>
-    <span class='doccomment'>/// Equivalent to python `o *= count`</span>
-    <span class='doccomment'>/// NB: Python accepts negative counts; it empties the Sequence.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>in_place_repeat</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>count</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_InPlaceRepeat</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>count</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Return the result of repeating sequence object o count times.</span>
+    <span class="doccomment">/// Equivalent to python `o *= count`</span>
+    <span class="doccomment">/// NB: Python accepts negative counts; it empties the Sequence.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">in_place_repeat</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">count</span>: <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_InPlaceRepeat</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">count</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Return the ith element of the Sequence. Equivalent to python `o[index]`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_item</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>index</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_GetItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Return the ith element of the Sequence. Equivalent to python `o[index]`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">index</span>: <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_GetItem</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">index</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Return the slice of sequence object o between begin and end.</span>
-    <span class='doccomment'>/// This is the equivalent of the Python expression `o[begin:end]`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_slice</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>begin</span> : <span class='ident'>isize</span>, <span class='ident'>end</span> : <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_GetSlice</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>begin</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>end</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Return the slice of sequence object o between begin and end.</span>
+    <span class="doccomment">/// This is the equivalent of the Python expression `o[begin:end]`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">begin</span> : <span class="ident">isize</span>, <span class="ident">end</span> : <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_GetSlice</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">begin</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">end</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Assign object v to the ith element of o.</span>
-    <span class='doccomment'>/// Equivalent to Python statement `o[i] = v`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_item</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>i</span>: <span class='ident'>isize</span>, <span class='ident'>v</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>err</span>::<span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_SetItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>v</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Assign object v to the ith element of o.</span>
+    <span class="doccomment">/// Equivalent to Python statement `o[i] = v`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">i</span>: <span class="ident">isize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_SetItem</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">i</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">v</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='doccomment'>/// Delete the ith element of object o.</span>
-    <span class='doccomment'>/// Python statement `del o[i]`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>del_item</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>i</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> { 
-            <span class='ident'>err</span>::<span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_DelItem</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Delete the ith element of object o.</span>
+    <span class="doccomment">/// Python statement `del o[i]`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">i</span>: <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> { 
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_DelItem</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">i</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Assign the sequence object v to the slice in sequence object o from i1 to i2.</span>
-    <span class='doccomment'>/// This is the equivalent of the Python statement `o[i1:i2] = v`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_slice</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>i1</span>: <span class='ident'>isize</span>, <span class='ident'>i2</span>: <span class='ident'>isize</span>, <span class='ident'>v</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>err</span>::<span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_SetSlice</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>i1</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>i2</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>v</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Assign the sequence object v to the slice in sequence object o from i1 to i2.</span>
+    <span class="doccomment">/// This is the equivalent of the Python statement `o[i1:i2] = v`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">i1</span>: <span class="ident">isize</span>, <span class="ident">i2</span>: <span class="ident">isize</span>, <span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_SetSlice</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">i1</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">i2</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">v</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='doccomment'>/// Delete the slice in sequence object o from i1 to i2.</span>
-    <span class='doccomment'>/// equivalent of the Python statement `del o[i1:i2]`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>del_slice</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>i1</span>: <span class='ident'>isize</span>, <span class='ident'>i2</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> { 
-            <span class='ident'>err</span>::<span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>,
-                <span class='ident'>ffi</span>::<span class='ident'>PySequence_DelSlice</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>i1</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>i2</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Delete the slice in sequence object o from i1 to i2.</span>
+    <span class="doccomment">/// equivalent of the Python statement `del o[i1:i2]`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">i1</span>: <span class="ident">isize</span>, <span class="ident">i2</span>: <span class="ident">isize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> { 
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
+                <span class="ident">ffi</span>::<span class="ident">PySequence_DelSlice</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">i1</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">i2</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='doccomment'>/// Return the number of occurrences of value in o, that is, return the number of keys for</span>
-    <span class='doccomment'>/// which `o[key] == value`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>count</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>V</span>: <span class='ident'>ToPyObject</span>
+    <span class="doccomment">/// Return the number of occurrences of value in o, that is, return the number of keys for</span>
+    <span class="doccomment">/// which `o[key] == value`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">count</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span>
     {
-        <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='ident'>value</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>ptr</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PySequence_Count</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>ptr</span>)
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PySequence_Count</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ptr</span>)
         });
-        <span class='kw'>if</span> <span class='ident'>r</span> <span class='op'>==</span> <span class='op'>-</span><span class='number'>1</span> {
-            <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
-        } <span class='kw'>else</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>r</span> <span class='kw'>as</span> <span class='ident'>usize</span>)
+        <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">r</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
-   <span class='doccomment'>/// Determine if o contains value. this is equivalent to the Python expression `value in o`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>contains</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>bool</span><span class='op'>&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>V</span>: <span class='ident'>ToPyObject</span>
+   <span class="doccomment">/// Determine if o contains value. this is equivalent to the Python expression `value in o`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span>
     {
-        <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='ident'>value</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>ptr</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PySequence_Contains</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>ptr</span>)
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PySequence_Contains</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ptr</span>)
         });
-        <span class='kw'>match</span> <span class='ident'>r</span> {
-            <span class='number'>0</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='bool-val'>false</span>),
-            <span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='bool-val'>true</span>),
-            _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
+        <span class="kw">match</span> <span class="ident">r</span> {
+            <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+            _ <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
         }
     }
 
-    <span class='doccomment'>/// Return the first index i for which o[i] == value.</span>
-    <span class='doccomment'>/// This is equivalent to the Python expression `o.index(value)`</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>index</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>V</span>: <span class='ident'>ToPyObject</span>
+    <span class="doccomment">/// Return the first index i for which o[i] == value.</span>
+    <span class="doccomment">/// This is equivalent to the Python expression `o.index(value)`</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">index</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span>
     {
-        <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='ident'>value</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>ptr</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PySequence_Index</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>ptr</span>)
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">ptr</span><span class="op">|</span> <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PySequence_Index</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="ident">ptr</span>)
         });
-        <span class='kw'>if</span> <span class='ident'>r</span> <span class='op'>==</span> <span class='op'>-</span><span class='number'>1</span> {
-            <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
-        } <span class='kw'>else</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>r</span> <span class='kw'>as</span> <span class='ident'>usize</span>)
+        <span class="kw">if</span> <span class="ident">r</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">r</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
-    <span class='doccomment'>/// Return a fresh list based on the Sequence.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyList</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_cast_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PySequence_List</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Return a fresh list based on the Sequence.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyList</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_cast_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySequence_List</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='doccomment'>/// Return a fresh tuple based on the Sequence.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>tuple</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>result_cast_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PySequence_Tuple</span>(<span class='self'>self</span>.<span class='ident'>as_ptr</span>()))
+    <span class="doccomment">/// Return a fresh tuple based on the Sequence.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tuple</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">result_cast_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySequence_Tuple</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()))
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>iter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyIterator</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> {
-        <span class='kw'>use</span> <span class='ident'>objectprotocol</span>::<span class='ident'>ObjectProtocol</span>;
-        <span class='self'>self</span>.<span class='ident'>as_object</span>().<span class='ident'>iter</span>(<span class='ident'>py</span>)
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span> {
+        <span class="kw">use</span> <span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
+        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">iter</span>(<span class="ident">py</span>)
     }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>test</span> {
-    <span class='kw'>use</span> <span class='ident'>std</span>;
-    <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
-    <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-    <span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PySequence</span>, <span class='ident'>PyList</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyIterator</span>};
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_numbers_are_not_sequences</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='number'>42i32</span>;
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>is_err</span>());
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>))]</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;source</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>
+{
+    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="ident">extract_sequence</span>(<span class="ident">py</span>, <span class="ident">obj</span>)
     }
+}
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_strings_are_sequences</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='string'>&quot;London Calling&quot;</span>;
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>is_ok</span>());
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;source</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>
+{
+    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="ident">extract_sequence</span>(<span class="ident">py</span>, <span class="ident">obj</span>)
     }
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_empty</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
+}
 
-        <span class='kw'>let</span> <span class='ident'>needle</span> <span class='op'>=</span> <span class='number'>7i32</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>false</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>needle</span>).<span class='ident'>unwrap</span>());
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_contains</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>6</span>, <span class='ident'>seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-
-        <span class='kw'>let</span> <span class='ident'>bad_needle</span> <span class='op'>=</span> <span class='number'>7i32</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>false</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>bad_needle</span>).<span class='ident'>unwrap</span>());
-
-        <span class='kw'>let</span> <span class='ident'>good_needle</span> <span class='op'>=</span> <span class='number'>8i32</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>true</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>good_needle</span>).<span class='ident'>unwrap</span>());
-
-        <span class='kw'>let</span> <span class='ident'>type_coerced_needle</span> <span class='op'>=</span> <span class='number'>8f32</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>true</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>type_coerced_needle</span>).<span class='ident'>unwrap</span>());
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_get_item</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>1</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>2</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>3</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>5</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>4</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>8</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>5</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>8</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='op'>-</span><span class='number'>1</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>5</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='op'>-</span><span class='number'>2</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='op'>-</span><span class='number'>3</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='op'>-</span><span class='number'>4</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='op'>-</span><span class='number'>5</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>10</span>).<span class='ident'>is_err</span>());
-    }
-
-    <span class='comment'>// fn test_get_slice() {}</span>
-    <span class='comment'>// fn test_set_slice() {}</span>
-    <span class='comment'>// fn test_del_slice() {}</span>
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_del_item</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>10</span>).<span class='ident'>is_err</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>5</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>8</span>, <span class='ident'>seq</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_ok</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>del_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>).<span class='ident'>is_err</span>());
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_index</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>1i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>2i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>3i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>4</span>, <span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>5i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>5</span>, <span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>8i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>index</span>(<span class='ident'>py</span>, <span class='number'>42i32</span>).<span class='ident'>is_err</span>());
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_count</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>2</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>1i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>2i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>3i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>5i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>8i32</span>).<span class='ident'>unwrap</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>seq</span>.<span class='ident'>count</span>(<span class='ident'>py</span>, <span class='number'>42i32</span>).<span class='ident'>unwrap</span>());
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_iter</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>5</span>, <span class='number'>8</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>idx</span> <span class='op'>=</span> <span class='number'>0</span>;
-        <span class='kw'>for</span> <span class='ident'>el</span> <span class='kw'>in</span> <span class='ident'>seq</span>.<span class='ident'>iter</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>() {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>v</span>[<span class='ident'>idx</span>], <span class='ident'>el</span>.<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-            <span class='ident'>idx</span> <span class='op'>+=</span> <span class='number'>1</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;source</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">buffer</span>::<span class="ident">Element</span> <span class="op">+</span> <span class="ident">Copy</span>
+{
+    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="comment">// first try buffer protocol</span>
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">buf</span>) <span class="op">=</span> <span class="ident">buffer</span>::<span class="ident">PyBuffer</span>::<span class="ident">get</span>(<span class="ident">py</span>, <span class="ident">obj</span>) {
+            <span class="kw">if</span> <span class="ident">buf</span>.<span class="ident">dimensions</span>() <span class="op">==</span> <span class="number">1</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">to_vec</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
+                    <span class="ident">buf</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">v</span>);
+                }
+            }
+            <span class="ident">buf</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
         }
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>idx</span>, <span class='ident'>v</span>.<span class='ident'>len</span>());
+        <span class="comment">// fall back to sequence protocol</span>
+        <span class="ident">extract_sequence</span>(<span class="ident">py</span>, <span class="ident">obj</span>)
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">extract_sequence</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
+    <span class="kw">where</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>
+{
+    <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>));
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+    <span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">iter</span>(<span class="ident">py</span>)) {
+        <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">item</span>);
+        <span class="ident">v</span>.<span class="ident">push</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="ident">T</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>)));
+        <span class="ident">item</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
+    }
+    <span class="prelude-val">Ok</span>(<span class="ident">v</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="kw">use</span> <span class="ident">std</span>;
+    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+    <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+    <span class="kw">use</span> <span class="ident">objects</span>::{<span class="ident">PySequence</span>, <span class="ident">PyList</span>, <span class="ident">PyTuple</span>, <span class="ident">PyIterator</span>};
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_numbers_are_not_sequences</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="number">42i32</span>;
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">is_err</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_strings</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;It&quot;</span>, <span class='string'>&quot;was&quot;</span>, <span class='string'>&quot;the&quot;</span>, <span class='string'>&quot;worst&quot;</span>, <span class='string'>&quot;of&quot;</span>, <span class='string'>&quot;times&quot;</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_strings_are_sequences</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="string">&quot;London Calling&quot;</span>;
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">is_ok</span>());
+    }
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_empty</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="ident">seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
 
-        <span class='kw'>let</span> <span class='ident'>bad_needle</span> <span class='op'>=</span> <span class='string'>&quot;blurst&quot;</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>false</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='ident'>bad_needle</span>).<span class='ident'>unwrap</span>());
-
-        <span class='kw'>let</span> <span class='ident'>good_needle</span> <span class='op'>=</span> <span class='string'>&quot;worst&quot;</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='bool-val'>true</span>, <span class='ident'>seq</span>.<span class='ident'>contains</span>(<span class='ident'>py</span>, <span class='ident'>good_needle</span>).<span class='ident'>unwrap</span>());
+        <span class="kw">let</span> <span class="ident">needle</span> <span class="op">=</span> <span class="number">7i32</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">false</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">needle</span>).<span class="ident">unwrap</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_concat</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='kw'>let</span> <span class='ident'>concat_seq</span> <span class='op'>=</span> <span class='ident'>seq</span>.<span class='ident'>concat</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>seq</span>).<span class='ident'>unwrap</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>6</span>, <span class='ident'>concat_seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='kw'>let</span> <span class='ident'>concat_v</span> : <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>, <span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>];
-        <span class='kw'>for</span> (<span class='ident'>el</span>, <span class='ident'>cc</span>) <span class='kw'>in</span> <span class='ident'>seq</span>.<span class='ident'>iter</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>().<span class='ident'>zip</span>(<span class='ident'>concat_v</span>) {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>, <span class='ident'>el</span>.<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_contains</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">6</span>, <span class="ident">seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+
+        <span class="kw">let</span> <span class="ident">bad_needle</span> <span class="op">=</span> <span class="number">7i32</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">false</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">bad_needle</span>).<span class="ident">unwrap</span>());
+
+        <span class="kw">let</span> <span class="ident">good_needle</span> <span class="op">=</span> <span class="number">8i32</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">good_needle</span>).<span class="ident">unwrap</span>());
+
+        <span class="kw">let</span> <span class="ident">type_coerced_needle</span> <span class="op">=</span> <span class="number">8f32</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">type_coerced_needle</span>).<span class="ident">unwrap</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_get_item</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">1</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">2</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">3</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">3</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">5</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">4</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">8</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">5</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">8</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="op">-</span><span class="number">1</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">5</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="op">-</span><span class="number">2</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">3</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="op">-</span><span class="number">3</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="op">-</span><span class="number">4</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="op">-</span><span class="number">5</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">10</span>).<span class="ident">is_err</span>());
+    }
+
+    <span class="comment">// fn test_get_slice() {}</span>
+    <span class="comment">// fn test_set_slice() {}</span>
+    <span class="comment">// fn test_del_slice() {}</span>
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_del_item</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">10</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">3</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">5</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">8</span>, <span class="ident">seq</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="ident">seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">del_item</span>(<span class="ident">py</span>, <span class="number">0</span>).<span class="ident">is_err</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_index</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">1i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">2i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">3</span>, <span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">3i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">4</span>, <span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">5i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">5</span>, <span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">8i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">index</span>(<span class="ident">py</span>, <span class="number">42i32</span>).<span class="ident">is_err</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_count</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">1i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">2i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">3i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">5i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">1</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">8i32</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="ident">seq</span>.<span class="ident">count</span>(<span class="ident">py</span>, <span class="number">42i32</span>).<span class="ident">unwrap</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_iter</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">idx</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">for</span> <span class="ident">el</span> <span class="kw">in</span> <span class="ident">seq</span>.<span class="ident">iter</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>() {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">v</span>[<span class="ident">idx</span>], <span class="ident">el</span>.<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+            <span class="ident">idx</span> <span class="op">+=</span> <span class="number">1</span>;
+        }
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">idx</span>, <span class="ident">v</span>.<span class="ident">len</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_strings</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;It&quot;</span>, <span class="string">&quot;was&quot;</span>, <span class="string">&quot;the&quot;</span>, <span class="string">&quot;worst&quot;</span>, <span class="string">&quot;of&quot;</span>, <span class="string">&quot;times&quot;</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">bad_needle</span> <span class="op">=</span> <span class="string">&quot;blurst&quot;</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">false</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="ident">bad_needle</span>).<span class="ident">unwrap</span>());
+
+        <span class="kw">let</span> <span class="ident">good_needle</span> <span class="op">=</span> <span class="string">&quot;worst&quot;</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>, <span class="ident">seq</span>.<span class="ident">contains</span>(<span class="ident">py</span>, <span class="ident">good_needle</span>).<span class="ident">unwrap</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_concat</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">concat_seq</span> <span class="op">=</span> <span class="ident">seq</span>.<span class="ident">concat</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">seq</span>).<span class="ident">unwrap</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">6</span>, <span class="ident">concat_seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="kw">let</span> <span class="ident">concat_v</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+        <span class="kw">for</span> (<span class="ident">el</span>, <span class="ident">cc</span>) <span class="kw">in</span> <span class="ident">seq</span>.<span class="ident">iter</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>().<span class="ident">zip</span>(<span class="ident">concat_v</span>) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cc</span>, <span class="ident">el</span>.<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_concat_string</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='string'>&quot;string&quot;</span>;
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='kw'>let</span> <span class='ident'>concat_seq</span> <span class='op'>=</span> <span class='ident'>seq</span>.<span class='ident'>concat</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>seq</span>).<span class='ident'>unwrap</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>12</span>, <span class='ident'>concat_seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='comment'>/*let concat_v = &quot;stringstring&quot;.to_owned();
-        for (el, cc) in seq.into_iter(py).zip(concat_v.chars()) {
-            assert_eq!(cc, el.extract::&lt;char&gt;(py).unwrap()); TODO: extract::&lt;char&gt;() is not implemented
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_concat_string</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="string">&quot;string&quot;</span>;
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">concat_seq</span> <span class="op">=</span> <span class="ident">seq</span>.<span class="ident">concat</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">seq</span>).<span class="ident">unwrap</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">12</span>, <span class="ident">concat_seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="comment">/*let concat_v = &quot;stringstring&quot;.to_owned();
+        for (el, cc) in seq.iter(py).unwrap().zip(concat_v.chars()) {
+            assert_eq!(cc, el.unwrap().extract::&lt;char&gt;(py).unwrap()); //TODO: extract::&lt;char&gt;() is not implemented
         }*/</span>
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_seq_repeat</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='kw'>let</span> <span class='ident'>repeat_seq</span> <span class='op'>=</span> <span class='ident'>seq</span>.<span class='ident'>repeat</span>(<span class='ident'>py</span>, <span class='number'>3</span>).<span class='ident'>unwrap</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>6</span>, <span class='ident'>repeat_seq</span>.<span class='ident'>len</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
-        <span class='kw'>let</span> <span class='ident'>repeated</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>, <span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>, <span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>];
-        <span class='kw'>for</span> (<span class='ident'>el</span>, <span class='ident'>rpt</span>) <span class='kw'>in</span> <span class='ident'>seq</span>.<span class='ident'>iter</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>().<span class='ident'>zip</span>(<span class='ident'>repeated</span>.<span class='ident'>iter</span>()) {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>*</span><span class='ident'>rpt</span>, <span class='ident'>el</span>.<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_seq_repeat</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">repeat_seq</span> <span class="op">=</span> <span class="ident">seq</span>.<span class="ident">repeat</span>(<span class="ident">py</span>, <span class="number">3</span>).<span class="ident">unwrap</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">6</span>, <span class="ident">repeat_seq</span>.<span class="ident">len</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
+        <span class="kw">let</span> <span class="ident">repeated</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>];
+        <span class="kw">for</span> (<span class="ident">el</span>, <span class="ident">rpt</span>) <span class="kw">in</span> <span class="ident">seq</span>.<span class="ident">iter</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>().<span class="ident">zip</span>(<span class="ident">repeated</span>.<span class="ident">iter</span>()) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">rpt</span>, <span class="ident">el</span>.<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_list_coercion</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>list</span>(<span class='ident'>py</span>).<span class='ident'>is_ok</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_list_coercion</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">list</span>(<span class="ident">py</span>).<span class="ident">is_ok</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_strings_coerce_to_lists</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='string'>&quot;foo&quot;</span>;
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>list</span>(<span class='ident'>py</span>).<span class='ident'>is_ok</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_strings_coerce_to_lists</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="string">&quot;foo&quot;</span>;
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">list</span>(<span class="ident">py</span>).<span class="ident">is_ok</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_tuple_coercion</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> (<span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>);
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>tuple</span>(<span class='ident'>py</span>).<span class='ident'>is_ok</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_tuple_coercion</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> (<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>);
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">tuple</span>(<span class="ident">py</span>).<span class="ident">is_ok</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_lists_coerce_to_tuples</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;foo&quot;</span>, <span class='string'>&quot;bar&quot;</span>];
-        <span class='kw'>let</span> <span class='ident'>seq</span> <span class='op'>=</span> <span class='ident'>v</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>().<span class='ident'>cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PySequence</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>seq</span>.<span class='ident'>tuple</span>(<span class='ident'>py</span>).<span class='ident'>is_ok</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_lists_coerce_to_tuples</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>];
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>().<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">tuple</span>(<span class="ident">py</span>).<span class="ident">is_ok</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_extract_tuple_to_vec</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">eval</span>(<span class="string">&quot;(1, 2)&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span> <span class="op">==</span> [<span class="number">1</span>, <span class="number">2</span>]);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_extract_range_to_vec</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">eval</span>(<span class="string">&quot;range(1, 5)&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span> <span class="op">==</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);
+    }
+    
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_extract_bytearray_to_vec</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">eval</span>(<span class="string">&quot;bytearray(b&#39;abc&#39;)&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span> <span class="op">==</span> <span class="string">b&quot;abc&quot;</span>);
     }
 }
 </pre>
@@ -947,13 +1101,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -987,7 +1143,6 @@
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
     <script defer src="../../../search-index.js"></script>
 </body>

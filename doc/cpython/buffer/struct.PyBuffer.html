@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `PyBuffer` struct in crate `cpython`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, PyBuffer">
+
+    <title>cpython::buffer::PyBuffer - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct PyBuffer</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.get">get</a><a href="#method.buf_ptr">buf_ptr</a><a href="#method.get_ptr">get_ptr</a><a href="#method.readonly">readonly</a><a href="#method.item_size">item_size</a><a href="#method.item_count">item_count</a><a href="#method.len_bytes">len_bytes</a><a href="#method.dimensions">dimensions</a><a href="#method.shape">shape</a><a href="#method.strides">strides</a><a href="#method.suboffsets">suboffsets</a><a href="#method.format">format</a><a href="#method.is_c_contiguous">is_c_contiguous</a><a href="#method.is_fortran_contiguous">is_fortran_contiguous</a><a href="#method.as_slice">as_slice</a><a href="#method.as_mut_slice">as_mut_slice</a><a href="#method.as_fortran_slice">as_fortran_slice</a><a href="#method.as_fortran_mut_slice">as_fortran_mut_slice</a><a href="#method.copy_to_slice">copy_to_slice</a><a href="#method.copy_to_fortran_slice">copy_to_fortran_slice</a><a href="#method.to_vec">to_vec</a><a href="#method.to_fortran_vec">to_fortran_vec</a><a href="#method.copy_from_slice">copy_from_slice</a><a href="#method.copy_from_fortran_slice">copy_from_fortran_slice</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a><a href="#impl-PyDrop">PyDrop</a><a href="#impl-Drop">Drop</a></div></div><p class='location'><a href='../index.html'>cpython</a>::<wbr><a href='index.html'>buffer</a></p><script>window.sidebarCurrent = {name: 'PyBuffer', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>cpython</a>::<wbr><a href='index.html'>buffer</a>::<wbr><a class="struct" href=''>PyBuffer</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/cpython/buffer.rs.html#29' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PyBuffer(_);</pre><div class='docblock'><p>Allows access to the underlying buffer used by a python object such as <code>bytes</code>, <code>bytearray</code> or <code>array.array</code>.</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#137-493' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get' class="method"><span id='get.v' class='invisible'><code>pub fn <a href='#method.get' class='fnname'>get</a>(py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: &amp;<a class="struct" href="../../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#139-146' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Get the underlying buffer from the specified python object.</p>
+</div><h4 id='method.buf_ptr' class="method"><span id='buf_ptr.v' class='invisible'><code>pub fn <a href='#method.buf_ptr' class='fnname'>buf_ptr</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="enum" href="https://doc.rust-lang.org/libc/x86_64-unknown-linux-gnu/libc/enum.c_void.html" title="enum libc::c_void">c_void</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#153-155' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the pointer to the start of the buffer memory.</p>
+
+<p>Warning: the buffer memory might be mutated by other Python functions,
+and thus may only be accessed while the GIL is held.</p>
+</div><h4 id='method.get_ptr' class="method"><span id='get_ptr.v' class='invisible'><code>pub fn <a href='#method.get_ptr' class='fnname'>get_ptr</a>(&amp;self, indices: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="enum" href="https://doc.rust-lang.org/libc/x86_64-unknown-linux-gnu/libc/enum.c_void.html" title="enum libc::c_void">c_void</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#160-171' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets a pointer to the specified item.</p>
+
+<p>If <code>indices.len() &lt; self.dimensions()</code>, returns the start address of the sub-array at the specified dimension.</p>
+</div><h4 id='method.readonly' class="method"><span id='readonly.v' class='invisible'><code>pub fn <a href='#method.readonly' class='fnname'>readonly</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#175-177' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets whether the underlying buffer is read-only.</p>
+</div><h4 id='method.item_size' class="method"><span id='item_size.v' class='invisible'><code>pub fn <a href='#method.item_size' class='fnname'>item_size</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#182-184' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the size of a single element, in bytes.
+Important exception: when requesting an unformatted buffer, item_size still has the value </p>
+</div><h4 id='method.item_count' class="method"><span id='item_count.v' class='invisible'><code>pub fn <a href='#method.item_count' class='fnname'>item_count</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#188-190' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the total number of items.</p>
+</div><h4 id='method.len_bytes' class="method"><span id='len_bytes.v' class='invisible'><code>pub fn <a href='#method.len_bytes' class='fnname'>len_bytes</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#196-198' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p><code>item_size() * item_count()</code>.
+For contiguous arrays, this is the length of the underlying memory block.
+For non-contiguous arrays, it is the length that the logical structure would have if it were copied to a contiguous representation.</p>
+</div><h4 id='method.dimensions' class="method"><span id='dimensions.v' class='invisible'><code>pub fn <a href='#method.dimensions' class='fnname'>dimensions</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#204-206' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the number of dimensions.</p>
+
+<p>May be 0 to indicate a single scalar value.</p>
+</div><h4 id='method.shape' class="method"><span id='shape.v' class='invisible'><code>pub fn <a href='#method.shape' class='fnname'>shape</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#216-220' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Returns an array of length <code>dimensions</code>. <code>shape()[i]</code> is the length of the array in dimension number <code>i</code>.</p>
+
+<p>May return None for single-dimensional arrays or scalar values (<code>dimensions() &lt;= 1</code>);
+You can call <code>item_count()</code> to get the length of the single dimension.</p>
+
+<p>Despite Python using an array of signed integers, the values are guaranteed to be non-negative.
+However, dimensions of length 0 are possible and might need special attention.</p>
+</div><h4 id='method.strides' class="method"><span id='strides.v' class='invisible'><code>pub fn <a href='#method.strides' class='fnname'>strides</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.isize.html">isize</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#227-231' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Returns an array that holds, for each dimension, the number of bytes to skip to get to the next element in the dimension.</p>
+
+<p>Stride values can be any integer. For regular arrays, strides are usually positive,
+but a consumer MUST be able to handle the case <code>strides[n] &lt;= 0</code>.</p>
+</div><h4 id='method.suboffsets' class="method"><span id='suboffsets.v' class='invisible'><code>pub fn <a href='#method.suboffsets' class='fnname'>suboffsets</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.isize.html">isize</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#239-247' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>An array of length ndim.
+If suboffsets[n] &gt;= 0, the values stored along the nth dimension are pointers and the suboffset value dictates how many bytes to add to each pointer after de-referencing.
+A suboffset value that is negative indicates that no de-referencing should occur (striding in a contiguous memory block).</p>
+
+<p>If all suboffsets are negative (i.e. no de-referencing is needed), then this field must be NULL (the default value).</p>
+</div><h4 id='method.format' class="method"><span id='format.v' class='invisible'><code>pub fn <a href='#method.format' class='fnname'>format</a>(&amp;self) -&gt; &amp;<a class="struct" href="https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.CStr.html" title="struct std::ffi::c_str::CStr">CStr</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#251-257' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>A NUL terminated string in struct module style syntax describing the contents of a single item.</p>
+</div><h4 id='method.is_c_contiguous' class="method"><span id='is_c_contiguous.v' class='invisible'><code>pub fn <a href='#method.is_c_contiguous' class='fnname'>is_c_contiguous</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#261-266' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets whether the buffer is contiguous in C-style order (last index varies fastest when visiting items in order of memory address).</p>
+</div><h4 id='method.is_fortran_contiguous' class="method"><span id='is_fortran_contiguous.v' class='invisible'><code>pub fn <a href='#method.is_fortran_contiguous' class='fnname'>is_fortran_contiguous</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#270-275' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets whether the buffer is contiguous in Fortran-style order (first index varies fastest when visiting items in order of memory address).</p>
+</div><h4 id='method.as_slice' class="method"><span id='as_slice.v' class='invisible'><code>pub fn <a href='#method.as_slice' class='fnname'>as_slice</a>&lt;'a, T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'a self, <br>&nbsp;&nbsp;&nbsp;&nbsp;_py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>&lt;'a&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'a [</a><a class="struct" href="../../cpython/buffer/struct.ReadOnlyCell.html" title="struct cpython::buffer::ReadOnlyCell">ReadOnlyCell</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#286-296' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the buffer memory as a slice.</p>
+
+<p>This function succeeds if:
+* the buffer format is compatible with <code>T</code>
+* alignment and size of buffer elements is matching the expectations for type <code>T</code>
+* the buffer is C-style contiguous</p>
+
+<p>The returned slice uses type <code>Cell&lt;T&gt;</code> because it&#39;s theoretically possible for any call into the Python runtime
+to modify the values in the slice.</p>
+</div><h4 id='method.as_mut_slice' class="method"><span id='as_mut_slice.v' class='invisible'><code>pub fn <a href='#method.as_mut_slice' class='fnname'>as_mut_slice</a>&lt;'a, T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'a self, <br>&nbsp;&nbsp;&nbsp;&nbsp;_py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>&lt;'a&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'a [</a><a class="struct" href="https://doc.rust-lang.org/nightly/core/cell/struct.Cell.html" title="struct core::cell::Cell">Cell</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#308-319' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the buffer memory as a slice.</p>
+
+<p>This function succeeds if:
+* the buffer is not read-only
+* the buffer format is compatible with <code>T</code>
+* alignment and size of buffer elements is matching the expectations for type <code>T</code>
+* the buffer is C-style contiguous</p>
+
+<p>The returned slice uses type <code>Cell&lt;T&gt;</code> because it&#39;s theoretically possible for any call into the Python runtime
+to modify the values in the slice.</p>
+</div><h4 id='method.as_fortran_slice' class="method"><span id='as_fortran_slice.v' class='invisible'><code>pub fn <a href='#method.as_fortran_slice' class='fnname'>as_fortran_slice</a>&lt;'a, T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'a self, <br>&nbsp;&nbsp;&nbsp;&nbsp;_py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>&lt;'a&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'a [</a><a class="struct" href="../../cpython/buffer/struct.ReadOnlyCell.html" title="struct cpython::buffer::ReadOnlyCell">ReadOnlyCell</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#330-340' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the buffer memory as a slice.</p>
+
+<p>This function succeeds if:
+* the buffer format is compatible with <code>T</code>
+* alignment and size of buffer elements is matching the expectations for type <code>T</code>
+* the buffer is Fortran-style contiguous</p>
+
+<p>The returned slice uses type <code>Cell&lt;T&gt;</code> because it&#39;s theoretically possible for any call into the Python runtime
+to modify the values in the slice.</p>
+</div><h4 id='method.as_fortran_mut_slice' class="method"><span id='as_fortran_mut_slice.v' class='invisible'><code>pub fn <a href='#method.as_fortran_mut_slice' class='fnname'>as_fortran_mut_slice</a>&lt;'a, T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;'a self, <br>&nbsp;&nbsp;&nbsp;&nbsp;_py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>&lt;'a&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;'a [</a><a class="struct" href="https://doc.rust-lang.org/nightly/core/cell/struct.Cell.html" title="struct core::cell::Cell">Cell</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#352-363' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Gets the buffer memory as a slice.</p>
+
+<p>This function succeeds if:
+* the buffer is not read-only
+* the buffer format is compatible with <code>T</code>
+* alignment and size of buffer elements is matching the expectations for type <code>T</code>
+* the buffer is Fortran-style contiguous</p>
+
+<p>The returned slice uses type <code>Cell&lt;T&gt;</code> because it&#39;s theoretically possible for any call into the Python runtime
+to modify the values in the slice.</p>
+</div><h4 id='method.copy_to_slice' class="method"><span id='copy_to_slice.v' class='invisible'><code>pub fn <a href='#method.copy_to_slice' class='fnname'>copy_to_slice</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;target: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [T]</a><br>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#374-376' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the buffer elements to the specified slice.
+If the buffer is multi-dimensional, the elements are written in C-style order.</p>
+
+<ul>
+<li>Fails if the slice does not have the correct length (<code>buf.item_count()</code>).</li>
+<li>Fails if the buffer format is not compatible with type <code>T</code>.</li>
+</ul>
+
+<p>To check whether the buffer format is compatible before calling this method,
+you can use <code>&lt;T as buffer::Element&gt;::is_compatible_format(buf.format())</code>.
+Alternatively, <code>match buffer::ElementType::from_format(buf.format())</code>.</p>
+</div><h4 id='method.copy_to_fortran_slice' class="method"><span id='copy_to_fortran_slice.v' class='invisible'><code>pub fn <a href='#method.copy_to_fortran_slice' class='fnname'>copy_to_fortran_slice</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;target: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [T]</a><br>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#387-389' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the buffer elements to the specified slice.
+If the buffer is multi-dimensional, the elements are written in Fortran-style order.</p>
+
+<ul>
+<li>Fails if the slice does not have the correct length (<code>buf.item_count()</code>).</li>
+<li>Fails if the buffer format is not compatible with type <code>T</code>.</li>
+</ul>
+
+<p>To check whether the buffer format is compatible before calling this method,
+you can use <code>&lt;T as buffer::Element&gt;::is_compatible_format(buf.format())</code>.
+Alternatively, <code>match buffer::ElementType::from_format(buf.format())</code>.</p>
+</div><h4 id='method.to_vec' class="method"><span id='to_vec.v' class='invisible'><code>pub fn <a href='#method.to_vec' class='fnname'>to_vec</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(&amp;self, py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;T&gt;&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#412-414' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the buffer elements to a newly allocated vector.
+If the buffer is multi-dimensional, the elements are written in C-style order.</p>
+
+<p>Fails if the buffer format is not compatible with type <code>T</code>.</p>
+</div><h4 id='method.to_fortran_vec' class="method"><span id='to_fortran_vec.v' class='invisible'><code>pub fn <a href='#method.to_fortran_vec' class='fnname'>to_fortran_vec</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(&amp;self, py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;T&gt;&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#420-422' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the buffer elements to a newly allocated vector.
+If the buffer is multi-dimensional, the elements are written in Fortran-style order.</p>
+
+<p>Fails if the buffer format is not compatible with type <code>T</code>.</p>
+</div><h4 id='method.copy_from_slice' class="method"><span id='copy_from_slice.v' class='invisible'><code>pub fn <a href='#method.copy_from_slice' class='fnname'>copy_from_slice</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[T]</a><br>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#456-458' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the specified slice into the buffer.
+If the buffer is multi-dimensional, the elements in the slice are expected to be in C-style order.</p>
+
+<ul>
+<li>Fails if the buffer is read-only.</li>
+<li>Fails if the slice does not have the correct length (<code>buf.item_count()</code>).</li>
+<li>Fails if the buffer format is not compatible with type <code>T</code>.</li>
+</ul>
+
+<p>To check whether the buffer format is compatible before calling this method,
+use <code>&lt;T as buffer::Element&gt;::is_compatible_format(buf.format())</code>.
+Alternatively, <code>match buffer::ElementType::from_format(buf.format())</code>.</p>
+</div><h4 id='method.copy_from_fortran_slice' class="method"><span id='copy_from_fortran_slice.v' class='invisible'><code>pub fn <a href='#method.copy_from_fortran_slice' class='fnname'>copy_from_fortran_slice</a>&lt;T:&nbsp;<a class="trait" href="../../cpython/buffer/trait.Element.html" title="trait cpython::buffer::Element">Element</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[T]</a><br>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#470-472' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Copies the specified slice into the buffer.
+If the buffer is multi-dimensional, the elements in the slice are expected to be in Fortran-style order.</p>
+
+<ul>
+<li>Fails if the buffer is read-only.</li>
+<li>Fails if the slice does not have the correct length (<code>buf.item_count()</code>).</li>
+<li>Fails if the buffer format is not compatible with type <code>T</code>.</li>
+</ul>
+
+<p>To check whether the buffer format is compatible before calling this method,
+use <code>&lt;T as buffer::Element&gt;::is_compatible_format(buf.format())</code>.
+Alternatively, <code>match buffer::ElementType::from_format(buf.format())</code>.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+        <h3 id='impl-Send' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a></code><a href='#impl-Send' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#33' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a></code><a href='#impl-Sync' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#34' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-PyDrop' class='impl'><span class='in-band'><code>impl <a class="trait" href="../../cpython/trait.PyDrop.html" title="trait cpython::PyDrop">PyDrop</a> for <a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a></code><a href='#impl-PyDrop' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#507-512' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.release_ref' class="method"><span id='release_ref.v' class='invisible'><code>fn <a href='../../cpython/trait.PyDrop.html#tymethod.release_ref' class='fnname'>release_ref</a>(self, _py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>)</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#509-511' title='goto source code'>[src]</a></span></h4>
+</div><h3 id='impl-Drop' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html" title="trait core::ops::drop::Drop">Drop</a> for <a class="struct" href="../../cpython/buffer/struct.PyBuffer.html" title="struct cpython::buffer::PyBuffer">PyBuffer</a></code><a href='#impl-Drop' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#514-519' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/cpython/buffer.rs.html#515-518' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Executes the destructor for this type. <a href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>↑</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>↓</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt style="width:31px;">+ / -</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "cpython";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

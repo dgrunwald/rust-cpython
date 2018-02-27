@@ -9,6 +9,7 @@
 
     <title>cpython::py_class::BaseObject - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc trait">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'><a href='../index.html'>cpython</a>::<wbr><a href='index.html'>py_class</a></p><script>window.sidebarCurrent = {name: 'BaseObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait BaseObject</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#associated-types">Associated Types</a><div class="sidebar-links"><a href="#associatedtype.InitType">InitType</a></div><a class="sidebar-title" href="#required-methods">Required Methods</a><div class="sidebar-links"><a href="#tymethod.size">size</a><a href="#tymethod.alloc">alloc</a><a href="#tymethod.dealloc">dealloc</a></div><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='../index.html'>cpython</a>::<wbr><a href='index.html'>py_class</a></p><script>window.sidebarCurrent = {name: 'BaseObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -42,36 +44,42 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>cpython</a>::<wbr><a href='index.html'>py_class</a>::<wbr><a class='trait' href=''>BaseObject</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>cpython</a>::<wbr><a href='index.html'>py_class</a>::<wbr><a class="trait" href=''>BaseObject</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../../src/cpython/py_class/mod.rs.html#94-110' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait BaseObject: <a class='trait' href='../../cpython/trait.PythonObject.html' title='cpython::PythonObject'>PythonObject</a> {
-    type <a href='#associatedtype.InitType' class='type'>InitType</a>;
-    fn <a href='#tymethod.size' class='fnname'>size</a>() -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>;
-    unsafe fn <a href='#tymethod.alloc' class='fnname'>alloc</a>(py: <a class='struct' href='../../cpython/struct.Python.html' title='cpython::Python'>Python</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ty: &amp;<a class='struct' href='../../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; init_val: Self::<a class='trait' href='../../cpython/py_class/trait.BaseObject.html' title='cpython::py_class::BaseObject'>InitType</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;;
-    unsafe fn <a href='#tymethod.dealloc' class='fnname'>dealloc</a>(py: <a class='struct' href='../../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyObject);
+               </span><a class='srclink' href='../../src/cpython/py_class/mod.rs.html#103-119' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait BaseObject: <a class="trait" href="../../cpython/trait.PythonObject.html" title="trait cpython::PythonObject">PythonObject</a> {
+    type <a href='#associatedtype.InitType' class="type">InitType</a>;
+    fn <a href='#tymethod.size' class='fnname'>size</a>() -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>;
+<div class='item-spacer'></div>    unsafe fn <a href='#tymethod.alloc' class='fnname'>alloc</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty: &amp;<a class="struct" href="../../cpython/struct.PyType.html" title="struct cpython::PyType">PyType</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init_val: Self::<a class="type" href="../../cpython/py_class/trait.BaseObject.html#associatedtype.InitType" title="type cpython::py_class::BaseObject::InitType">InitType</a><br>&nbsp;&nbsp;&nbsp;&nbsp;) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="../../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;;
+<div class='item-spacer'></div>    unsafe fn <a href='#tymethod.dealloc' class='fnname'>dealloc</a>(py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a>PyObject);
 }</pre><div class='docblock'><p>A PythonObject that is usable as a base type with the <code>py_class!()</code> macro.</p>
 </div>
-            <h2 id='associated-types'>Associated Types</h2>
+            <h2 id='associated-types' class='small-section-header'>
+              Associated Types<a href='#associated-types' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='associatedtype.InitType' class='method stab '><span id='InitType.t' class='invisible'><code>type <a href='#associatedtype.InitType' class='type'>InitType</a></code></span></h3></div>
-            <h2 id='required-methods'>Required Methods</h2>
+        <h3 id='associatedtype.InitType' class='method'><span id='InitType.t' class='invisible'><code>type <a href='#associatedtype.InitType' class="type">InitType</a></code></span></h3></div>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.size' class='method stab '><span id='size.v' class='invisible'><code>fn <a href='#tymethod.size' class='fnname'>size</a>() -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></span></h3><div class='docblock'><p>Gets the size of the object, in bytes.</p>
-</div><h3 id='tymethod.alloc' class='method stab '><span id='alloc.v' class='invisible'><code>unsafe fn <a href='#tymethod.alloc' class='fnname'>alloc</a>(py: <a class='struct' href='../../cpython/struct.Python.html' title='cpython::Python'>Python</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ty: &amp;<a class='struct' href='../../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; init_val: Self::<a class='trait' href='../../cpython/py_class/trait.BaseObject.html' title='cpython::py_class::BaseObject'>InitType</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;<a class='struct' href='../../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>&gt;</code></span></h3><div class='docblock'><p>Allocates a new object (usually by calling ty-&gt;tp_alloc),
+        <h3 id='tymethod.size' class='method'><span id='size.v' class='invisible'><code>fn <a href='#tymethod.size' class='fnname'>size</a>() -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span></h3><div class='docblock'><p>Gets the size of the object, in bytes.</p>
+</div><h3 id='tymethod.alloc' class='method'><span id='alloc.v' class='invisible'><code>unsafe fn <a href='#tymethod.alloc' class='fnname'>alloc</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;ty: &amp;<a class="struct" href="../../cpython/struct.PyType.html" title="struct cpython::PyType">PyType</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;init_val: Self::<a class="type" href="../../cpython/py_class/trait.BaseObject.html#associatedtype.InitType" title="type cpython::py_class::BaseObject::InitType">InitType</a><br>) -&gt; <a class="type" href="../../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="../../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</code></span></h3><div class='docblock'><p>Allocates a new object (usually by calling ty-&gt;tp_alloc),
 and initializes it using init_val.
 <code>ty</code> must be derived from the Self type, and the resulting object
 must be of type <code>ty</code>.</p>
-</div><h3 id='tymethod.dealloc' class='method stab '><span id='dealloc.v' class='invisible'><code>unsafe fn <a href='#tymethod.dealloc' class='fnname'>dealloc</a>(py: <a class='struct' href='../../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a>PyObject)</code></span></h3><div class='docblock'><p>Calls the rust destructor for the object and frees the memory
+</div><h3 id='tymethod.dealloc' class='method'><span id='dealloc.v' class='invisible'><code>unsafe fn <a href='#tymethod.dealloc' class='fnname'>dealloc</a>(py: <a class="struct" href="../../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a>PyObject)</code></span></h3><div class='docblock'><p>Calls the rust destructor for the object and frees the memory
 (usually by calling ptr-&gt;ob_type-&gt;tp_free).
 This function is used as tp_dealloc implementation.</p>
 </div></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl BaseObject for <a class='struct' href='../../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
+    <li><div class='out-of-band'><a class='srclink' href='../../src/cpython/py_class/mod.rs.html#121-151' title='goto source code'>[src]</a></div><code>impl BaseObject for <a class="struct" href="../../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a><span class="where fmt-newline">  type <a href='#associatedtype.InitType' class="type">InitType</a> = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>;</span></code></li>
 </ul><script type="text/javascript" async
                          src="../../implementors/cpython/py_class/trait.BaseObject.js">
                  </script></section>
@@ -91,13 +99,15 @@ This function is used as tp_dealloc implementation.</p>
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -131,7 +141,6 @@ This function is used as tp_dealloc implementation.</p>
         window.rootPath = "../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

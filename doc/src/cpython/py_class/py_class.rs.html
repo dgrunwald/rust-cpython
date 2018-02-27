@@ -9,6 +9,7 @@
 
     <title>py_class.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -481,34 +483,69 @@
 <span id="437">437</span>
 <span id="438">438</span>
 <span id="439">439</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2016 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='doccomment'>/**
+<span class="doccomment">/**
 Defines new python extension class.
 A `py_class!` macro invocation generates code that declares a new Python class.
 Additionally, it generates a Rust struct of the same name, which allows accessing
 instances of that Python class from Rust.
 
 # Syntax
-`py_class!(class MyType |py| { ... })`
+`py_class!(pub class MyType |py| { ... })`
 
+* `pub` makes the generated Rust struct visible outside the current module. It has no effect on the visibility from Python.
 * `MyType` is the name of the Python class.
 * `py` is an identifier that will be made available as a variable of type `Python`
 in all function bodies.
@@ -690,6 +727,7 @@ py_class!(class ClassWithGCSupport |py| {
 ```
 
 Caution: `__traverse__` may be called by the garbage collector:
+
   * during any python operation that takes a `Python` token as argument
   * indirectly from the `PyObject` (or derived type) `Drop` implementation
   * if your code releases the GIL, at any time by other threads.
@@ -762,11 +800,14 @@ py_class!(class MyIterator |py| {
 
 ## Comparison operators
 
-  * `def __richcmp__(&amp;self, other: impl ToPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;`
+  * `def __richcmp__(&amp;self, other: impl FromPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;`
 
-    Overloads Python comparison operations (`==`, `!=`, `&lt;`, `&lt;=`, `&gt;`, and `&gt;=`). The `op`
-    argument indicates the comparison operation being performed.
+    Overloads Python comparison operations (`==`, `!=`, `&lt;`, `&lt;=`, `&gt;`, and `&gt;=`).
+    The `op` argument indicates the comparison operation being performed.
     The return type will normally be `PyResult&lt;bool&gt;`, but any Python object can be returned.
+
+    If `other` is not of the type specified in the signature, the generated code will
+    automatically `return NotImplemented`.
 
   * `def __hash__(&amp;self) -&gt; PyResult&lt;impl PrimInt&gt;`
 
@@ -876,51 +917,80 @@ py_class!(class MyIterator |py| {
 
 
 */</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class</span> {
-    (<span class='ident'>class</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span>:<span class='ident'>ident</span> <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>: <span class='ident'>ident</span><span class='op'>|</span> { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>tt</span> )<span class='op'>*</span> }) <span class='op'>=&gt;</span> (
-        <span class='macro'>py_class_impl</span><span class='macro'>!</span> {
-            { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span> )<span class='op'>*</span> }
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>
-            <span class='comment'>/* info: */</span> {
-                <span class='comment'>/* base_type: */</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>,
-                <span class='comment'>/* size: */</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>py_class</span>::<span class='ident'>BaseObject</span><span class='op'>&gt;</span>::<span class='ident'>size</span>(),
-                <span class='comment'>/* gc: */</span> {
-                    <span class='comment'>/* traverse_proc: */</span> <span class='prelude-val'>None</span>,
-                    <span class='comment'>/* traverse_data: */</span> [ <span class='comment'>/*name*/</span> ]
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class</span> {
+    (<span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=&gt;</span> (
+        <span class="macro">py_class_impl</span><span class="macro">!</span> {
+            { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span> )<span class="op">*</span> }
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>
+            <span class="comment">/* info: */</span> {
+                <span class="comment">/* base_type: */</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>,
+                <span class="comment">/* size: */</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">BaseObject</span><span class="op">&gt;</span>::<span class="ident">size</span>(),
+                <span class="comment">/* class_visibility: */</span> {},
+                <span class="comment">/* gc: */</span> {
+                    <span class="comment">/* traverse_proc: */</span> <span class="prelude-val">None</span>,
+                    <span class="comment">/* traverse_data: */</span> [ <span class="comment">/*name*/</span> ]
                 },
-                <span class='comment'>/* data: */</span> [ <span class='comment'>/* { offset, name, type } */</span> ]
-                <span class='comment'>// TODO: base type, documentation, ...</span>
+                <span class="comment">/* data: */</span> [ <span class="comment">/* { offset, name, type } */</span> ]
+                <span class="comment">// TODO: base type, documentation, ...</span>
             }
-            <span class='comment'>/* slots: */</span> {
-                <span class='comment'>/* type_slots */</span>  [ <span class='comment'>/* slot: expr, */</span> ]
-                <span class='comment'>/* as_number */</span>   [ <span class='comment'>/* slot: expr, */</span> ]
-                <span class='comment'>/* as_sequence */</span> [ <span class='comment'>/* slot: expr, */</span> ]
-                <span class='comment'>/* as_mapping */</span>  [ <span class='comment'>/* slot: expr, */</span> ]
-                <span class='comment'>/* setitem_delitem */</span> [
-                    <span class='ident'>sdi_setitem</span>: {},
-                    <span class='ident'>sdi_delitem</span>: {},
+            <span class="comment">/* slots: */</span> {
+                <span class="comment">/* type_slots */</span>  [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_number */</span>   [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_sequence */</span> [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_mapping */</span>  [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* setitem_delitem */</span> [
+                    <span class="ident">sdi_setitem</span>: {},
+                    <span class="ident">sdi_delitem</span>: {},
                 ]
             }
-            <span class='comment'>/* impls: */</span> { <span class='comment'>/* impl body */</span> }
-            <span class='comment'>/* members: */</span> { <span class='comment'>/* ident = expr; */</span> }
+            <span class="comment">/* impls: */</span> { <span class="comment">/* impl body */</span> }
+            <span class="comment">/* members: */</span> { <span class="comment">/* ident = expr; */</span> }
+        }
+    );
+    (<span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=&gt;</span> (
+        <span class="macro">py_class_impl</span><span class="macro">!</span> {
+            { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span> )<span class="op">*</span> }
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>
+            <span class="comment">/* info: */</span> {
+                <span class="comment">/* base_type: */</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>,
+                <span class="comment">/* size: */</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">BaseObject</span><span class="op">&gt;</span>::<span class="ident">size</span>(),
+                <span class="comment">/* class_visibility: */</span> {<span class="kw">pub</span>},
+                <span class="comment">/* gc: */</span> {
+                    <span class="comment">/* traverse_proc: */</span> <span class="prelude-val">None</span>,
+                    <span class="comment">/* traverse_data: */</span> [ <span class="comment">/*name*/</span> ]
+                },
+                <span class="comment">/* data: */</span> [ <span class="comment">/* { offset, name, type } */</span> ]
+                <span class="comment">// TODO: base type, documentation, ...</span>
+            }
+            <span class="comment">/* slots: */</span> {
+                <span class="comment">/* type_slots */</span>  [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_number */</span>   [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_sequence */</span> [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* as_mapping */</span>  [ <span class="comment">/* slot: expr, */</span> ]
+                <span class="comment">/* setitem_delitem */</span> [
+                    <span class="ident">sdi_setitem</span>: {},
+                    <span class="ident">sdi_delitem</span>: {},
+                ]
+            }
+            <span class="comment">/* impls: */</span> { <span class="comment">/* impl body */</span> }
+            <span class="comment">/* members: */</span> { <span class="comment">/* ident = expr; */</span> }
         }
     );
 }
 
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_class_impl_item</span> {
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span>( $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>selfarg</span>:<span class='ident'>tt</span> )<span class='op'>*</span> )
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>res_type</span>:<span class='ident'>ty</span>; <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span> [ $( { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>detail</span>:<span class='ident'>tt</span> } )<span class='op'>*</span> ]
-    } <span class='op'>=&gt;</span> { <span class='macro'>py_coerce_item</span><span class='macro'>!</span> {
-        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>class</span> {
-            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>($( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>selfarg</span> )<span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span> $( , <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> )<span class='op'>*</span> )
-            <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>res_type</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_impl_item</span> {
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">selfarg</span>:<span class="ident">tt</span> )<span class="op">*</span> )
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span>:<span class="ident">tt</span> } )<span class="op">*</span> ]
+    } <span class="op">=&gt;</span> { <span class="macro">py_coerce_item</span><span class="macro">!</span> {
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>($( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">selfarg</span> )<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span> $( , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> )<span class="op">*</span> )
+            <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
         }
     }}
 }
-
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -939,13 +1009,15 @@ py_class!(class MyIterator |py| {
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -979,7 +1051,6 @@ py_class!(class MyIterator |py| {
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
     <script defer src="../../../search-index.js"></script>
 </body>

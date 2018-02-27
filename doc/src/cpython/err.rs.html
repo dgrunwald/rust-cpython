@@ -9,6 +9,7 @@
 
     <title>err.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -507,39 +509,42 @@
 <span id="463">463</span>
 <span id="464">464</span>
 <span id="465">465</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>Python</span>, <span class='ident'>PythonObjectDowncastError</span>,
-        <span class='ident'>PythonObjectWithTypeObject</span>, <span class='ident'>PyClone</span>, <span class='ident'>PyDrop</span>};
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>, <span class='ident'>exc</span>};
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
-<span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>oldstyle</span>::<span class='ident'>PyClass</span>;
-<span class='kw'>use</span> <span class='ident'>ffi</span>;
-<span class='kw'>use</span> <span class='ident'>libc</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
-<span class='kw'>use</span> <span class='ident'>libc</span>::<span class='ident'>c_char</span>;
-<span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CString</span>;
+<span class="kw">use</span> <span class="ident">std</span>;
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">PythonObject</span>, <span class="ident">ToPythonPointer</span>, <span class="ident">Python</span>, <span class="ident">PythonObjectDowncastError</span>,
+        <span class="ident">PythonObjectWithTypeObject</span>, <span class="ident">PyClone</span>, <span class="ident">PyDrop</span>};
+<span class="kw">use</span> <span class="ident">objects</span>::{<span class="ident">PyObject</span>, <span class="ident">PyType</span>, <span class="ident">exc</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">oldstyle</span>::<span class="ident">PyClass</span>;
+<span class="kw">use</span> <span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="ident">libc</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
+<span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_char</span>;
+<span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
 
-<span class='doccomment'>/**
+<span class="doccomment">/**
 Defines a new exception type.
 
 # Syntax
@@ -569,406 +574,409 @@ fn main() {
 }
 ```
 */</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_exception</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>module</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>base</span>: <span class='ident'>ty</span>) <span class='op'>=&gt;</span> {
-        <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>(<span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>);
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_exception</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">base</span>: <span class="ident">ty</span>) <span class="op">=&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>);
 
-        <span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>);
+        <span class="macro">pyobject_newtype</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
 
-        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> {
-            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span>, <span class='ident'>T</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ToPyObject</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>args</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyErr</span> {
-                <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyErr</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>, <span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span>, <span class='ident'>args</span>)
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ToPyObject</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">args</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyErr</span> {
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">args</span>)
             }
         }
 
-        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectWithCheckedDowncast</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> {
-            <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-            <span class='kw'>fn</span> <span class='ident'>downcast_from</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>obj</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>)
-                <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>, <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectWithCheckedDowncast</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
+            <span class="attribute">#[<span class="ident">inline</span>]</span>
+            <span class="kw">fn</span> <span class="ident">downcast_from</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>)
+                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span>
             {
-                <span class='kw'>if</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectWithTypeObject</span><span class='op'>&gt;</span>::<span class='ident'>type_object</span>(<span class='ident'>py</span>).<span class='ident'>is_instance</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span><span class='ident'>obj</span>) {
-                    <span class='prelude-val'>Ok</span>(<span class='kw'>unsafe</span> { <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObject</span>::<span class='ident'>unchecked_downcast_from</span>(<span class='ident'>obj</span>) })
-                } <span class='kw'>else</span> {
-                    <span class='prelude-val'>Err</span>(<span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectDowncastError</span>(<span class='ident'>py</span>))
+                <span class="kw">if</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectWithTypeObject</span><span class="op">&gt;</span>::<span class="ident">type_object</span>(<span class="ident">py</span>).<span class="ident">is_instance</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">obj</span>) {
+                    <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObject</span>::<span class="ident">unchecked_downcast_from</span>(<span class="ident">obj</span>) })
+                } <span class="kw">else</span> {
+                    <span class="prelude-val">Err</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectDowncastError</span>(<span class="ident">py</span>))
                 }
             }
 
-            <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-            <span class='kw'>fn</span> <span class='ident'>downcast_borrow_from</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>)
-                <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>, <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span>
+            <span class="attribute">#[<span class="ident">inline</span>]</span>
+            <span class="kw">fn</span> <span class="ident">downcast_borrow_from</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>)
+                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span>
             {
-                <span class='kw'>if</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectWithTypeObject</span><span class='op'>&gt;</span>::<span class='ident'>type_object</span>(<span class='ident'>py</span>).<span class='ident'>is_instance</span>(<span class='ident'>py</span>, <span class='ident'>obj</span>) {
-                    <span class='prelude-val'>Ok</span>(<span class='kw'>unsafe</span> { <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObject</span>::<span class='ident'>unchecked_downcast_borrow_from</span>(<span class='ident'>obj</span>) })
-                } <span class='kw'>else</span> {
-                    <span class='prelude-val'>Err</span>(<span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectDowncastError</span>(<span class='ident'>py</span>))
+                <span class="kw">if</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectWithTypeObject</span><span class="op">&gt;</span>::<span class="ident">type_object</span>(<span class="ident">py</span>).<span class="ident">is_instance</span>(<span class="ident">py</span>, <span class="ident">obj</span>) {
+                    <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObject</span>::<span class="ident">unchecked_downcast_borrow_from</span>(<span class="ident">obj</span>) })
+                } <span class="kw">else</span> {
+                    <span class="prelude-val">Err</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectDowncastError</span>(<span class="ident">py</span>))
                 }
             }
         }
 
-        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObjectWithTypeObject</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span> {
-            <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-            <span class='kw'>fn</span> <span class='ident'>type_object</span>(<span class='ident'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyType</span> {
-                <span class='kw'>unsafe</span> {
-                    <span class='kw'>static</span> <span class='kw-2'>mut</span> <span class='ident'>type_object</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyTypeObject</span> <span class='op'>=</span> <span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>_detail</span>::<span class='ident'>ffi</span>::<span class='ident'>PyTypeObject</span>;
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObjectWithTypeObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
+            <span class="attribute">#[<span class="ident">inline</span>]</span>
+            <span class="kw">fn</span> <span class="ident">type_object</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyType</span> {
+                <span class="kw">unsafe</span> {
+                    <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">type_object</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyTypeObject</span> <span class="op">=</span> <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyTypeObject</span>;
 
-                    <span class='kw'>if</span> <span class='ident'>type_object</span>.<span class='ident'>is_null</span>() {
-                        <span class='ident'>type_object</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyErr</span>::<span class='ident'>new_type</span>(
-                            <span class='ident'>py</span>,
-                            <span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>module</span>), <span class='string'>&quot;.&quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>)),
-                            <span class='prelude-val'>Some</span>(<span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PythonObject</span>::<span class='ident'>into_object</span>(<span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>base</span><span class='op'>&gt;</span>())),
-                            <span class='prelude-val'>None</span>).<span class='ident'>as_type_ptr</span>();
+                    <span class="kw">if</span> <span class="ident">type_object</span>.<span class="ident">is_null</span>() {
+                        <span class="ident">type_object</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyErr</span>::<span class="ident">new_type</span>(
+                            <span class="ident">py</span>,
+                            <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>)),
+                            <span class="prelude-val">Some</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObject</span>::<span class="ident">into_object</span>(<span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">base</span><span class="op">&gt;</span>())),
+                            <span class="prelude-val">None</span>).<span class="ident">as_type_ptr</span>();
                     }
 
-                    <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyType</span>::<span class='ident'>from_type_ptr</span>(<span class='ident'>py</span>, <span class='ident'>type_object</span>)
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyType</span>::<span class="ident">from_type_ptr</span>(<span class="ident">py</span>, <span class="ident">type_object</span>)
                 }
             }
         }
     };
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>module</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>py_exception</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>module</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>, <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>exc</span>::<span class='ident'>Exception</span>);
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) <span class="op">=&gt;</span> {
+        <span class="macro">py_exception</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">exc</span>::<span class="ident">Exception</span>);
     }
 }
 
-<span class='doccomment'>/// Represents a Python exception that was raised.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyErr</span> {
-    <span class='doccomment'>/// The type of the exception. This should be either a `PyClass` or a `PyType`.</span>
-    <span class='kw'>pub</span> <span class='ident'>ptype</span> : <span class='ident'>PyObject</span>,
-    <span class='doccomment'>/// The value of the exception.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// This can be either an instance of `ptype`,</span>
-    <span class='doccomment'>/// a tuple of arguments to be passed to `ptype`&#39;s constructor,</span>
-    <span class='doccomment'>/// or a single argument to be passed to `ptype`&#39;s constructor.</span>
-    <span class='doccomment'>/// Call `PyErr::instance()` to get the exception instance in all cases.</span>
-    <span class='kw'>pub</span> <span class='ident'>pvalue</span> : <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// The `PyTraceBack` object associated with the error.</span>
-    <span class='kw'>pub</span> <span class='ident'>ptraceback</span> : <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>
+<span class="doccomment">/// Represents a Python exception that was raised.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyErr</span> {
+    <span class="doccomment">/// The type of the exception. This should be either a `PyClass` or a `PyType`.</span>
+    <span class="kw">pub</span> <span class="ident">ptype</span> : <span class="ident">PyObject</span>,
+    <span class="doccomment">/// The value of the exception.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This can be either an instance of `ptype`,</span>
+    <span class="doccomment">/// a tuple of arguments to be passed to `ptype`&#39;s constructor,</span>
+    <span class="doccomment">/// or a single argument to be passed to `ptype`&#39;s constructor.</span>
+    <span class="doccomment">/// Call `PyErr::instance()` to get the exception instance in all cases.</span>
+    <span class="kw">pub</span> <span class="ident">pvalue</span> : <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The `PyTraceBack` object associated with the error.</span>
+    <span class="kw">pub</span> <span class="ident">ptraceback</span> : <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>
 }
 
 
-<span class='doccomment'>/// Represents the result of a Python call.</span>
-<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>PyErr</span><span class='op'>&gt;</span>;
+<span class="doccomment">/// Represents the result of a Python call.</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">PyErr</span><span class="op">&gt;</span>;
 
-<span class='kw'>impl</span> <span class='ident'>PyErr</span> {
-    <span class='doccomment'>/// Gets whether an error is present in the Python interpreter&#39;s global state.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>occurred</span>(_ : <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='kw'>unsafe</span> { <span class='op'>!</span><span class='ident'>ffi</span>::<span class='ident'>PyErr_Occurred</span>().<span class='ident'>is_null</span>() }
+<span class="kw">impl</span> <span class="ident">PyErr</span> {
+    <span class="doccomment">/// Creates a new PyErr of type `T`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `value` can be:</span>
+    <span class="doccomment">/// * `NoArgs`: the exception instance will be created using python `T()`</span>
+    <span class="doccomment">/// * a tuple: the exception instance will be created using python `T(*tuple)`</span>
+    <span class="doccomment">/// * any other value: the exception instance will be created using python `T(value)`</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Panics if `T` is not a python class derived from `BaseException`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Example:</span>
+    <span class="doccomment">///  `return Err(PyErr::new::&lt;exc::TypeError, _&gt;(py, &quot;Error message&quot;));`</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span>
+        <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PythonObjectWithTypeObject</span>, <span class="ident">V</span>: <span class="ident">ToPyObject</span>
+    {
+        <span class="ident">PyErr</span>::<span class="ident">new_helper</span>(<span class="ident">py</span>, <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(), <span class="ident">value</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>())
     }
 
-    <span class='doccomment'>/// Creates a new exception type with the given name, which must be of the form</span>
-    <span class='doccomment'>/// `&lt;module&gt;.&lt;ExceptionName&gt;`, as required by `PyErr_NewException`.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// `base` can be an existing exception type to subclass, or a tuple of classes</span>
-    <span class='doccomment'>/// `dict` specifies an optional dictionary of class variables and methods</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new_type</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>base</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>, <span class='ident'>dict</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span> {
-        <span class='kw'>let</span> <span class='ident'>base</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>base</span> {
-            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>(),
-            <span class='prelude-val'>Some</span>(<span class='ident'>obj</span>) <span class='op'>=&gt;</span> <span class='ident'>obj</span>.<span class='ident'>steal_ptr</span>()
+    <span class="doccomment">/// Gets whether an error is present in the Python interpreter&#39;s global state.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">occurred</span>(_ : <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="kw">unsafe</span> { <span class="op">!</span><span class="ident">ffi</span>::<span class="ident">PyErr_Occurred</span>().<span class="ident">is_null</span>() }
+    }
+
+    <span class="doccomment">/// Creates a new exception type with the given name, which must be of the form</span>
+    <span class="doccomment">/// `&lt;module&gt;.&lt;ExceptionName&gt;`, as required by `PyErr_NewException`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `base` can be an existing exception type to subclass, or a tuple of classes</span>
+    <span class="doccomment">/// `dict` specifies an optional dictionary of class variables and methods</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_type</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">base</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>, <span class="ident">dict</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyType</span> {
+        <span class="kw">let</span> <span class="ident">base</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">base</span> {
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=&gt;</span> <span class="ident">obj</span>.<span class="ident">steal_ptr</span>()
         };
 
-        <span class='kw'>let</span> <span class='ident'>dict</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>dict</span> {
-            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>(),
-            <span class='prelude-val'>Some</span>(<span class='ident'>obj</span>) <span class='op'>=&gt;</span> <span class='ident'>obj</span>.<span class='ident'>steal_ptr</span>()
+        <span class="kw">let</span> <span class="ident">dict</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">dict</span> {
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=&gt;</span> <span class="ident">obj</span>.<span class="ident">steal_ptr</span>()
         };
 
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>null_terminated_name</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>name</span>).<span class='ident'>unwrap</span>();
-            <span class='kw'>let</span> <span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyErr_NewException</span>(<span class='ident'>null_terminated_name</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>,
-                                                                  <span class='ident'>base</span>,
-                                                                  <span class='ident'>dict</span>);
-            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>).<span class='ident'>unchecked_cast_into</span>::<span class='op'>&lt;</span><span class='ident'>PyType</span><span class='op'>&gt;</span>()
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">null_terminated_name</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">name</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyErr_NewException</span>(<span class="ident">null_terminated_name</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>,
+                                                                  <span class="ident">base</span>,
+                                                                  <span class="ident">dict</span>);
+            <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">ptr</span>).<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="ident">PyType</span><span class="op">&gt;</span>()
         }
     }
 
-    <span class='doccomment'>/// Retrieves the current error from the Python interpreter&#39;s global state.</span>
-    <span class='doccomment'>/// The error is cleared from the Python interpreter.</span>
-    <span class='doccomment'>/// If no error is set, returns a `SystemError`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>fetch</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ptype</span>      : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>pvalue</span>     : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ptraceback</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>uninitialized</span>();
-            <span class='ident'>ffi</span>::<span class='ident'>PyErr_Fetch</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>ptype</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>pvalue</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>ptraceback</span>);
-            <span class='ident'>PyErr</span>::<span class='ident'>new_from_ffi_tuple</span>(<span class='ident'>py</span>, <span class='ident'>ptype</span>, <span class='ident'>pvalue</span>, <span class='ident'>ptraceback</span>)
+    <span class="doccomment">/// Retrieves the current error from the Python interpreter&#39;s global state.</span>
+    <span class="doccomment">/// The error is cleared from the Python interpreter.</span>
+    <span class="doccomment">/// If no error is set, returns a `SystemError`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fetch</span>(<span class="ident">py</span> : <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ptype</span>      : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">uninitialized</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pvalue</span>     : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">uninitialized</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ptraceback</span> : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">uninitialized</span>();
+            <span class="ident">ffi</span>::<span class="ident">PyErr_Fetch</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ptype</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pvalue</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ptraceback</span>);
+            <span class="ident">PyErr</span>::<span class="ident">new_from_ffi_tuple</span>(<span class="ident">py</span>, <span class="ident">ptype</span>, <span class="ident">pvalue</span>, <span class="ident">ptraceback</span>)
         }
     }
 
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>new_from_ffi_tuple</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ptype</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>, <span class='ident'>pvalue</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>, <span class='ident'>ptraceback</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='comment'>// Note: must not panic to ensure all owned pointers get acquired correctly,</span>
-        <span class='comment'>// and because we mustn&#39;t panic in normalize().</span>
-        <span class='ident'>PyErr</span> {
-            <span class='ident'>ptype</span>: <span class='kw'>if</span> <span class='ident'>ptype</span>.<span class='ident'>is_null</span>() {
-                        <span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>SystemError</span><span class='op'>&gt;</span>().<span class='ident'>into_object</span>()
-                   } <span class='kw'>else</span> {
-                        <span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptype</span>)
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_from_ffi_tuple</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">ptype</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>, <span class="ident">pvalue</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>, <span class="ident">ptraceback</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="comment">// Note: must not panic to ensure all owned pointers get acquired correctly,</span>
+        <span class="comment">// and because we mustn&#39;t panic in normalize().</span>
+        <span class="ident">PyErr</span> {
+            <span class="ident">ptype</span>: <span class="kw">if</span> <span class="ident">ptype</span>.<span class="ident">is_null</span>() {
+                        <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">SystemError</span><span class="op">&gt;</span>().<span class="ident">into_object</span>()
+                   } <span class="kw">else</span> {
+                        <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ptype</span>)
                    },
-            <span class='ident'>pvalue</span>: <span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr_opt</span>(<span class='ident'>py</span>, <span class='ident'>pvalue</span>),
-            <span class='ident'>ptraceback</span>: <span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr_opt</span>(<span class='ident'>py</span>, <span class='ident'>ptraceback</span>)
+            <span class="ident">pvalue</span>: <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr_opt</span>(<span class="ident">py</span>, <span class="ident">pvalue</span>),
+            <span class="ident">ptraceback</span>: <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr_opt</span>(<span class="ident">py</span>, <span class="ident">ptraceback</span>)
         }
     }
 
-    <span class='doccomment'>/// Creates a new PyErr of type `T`.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// `value` can be:</span>
-    <span class='doccomment'>/// * `NoArgs`: the exception instance will be created using python `T()`</span>
-    <span class='doccomment'>/// * a tuple: the exception instance will be created using python `T(*tuple)`</span>
-    <span class='doccomment'>/// * any other value: the exception instance will be created using python `T(value)`</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Panics if `T` is not a python class derived from `BaseException`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>V</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span>
-        <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>PythonObjectWithTypeObject</span>, <span class='ident'>V</span>: <span class='ident'>ToPyObject</span>
+    <span class="kw">fn</span> <span class="ident">new_helper</span>(<span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">ty</span>: <span class="ident">PyType</span>, <span class="ident">value</span>: <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyExceptionClass_Check</span>(<span class="ident">ty</span>.<span class="ident">as_object</span>().<span class="ident">as_ptr</span>()) } <span class="op">!=</span> <span class="number">0</span>);
+        <span class="ident">PyErr</span> {
+            <span class="ident">ptype</span>: <span class="ident">ty</span>.<span class="ident">into_object</span>(),
+            <span class="ident">pvalue</span>: <span class="prelude-val">Some</span>(<span class="ident">value</span>),
+            <span class="ident">ptraceback</span>: <span class="prelude-val">None</span>
+        }
+    }
+
+    <span class="doccomment">/// Creates a new PyErr.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `obj` must be an Python exception instance, the PyErr will use that instance.</span>
+    <span class="doccomment">/// If `obj` is a Python exception type object, the PyErr will (lazily) create a new instance of that type.</span>
+    <span class="doccomment">/// Otherwise, a `TypeError` is created instead.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_instance</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="ident">O</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> <span class="kw">where</span> <span class="ident">O</span>: <span class="ident">PythonObject</span> {
+        <span class="ident">PyErr</span>::<span class="ident">from_instance_helper</span>(<span class="ident">py</span>, <span class="ident">obj</span>.<span class="ident">into_object</span>())
+    }
+
+    <span class="kw">fn</span> <span class="ident">from_instance_helper</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyExceptionInstance_Check</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) } <span class="op">!=</span> <span class="number">0</span> {
+            <span class="ident">PyErr</span> {
+                <span class="ident">ptype</span>: <span class="kw">unsafe</span> { <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PyExceptionInstance_Class</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>())) },
+                <span class="ident">pvalue</span>: <span class="prelude-val">Some</span>(<span class="ident">obj</span>),
+                <span class="ident">ptraceback</span>: <span class="prelude-val">None</span>
+            }
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyExceptionClass_Check</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) } <span class="op">!=</span> <span class="number">0</span> {
+            <span class="ident">PyErr</span> {
+                <span class="ident">ptype</span>: <span class="ident">obj</span>,
+                <span class="ident">pvalue</span>: <span class="prelude-val">None</span>,
+                <span class="ident">ptraceback</span>: <span class="prelude-val">None</span>
+            }
+        } <span class="kw">else</span> {
+            <span class="ident">PyErr</span> {
+                <span class="ident">ptype</span>: <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span><span class="op">&gt;</span>().<span class="ident">into_object</span>(),
+                <span class="ident">pvalue</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;exceptions must derive from BaseException&quot;</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>()),
+                <span class="ident">ptraceback</span>: <span class="prelude-val">None</span>
+            }
+        }
+    }
+
+    <span class="doccomment">/// Construct a new error, with the usual lazy initialization of Python exceptions.</span>
+    <span class="doccomment">/// `exc` is the exception type; usually one of the standard exceptions like `py.get_type::&lt;exc::RuntimeError&gt;()`.</span>
+    <span class="doccomment">/// `value` is the exception instance, or a tuple of arguments to pass to the exception constructor.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_lazy_init</span>(<span class="ident">exc</span>: <span class="ident">PyType</span>, <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="ident">PyErr</span> {
+            <span class="ident">ptype</span>: <span class="ident">exc</span>.<span class="ident">into_object</span>(),
+            <span class="ident">pvalue</span>: <span class="ident">value</span>,
+            <span class="ident">ptraceback</span>: <span class="prelude-val">None</span>
+        }
+    }
+
+    <span class="doccomment">/// Print a standard traceback to sys.stderr.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) {
+        <span class="self">self</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
+        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyErr_PrintEx</span>(<span class="number">0</span>) }
+    }
+
+    <span class="doccomment">/// Print a standard traceback to sys.stderr.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print_and_set_sys_last_vars</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) {
+        <span class="self">self</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
+        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyErr_PrintEx</span>(<span class="number">1</span>) }
+    }
+
+    <span class="doccomment">/// Return true if the current exception matches the exception in `exc`.</span>
+    <span class="doccomment">/// If `exc` is a class object, this also returns `true` when `self` is an instance of a subclass.</span>
+    <span class="doccomment">/// If `exc` is a tuple, all exceptions in the tuple (and recursively in subtuples) are searched for a match.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">matches</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">exc</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">bool</span>
+        <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">ToPyObject</span>
     {
-        <span class='ident'>PyErr</span>::<span class='ident'>new_helper</span>(<span class='ident'>py</span>, <span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(), <span class='ident'>value</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>())
-    }
-
-    <span class='kw'>fn</span> <span class='ident'>new_helper</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='ident'>PyType</span>, <span class='ident'>value</span>: <span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyExceptionClass_Check</span>(<span class='ident'>ty</span>.<span class='ident'>as_object</span>().<span class='ident'>as_ptr</span>()) } <span class='op'>!=</span> <span class='number'>0</span>);
-        <span class='ident'>PyErr</span> {
-            <span class='ident'>ptype</span>: <span class='ident'>ty</span>.<span class='ident'>into_object</span>(),
-            <span class='ident'>pvalue</span>: <span class='prelude-val'>Some</span>(<span class='ident'>value</span>),
-            <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
-        }
-    }
-
-    <span class='doccomment'>/// Creates a new PyErr.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// `obj` must be an Python exception instance, the PyErr will use that instance.</span>
-    <span class='doccomment'>/// If `obj` is a Python exception type object, the PyErr will (lazily) create a new instance of that type.</span>
-    <span class='doccomment'>/// Otherwise, a `TypeError` is created instead.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>from_instance</span><span class='op'>&lt;</span><span class='ident'>O</span><span class='op'>&gt;</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='ident'>O</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> <span class='kw'>where</span> <span class='ident'>O</span>: <span class='ident'>PythonObject</span> {
-        <span class='ident'>PyErr</span>::<span class='ident'>from_instance_helper</span>(<span class='ident'>py</span>, <span class='ident'>obj</span>.<span class='ident'>into_object</span>())
-    }
-
-    <span class='kw'>fn</span> <span class='ident'>from_instance_helper</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='kw'>if</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyExceptionInstance_Check</span>(<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>()) } <span class='op'>!=</span> <span class='number'>0</span> {
-            <span class='ident'>PyErr</span> {
-                <span class='ident'>ptype</span>: <span class='kw'>unsafe</span> { <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyExceptionInstance_Class</span>(<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>())) },
-                <span class='ident'>pvalue</span>: <span class='prelude-val'>Some</span>(<span class='ident'>obj</span>),
-                <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
-            }
-        } <span class='kw'>else</span> <span class='kw'>if</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyExceptionClass_Check</span>(<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>()) } <span class='op'>!=</span> <span class='number'>0</span> {
-            <span class='ident'>PyErr</span> {
-                <span class='ident'>ptype</span>: <span class='ident'>obj</span>,
-                <span class='ident'>pvalue</span>: <span class='prelude-val'>None</span>,
-                <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
-            }
-        } <span class='kw'>else</span> {
-            <span class='ident'>PyErr</span> {
-                <span class='ident'>ptype</span>: <span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span><span class='op'>&gt;</span>().<span class='ident'>into_object</span>(),
-                <span class='ident'>pvalue</span>: <span class='prelude-val'>Some</span>(<span class='string'>&quot;exceptions must derive from BaseException&quot;</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>()),
-                <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
-            }
-        }
-    }
-
-    <span class='doccomment'>/// Construct a new error, with the usual lazy initialization of Python exceptions.</span>
-    <span class='doccomment'>/// `exc` is the exception type; usually one of the standard exceptions like `PyExc::runtime_error()`.</span>
-    <span class='doccomment'>/// `value` is the exception instance, or a tuple of arguments to pass to the exception constructor.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new_lazy_init</span>(<span class='ident'>exc</span>: <span class='ident'>PyType</span>, <span class='ident'>value</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='ident'>PyErr</span> {
-            <span class='ident'>ptype</span>: <span class='ident'>exc</span>.<span class='ident'>into_object</span>(),
-            <span class='ident'>pvalue</span>: <span class='ident'>value</span>,
-            <span class='ident'>ptraceback</span>: <span class='prelude-val'>None</span>
-        }
-    }
-
-    <span class='doccomment'>/// Print a standard traceback to sys.stderr.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>print</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) {
-        <span class='self'>self</span>.<span class='ident'>restore</span>(<span class='ident'>py</span>);
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyErr_PrintEx</span>(<span class='number'>0</span>) }
-    }
-
-    <span class='doccomment'>/// Print a standard traceback to sys.stderr.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>print_and_set_sys_last_vars</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) {
-        <span class='self'>self</span>.<span class='ident'>restore</span>(<span class='ident'>py</span>);
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyErr_PrintEx</span>(<span class='number'>1</span>) }
-    }
-
-    <span class='doccomment'>/// Return true if the current exception matches the exception in `exc`.</span>
-    <span class='doccomment'>/// If `exc` is a class object, this also returns `true` when `self` is an instance of a subclass.</span>
-    <span class='doccomment'>/// If `exc` is a tuple, all exceptions in the tuple (and recursively in subtuples) are searched for a match.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>matches</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>exc</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span>
-        <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>ToPyObject</span>
-    {
-        <span class='ident'>exc</span>.<span class='ident'>with_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='op'>|</span><span class='ident'>exc</span><span class='op'>|</span> <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyErr_GivenExceptionMatches</span>(<span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>exc</span>) <span class='op'>!=</span> <span class='number'>0</span>
+        <span class="ident">exc</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">exc</span><span class="op">|</span> <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PyErr_GivenExceptionMatches</span>(<span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">as_ptr</span>(), <span class="ident">exc</span>) <span class="op">!=</span> <span class="number">0</span>
         })
     }
 
-    <span class='doccomment'>/// Normalizes the error. This ensures that the exception value is an instance of the exception type.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>normalize</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) {
-        <span class='comment'>// The normalization helper function involves temporarily moving out of the &amp;mut self,</span>
-        <span class='comment'>// which requires some unsafe trickery:</span>
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>std</span>::<span class='ident'>ptr</span>::<span class='ident'>write</span>(<span class='self'>self</span>, <span class='ident'>std</span>::<span class='ident'>ptr</span>::<span class='ident'>read</span>(<span class='self'>self</span>).<span class='ident'>into_normalized</span>(<span class='ident'>py</span>));
+    <span class="doccomment">/// Normalizes the error. This ensures that the exception value is an instance of the exception type.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">normalize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) {
+        <span class="comment">// The normalization helper function involves temporarily moving out of the &amp;mut self,</span>
+        <span class="comment">// which requires some unsafe trickery:</span>
+        <span class="kw">unsafe</span> {
+            <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">write</span>(<span class="self">self</span>, <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">read</span>(<span class="self">self</span>).<span class="ident">into_normalized</span>(<span class="ident">py</span>));
         }
-        <span class='comment'>// This is safe as long as normalized() doesn&#39;t unwind due to a panic.</span>
+        <span class="comment">// This is safe as long as normalized() doesn&#39;t unwind due to a panic.</span>
     }
 
-    <span class='doccomment'>/// Helper function for normalizing the error by deconstructing and reconstructing the PyErr.</span>
-    <span class='doccomment'>/// Must not panic for safety in normalize()</span>
-    <span class='kw'>fn</span> <span class='ident'>into_normalized</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='kw'>let</span> <span class='ident'>PyErr</span> { <span class='ident'>ptype</span>, <span class='ident'>pvalue</span>, <span class='ident'>ptraceback</span> } <span class='op'>=</span> <span class='self'>self</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ptype</span> <span class='op'>=</span> <span class='ident'>ptype</span>.<span class='ident'>steal_ptr</span>();
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>pvalue</span> <span class='op'>=</span> <span class='ident'>pvalue</span>.<span class='ident'>steal_ptr</span>(<span class='ident'>py</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ptraceback</span> <span class='op'>=</span> <span class='ident'>ptraceback</span>.<span class='ident'>steal_ptr</span>(<span class='ident'>py</span>);
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyErr_NormalizeException</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>ptype</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>pvalue</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>ptraceback</span>);
-            <span class='ident'>PyErr</span>::<span class='ident'>new_from_ffi_tuple</span>(<span class='ident'>py</span>, <span class='ident'>ptype</span>, <span class='ident'>pvalue</span>, <span class='ident'>ptraceback</span>)
+    <span class="doccomment">/// Helper function for normalizing the error by deconstructing and reconstructing the PyErr.</span>
+    <span class="doccomment">/// Must not panic for safety in normalize()</span>
+    <span class="kw">fn</span> <span class="ident">into_normalized</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="kw">let</span> <span class="ident">PyErr</span> { <span class="ident">ptype</span>, <span class="ident">pvalue</span>, <span class="ident">ptraceback</span> } <span class="op">=</span> <span class="self">self</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ptype</span> <span class="op">=</span> <span class="ident">ptype</span>.<span class="ident">steal_ptr</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pvalue</span> <span class="op">=</span> <span class="ident">pvalue</span>.<span class="ident">steal_ptr</span>(<span class="ident">py</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ptraceback</span> <span class="op">=</span> <span class="ident">ptraceback</span>.<span class="ident">steal_ptr</span>(<span class="ident">py</span>);
+        <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PyErr_NormalizeException</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ptype</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pvalue</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ptraceback</span>);
+            <span class="ident">PyErr</span>::<span class="ident">new_from_ffi_tuple</span>(<span class="ident">py</span>, <span class="ident">ptype</span>, <span class="ident">pvalue</span>, <span class="ident">ptraceback</span>)
         }
     }
 
-    <span class='doccomment'>/// Retrieves the exception type.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// If the exception type is an old-style class, returns `oldstyle::PyClass`.</span>
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span> {
-        <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyType</span><span class='op'>&gt;</span>(<span class='ident'>py</span>) {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>t</span>)  <span class='op'>=&gt;</span> <span class='ident'>t</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>),
-            <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span>
-                <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyClass</span><span class='op'>&gt;</span>(<span class='ident'>py</span>) {
-                    <span class='prelude-val'>Ok</span>(_)  <span class='op'>=&gt;</span> <span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>PyClass</span><span class='op'>&gt;</span>(),
-                    <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='ident'>py</span>.<span class='prelude-val'>None</span>().<span class='ident'>get_type</span>(<span class='ident'>py</span>)
+    <span class="doccomment">/// Retrieves the exception type.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the exception type is an old-style class, returns `oldstyle::PyClass`.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyType</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyType</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">t</span>)  <span class="op">=&gt;</span> <span class="ident">t</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>),
+            <span class="prelude-val">Err</span>(_) <span class="op">=&gt;</span>
+                <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyClass</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
+                    <span class="prelude-val">Ok</span>(_)  <span class="op">=&gt;</span> <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">PyClass</span><span class="op">&gt;</span>(),
+                    <span class="prelude-val">Err</span>(_) <span class="op">=&gt;</span> <span class="ident">py</span>.<span class="prelude-val">None</span>().<span class="ident">get_type</span>(<span class="ident">py</span>)
                 }
         }
     }
 
-    <span class='doccomment'>/// Retrieves the exception type.</span>
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>))]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_type</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyType</span> {
-        <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyType</span><span class='op'>&gt;</span>(<span class='ident'>py</span>) {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>t</span>)  <span class='op'>=&gt;</span> <span class='ident'>t</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>),
-            <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='ident'>py</span>.<span class='prelude-val'>None</span>().<span class='ident'>get_type</span>(<span class='ident'>py</span>)
+    <span class="doccomment">/// Retrieves the exception type.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyType</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyType</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">t</span>)  <span class="op">=&gt;</span> <span class="ident">t</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>),
+            <span class="prelude-val">Err</span>(_) <span class="op">=&gt;</span> <span class="ident">py</span>.<span class="prelude-val">None</span>().<span class="ident">get_type</span>(<span class="ident">py</span>)
         }
     }
 
-    <span class='doccomment'>/// Retrieves the exception instance for this error.</span>
-    <span class='doccomment'>/// This method takes `&amp;mut self` because the error might need</span>
-    <span class='doccomment'>/// to be normalized in order to create the exception instance.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>instance</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
-        <span class='self'>self</span>.<span class='ident'>normalize</span>(<span class='ident'>py</span>);
-        <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>pvalue</span> {
-            <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>instance</span>) <span class='op'>=&gt;</span> <span class='ident'>instance</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>),
-            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>py</span>.<span class='prelude-val'>None</span>()
+    <span class="doccomment">/// Retrieves the exception instance for this error.</span>
+    <span class="doccomment">/// This method takes `&amp;mut self` because the error might need</span>
+    <span class="doccomment">/// to be normalized in order to create the exception instance.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">instance</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+        <span class="self">self</span>.<span class="ident">normalize</span>(<span class="ident">py</span>);
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">pvalue</span> {
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">instance</span>) <span class="op">=&gt;</span> <span class="ident">instance</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">py</span>.<span class="prelude-val">None</span>()
         }
     }
 
-    <span class='doccomment'>/// Writes the error back to the Python interpreter&#39;s global state.</span>
-    <span class='doccomment'>/// This is the opposite of `PyErr::fetch()`.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>restore</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) {
-        <span class='kw'>let</span> <span class='ident'>PyErr</span> { <span class='ident'>ptype</span>, <span class='ident'>pvalue</span>, <span class='ident'>ptraceback</span> } <span class='op'>=</span> <span class='self'>self</span>;
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyErr_Restore</span>(<span class='ident'>ptype</span>.<span class='ident'>steal_ptr</span>(), <span class='ident'>pvalue</span>.<span class='ident'>steal_ptr</span>(<span class='ident'>py</span>), <span class='ident'>ptraceback</span>.<span class='ident'>steal_ptr</span>(<span class='ident'>py</span>))
+    <span class="doccomment">/// Writes the error back to the Python interpreter&#39;s global state.</span>
+    <span class="doccomment">/// This is the opposite of `PyErr::fetch()`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">restore</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) {
+        <span class="kw">let</span> <span class="ident">PyErr</span> { <span class="ident">ptype</span>, <span class="ident">pvalue</span>, <span class="ident">ptraceback</span> } <span class="op">=</span> <span class="self">self</span>;
+        <span class="kw">unsafe</span> {
+            <span class="ident">ffi</span>::<span class="ident">PyErr_Restore</span>(<span class="ident">ptype</span>.<span class="ident">steal_ptr</span>(), <span class="ident">pvalue</span>.<span class="ident">steal_ptr</span>(<span class="ident">py</span>), <span class="ident">ptraceback</span>.<span class="ident">steal_ptr</span>(<span class="ident">py</span>))
         }
     }
 
-    <span class='doccomment'>/// Issue a warning message.</span>
-    <span class='doccomment'>/// May return a PyErr if warnings-as-errors is enabled.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>warn</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>category</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyObject</span>, <span class='ident'>message</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>stacklevel</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>message</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>message</span>).<span class='ident'>unwrap</span>();
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>error_on_minusone</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyErr_WarnEx</span>(<span class='ident'>category</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>message</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>stacklevel</span> <span class='kw'>as</span> <span class='ident'>ffi</span>::<span class='ident'>Py_ssize_t</span>))
-        }
-    }
-}
-
-<span class='kw'>impl</span> <span class='ident'>PyDrop</span> <span class='kw'>for</span> <span class='ident'>PyErr</span> {
-    <span class='kw'>fn</span> <span class='ident'>release_ref</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) {
-        <span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>release_ref</span>(<span class='ident'>py</span>);
-        <span class='self'>self</span>.<span class='ident'>pvalue</span>.<span class='ident'>release_ref</span>(<span class='ident'>py</span>);
-        <span class='self'>self</span>.<span class='ident'>ptraceback</span>.<span class='ident'>release_ref</span>(<span class='ident'>py</span>);
-    }
-}
-
-<span class='kw'>impl</span> <span class='ident'>PyClone</span> <span class='kw'>for</span> <span class='ident'>PyErr</span> {
-    <span class='kw'>fn</span> <span class='ident'>clone_ref</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='ident'>PyErr</span> {
-            <span class='ident'>ptype</span>: <span class='self'>self</span>.<span class='ident'>ptype</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>),
-            <span class='ident'>pvalue</span>: <span class='self'>self</span>.<span class='ident'>pvalue</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>),
-            <span class='ident'>ptraceback</span>: <span class='self'>self</span>.<span class='ident'>ptraceback</span>.<span class='ident'>clone_ref</span>(<span class='ident'>py</span>)
+    <span class="doccomment">/// Issue a warning message.</span>
+    <span class="doccomment">/// May return a PyErr if warnings-as-errors is enabled.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">warn</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">category</span>: <span class="kw-2">&amp;</span><span class="ident">PyObject</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">stacklevel</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">message</span>).<span class="ident">unwrap</span>();
+        <span class="kw">unsafe</span> {
+            <span class="ident">error_on_minusone</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PyErr_WarnEx</span>(<span class="ident">category</span>.<span class="ident">as_ptr</span>(), <span class="ident">message</span>.<span class="ident">as_ptr</span>(), <span class="ident">stacklevel</span> <span class="kw">as</span> <span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span>))
         }
     }
 }
 
-<span class='doccomment'>/// Converts `PythonObjectDowncastError` to Python `TypeError`.</span>
-<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> <span class='ident'>std</span>::<span class='ident'>convert</span>::<span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;&gt;</span> <span class='kw'>for</span> <span class='ident'>PyErr</span> {
-    <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>PythonObjectDowncastError</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-        <span class='ident'>PyErr</span>::<span class='ident'>new_lazy_init</span>(<span class='ident'>err</span>.<span class='number'>0</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span><span class='op'>&gt;</span>(), <span class='prelude-val'>None</span>)
+<span class="kw">impl</span> <span class="ident">PyDrop</span> <span class="kw">for</span> <span class="ident">PyErr</span> {
+    <span class="kw">fn</span> <span class="ident">release_ref</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) {
+        <span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
+        <span class="self">self</span>.<span class="ident">pvalue</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
+        <span class="self">self</span>.<span class="ident">ptraceback</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
     }
 }
 
-<span class='doccomment'>/// Construct PyObject from the result of a Python FFI call that returns a new reference (owned pointer).</span>
-<span class='doccomment'>/// Returns `Err(PyErr)` if the pointer is `null`.</span>
-<span class='doccomment'>/// Unsafe because the pointer might be invalid.</span>
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>, <span class='ident'>p</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-    <span class='kw'>if</span> <span class='ident'>p</span>.<span class='ident'>is_null</span>() {
-        <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(<span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>p</span>))
+<span class="kw">impl</span> <span class="ident">PyClone</span> <span class="kw">for</span> <span class="ident">PyErr</span> {
+    <span class="kw">fn</span> <span class="ident">clone_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="ident">PyErr</span> {
+            <span class="ident">ptype</span>: <span class="self">self</span>.<span class="ident">ptype</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>),
+            <span class="ident">pvalue</span>: <span class="self">self</span>.<span class="ident">pvalue</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>),
+            <span class="ident">ptraceback</span>: <span class="self">self</span>.<span class="ident">ptraceback</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>)
+        }
     }
 }
 
-<span class='kw'>fn</span> <span class='ident'>panic_after_error</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='op'>!</span> {
-    <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyErr_Print</span>(); }
-    <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Python API called failed&quot;</span>);
-}
-
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_owned_ptr_or_panic</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>, <span class='ident'>p</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
-    <span class='kw'>if</span> <span class='ident'>p</span>.<span class='ident'>is_null</span>() {
-        <span class='ident'>panic_after_error</span>(<span class='ident'>py</span>);
-    } <span class='kw'>else</span> {
-        <span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>p</span>)
+<span class="doccomment">/// Converts `PythonObjectDowncastError` to Python `TypeError`.</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">PyErr</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+        <span class="ident">PyErr</span>::<span class="ident">new_lazy_init</span>(<span class="ident">err</span>.<span class="number">0</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span><span class="op">&gt;</span>(), <span class="prelude-val">None</span>)
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>result_cast_from_owned_ptr</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>, <span class='ident'>p</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>T</span>: ::<span class='ident'>python</span>::<span class='ident'>PythonObjectWithCheckedDowncast</span>
+<span class="doccomment">/// Construct PyObject from the result of a Python FFI call that returns a new reference (owned pointer).</span>
+<span class="doccomment">/// Returns `Err(PyErr)` if the pointer is `null`.</span>
+<span class="doccomment">/// Unsafe because the pointer might be invalid.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span> : <span class="ident">Python</span>, <span class="ident">p</span> : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">is_null</span>() {
+        <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">p</span>))
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">panic_after_error</span>(<span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="op">!</span> {
+    <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyErr_Print</span>(); }
+    <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Python API called failed&quot;</span>);
+}
+
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_owned_ptr_or_panic</span>(<span class="ident">py</span> : <span class="ident">Python</span>, <span class="ident">p</span> : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+    <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">is_null</span>() {
+        <span class="ident">panic_after_error</span>(<span class="ident">py</span>);
+    } <span class="kw">else</span> {
+        <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">p</span>)
+    }
+}
+
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">result_cast_from_owned_ptr</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">py</span> : <span class="ident">Python</span>, <span class="ident">p</span> : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">T</span>: ::<span class="ident">python</span>::<span class="ident">PythonObjectWithCheckedDowncast</span>
 {
-    <span class='kw'>if</span> <span class='ident'>p</span>.<span class='ident'>is_null</span>() {
-        <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>p</span>).<span class='ident'>cast_into</span>(<span class='ident'>py</span>)))
+    <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">is_null</span>() {
+        <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">p</span>).<span class="ident">cast_into</span>(<span class="ident">py</span>)))
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>cast_from_owned_ptr_or_panic</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>, <span class='ident'>p</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>T</span>
-    <span class='kw'>where</span> <span class='ident'>T</span>: ::<span class='ident'>python</span>::<span class='ident'>PythonObjectWithCheckedDowncast</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_from_owned_ptr_or_panic</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">py</span> : <span class="ident">Python</span>, <span class="ident">p</span> : <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">T</span>
+    <span class="kw">where</span> <span class="ident">T</span>: ::<span class="ident">python</span>::<span class="ident">PythonObjectWithCheckedDowncast</span>
 {
-    <span class='kw'>if</span> <span class='ident'>p</span>.<span class='ident'>is_null</span>() {
-        <span class='ident'>panic_after_error</span>(<span class='ident'>py</span>);
-    } <span class='kw'>else</span> {
-        <span class='ident'>PyObject</span>::<span class='ident'>from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>p</span>).<span class='ident'>cast_into</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>()
+    <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">is_null</span>() {
+        <span class="ident">panic_after_error</span>(<span class="ident">py</span>);
+    } <span class="kw">else</span> {
+        <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">p</span>).<span class="ident">cast_into</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>()
     }
 }
 
-<span class='doccomment'>/// Returns Ok if the error code is not -1.</span>
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>error_on_minusone</span>(<span class='ident'>py</span> : <span class='ident'>Python</span>, <span class='ident'>result</span> : <span class='ident'>libc</span>::<span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='kw'>if</span> <span class='ident'>result</span> <span class='op'>!=</span> <span class='op'>-</span><span class='number'>1</span> {
-        <span class='prelude-val'>Ok</span>(())
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>))
+<span class="doccomment">/// Returns Ok if the error code is not -1.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_on_minusone</span>(<span class="ident">py</span> : <span class="ident">Python</span>, <span class="ident">result</span> : <span class="ident">libc</span>::<span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">result</span> <span class="op">!=</span> <span class="op">-</span><span class="number">1</span> {
+        <span class="prelude-val">Ok</span>(())
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
     }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> {<span class='ident'>Python</span>, <span class='ident'>PyErr</span>};
-    <span class='kw'>use</span> <span class='ident'>objects</span>::<span class='ident'>exc</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> {<span class="ident">Python</span>, <span class="ident">PyErr</span>};
+    <span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">exc</span>;
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>set_typeerror</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='ident'>PyErr</span>::<span class='ident'>new_lazy_init</span>(<span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span><span class='op'>&gt;</span>(), <span class='prelude-val'>None</span>).<span class='ident'>restore</span>(<span class='ident'>py</span>);
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>PyErr</span>::<span class='ident'>occurred</span>(<span class='ident'>py</span>));
-        <span class='ident'>drop</span>(<span class='ident'>PyErr</span>::<span class='ident'>fetch</span>(<span class='ident'>py</span>));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">set_typeerror</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="ident">PyErr</span>::<span class="ident">new_lazy_init</span>(<span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span><span class="op">&gt;</span>(), <span class="prelude-val">None</span>).<span class="ident">restore</span>(<span class="ident">py</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">PyErr</span>::<span class="ident">occurred</span>(<span class="ident">py</span>));
+        <span class="ident">drop</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>));
     }
 }
 
@@ -991,13 +999,15 @@ fn main() {
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -1031,7 +1041,6 @@ fn main() {
         window.rootPath = "../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

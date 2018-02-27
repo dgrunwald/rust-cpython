@@ -9,6 +9,7 @@
 
     <title>pythonrun.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -219,181 +221,181 @@
 <span id="175">175</span>
 <span id="176">176</span>
 <span id="177">177</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>sync</span>, <span class='ident'>rc</span>, <span class='ident'>marker</span>};
-<span class='kw'>use</span> <span class='ident'>ffi</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::<span class='ident'>Python</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">sync</span>, <span class="ident">rc</span>, <span class="ident">marker</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
 
-<span class='kw'>static</span> <span class='ident'>START</span>: <span class='ident'>sync</span>::<span class='ident'>Once</span> <span class='op'>=</span> <span class='ident'>sync</span>::<span class='ident'>ONCE_INIT</span>;
+<span class="kw">static</span> <span class="ident">START</span>: <span class="ident">sync</span>::<span class="ident">Once</span> <span class="op">=</span> <span class="ident">sync</span>::<span class="ident">ONCE_INIT</span>;
 
-<span class='doccomment'>/// Prepares the use of Python in a free-threaded context.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// If the Python interpreter is not already initialized, this function</span>
-<span class='doccomment'>/// will initialize it with disabled signal handling</span>
-<span class='doccomment'>/// (Python will not raise the `KeyboardInterrupt` exception).</span>
-<span class='doccomment'>/// Python signal handling depends on the notion of a &#39;main thread&#39;, which must be</span>
-<span class='doccomment'>/// the thread that initializes the Python interpreter.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// If both the Python interpreter and Python threading are already initialized,</span>
-<span class='doccomment'>/// this function has no effect.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// # Panic</span>
-<span class='doccomment'>/// If the Python interpreter is initialized but Python threading is not,</span>
-<span class='doccomment'>/// a panic occurs.</span>
-<span class='doccomment'>/// It is not possible to safely access the Python runtime unless the main</span>
-<span class='doccomment'>/// thread (the thread which originally initialized Python) also initializes</span>
-<span class='doccomment'>/// threading.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// When writing an extension module, the `py_module_initializer!` macro</span>
-<span class='doccomment'>/// will ensure that Python threading is initialized.</span>
-<span class='doccomment'>///</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>prepare_freethreaded_python</span>() {
-    <span class='comment'>// Protect against race conditions when Python is not yet initialized</span>
-    <span class='comment'>// and multiple threads concurrently call &#39;prepare_freethreaded_python()&#39;.</span>
-    <span class='comment'>// Note that we do not protect against concurrent initialization of the Python runtime</span>
-    <span class='comment'>// by other users of the Python C API.</span>
-    <span class='ident'>START</span>.<span class='ident'>call_once</span>(<span class='op'>||</span> <span class='kw'>unsafe</span> {
-        <span class='kw'>if</span> <span class='ident'>ffi</span>::<span class='ident'>Py_IsInitialized</span>() <span class='op'>!=</span> <span class='number'>0</span> {
-            <span class='comment'>// If Python is already initialized, we expect Python threading to also be initialized,</span>
-            <span class='comment'>// as we can&#39;t make the existing Python main thread acquire the GIL.</span>
-            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>ffi</span>::<span class='ident'>PyEval_ThreadsInitialized</span>() <span class='op'>!=</span> <span class='number'>0</span>);
-        } <span class='kw'>else</span> {
-            <span class='comment'>// If Python isn&#39;t initialized yet, we expect that Python threading isn&#39;t initialized either.</span>
-            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>ffi</span>::<span class='ident'>PyEval_ThreadsInitialized</span>() <span class='op'>==</span> <span class='number'>0</span>);
-            <span class='comment'>// Initialize Python.</span>
-            <span class='comment'>// We use Py_InitializeEx() with initsigs=0 to disable Python signal handling.</span>
-            <span class='comment'>// Signal handling depends on the notion of a &#39;main thread&#39;, which doesn&#39;t exist in this case.</span>
-            <span class='comment'>// Note that the &#39;main thread&#39; notion in Python isn&#39;t documented properly;</span>
-            <span class='comment'>// and running Python without one is not officially supported.</span>
-            <span class='ident'>ffi</span>::<span class='ident'>Py_InitializeEx</span>(<span class='number'>0</span>);
-            <span class='ident'>ffi</span>::<span class='ident'>PyEval_InitThreads</span>();
-            <span class='comment'>// PyEval_InitThreads() will acquire the GIL,</span>
-            <span class='comment'>// but we don&#39;t want to hold it at this point</span>
-            <span class='comment'>// (it&#39;s not acquired in the other code paths)</span>
-            <span class='comment'>// So immediately release the GIL:</span>
-            <span class='kw'>let</span> <span class='ident'>_thread_state</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyEval_SaveThread</span>();
-            <span class='comment'>// Note that the PyThreadState returned by PyEval_SaveThread is also held in TLS by the Python runtime,</span>
-            <span class='comment'>// and will be restored by PyGILState_Ensure.</span>
+<span class="doccomment">/// Prepares the use of Python in a free-threaded context.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If the Python interpreter is not already initialized, this function</span>
+<span class="doccomment">/// will initialize it with disabled signal handling</span>
+<span class="doccomment">/// (Python will not raise the `KeyboardInterrupt` exception).</span>
+<span class="doccomment">/// Python signal handling depends on the notion of a &#39;main thread&#39;, which must be</span>
+<span class="doccomment">/// the thread that initializes the Python interpreter.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// If both the Python interpreter and Python threading are already initialized,</span>
+<span class="doccomment">/// this function has no effect.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Panic</span>
+<span class="doccomment">/// If the Python interpreter is initialized but Python threading is not,</span>
+<span class="doccomment">/// a panic occurs.</span>
+<span class="doccomment">/// It is not possible to safely access the Python runtime unless the main</span>
+<span class="doccomment">/// thread (the thread which originally initialized Python) also initializes</span>
+<span class="doccomment">/// threading.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// When writing an extension module, the `py_module_initializer!` macro</span>
+<span class="doccomment">/// will ensure that Python threading is initialized.</span>
+<span class="doccomment">///</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prepare_freethreaded_python</span>() {
+    <span class="comment">// Protect against race conditions when Python is not yet initialized</span>
+    <span class="comment">// and multiple threads concurrently call &#39;prepare_freethreaded_python()&#39;.</span>
+    <span class="comment">// Note that we do not protect against concurrent initialization of the Python runtime</span>
+    <span class="comment">// by other users of the Python C API.</span>
+    <span class="ident">START</span>.<span class="ident">call_once</span>(<span class="op">||</span> <span class="kw">unsafe</span> {
+        <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">Py_IsInitialized</span>() <span class="op">!=</span> <span class="number">0</span> {
+            <span class="comment">// If Python is already initialized, we expect Python threading to also be initialized,</span>
+            <span class="comment">// as we can&#39;t make the existing Python main thread acquire the GIL.</span>
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">PyEval_ThreadsInitialized</span>() <span class="op">!=</span> <span class="number">0</span>);
+        } <span class="kw">else</span> {
+            <span class="comment">// If Python isn&#39;t initialized yet, we expect that Python threading isn&#39;t initialized either.</span>
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">PyEval_ThreadsInitialized</span>() <span class="op">==</span> <span class="number">0</span>);
+            <span class="comment">// Initialize Python.</span>
+            <span class="comment">// We use Py_InitializeEx() with initsigs=0 to disable Python signal handling.</span>
+            <span class="comment">// Signal handling depends on the notion of a &#39;main thread&#39;, which doesn&#39;t exist in this case.</span>
+            <span class="comment">// Note that the &#39;main thread&#39; notion in Python isn&#39;t documented properly;</span>
+            <span class="comment">// and running Python without one is not officially supported.</span>
+            <span class="ident">ffi</span>::<span class="ident">Py_InitializeEx</span>(<span class="number">0</span>);
+            <span class="ident">ffi</span>::<span class="ident">PyEval_InitThreads</span>();
+            <span class="comment">// PyEval_InitThreads() will acquire the GIL,</span>
+            <span class="comment">// but we don&#39;t want to hold it at this point</span>
+            <span class="comment">// (it&#39;s not acquired in the other code paths)</span>
+            <span class="comment">// So immediately release the GIL:</span>
+            <span class="kw">let</span> <span class="ident">_thread_state</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyEval_SaveThread</span>();
+            <span class="comment">// Note that the PyThreadState returned by PyEval_SaveThread is also held in TLS by the Python runtime,</span>
+            <span class="comment">// and will be restored by PyGILState_Ensure.</span>
         }
     });
 }
 
-<span class='doccomment'>/// RAII type that represents the Global Interpreter Lock acquisition.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// # Example</span>
-<span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// use cpython::Python;</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// {</span>
-<span class='doccomment'>///     let gil_guard = Python::acquire_gil();</span>
-<span class='doccomment'>///     let py = gil_guard.python();</span>
-<span class='doccomment'>/// } // GIL is released when gil_guard is dropped</span>
-<span class='doccomment'>/// ```</span>
-<span class='attribute'>#[<span class='ident'>must_use</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GILGuard</span> {
-    <span class='ident'>gstate</span>: <span class='ident'>ffi</span>::<span class='ident'>PyGILState_STATE</span>,
-    <span class='comment'>// hack to opt out of Send on stable rust, which doesn&#39;t</span>
-    <span class='comment'>// have negative impls</span>
-    <span class='ident'>no_send</span>: <span class='ident'>marker</span>::<span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='ident'>rc</span>::<span class='ident'>Rc</span><span class='op'>&lt;</span>()<span class='op'>&gt;&gt;</span>
+<span class="doccomment">/// RAII type that represents the Global Interpreter Lock acquisition.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use cpython::Python;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// {</span>
+<span class="doccomment">///     let gil_guard = Python::acquire_gil();</span>
+<span class="doccomment">///     let py = gil_guard.python();</span>
+<span class="doccomment">/// } // GIL is released when gil_guard is dropped</span>
+<span class="doccomment">/// ```</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GILGuard</span> {
+    <span class="ident">gstate</span>: <span class="ident">ffi</span>::<span class="ident">PyGILState_STATE</span>,
+    <span class="comment">// hack to opt out of Send on stable rust, which doesn&#39;t</span>
+    <span class="comment">// have negative impls</span>
+    <span class="ident">no_send</span>: <span class="ident">marker</span>::<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>
 }
 
-<span class='doccomment'>/// The Drop implementation for GILGuard will release the GIL.</span>
-<span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>GILGuard</span> {
-    <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyGILState_Release</span>(<span class='self'>self</span>.<span class='ident'>gstate</span>) }
-    }
-}
-
-<span class='kw'>impl</span> <span class='ident'>GILGuard</span> {
-    <span class='doccomment'>/// Acquires the global interpreter lock, which allows access to the Python runtime.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// If the Python runtime is not already initialized, this function will initialize it.</span>
-    <span class='doccomment'>/// See [prepare_freethreaded_python()](fn.prepare_freethreaded_python.html) for details.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>acquire</span>() <span class='op'>-&gt;</span> <span class='ident'>GILGuard</span> {
-        ::<span class='ident'>pythonrun</span>::<span class='ident'>prepare_freethreaded_python</span>();
-        <span class='kw'>let</span> <span class='ident'>gstate</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>PyGILState_Ensure</span>() }; <span class='comment'>// acquire GIL</span>
-        <span class='ident'>GILGuard</span> { <span class='ident'>gstate</span>: <span class='ident'>gstate</span>, <span class='ident'>no_send</span>: <span class='ident'>marker</span>::<span class='ident'>PhantomData</span> }
-    }
-
-    <span class='doccomment'>/// Retrieves the marker type that proves that the GIL was acquired.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;p</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;p</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> { <span class='ident'>Python</span>::<span class='ident'>assume_gil_acquired</span>() }
+<span class="doccomment">/// The Drop implementation for GILGuard will release the GIL.</span>
+<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">GILGuard</span> {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyGILState_Release</span>(<span class="self">self</span>.<span class="ident">gstate</span>) }
     }
 }
 
-<span class='doccomment'>/// Mutex-like wrapper object for data that is protected by the Python GIL.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// # Example</span>
-<span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// use std::cell::Cell;</span>
-<span class='doccomment'>/// use cpython::{Python, GILProtected};</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// let data = GILProtected::new(Cell::new(0));</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// {</span>
-<span class='doccomment'>///     let gil_guard = Python::acquire_gil();</span>
-<span class='doccomment'>///     let cell = data.get(gil_guard.python());</span>
-<span class='doccomment'>///     cell.set(cell.get() + 1);</span>
-<span class='doccomment'>/// }</span>
-<span class='doccomment'>/// ```</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='ident'>data</span>: <span class='ident'>T</span>
+<span class="kw">impl</span> <span class="ident">GILGuard</span> {
+    <span class="doccomment">/// Acquires the global interpreter lock, which allows access to the Python runtime.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the Python runtime is not already initialized, this function will initialize it.</span>
+    <span class="doccomment">/// See [prepare_freethreaded_python()](fn.prepare_freethreaded_python.html) for details.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">acquire</span>() <span class="op">-&gt;</span> <span class="ident">GILGuard</span> {
+        ::<span class="ident">pythonrun</span>::<span class="ident">prepare_freethreaded_python</span>();
+        <span class="kw">let</span> <span class="ident">gstate</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyGILState_Ensure</span>() }; <span class="comment">// acquire GIL</span>
+        <span class="ident">GILGuard</span> { <span class="ident">gstate</span>: <span class="ident">gstate</span>, <span class="ident">no_send</span>: <span class="ident">marker</span>::<span class="ident">PhantomData</span> }
+    }
+
+    <span class="doccomment">/// Retrieves the marker type that proves that the GIL was acquired.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> { <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>() }
+    }
 }
 
-<span class='kw'>unsafe</span> <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Send</span><span class='op'>&gt;</span> <span class='ident'>Send</span> <span class='kw'>for</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> { }
+<span class="doccomment">/// Mutex-like wrapper object for data that is protected by the Python GIL.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use std::cell::Cell;</span>
+<span class="doccomment">/// use cpython::{Python, GILProtected};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let data = GILProtected::new(Cell::new(0));</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// {</span>
+<span class="doccomment">///     let gil_guard = Python::acquire_gil();</span>
+<span class="doccomment">///     let cell = data.get(gil_guard.python());</span>
+<span class="doccomment">///     cell.set(cell.get() + 1);</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">data</span>: <span class="ident">T</span>
+}
 
-<span class='doccomment'>/// Because `GILProtected` ensures that the contained data</span>
-<span class='doccomment'>/// is only accessed while the GIL is acquired,</span>
-<span class='doccomment'>/// it can implement `Sync` even if the contained data</span>
-<span class='doccomment'>/// does not.</span>
-<span class='kw'>unsafe</span> <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Send</span><span class='op'>&gt;</span> <span class='ident'>Sync</span> <span class='kw'>for</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> { }
+<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Send</span><span class="op">&gt;</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> { }
 
-<span class='kw'>impl</span> <span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// Creates a new instance of `GILProtected`.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>)]</span>
-    <span class='kw'>pub</span> <span class='kw'>const</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>data</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-        <span class='ident'>GILProtected</span> { <span class='ident'>data</span>: <span class='ident'>data</span> }
+<span class="doccomment">/// Because `GILProtected` ensures that the contained data</span>
+<span class="doccomment">/// is only accessed while the GIL is acquired,</span>
+<span class="doccomment">/// it can implement `Sync` even if the contained data</span>
+<span class="doccomment">/// does not.</span>
+<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Send</span><span class="op">&gt;</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> { }
+
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Creates a new instance of `GILProtected`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="ident">GILProtected</span> { <span class="ident">data</span>: <span class="ident">data</span> }
     }
 
-    <span class='doccomment'>/// Creates a new instance of `GILProtected`.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;nightly&quot;</span>))]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>data</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>GILProtected</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
-        <span class='ident'>GILProtected</span> { <span class='ident'>data</span>: <span class='ident'>data</span> }
+    <span class="doccomment">/// Creates a new instance of `GILProtected`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">GILProtected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="ident">GILProtected</span> { <span class="ident">data</span>: <span class="ident">data</span> }
     }
 
-    <span class='doccomment'>/// Returns a shared reference to the data stored in the `GILProtected`.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Requires a `Python` instance as proof that the GIL is acquired.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>T</span> {
-        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>data</span>
+    <span class="doccomment">/// Returns a shared reference to the data stored in the `GILProtected`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Requires a `Python` instance as proof that the GIL is acquired.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>
     }
 
-    <span class='doccomment'>/// Consumes the `GILProtected`, returning the wrapped value.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>into_inner</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>T</span> {
-        <span class='self'>self</span>.<span class='ident'>data</span>
+    <span class="doccomment">/// Consumes the `GILProtected`, returning the wrapped value.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+        <span class="self">self</span>.<span class="ident">data</span>
     }
 }
 
@@ -415,13 +417,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -455,7 +459,6 @@
         window.rootPath = "../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

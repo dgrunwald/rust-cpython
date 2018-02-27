@@ -9,6 +9,7 @@
 
     <title>mod.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -185,146 +187,164 @@
 <span id="141">141</span>
 <span id="142">142</span>
 <span id="143">143</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2016 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>mod</span> <span class='ident'>py_class</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python27-sys&quot;</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>py_class_impl2</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;python3-sys&quot;</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>py_class_impl3</span>;
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span> <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>slots</span>;
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span> <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>members</span>;
-<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>gc</span>;
+<span class="kw">mod</span> <span class="ident">py_class</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">py_class_impl2</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python3-sys&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">py_class_impl3</span>;
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span> <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">slots</span>;
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span> <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">members</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">gc</span>;
 
-<span class='kw'>use</span> <span class='ident'>libc</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>mem</span>, <span class='ident'>ptr</span>, <span class='ident'>cell</span>};
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='self'>self</span>, <span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyType</span>};
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>};
-<span class='kw'>use</span> <span class='ident'>ffi</span>;
+<span class="kw">use</span> <span class="ident">libc</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">ptr</span>, <span class="ident">cell</span>};
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="self">self</span>, <span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+<span class="kw">use</span> <span class="ident">objects</span>::{<span class="ident">PyObject</span>, <span class="ident">PyType</span>, <span class="ident">PyModule</span>};
+<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>;
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>CompareOp</span> {
-    <span class='ident'>Lt</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_LT</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
-    <span class='ident'>Le</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_LE</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
-    <span class='ident'>Eq</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_EQ</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
-    <span class='ident'>Ne</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_NE</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
-    <span class='ident'>Gt</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_GT</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
-    <span class='ident'>Ge</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_GE</span> <span class='kw'>as</span> <span class='ident'>isize</span>
+<span class="comment">// TODO: consider moving CompareOp to a different module, so that it isn&#39;t exported via two paths</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CompareOp</span> {
+    <span class="ident">Lt</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_LT</span> <span class="kw">as</span> <span class="ident">isize</span>,
+    <span class="ident">Le</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_LE</span> <span class="kw">as</span> <span class="ident">isize</span>,
+    <span class="ident">Eq</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_EQ</span> <span class="kw">as</span> <span class="ident">isize</span>,
+    <span class="ident">Ne</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_NE</span> <span class="kw">as</span> <span class="ident">isize</span>,
+    <span class="ident">Gt</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_GT</span> <span class="kw">as</span> <span class="ident">isize</span>,
+    <span class="ident">Ge</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_GE</span> <span class="kw">as</span> <span class="ident">isize</span>
 }
 
-<span class='doccomment'>/// Trait implemented by the types produced by the `py_class!()` macro.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>PythonObjectFromPyClassMacro</span> : <span class='ident'>python</span>::<span class='ident'>PythonObjectWithTypeObject</span> {
-    <span class='kw'>fn</span> <span class='ident'>initialize</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyType</span><span class='op'>&gt;</span>;
+<span class="doccomment">/// Trait implemented by the types produced by the `py_class!()` macro.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This is an unstable implementation detail; do not implement manually!</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PythonObjectFromPyClassMacro</span> : <span class="ident">python</span>::<span class="ident">PythonObjectWithTypeObject</span> {
+    <span class="doccomment">/// Initializes the class.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// module_name: the name of the parent module into which the class will be placed.</span>
+    <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">module_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyType</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Initializes the class and adds it to the module.</span>
+    <span class="kw">fn</span> <span class="ident">add_to_module</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">module</span>: <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>data_offset</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>base_size</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-    <span class='kw'>let</span> <span class='ident'>align</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>align_of</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>();
-    <span class='comment'>// round base_size up to next multiple of align</span>
-    (<span class='ident'>base_size</span> <span class='op'>+</span> <span class='ident'>align</span> <span class='op'>-</span> <span class='number'>1</span>) <span class='op'>/</span> <span class='ident'>align</span> <span class='op'>*</span> <span class='ident'>align</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_offset</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">base_size</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">let</span> <span class="ident">align</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">align_of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>();
+    <span class="comment">// round base_size up to next multiple of align</span>
+    (<span class="ident">base_size</span> <span class="op">+</span> <span class="ident">align</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">/</span> <span class="ident">align</span> <span class="op">*</span> <span class="ident">align</span>
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>data_new_size</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>base_size</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-    <span class='ident'>data_offset</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>base_size</span>) <span class='op'>+</span> <span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>()
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_new_size</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">base_size</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="ident">data_offset</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">base_size</span>) <span class="op">+</span> <span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>()
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>data_get</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>T</span> {
-    <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> (<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>u8</span>).<span class='ident'>offset</span>(<span class='ident'>offset</span> <span class='kw'>as</span> <span class='ident'>isize</span>) <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>T</span>;
-    <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>ptr</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">data_get</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">_py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObject</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span> {
+    <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="ident">obj</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">offset</span> <span class="kw">as</span> <span class="ident">isize</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span>;
+    <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">ptr</span>
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>data_init</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>PyObject</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>, <span class='ident'>value</span>: <span class='ident'>T</span>)
-    <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Send</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">data_init</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">_py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObject</span>, <span class="ident">offset</span>: <span class="ident">usize</span>, <span class="ident">value</span>: <span class="ident">T</span>)
+    <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
 {
-    <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> (<span class='ident'>obj</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span>).<span class='ident'>offset</span>(<span class='ident'>offset</span> <span class='kw'>as</span> <span class='ident'>isize</span>) <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>T</span>;
-    <span class='ident'>ptr</span>::<span class='ident'>write</span>(<span class='ident'>ptr</span>, <span class='ident'>value</span>)
+    <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="ident">obj</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">offset</span> <span class="kw">as</span> <span class="ident">isize</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
+    <span class="ident">ptr</span>::<span class="ident">write</span>(<span class="ident">ptr</span>, <span class="ident">value</span>)
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>data_drop</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>, <span class='ident'>obj</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>) {
-    <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> (<span class='ident'>obj</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span>).<span class='ident'>offset</span>(<span class='ident'>offset</span> <span class='kw'>as</span> <span class='ident'>isize</span>) <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>T</span>;
-    <span class='ident'>ptr</span>::<span class='ident'>drop_in_place</span>(<span class='ident'>ptr</span>)
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">data_drop</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">_py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) {
+    <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">offset</span> <span class="kw">as</span> <span class="ident">isize</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
+    <span class="ident">ptr</span>::<span class="ident">drop_in_place</span>(<span class="ident">ptr</span>)
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_ready</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>ffi</span>::<span class='ident'>PyTypeObject</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-    (<span class='ident'>ty</span>.<span class='ident'>tp_flags</span> <span class='kw-2'>&amp;</span> <span class='ident'>ffi</span>::<span class='ident'>Py_TPFLAGS_READY</span>) <span class='op'>!=</span> <span class='number'>0</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_ready</span>(<span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="ident">ffi</span>::<span class="ident">PyTypeObject</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    (<span class="ident">ty</span>.<span class="ident">tp_flags</span> <span class="op">&amp;</span> <span class="ident">ffi</span>::<span class="ident">Py_TPFLAGS_READY</span>) <span class="op">!=</span> <span class="number">0</span>
 }
 
-<span class='doccomment'>/// A PythonObject that is usable as a base type with the `py_class!()` macro.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>BaseObject</span> : <span class='ident'>PythonObject</span> {
-    <span class='doccomment'>/// Gets the size of the object, in bytes.</span>
-    <span class='kw'>fn</span> <span class='ident'>size</span>() <span class='op'>-&gt;</span> <span class='ident'>usize</span>;
+<span class="doccomment">/// A PythonObject that is usable as a base type with the `py_class!()` macro.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BaseObject</span> : <span class="ident">PythonObject</span> {
+    <span class="doccomment">/// Gets the size of the object, in bytes.</span>
+    <span class="kw">fn</span> <span class="ident">size</span>() <span class="op">-&gt;</span> <span class="ident">usize</span>;
 
-    <span class='kw'>type</span> <span class='ident'>InitType</span>;
+    <span class="kw">type</span> <span class="ident">InitType</span>;
 
-    <span class='doccomment'>/// Allocates a new object (usually by calling ty-&gt;tp_alloc),</span>
-    <span class='doccomment'>/// and initializes it using init_val.</span>
-    <span class='doccomment'>/// `ty` must be derived from the Self type, and the resulting object</span>
-    <span class='doccomment'>/// must be of type `ty`.</span>
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span>, <span class='ident'>init_val</span>: <span class='self'>Self</span>::<span class='ident'>InitType</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>;
+    <span class="doccomment">/// Allocates a new object (usually by calling ty-&gt;tp_alloc),</span>
+    <span class="doccomment">/// and initializes it using init_val.</span>
+    <span class="doccomment">/// `ty` must be derived from the Self type, and the resulting object</span>
+    <span class="doccomment">/// must be of type `ty`.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="ident">PyType</span>, <span class="ident">init_val</span>: <span class="self">Self</span>::<span class="ident">InitType</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
 
-    <span class='doccomment'>/// Calls the rust destructor for the object and frees the memory</span>
-    <span class='doccomment'>/// (usually by calling ptr-&gt;ob_type-&gt;tp_free).</span>
-    <span class='doccomment'>/// This function is used as tp_dealloc implementation.</span>
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>dealloc</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>);
+    <span class="doccomment">/// Calls the rust destructor for the object and frees the memory</span>
+    <span class="doccomment">/// (usually by calling ptr-&gt;ob_type-&gt;tp_free).</span>
+    <span class="doccomment">/// This function is used as tp_dealloc implementation.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>);
 }
 
-<span class='kw'>impl</span> <span class='ident'>BaseObject</span> <span class='kw'>for</span> <span class='ident'>PyObject</span> {
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>size</span>() <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-        <span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>ffi</span>::<span class='ident'>PyObject</span><span class='op'>&gt;</span>()
+<span class="kw">impl</span> <span class="ident">BaseObject</span> <span class="kw">for</span> <span class="ident">PyObject</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">size</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
+        <span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>()
     }
 
-    <span class='kw'>type</span> <span class='ident'>InitType</span> <span class='op'>=</span> ();
+    <span class="kw">type</span> <span class="ident">InitType</span> <span class="op">=</span> ();
 
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>alloc</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ty</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyType</span>, <span class='ident'>_init_val</span>: ()) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_GenericAlloc</span>(<span class='ident'>ty</span>.<span class='ident'>as_type_ptr</span>(), <span class='number'>0</span>);
-        <span class='comment'>//println!(&quot;BaseObject::alloc({:?}) = {:?}&quot;, ty.as_type_ptr(), ptr);</span>
-        <span class='ident'>err</span>::<span class='ident'>result_from_owned_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>)
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="ident">PyType</span>, <span class="ident">_init_val</span>: ()) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyType_GenericAlloc</span>(<span class="ident">ty</span>.<span class="ident">as_type_ptr</span>(), <span class="number">0</span>);
+        <span class="comment">//println!(&quot;BaseObject::alloc({:?}) = {:?}&quot;, ty.as_type_ptr(), ptr);</span>
+        <span class="ident">err</span>::<span class="ident">result_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ptr</span>)
     }
 
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>dealloc</span>(<span class='ident'>_py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) {
-        <span class='comment'>//println!(&quot;BaseObject::dealloc({:?})&quot;, ptr);</span>
-        <span class='comment'>// Unfortunately, there is no PyType_GenericFree, so</span>
-        <span class='comment'>// we have to manually un-do the work of PyType_GenericAlloc:</span>
-        <span class='kw'>let</span> <span class='ident'>ty</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>Py_TYPE</span>(<span class='ident'>obj</span>);
-        <span class='kw'>if</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_IS_GC</span>(<span class='ident'>ty</span>) <span class='op'>!=</span> <span class='number'>0</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyObject_GC_Del</span>(<span class='ident'>obj</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>libc</span>::<span class='ident'>c_void</span>);
-        } <span class='kw'>else</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>PyObject_Free</span>(<span class='ident'>obj</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>libc</span>::<span class='ident'>c_void</span>);
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
+        <span class="comment">//println!(&quot;BaseObject::dealloc({:?})&quot;, ptr);</span>
+        <span class="comment">// Unfortunately, there is no PyType_GenericFree, so</span>
+        <span class="comment">// we have to manually un-do the work of PyType_GenericAlloc:</span>
+        <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_TYPE</span>(<span class="ident">obj</span>);
+        <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">PyType_IS_GC</span>(<span class="ident">ty</span>) <span class="op">!=</span> <span class="number">0</span> {
+            <span class="ident">ffi</span>::<span class="ident">PyObject_GC_Del</span>(<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libc</span>::<span class="ident">c_void</span>);
+        } <span class="kw">else</span> {
+            <span class="ident">ffi</span>::<span class="ident">PyObject_Free</span>(<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libc</span>::<span class="ident">c_void</span>);
         }
-        <span class='comment'>// For heap types, PyType_GenericAlloc calls INCREF on the type objects,</span>
-        <span class='comment'>// so we need to call DECREF here:</span>
-        <span class='kw'>if</span> <span class='ident'>ffi</span>::<span class='ident'>PyType_HasFeature</span>(<span class='ident'>ty</span>, <span class='ident'>ffi</span>::<span class='ident'>Py_TPFLAGS_HEAPTYPE</span>) <span class='op'>!=</span> <span class='number'>0</span> {
-            <span class='ident'>ffi</span>::<span class='ident'>Py_DECREF</span>(<span class='ident'>ty</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>);
+        <span class="comment">// For heap types, PyType_GenericAlloc calls INCREF on the type objects,</span>
+        <span class="comment">// so we need to call DECREF here:</span>
+        <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">PyType_HasFeature</span>(<span class="ident">ty</span>, <span class="ident">ffi</span>::<span class="ident">Py_TPFLAGS_HEAPTYPE</span>) <span class="op">!=</span> <span class="number">0</span> {
+            <span class="ident">ffi</span>::<span class="ident">Py_DECREF</span>(<span class="ident">ty</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>);
         }
     }
 }
@@ -347,13 +367,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -387,7 +409,6 @@
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
     <script defer src="../../../search-index.js"></script>
 </body>

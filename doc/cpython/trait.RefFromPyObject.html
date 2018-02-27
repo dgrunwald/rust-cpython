@@ -9,6 +9,7 @@
 
     <title>cpython::RefFromPyObject - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc trait">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'RefFromPyObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait RefFromPyObject</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#required-methods">Required Methods</a><div class="sidebar-links"><a href="#tymethod.with_extracted">with_extracted</a></div><a class="sidebar-title" href="#foreign-impls">Implementations on Foreign Types</a><div class="sidebar-links"><a href="#impl-RefFromPyObject">str</a></div><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'RefFromPyObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -42,22 +44,31 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>RefFromPyObject</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class="trait" href=''>RefFromPyObject</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span><a class='srclink' href='../src/cpython/conversion.rs.html#107-110' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait RefFromPyObject {
-    fn <a href='#tymethod.with_extracted' class='fnname'>with_extracted</a>&lt;F, R&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>, f: F) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;R&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;Self) -&gt; R</span>;
+    fn <a href='#tymethod.with_extracted' class='fnname'>with_extracted</a>&lt;F, R&gt;(py: <a class="struct" href="../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: &amp;<a class="struct" href="../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>, f: F) -&gt; <a class="type" href="../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;R&gt;<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self) -&gt; R</span>;
 }</pre>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.with_extracted' class='method stab '><span id='with_extracted.v' class='invisible'><code>fn <a href='#tymethod.with_extracted' class='fnname'>with_extracted</a>&lt;F, R&gt;(py: <a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>, obj: &amp;<a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a>, f: F) -&gt; <a class='type' href='../cpython/type.PyResult.html' title='cpython::PyResult'>PyResult</a>&lt;R&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;Self) -&gt; R</span></code></span></h3></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h3 id='tymethod.with_extracted' class='method'><span id='with_extracted.v' class='invisible'><code>fn <a href='#tymethod.with_extracted' class='fnname'>with_extracted</a>&lt;F, R&gt;(py: <a class="struct" href="../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: &amp;<a class="struct" href="../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>, f: F) -&gt; <a class="type" href="../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;R&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self) -&gt; R,&nbsp;</span></code></span></h3></div>
+                <h2 id='foreign-impls' class='small-section-header'>
+                  Implementations on Foreign Types<a href='#foreign-impls' class='anchor'></a>
+                </h2>
+            <h3 id='impl-RefFromPyObject' class='impl'><span class='in-band'><code>impl <a class="trait" href="../cpython/trait.RefFromPyObject.html" title="trait cpython::RefFromPyObject">RefFromPyObject</a> for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></code><a href='#impl-RefFromPyObject' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/objects/string.rs.html#439-446' title='goto source code'>[src]</a></span></h3>
+<span class='docblock autohide'><div class='impl-items'><h4 id='method.with_extracted' class="method"><span id='with_extracted.v-1' class='invisible'><code>fn <a href='#method.with_extracted' class='fnname'>with_extracted</a>&lt;F, R&gt;(py: <a class="struct" href="../cpython/struct.Python.html" title="struct cpython::Python">Python</a>, obj: &amp;<a class="struct" href="../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>, f: F) -&gt; <a class="type" href="../cpython/type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;R&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; R,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/cpython/objects/string.rs.html#440-445' title='goto source code'>[src]</a></span></h4>
+</div></span>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T:&nbsp;?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a>&gt; RefFromPyObject for T <span class='where'>where &amp;'a T: <a class='trait' href='../cpython/trait.FromPyObject.html' title='cpython::FromPyObject'>FromPyObject</a>&lt;'a&gt;</span></code></li>
-<li><code>impl RefFromPyObject for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></li>
+    <li><code>impl&lt;T:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>&gt; RefFromPyObject for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;'a </a>T: <a class="trait" href="../cpython/trait.FromPyObject.html" title="trait cpython::FromPyObject">FromPyObject</a>&lt;'a&gt;,&nbsp;</span></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/cpython/trait.RefFromPyObject.js">
                  </script></section>
@@ -77,13 +88,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -117,7 +130,6 @@
         window.rootPath = "../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

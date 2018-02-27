@@ -9,6 +9,7 @@
 
     <title>argparse.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -466,431 +468,595 @@
 <span id="422">422</span>
 <span id="423">423</span>
 <span id="424">424</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='doccomment'>//! This module contains logic for parsing a python argument list.</span>
-<span class='doccomment'>//! See also the macros `py_argparse!`, `py_fn!` and `py_method!`.</span>
+<span class="doccomment">//! This module contains logic for parsing a python argument list.</span>
+<span class="doccomment">//! See also the macros `py_argparse!`, `py_fn!` and `py_method!`.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
-<span class='kw'>use</span> <span class='ident'>objects</span>::{<span class='ident'>PyObject</span>, <span class='ident'>PyTuple</span>, <span class='ident'>PyDict</span>, <span class='ident'>PyString</span>, <span class='ident'>exc</span>};
-<span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-<span class='kw'>use</span> <span class='ident'>ffi</span>;
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyResult</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+<span class="kw">use</span> <span class="ident">objects</span>::{<span class="ident">PyObject</span>, <span class="ident">PyTuple</span>, <span class="ident">PyDict</span>, <span class="ident">PyString</span>, <span class="ident">exc</span>};
+<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyResult</span>};
 
-<span class='doccomment'>/// Description of a python parameter; used for `parse_args()`.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ParamDescription</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// The name of the parameter.</span>
-    <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>,
-    <span class='doccomment'>/// Whether the parameter is optional.</span>
-    <span class='kw'>pub</span> <span class='ident'>is_optional</span>: <span class='ident'>bool</span>
+<span class="doccomment">/// Description of a python parameter; used for `parse_args()`.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamDescription</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The name of the parameter.</span>
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    <span class="doccomment">/// Whether the parameter is optional.</span>
+    <span class="kw">pub</span> <span class="ident">is_optional</span>: <span class="ident">bool</span>
 }
 
-<span class='doccomment'>/// Parse argument list</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * fname:  Name of the current function</span>
-<span class='doccomment'>/// * params: Declared parameters of the function</span>
-<span class='doccomment'>/// * args:   Positional arguments</span>
-<span class='doccomment'>/// * kwargs: Keyword arguments</span>
-<span class='doccomment'>/// * output: Output array that receives the arguments.</span>
-<span class='doccomment'>///           Must have same length as `params` and must be initialized to `None`.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_args</span>(
-    <span class='ident'>py</span>: <span class='ident'>Python</span>,
-    <span class='ident'>fname</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>str</span><span class='op'>&gt;</span>, <span class='ident'>params</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>ParamDescription</span>],
-    <span class='ident'>args</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyTuple</span>, <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>PyDict</span><span class='op'>&gt;</span>,
-    <span class='ident'>output</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span>[<span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span>]
-) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>
+<span class="doccomment">/// Parse argument list</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * fname:  Name of the current function</span>
+<span class="doccomment">/// * params: Declared parameters of the function</span>
+<span class="doccomment">/// * args:   Positional arguments</span>
+<span class="doccomment">/// * kwargs: Keyword arguments</span>
+<span class="doccomment">/// * output: Output array that receives the arguments.</span>
+<span class="doccomment">///           Must have same length as `params` and must be initialized to `None`.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_args</span>(
+    <span class="ident">py</span>: <span class="ident">Python</span>,
+    <span class="ident">fname</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">params</span>: <span class="kw-2">&amp;</span>[<span class="ident">ParamDescription</span>],
+    <span class="ident">args</span>: <span class="kw-2">&amp;</span><span class="ident">PyTuple</span>, <span class="ident">kwargs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
+    <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span>[<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>]
+) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
 {
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>params</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='ident'>output</span>.<span class='ident'>len</span>());
-    <span class='kw'>let</span> <span class='ident'>nargs</span> <span class='op'>=</span> <span class='ident'>args</span>.<span class='ident'>len</span>(<span class='ident'>py</span>);
-    <span class='kw'>let</span> <span class='ident'>nkeywords</span> <span class='op'>=</span> <span class='ident'>kwargs</span>.<span class='ident'>map_or</span>(<span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>len</span>(<span class='ident'>py</span>));
-    <span class='kw'>if</span> <span class='ident'>nargs</span> <span class='op'>+</span> <span class='ident'>nkeywords</span> <span class='op'>&gt;</span> <span class='ident'>params</span>.<span class='ident'>len</span>() {
-        <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>err</span>::<span class='ident'>PyErr</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span>, _<span class='op'>&gt;</span>(<span class='ident'>py</span>,
-            <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}{} takes at most {} argument{} ({} given)&quot;</span>,
-                    <span class='ident'>fname</span>.<span class='ident'>unwrap_or</span>(<span class='string'>&quot;function&quot;</span>),
-                    <span class='kw'>if</span> <span class='ident'>fname</span>.<span class='ident'>is_some</span>() { <span class='string'>&quot;()&quot;</span> } <span class='kw'>else</span> { <span class='string'>&quot;&quot;</span> },
-                    <span class='ident'>params</span>.<span class='ident'>len</span>(),
-                    <span class='kw'>if</span> <span class='ident'>params</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='number'>1</span> { <span class='string'>&quot;s&quot;</span> } <span class='kw'>else</span> { <span class='string'>&quot;&quot;</span> },
-                    <span class='ident'>nargs</span> <span class='op'>+</span> <span class='ident'>nkeywords</span>
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">params</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="ident">output</span>.<span class="ident">len</span>());
+    <span class="kw">let</span> <span class="ident">nargs</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">len</span>(<span class="ident">py</span>);
+    <span class="kw">let</span> <span class="ident">nkeywords</span> <span class="op">=</span> <span class="ident">kwargs</span>.<span class="ident">map_or</span>(<span class="number">0</span>, <span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">len</span>(<span class="ident">py</span>));
+    <span class="kw">if</span> <span class="ident">nargs</span> <span class="op">+</span> <span class="ident">nkeywords</span> <span class="op">&gt;</span> <span class="ident">params</span>.<span class="ident">len</span>() {
+        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{} takes at most {} argument{} ({} given)&quot;</span>,
+                    <span class="ident">fname</span>.<span class="ident">unwrap_or</span>(<span class="string">&quot;function&quot;</span>),
+                    <span class="kw">if</span> <span class="ident">fname</span>.<span class="ident">is_some</span>() { <span class="string">&quot;()&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;&quot;</span> },
+                    <span class="ident">params</span>.<span class="ident">len</span>(),
+                    <span class="kw">if</span> <span class="ident">params</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> { <span class="string">&quot;s&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;&quot;</span> },
+                    <span class="ident">nargs</span> <span class="op">+</span> <span class="ident">nkeywords</span>
                 )));
     }
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>used_keywords</span> <span class='op'>=</span> <span class='number'>0</span>;
-    <span class='comment'>// Iterate through the parameters and assign values to output:</span>
-    <span class='kw'>for</span> (<span class='ident'>i</span>, (<span class='ident'>p</span>, <span class='ident'>out</span>)) <span class='kw'>in</span> <span class='ident'>params</span>.<span class='ident'>iter</span>().<span class='ident'>zip</span>(<span class='ident'>output</span>).<span class='ident'>enumerate</span>() {
-        <span class='kw'>match</span> <span class='ident'>kwargs</span>.<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='ident'>p</span>.<span class='ident'>name</span>)) {
-            <span class='prelude-val'>Some</span>(<span class='ident'>kwarg</span>) <span class='op'>=&gt;</span> {
-                <span class='op'>*</span><span class='ident'>out</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>kwarg</span>);
-                <span class='ident'>used_keywords</span> <span class='op'>+=</span> <span class='number'>1</span>;
-                <span class='kw'>if</span> <span class='ident'>i</span> <span class='op'>&lt;</span> <span class='ident'>nargs</span> {
-                    <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>err</span>::<span class='ident'>PyErr</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span>, _<span class='op'>&gt;</span>(<span class='ident'>py</span>,
-                        <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Argument given by name (&#39;{}&#39;) and position ({})&quot;</span>,
-                                <span class='ident'>p</span>.<span class='ident'>name</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)));
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">used_keywords</span> <span class="op">=</span> <span class="number">0</span>;
+    <span class="comment">// Iterate through the parameters and assign values to output:</span>
+    <span class="kw">for</span> (<span class="ident">i</span>, (<span class="ident">p</span>, <span class="ident">out</span>)) <span class="kw">in</span> <span class="ident">params</span>.<span class="ident">iter</span>().<span class="ident">zip</span>(<span class="ident">output</span>).<span class="ident">enumerate</span>() {
+        <span class="kw">match</span> <span class="ident">kwargs</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="ident">p</span>.<span class="ident">name</span>)) {
+            <span class="prelude-val">Some</span>(<span class="ident">kwarg</span>) <span class="op">=&gt;</span> {
+                <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kwarg</span>);
+                <span class="ident">used_keywords</span> <span class="op">+=</span> <span class="number">1</span>;
+                <span class="kw">if</span> <span class="ident">i</span> <span class="op">&lt;</span> <span class="ident">nargs</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Argument given by name (&#39;{}&#39;) and position ({})&quot;</span>,
+                                <span class="ident">p</span>.<span class="ident">name</span>, <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
                 }
             },
-            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>if</span> <span class='ident'>i</span> <span class='op'>&lt;</span> <span class='ident'>nargs</span> {
-                    <span class='op'>*</span><span class='ident'>out</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>args</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='ident'>i</span>));
-                } <span class='kw'>else</span> {
-                    <span class='op'>*</span><span class='ident'>out</span> <span class='op'>=</span> <span class='prelude-val'>None</span>;
-                    <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>p</span>.<span class='ident'>is_optional</span> {
-                        <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>err</span>::<span class='ident'>PyErr</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span>, _<span class='op'>&gt;</span>(<span class='ident'>py</span>,
-                            <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Required argument (&#39;{}&#39;) (pos {}) not found&quot;</span>,
-                                    <span class='ident'>p</span>.<span class='ident'>name</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)));
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
+                <span class="kw">if</span> <span class="ident">i</span> <span class="op">&lt;</span> <span class="ident">nargs</span> {
+                    <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">args</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="ident">i</span>));
+                } <span class="kw">else</span> {
+                    <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+                    <span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">is_optional</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Required argument (&#39;{}&#39;) (pos {}) not found&quot;</span>,
+                                    <span class="ident">p</span>.<span class="ident">name</span>, <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
                     }
                 }
             }
         }
     }
-    <span class='kw'>if</span> <span class='ident'>used_keywords</span> <span class='op'>!=</span> <span class='ident'>nkeywords</span> {
-        <span class='comment'>// check for extraneous keyword arguments</span>
-        <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>_value</span>) <span class='kw'>in</span> <span class='ident'>kwargs</span>.<span class='ident'>unwrap</span>().<span class='ident'>items</span>(<span class='ident'>py</span>) {
-            <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>key</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyString</span><span class='op'>&gt;</span>(<span class='ident'>py</span>)).<span class='ident'>to_string</span>(<span class='ident'>py</span>));
-            <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>params</span>.<span class='ident'>iter</span>().<span class='ident'>any</span>(<span class='op'>|</span><span class='ident'>p</span><span class='op'>|</span> <span class='ident'>p</span>.<span class='ident'>name</span> <span class='op'>==</span> <span class='ident'>key</span>) {
-                <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>err</span>::<span class='ident'>PyErr</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>TypeError</span>, _<span class='op'>&gt;</span>(<span class='ident'>py</span>,
-                    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;&#39;{}&#39; is an invalid keyword argument for this function&quot;</span>,
-                            <span class='ident'>key</span>)));
+    <span class="kw">if</span> <span class="ident">used_keywords</span> <span class="op">!=</span> <span class="ident">nkeywords</span> {
+        <span class="comment">// check for extraneous keyword arguments</span>
+        <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">_value</span>) <span class="kw">in</span> <span class="ident">kwargs</span>.<span class="ident">unwrap</span>().<span class="ident">items</span>(<span class="ident">py</span>) {
+            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="ident">key</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyString</span><span class="op">&gt;</span>(<span class="ident">py</span>)).<span class="ident">to_string</span>(<span class="ident">py</span>));
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">params</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">name</span> <span class="op">==</span> <span class="ident">key</span>) {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                    <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;&#39;{}&#39; is an invalid keyword argument for this function&quot;</span>,
+                            <span class="ident">key</span>)));
             }
         }
     }
-    <span class='prelude-val'>Ok</span>(())
+    <span class="prelude-val">Ok</span>(())
 }
 
-<span class='doccomment'>/// This macro is used to parse a parameter list into a set of variables.</span>
-<span class='doccomment'>/// </span>
-<span class='doccomment'>/// Syntax: `py_argparse!(py, fname, args, kwargs, (parameter-list) { body })`</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `py`: the `Python` token</span>
-<span class='doccomment'>/// * `fname`: expression of type `Option&lt;&amp;str&gt;`: Name of the function used in error messages.</span>
-<span class='doccomment'>/// * `args`: expression of type `&amp;PyTuple`: The position arguments</span>
-<span class='doccomment'>/// * `kwargs`: expression of type `Option&lt;&amp;PyDict&gt;`: The named arguments</span>
-<span class='doccomment'>/// * `parameter-list`: a comma-separated list of parameter declarations.</span>
-<span class='doccomment'>///   Parameter declarations have one of these formats:</span>
-<span class='doccomment'>///    1. `name`</span>
-<span class='doccomment'>///    2. `name: ty`</span>
-<span class='doccomment'>///    3. `name: ty = default_value`</span>
-<span class='doccomment'>///    4. `*name`</span>
-<span class='doccomment'>///    5. `*name : ty`</span>
-<span class='doccomment'>///    6. `**name`</span>
-<span class='doccomment'>///    7. `**name : ty`</span>
-<span class='doccomment'>///   The types used must implement the `FromPyObject` trait.</span>
-<span class='doccomment'>///   If no type is specified, the parameter implicitly uses</span>
-<span class='doccomment'>///   `&amp;PyObject` (format 1), `&amp;PyTuple` (format 4) or `&amp;PyDict` (format 6).</span>
-<span class='doccomment'>///   If a default value is specified, it must be a compile-time constant</span>
-<span class='comment'>//    of type `ty`.</span>
-<span class='doccomment'>/// * `body`: expression of type `PyResult&lt;_&gt;`.</span>
-<span class='doccomment'>///     The extracted argument values are available in this scope.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// `py_argparse!()` expands to code that extracts values from `args` and `kwargs` and assigns</span>
-<span class='doccomment'>/// them to the parameters. If the extraction is successful, `py_argparse!()` evaluates</span>
-<span class='doccomment'>/// the body expression and returns of that evaluation.</span>
-<span class='doccomment'>/// If extraction fails, `py_argparse!()` returns a failed `PyResult` without evaluating `body`.</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span>:<span class='ident'>tt</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist</span><span class='macro'>!</span> { <span class='ident'>py_argparse_impl</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>, } <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span> }
-    };
-}
-
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_parse_plist</span> {
-    <span class='comment'>// Parses a parameter-list into a format more suitable for consumption by Rust macros.</span>
-    <span class='comment'>// py_argparse_parse_plist! { callback { initial_args } (plist) }</span>
-    <span class='comment'>//  = callback! { initial_args [{ pname:ptype = [ {**} {default-value} ] } ...] }</span>
-    <span class='comment'>// The braces around the *s and the default-value are used even if they are empty.</span>
-
-    <span class='comment'>// Special-case entry-point for empty parameter list:</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_arg</span>:<span class='ident'>tt</span>)<span class='op'>*</span> } ( ) } <span class='op'>=&gt;</span> {
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span><span class='op'>!</span> { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_arg</span>)<span class='op'>*</span> [] }
-    };
-    <span class='comment'>// Regular entry point for non-empty parameter list:</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> ( $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>p</span>:<span class='ident'>tt</span> )<span class='op'>+</span> ) } <span class='op'>=&gt;</span> {
-        <span class='comment'>// add trailing comma to plist so that the parsing step can assume every</span>
-        <span class='comment'>// parameter ends with a comma.</span>
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span> [] ( $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>p</span>)<span class='op'>*</span>, ) }
+<span class="doccomment">/// This macro is used to parse a parameter list into a set of variables.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Syntax: `py_argparse!(py, fname, args, kwargs, (parameter-list) { body })`</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * `py`: the `Python` token</span>
+<span class="doccomment">/// * `fname`: expression of type `Option&lt;&amp;str&gt;`: Name of the function used in error messages.</span>
+<span class="doccomment">/// * `args`: expression of type `&amp;PyTuple`: The position arguments</span>
+<span class="doccomment">/// * `kwargs`: expression of type `Option&lt;&amp;PyDict&gt;`: The named arguments</span>
+<span class="doccomment">/// * `parameter-list`: a comma-separated list of parameter declarations.</span>
+<span class="doccomment">///   Parameter declarations have one of these formats:</span>
+<span class="doccomment">///    1. `name`</span>
+<span class="doccomment">///    2. `name: ty`</span>
+<span class="doccomment">///    3. `name: ty = default_value`</span>
+<span class="doccomment">///    4. `*name`</span>
+<span class="doccomment">///    5. `*name : ty`</span>
+<span class="doccomment">///    6. `**name`</span>
+<span class="doccomment">///    7. `**name : ty`</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///   The types used must implement the `FromPyObject` trait.</span>
+<span class="doccomment">///   If no type is specified, the parameter implicitly uses</span>
+<span class="doccomment">///   `&amp;PyObject` (format 1), `&amp;PyTuple` (format 4) or `&amp;PyDict` (format 6).</span>
+<span class="doccomment">///   If a default value is specified, it must be a compile-time constant</span>
+<span class="comment">//    of type `ty`.</span>
+<span class="doccomment">/// * `body`: expression of type `PyResult&lt;_&gt;`.</span>
+<span class="doccomment">///     The extracted argument values are available in this scope.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `py_argparse!()` expands to code that extracts values from `args` and `kwargs` and assigns</span>
+<span class="doccomment">/// them to the parameters. If the extraction is successful, `py_argparse!()` evaluates</span>
+<span class="doccomment">/// the body expression and returns of that evaluation.</span>
+<span class="doccomment">/// If extraction fails, `py_argparse!()` returns a failed `PyResult` without evaluating `body`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The `py_argparse!()` macro special-cases reference types (when `ty` starts with a `&amp;` token):</span>
+<span class="doccomment">/// In this case, the macro uses the `RefFromPyObject` trait instead of the `FromPyObject` trait.</span>
+<span class="doccomment">/// When using at least one reference parameter, the `body` block is placed within a closure,</span>
+<span class="doccomment">/// so `return` statements might behave unexpectedly in this case. (this only affects direct use</span>
+<span class="doccomment">/// of `py_argparse!`; `py_fn!` is unaffected as the body there is always in a separate function</span>
+<span class="doccomment">/// from the generated argument-parsing code).</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>) <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist</span><span class="macro">!</span> { <span class="ident">py_argparse_impl</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, } <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span> }
     };
 }
 
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_parse_plist_impl</span> {
-    <span class='comment'>// TT muncher macro that does the main work for py_argparse_parse_plist!.</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_parse_plist</span> {
+    <span class="comment">// Parses a parameter-list into a format more suitable for consumption by Rust macros.</span>
+    <span class="comment">// py_argparse_parse_plist! { callback { initial_args } (plist) }</span>
+    <span class="comment">//  = callback! { initial_args [{ pname:ptype = [ {**} {default-value} ] } ...] }</span>
+    <span class="comment">// The braces around the *s and the default-value are used even if they are empty.</span>
 
-    <span class='comment'>// Base case: all parameters handled</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_arg</span>:<span class='ident'>tt</span>)<span class='op'>*</span> } <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span> ( ) } <span class='op'>=&gt;</span> {
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span><span class='op'>!</span> { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_arg</span>)<span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span> }
+    <span class="comment">// Special-case entry-point for empty parameter list:</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_arg</span>:<span class="ident">tt</span>)<span class="op">*</span> } ( ) } <span class="op">=&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span><span class="op">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_arg</span>)<span class="op">*</span> [] }
     };
-    <span class='comment'>// Kwargs parameter with reference extraction</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span><span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {<span class='op'>*</span><span class='op'>*</span>} {} {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Regular entry point for non-empty parameter list:</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> ( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>:<span class="ident">tt</span> )<span class="op">+</span> ) } <span class="op">=&gt;</span> {
+        <span class="comment">// add trailing comma to plist so that the parsing step can assume every</span>
+        <span class="comment">// parameter ends with a comma.</span>
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span> [] ( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>)<span class="kw-2">*</span>, ) }
+    };
+}
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_parse_plist_impl</span> {
+    <span class="comment">// TT muncher macro that does the main work for py_argparse_parse_plist!.</span>
+
+    <span class="comment">// Base case: all parameters handled</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_arg</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span> ( ) } <span class="op">=&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span><span class="op">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_arg</span>)<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span> }
+    };
+    <span class="comment">// Kwargs parameter with reference extraction</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="kw-2">*</span><span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {<span class="kw-2">*</span><span class="kw-2">*</span>} {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Kwargs parameter</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span><span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {<span class='op'>*</span><span class='op'>*</span>} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Kwargs parameter</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="kw-2">*</span><span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {<span class="kw-2">*</span><span class="kw-2">*</span>} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Kwargs parameter with implicit type</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span><span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyDict</span><span class='op'>&gt;</span> <span class='op'>=</span> [ {<span class='op'>*</span><span class='op'>*</span>} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Kwargs parameter with implicit type</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="kw-2">*</span><span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDict</span><span class="op">&gt;</span> <span class="op">=</span> [ {<span class="kw-2">*</span><span class="kw-2">*</span>} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Varargs parameter with reference extraction</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {<span class='op'>*</span>} {} {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Varargs parameter with reference extraction</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {<span class="kw-2">*</span>} {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Varargs parameter</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {<span class='op'>*</span>} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Varargs parameter</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {<span class="kw-2">*</span>} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Varargs parameter with implicit type</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='op'>*</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyTuple</span> <span class='op'>=</span> [ {<span class='op'>*</span>} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Varargs parameter with implicit type</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyTuple</span> <span class="op">=</span> [ {<span class="kw-2">*</span>} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Simple parameter with reference extraction</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {} {} {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Simple parameter with reference extraction</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {} {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Simple parameter</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Simple parameter</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Simple parameter with implicit type</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span> <span class='op'>=</span> [ {} {} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Simple parameter with implicit type</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> <span class="op">=</span> [ {} {} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
-    <span class='comment'>// Optional parameter</span>
-    <span class='comment'>// TODO: with reference extraction?</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>:<span class='ident'>tt</span> [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-        ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>default</span>:<span class='ident'>expr</span> , $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> )
-    } <span class='op'>=&gt;</span> {
-        <span class='macro'>py_argparse_parse_plist_impl</span><span class='macro'>!</span> {
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>callback</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>initial_args</span>
-            [ $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>output</span>)<span class='op'>*</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> <span class='op'>=</span> [ {} {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>default</span>} {} ] } ]
-            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>)
+    <span class="comment">// Optional parameter with reference extraction</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
+        }
+    };
+    <span class="comment">// Optional parameter</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>:<span class="ident">tt</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+        ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> )
+    } <span class="op">=&gt;</span> {
+        <span class="macro">py_argparse_parse_plist_impl</span><span class="macro">!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">initial_args</span>
+            [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output</span>)<span class="op">*</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>} {} ] } ]
+            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>)
         }
     };
 }
 
-<span class='comment'>// The main py_argparse!() macro, except that it expects the parameter-list</span>
-<span class='comment'>// in the output format of py_argparse_parse_plist!().</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_impl</span> {
-    <span class='comment'>// special case: function signature is (*args, **kwargs),</span>
-    <span class='comment'>// so we can directly pass along our inputs without calling parse_args().</span>
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>,
+<span class="comment">// The main py_argparse!() macro, except that it expects the parameter-list</span>
+<span class="comment">// in the output format of py_argparse_parse_plist!().</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_impl</span> {
+    <span class="comment">// special case: function signature is (*args, **kwargs),</span>
+    <span class="comment">// so we can directly pass along our inputs without calling parse_args().</span>
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
         [
-            { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pargs</span>:<span class='ident'>ident</span>   : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pargs_type</span>:<span class='ident'>ty</span>   <span class='op'>=</span> [ {<span class='op'>*</span>}  {} {} ] }
-            { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pkwargs</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pkwargs_type</span>:<span class='ident'>ty</span> <span class='op'>=</span> [ {<span class='op'>*</span><span class='op'>*</span>} {} {} ] }
+            { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pargs</span>:<span class="ident">ident</span>   : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pargs_type</span>:<span class="ident">ty</span>   <span class="op">=</span> [ {<span class="kw-2">*</span>}  {} {} ] }
+            { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pkwargs</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pkwargs_type</span>:<span class="ident">ty</span> <span class="op">=</span> [ {<span class="kw-2">*</span><span class="kw-2">*</span>} {} {} ] }
         ]
-    ) <span class='op'>=&gt;</span> {{
-        <span class='kw'>let</span> <span class='ident'>_py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>;
-        <span class='comment'>// TODO: use extract() to be more flexible in which type is expected</span>
-        <span class='kw'>let</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pargs</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pargs_type</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>;
-        <span class='kw'>let</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pkwargs</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pkwargs_type</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>
+    ) <span class="op">=&gt;</span> {{
+        <span class="kw">let</span> <span class="ident">_py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>;
+        <span class="comment">// TODO: use extract() to be more flexible in which type is expected</span>
+        <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pargs</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pargs_type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>;
+        <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pkwargs</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pkwargs_type</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>;
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
     }};
 
-    <span class='comment'>// normal argparse logic</span>
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>,
-        [ $( { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>detail</span>:<span class='ident'>tt</span> } )<span class='op'>*</span> ]
-    ) <span class='op'>=&gt;</span> {{
-        <span class='kw'>const</span> <span class='ident'>PARAMS</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> [<span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>argparse</span>::<span class='ident'>ParamDescription</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span><span class='op'>&gt;</span>] <span class='op'>=</span> <span class='kw-2'>&amp;</span>[
+    <span class="comment">// normal argparse logic</span>
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
+        [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span>:<span class="ident">tt</span> } )<span class="op">*</span> ]
+    ) <span class="op">=&gt;</span> {{
+        <span class="kw">const</span> <span class="ident">PARAMS</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">ParamDescription</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
             $(
-                <span class='macro'>py_argparse_param_description</span><span class='macro'>!</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>detail</span> }
-            ),<span class='op'>*</span>
+                <span class="macro">py_argparse_param_description</span><span class="macro">!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span> }
+            ),<span class="op">*</span>
         ];
-        <span class='kw'>let</span> <span class='ident'>py</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Python</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>output</span> <span class='op'>=</span> [$( <span class='macro'>py_replace_expr</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span> <span class='prelude-val'>None</span>) ),<span class='op'>*</span>];
-        <span class='kw'>match</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>argparse</span>::<span class='ident'>parse_args</span>(<span class='ident'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>, <span class='ident'>PARAMS</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>output</span>) {
-            <span class='prelude-val'>Ok</span>(()) <span class='op'>=&gt;</span> {
-                <span class='comment'>// Experimental slice pattern syntax would be really nice here (#23121)</span>
-                <span class='comment'>//let [$(ref $pname),*] = output;</span>
-                <span class='comment'>// We&#39;ll use an iterator instead.</span>
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>_iter</span> <span class='op'>=</span> <span class='ident'>output</span>.<span class='ident'>iter</span>();
-                <span class='comment'>// We&#39;ll have to generate a bunch of nested `match` statements</span>
-                <span class='comment'>// (at least until we can use ? + catch, assuming that will be hygienic wrt. macros),</span>
-                <span class='comment'>// so use a recursive helper macro for that:</span>
-                <span class='macro'>py_argparse_extract</span><span class='macro'>!</span>( <span class='ident'>py</span>, <span class='ident'>_iter</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>,
-                    [ $( { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>detail</span> } )<span class='op'>*</span> ])
+        <span class="kw">let</span> <span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> [$( <span class="macro">py_replace_expr</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span> <span class="prelude-val">None</span>) ),<span class="kw-2">*</span>];
+        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">parse_args</span>(<span class="ident">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>, <span class="ident">PARAMS</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>) {
+            <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> {
+                <span class="comment">// Experimental slice pattern syntax would be really nice here (#23121)</span>
+                <span class="comment">//let [$(ref $pname),*] = output;</span>
+                <span class="comment">// We&#39;ll use an iterator instead.</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">_iter</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">iter</span>();
+                <span class="comment">// We&#39;ll have to generate a bunch of nested `match` statements</span>
+                <span class="comment">// (at least until we can use ? + catch, assuming that will be hygienic wrt. macros),</span>
+                <span class="comment">// so use a recursive helper macro for that:</span>
+                <span class="macro">py_argparse_extract</span><span class="macro">!</span>( <span class="ident">py</span>, <span class="ident">_iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>,
+                    [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span> } )<span class="op">*</span> ])
             },
-            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
         }
     }};
 }
 
-<span class='comment'>// Like py_argparse_impl!(), but accepts `*mut ffi::PyObject` for $args and $kwargs.</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_raw</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span>:<span class='ident'>tt</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>let</span> <span class='ident'>args</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyTuple</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>args</span>).<span class='ident'>unchecked_cast_into</span>();
-        <span class='kw'>let</span> <span class='ident'>kwargs</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyDict</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>argparse</span>::<span class='ident'>get_kwargs</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>kwargs</span>);
-        <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='macro'>py_argparse_impl</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>fname</span>, <span class='kw-2'>&amp;</span><span class='ident'>args</span>, <span class='ident'>kwargs</span>.<span class='ident'>as_ref</span>(), <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>plist</span>);
-        <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyDrop</span>::<span class='ident'>release_ref</span>(<span class='ident'>args</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>);
-        <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>PyDrop</span>::<span class='ident'>release_ref</span>(<span class='ident'>kwargs</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>);
-        <span class='ident'>ret</span>
+<span class="comment">// Like py_argparse_impl!(), but accepts `*mut ffi::PyObject` for $args and $kwargs.</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_raw</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>) <span class="op">=&gt;</span> {{
+        <span class="kw">let</span> <span class="ident">args</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyTuple</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>).<span class="ident">unchecked_cast_into</span>();
+        <span class="kw">let</span> <span class="ident">kwargs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDict</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">get_kwargs</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>);
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="macro">py_argparse_impl</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>, <span class="kw-2">&amp;</span><span class="ident">args</span>, <span class="ident">kwargs</span>.<span class="ident">as_ref</span>(), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">args</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">kwargs</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>);
+        <span class="ident">ret</span>
     }};
 }
 
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>get_kwargs</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PyDict</span><span class='op'>&gt;</span> {
-    <span class='kw'>if</span> <span class='ident'>ptr</span>.<span class='ident'>is_null</span>() {
-        <span class='prelude-val'>None</span>
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Some</span>(<span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>).<span class='ident'>unchecked_cast_into</span>())
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_kwargs</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyDict</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
+        <span class="prelude-val">None</span>
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">ptr</span>).<span class="ident">unchecked_cast_into</span>())
     }
 }
 
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_param_description</span> {
-    <span class='comment'>// normal parameter</span>
-    { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> [ {} {} <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rtype</span>:<span class='ident'>tt</span> ] } <span class='op'>=&gt;</span> (
-        <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>argparse</span>::<span class='ident'>ParamDescription</span> {
-            <span class='ident'>name</span>: <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>),
-            <span class='ident'>is_optional</span>: <span class='bool-val'>false</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_param_description</span> {
+    <span class="comment">// normal parameter</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {} <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rtype</span>:<span class="ident">tt</span> ] } <span class="op">=&gt;</span> (
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">ParamDescription</span> {
+            <span class="ident">name</span>: <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>),
+            <span class="ident">is_optional</span>: <span class="bool-val">false</span>
+        }
+    );
+    <span class="comment">// optional parameters</span>
+    { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span>} {$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rtype</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>} ] } <span class="op">=&gt;</span> (
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">ParamDescription</span> {
+            <span class="ident">name</span>: <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>),
+            <span class="ident">is_optional</span>: <span class="bool-val">true</span>
         }
     );
 }
 
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_argparse_extract</span> {
-    <span class='comment'>// base case</span>
-    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>, [] ) <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span> };
-    <span class='comment'>// normal parameter</span>
-    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>,
-        [ { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> [ {} {} {} ] } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-    ) <span class='op'>=&gt;</span> {
-        <span class='comment'>// First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);</span>
-        <span class='comment'>// second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).</span>
-        <span class='kw'>match</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>FromPyObject</span><span class='op'>&gt;</span>::<span class='ident'>extract</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>().<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>()) {
-            <span class='prelude-val'>Ok</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>) <span class='op'>=&gt;</span> <span class='macro'>py_argparse_extract</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>, [$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>]),
-            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_extract</span> {
+    <span class="comment">// base case</span>
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>, [] ) <span class="op">=&gt;</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span> };
+    <span class="comment">// normal parameter</span>
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
+        [ { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {} {} ] } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+    ) <span class="op">=&gt;</span> {
+        <span class="comment">// First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);</span>
+        <span class="comment">// second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).</span>
+        <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>().<span class="ident">unwrap</span>()) {
+            <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>) <span class="op">=&gt;</span> <span class="macro">py_argparse_extract</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>]),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
         }
     };
-    <span class='comment'>// normal parameter with reference extraction</span>
-    ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>:<span class='ident'>expr</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>:<span class='ident'>block</span>,
-        [ { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>:<span class='ident'>ident</span> : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span>:<span class='ident'>ty</span> <span class='op'>=</span> [ {} {} {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rtype</span>:<span class='ident'>ty</span>} ] } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ]
-    ) <span class='op'>=&gt;</span> {
-        <span class='comment'>// First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);</span>
-        <span class='comment'>// second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).</span>
-        <span class='kw'>match</span> <span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rtype</span> <span class='kw'>as</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>RefFromPyObject</span><span class='op'>&gt;</span>::<span class='ident'>with_extracted</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>,
-            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>().<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>(),
-            <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>pname</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ptype</span><span class='op'>|</span> <span class='macro'>py_argparse_extract</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>iter</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>, [$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>])
+    <span class="comment">// normal parameter with reference extraction</span>
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
+        [ { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rtype</span>:<span class="ident">ty</span>} ] } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+    ) <span class="op">=&gt;</span> {
+        <span class="comment">// First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);</span>
+        <span class="comment">// second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).</span>
+        <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rtype</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">RefFromPyObject</span><span class="op">&gt;</span>::<span class="ident">with_extracted</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>,
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>().<span class="ident">unwrap</span>(),
+            <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span><span class="op">|</span> <span class="macro">py_argparse_extract</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>])
         ) {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>v</span>) <span class='op'>=&gt;</span> <span class='ident'>v</span>,
-            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
+            <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="ident">v</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
         }
+    };
+    <span class="comment">// optional parameter</span>
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
+        [ { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span>} {} ] } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+    ) <span class="op">=&gt;</span> {
+        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">obj</span><span class="op">|</span> <span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span>_<span class="op">&gt;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>)).<span class="ident">unwrap_or</span>(<span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>)) {
+            <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>) <span class="op">=&gt;</span> <span class="macro">py_argparse_extract</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>]),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
+        }
+    };
+    <span class="comment">// optional parameter with reference extraction</span>
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
+        [ { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span>} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rtype</span>:<span class="ident">ty</span>} ] } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
+    ) <span class="op">=&gt;</span> {
+        <span class="comment">//unwrap() asserts the iterated sequence is long enough (which should be guaranteed);</span>
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">argparse</span>::<span class="ident">with_extracted_or_default</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>,
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>(),
+            <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span><span class="op">|</span> <span class="macro">py_argparse_extract</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>]),
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>)
     };
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>test</span> {
-    <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
-    <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>test_parse</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>called</span> <span class='op'>=</span> <span class='bool-val'>false</span>;
-        <span class='kw'>let</span> <span class='ident'>tuple</span> <span class='op'>=</span> (<span class='string'>&quot;abc&quot;</span>, <span class='number'>42</span>).<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-        <span class='macro'>py_argparse</span><span class='macro'>!</span>(<span class='ident'>py</span>, <span class='prelude-val'>None</span>, <span class='kw-2'>&amp;</span><span class='ident'>tuple</span>, <span class='prelude-val'>None</span>, (<span class='ident'>x</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>y</span>: <span class='ident'>i32</span>) {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>x</span>, <span class='string'>&quot;abc&quot;</span>);
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>y</span>, <span class='number'>42</span>);
-            <span class='ident'>called</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
-            <span class='prelude-val'>Ok</span>(())
-        }).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>called</span>);
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>test_default_param_type</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil_guard</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil_guard</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>called</span> <span class='op'>=</span> <span class='bool-val'>false</span>;
-        <span class='kw'>let</span> <span class='ident'>tuple</span> <span class='op'>=</span> (<span class='string'>&quot;abc&quot;</span>,).<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-        <span class='macro'>py_argparse</span><span class='macro'>!</span>(<span class='ident'>py</span>, <span class='prelude-val'>None</span>, <span class='kw-2'>&amp;</span><span class='ident'>tuple</span>, <span class='prelude-val'>None</span>, (<span class='ident'>x</span>) {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>*</span><span class='ident'>x</span>, <span class='ident'>tuple</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>0</span>));
-            <span class='ident'>called</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
-            <span class='prelude-val'>Ok</span>(())
-        }).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>called</span>);
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span> <span class="comment">// used in py_argparse_extract!() macro</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_extracted_or_default</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">R</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyObject</span><span class="op">&gt;</span>, <span class="ident">f</span>: <span class="ident">F</span>, <span class="ident">default</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">P</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
+          <span class="ident">P</span>: <span class="ident">RefFromPyObject</span>
+{
+    <span class="kw">match</span> <span class="ident">obj</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">P</span>::<span class="ident">with_extracted</span>(<span class="ident">py</span>, <span class="ident">obj</span>, <span class="ident">f</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">result</span>) <span class="op">=&gt;</span> <span class="ident">result</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
+        },
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">f</span>(<span class="ident">default</span>)
     }
 }
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+    <span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">PyTuple</span>;
+    <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_parse</span>() {
+        <span class="kw">let</span> <span class="ident">gil_guard</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil_guard</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="ident">tuple</span> <span class="op">=</span> (<span class="string">&quot;abc&quot;</span>, <span class="number">42</span>).<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">py_argparse</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">tuple</span>, <span class="prelude-val">None</span>, (<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">y</span>: <span class="ident">i32</span>) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">x</span>, <span class="string">&quot;abc&quot;</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">y</span>, <span class="number">42</span>);
+            <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="prelude-val">Ok</span>(())
+        }).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">called</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_default_param_type</span>() {
+        <span class="kw">let</span> <span class="ident">gil_guard</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil_guard</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="ident">tuple</span> <span class="op">=</span> (<span class="string">&quot;abc&quot;</span>,).<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">py_argparse</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">tuple</span>, <span class="prelude-val">None</span>, (<span class="ident">x</span>) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">x</span>, <span class="ident">tuple</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">0</span>));
+            <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="prelude-val">Ok</span>(())
+        }).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">called</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_default_value</span>() {
+        <span class="kw">let</span> <span class="ident">gil_guard</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil_guard</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="ident">tuple</span> <span class="op">=</span> (<span class="number">0</span>, <span class="string">&quot;foo&quot;</span>).<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">py_argparse</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">tuple</span>, <span class="prelude-val">None</span>, (<span class="ident">x</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">42</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;abc&quot;</span>) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">x</span>, <span class="number">0</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">y</span>, <span class="string">&quot;foo&quot;</span>);
+            <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="prelude-val">Ok</span>(())
+        }).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">called</span>);
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let</span> <span class="ident">tuple</span> <span class="op">=</span> <span class="ident">PyTuple</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span>[]);
+        <span class="macro">py_argparse</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">tuple</span>, <span class="prelude-val">None</span>, (<span class="ident">x</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">42</span>, <span class="ident">y</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;abc&quot;</span>) {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">x</span>, <span class="number">42</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">y</span>, <span class="string">&quot;abc&quot;</span>);
+            <span class="ident">called</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="prelude-val">Ok</span>(())
+        }).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">called</span>);
+    }
+}
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -909,13 +1075,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -949,7 +1117,6 @@
         window.rootPath = "../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

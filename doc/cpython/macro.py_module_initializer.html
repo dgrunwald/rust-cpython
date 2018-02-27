@@ -9,6 +9,7 @@
 
     <title>cpython::py_module_initializer - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc macro">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_module_initializer', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
@@ -42,15 +44,15 @@
         </form>
     </nav>
 
-    <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class='macro' href=''>py_module_initializer</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_module_initializer</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/cpython/lib.rs.html#258-271' title='goto source code'>[src]</a></span></h1>
-<pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>py_module_initializer</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py2</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py3</span>: <span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>py_id</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>m_id</span>: <span class='ident'>ident</span><span class='op'>|</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
+               </span><a class='srclink' href='../src/cpython/lib.rs.html#260-273' title='goto source code'>[src]</a></span></h1>
+<pre class="rust macro">
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_module_initializer</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py2</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py3</span>: <span class="ident">ident</span>, <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py_id</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m_id</span>: <span class="ident">ident</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>: <span class="ident">expr</span>) <span class="op">=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>Expands to an <code>extern &quot;C&quot;</code> function that allows Python to load
 the rust code as a Python extension module.</p>
@@ -67,19 +69,19 @@ for adding the module&#39;s members.</li>
 </ol>
 
 <h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
-<pre class='rust rust-example-rendered'>
-<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>cpython</span>;
-<span class='kw'>use</span> <span class='ident'>cpython</span>::{<span class='ident'>Python</span>, <span class='ident'>PyResult</span>, <span class='ident'>PyObject</span>};
+<pre class="rust rust-example-rendered">
+<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">Python</span>, <span class="ident">PyResult</span>, <span class="ident">PyObject</span>};
 
-<span class='macro'>py_module_initializer</span><span class='macro'>!</span>(<span class='ident'>hello</span>, <span class='ident'>inithello</span>, <span class='ident'>PyInit_hello</span>, <span class='op'>|</span><span class='ident'>py</span>, <span class='ident'>m</span><span class='op'>|</span> {
-    <span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;__doc__&quot;</span>, <span class='string'>&quot;Module documentation string&quot;</span>)<span class='question-mark'>?</span>;
-    <span class='ident'>m</span>.<span class='ident'>add</span>(<span class='ident'>py</span>, <span class='string'>&quot;run&quot;</span>, <span class='macro'>py_fn</span><span class='macro'>!</span>(<span class='ident'>py</span>, <span class='ident'>run</span>()))<span class='question-mark'>?</span>;
-    <span class='prelude-val'>Ok</span>(())
+<span class="macro">py_module_initializer</span><span class="macro">!</span>(<span class="ident">hello</span>, <span class="ident">inithello</span>, <span class="ident">PyInit_hello</span>, <span class="op">|</span><span class="ident">py</span>, <span class="ident">m</span><span class="op">|</span> {
+    <span class="ident">m</span>.<span class="ident">add</span>(<span class="ident">py</span>, <span class="string">&quot;__doc__&quot;</span>, <span class="string">&quot;Module documentation string&quot;</span>)<span class="question-mark">?</span>;
+    <span class="ident">m</span>.<span class="ident">add</span>(<span class="ident">py</span>, <span class="string">&quot;run&quot;</span>, <span class="macro">py_fn</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="ident">run</span>()))<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(())
 });
 
-<span class='kw'>fn</span> <span class='ident'>run</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Rust says: Hello Python!&quot;</span>);
-    <span class='prelude-val'>Ok</span>(<span class='ident'>py</span>.<span class='prelude-val'>None</span>())
+<span class="kw">fn</span> <span class="ident">run</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Rust says: Hello Python!&quot;</span>);
+    <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="prelude-val">None</span>())
 }</pre>
 
 <p>In your <code>Cargo.toml</code>, use the <code>extension-module</code> feature for the <code>cpython</code> dependency:
@@ -118,13 +120,15 @@ Rust says: Hello Python!
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -158,7 +162,6 @@ Rust says: Hello Python!
         window.rootPath = "../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

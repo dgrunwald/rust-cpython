@@ -9,6 +9,7 @@
 
     <title>tuple.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -240,202 +242,202 @@
 <span id="196">196</span>
 <span id="197">197</span>
 <span id="198">198</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Daniel Grunwald</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>, <span class='ident'>ToPythonPointer</span>, <span class='ident'>PyDrop</span>};
-<span class='kw'>use</span> <span class='ident'>err</span>::{<span class='self'>self</span>, <span class='ident'>PyErr</span>, <span class='ident'>PyResult</span>};
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>object</span>::<span class='ident'>PyObject</span>;
-<span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>exc</span>;
-<span class='kw'>use</span> <span class='ident'>ffi</span>::{<span class='self'>self</span>, <span class='ident'>Py_ssize_t</span>};
-<span class='kw'>use</span> <span class='ident'>conversion</span>::{<span class='ident'>FromPyObject</span>, <span class='ident'>ToPyObject</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>, <span class="ident">ToPythonPointer</span>, <span class="ident">PyDrop</span>};
+<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">exc</span>;
+<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="self">self</span>, <span class="ident">Py_ssize_t</span>};
+<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">slice</span>;
 
-<span class='doccomment'>/// Represents a Python tuple object.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PyTuple</span>(<span class='ident'>PyObject</span>);
+<span class="doccomment">/// Represents a Python tuple object.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyTuple</span>(<span class="ident">PyObject</span>);
 
-<span class='macro'>pyobject_newtype</span><span class='macro'>!</span>(<span class='ident'>PyTuple</span>, <span class='ident'>PyTuple_Check</span>, <span class='ident'>PyTuple_Type</span>);
+<span class="macro">pyobject_newtype</span><span class="macro">!</span>(<span class="ident">PyTuple</span>, <span class="ident">PyTuple_Check</span>, <span class="ident">PyTuple_Type</span>);
 
-<span class='kw'>impl</span> <span class='ident'>PyTuple</span> {
-    <span class='doccomment'>/// Construct a new tuple with the given elements.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>elements</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>PyObject</span>]) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>elements</span>.<span class='ident'>len</span>();
-            <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>PyTuple_New</span>(<span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>);
-            <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='ident'>err</span>::<span class='ident'>result_cast_from_owned_ptr</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>, <span class='ident'>ptr</span>).<span class='ident'>unwrap</span>();
-            <span class='kw'>for</span> (<span class='ident'>i</span>, <span class='ident'>e</span>) <span class='kw'>in</span> <span class='ident'>elements</span>.<span class='ident'>iter</span>().<span class='ident'>enumerate</span>() {
-                <span class='ident'>ffi</span>::<span class='ident'>PyTuple_SetItem</span>(<span class='ident'>ptr</span>, <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>, <span class='ident'>e</span>.<span class='ident'>steal_ptr</span>(<span class='ident'>py</span>));
+<span class="kw">impl</span> <span class="ident">PyTuple</span> {
+    <span class="doccomment">/// Construct a new tuple with the given elements.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">elements</span>: <span class="kw-2">&amp;</span>[<span class="ident">PyObject</span>]) <span class="op">-&gt;</span> <span class="ident">PyTuple</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">elements</span>.<span class="ident">len</span>();
+            <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyTuple_New</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>);
+            <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">err</span>::<span class="ident">result_cast_from_owned_ptr</span>::<span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">ptr</span>).<span class="ident">unwrap</span>();
+            <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">e</span>) <span class="kw">in</span> <span class="ident">elements</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
+                <span class="ident">ffi</span>::<span class="ident">PyTuple_SetItem</span>(<span class="ident">ptr</span>, <span class="ident">i</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>, <span class="ident">e</span>.<span class="ident">steal_ptr</span>(<span class="ident">py</span>));
             }
-            <span class='ident'>t</span>
+            <span class="ident">t</span>
         }
     }
 
-    <span class='doccomment'>/// Retrieves the empty tuple.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>err</span>::<span class='ident'>result_cast_from_owned_ptr</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyTuple_New</span>(<span class='number'>0</span>)).<span class='ident'>unwrap</span>()
+    <span class="doccomment">/// Retrieves the empty tuple.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyTuple</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">err</span>::<span class="ident">result_cast_from_owned_ptr</span>::<span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PyTuple_New</span>(<span class="number">0</span>)).<span class="ident">unwrap</span>()
         }
     }
 
-    <span class='doccomment'>/// Gets the length of the tuple.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>_py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='comment'>// non-negative Py_ssize_t should always fit into Rust uint</span>
-            <span class='ident'>ffi</span>::<span class='ident'>PyTuple_GET_SIZE</span>(<span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_ptr</span>()) <span class='kw'>as</span> <span class='ident'>usize</span>
+    <span class="doccomment">/// Gets the length of the tuple.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+        <span class="kw">unsafe</span> {
+            <span class="comment">// non-negative Py_ssize_t should always fit into Rust uint</span>
+            <span class="ident">ffi</span>::<span class="ident">PyTuple_GET_SIZE</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">usize</span>
         }
     }
 
-    <span class='doccomment'>/// Gets the item at the specified index.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Panics if the index is out of range.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_item</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>index</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyObject</span> {
-        <span class='comment'>// TODO: reconsider whether we should panic</span>
-        <span class='comment'>// It&#39;s quite inconsistent that this method takes `Python` when `len()` does not.</span>
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>index</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>len</span>(<span class='ident'>py</span>));
-        <span class='kw'>unsafe</span> {
-            <span class='ident'>PyObject</span>::<span class='ident'>from_borrowed_ptr</span>(<span class='ident'>py</span>, <span class='ident'>ffi</span>::<span class='ident'>PyTuple_GET_ITEM</span>(<span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>Py_ssize_t</span>))
+    <span class="doccomment">/// Gets the item at the specified index.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Panics if the index is out of range.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">index</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+        <span class="comment">// TODO: reconsider whether we should panic</span>
+        <span class="comment">// It&#39;s quite inconsistent that this method takes `Python` when `len()` does not.</span>
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">index</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">len</span>(<span class="ident">py</span>));
+        <span class="kw">unsafe</span> {
+            <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PyTuple_GET_ITEM</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">index</span> <span class="kw">as</span> <span class="ident">Py_ssize_t</span>))
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>as_slice</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>PyObject</span>] {
-        <span class='comment'>// This is safe because PyObject has the same memory layout as *mut ffi::PyObject,</span>
-        <span class='comment'>// and because tuples are immutable.</span>
-        <span class='comment'>// (We don&#39;t even need a Python token, thanks to immutability)</span>
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>PyTupleObject</span>;
-            <span class='ident'>PyObject</span>::<span class='ident'>borrow_from_owned_ptr_slice</span>(
-                <span class='ident'>slice</span>::<span class='ident'>from_raw_parts</span>(
-                    (<span class='op'>*</span><span class='ident'>ptr</span>).<span class='ident'>ob_item</span>.<span class='ident'>as_ptr</span>(),
-                    <span class='self'>self</span>.<span class='ident'>len</span>(<span class='ident'>py</span>)
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_slice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">PyObject</span>] {
+        <span class="comment">// This is safe because PyObject has the same memory layout as *mut ffi::PyObject,</span>
+        <span class="comment">// and because tuples are immutable.</span>
+        <span class="comment">// (We don&#39;t even need a Python token, thanks to immutability)</span>
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyTupleObject</span>;
+            <span class="ident">PyObject</span>::<span class="ident">borrow_from_owned_ptr_slice</span>(
+                <span class="ident">slice</span>::<span class="ident">from_raw_parts</span>(
+                    (<span class="kw-2">*</span><span class="ident">ptr</span>).<span class="ident">ob_item</span>.<span class="ident">as_ptr</span>(),
+                    <span class="self">self</span>.<span class="ident">len</span>(<span class="ident">py</span>)
                 ))
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>iter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>slice</span>::<span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>PyObject</span><span class='op'>&gt;</span> {
-        <span class='self'>self</span>.<span class='ident'>as_slice</span>(<span class='ident'>py</span>).<span class='ident'>iter</span>()
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">slice</span>::<span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">as_slice</span>(<span class="ident">py</span>).<span class="ident">iter</span>()
     }
 }
 
-<span class='kw'>fn</span> <span class='ident'>wrong_tuple_length</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>t</span>: <span class='kw-2'>&amp;</span><span class='ident'>PyTuple</span>, <span class='ident'>expected_length</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>PyErr</span> {
-    <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Expected tuple of length {}, but got tuple of length {}.&quot;</span>, <span class='ident'>expected_length</span>, <span class='ident'>t</span>.<span class='ident'>len</span>(<span class='ident'>py</span>));
-    <span class='ident'>PyErr</span>::<span class='ident'>new_lazy_init</span>(<span class='ident'>py</span>.<span class='ident'>get_type</span>::<span class='op'>&lt;</span><span class='ident'>exc</span>::<span class='ident'>ValueError</span><span class='op'>&gt;</span>(), <span class='prelude-val'>Some</span>(<span class='ident'>msg</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>).<span class='ident'>into_object</span>()))
+<span class="kw">fn</span> <span class="ident">wrong_tuple_length</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">PyTuple</span>, <span class="ident">expected_length</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">PyErr</span> {
+    <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Expected tuple of length {}, but got tuple of length {}.&quot;</span>, <span class="ident">expected_length</span>, <span class="ident">t</span>.<span class="ident">len</span>(<span class="ident">py</span>));
+    <span class="ident">PyErr</span>::<span class="ident">new_lazy_init</span>(<span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">ValueError</span><span class="op">&gt;</span>(), <span class="prelude-val">Some</span>(<span class="ident">msg</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>()))
 }
 
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>tuple_conversion</span> ({<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>:<span class='ident'>expr</span>,$((<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>refN</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>:<span class='ident'>ident</span>)),<span class='op'>+</span>} <span class='op'>=&gt;</span> {
-    <span class='kw'>impl</span> <span class='op'>&lt;</span>$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='ident'>ToPyObject</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>ToPyObject</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
-        <span class='kw'>type</span> <span class='ident'>ObjectType</span> <span class='op'>=</span> <span class='ident'>PyTuple</span>;
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">tuple_conversion</span> ({<span class="macro-nonterminal">$</span><span class="macro-nonterminal">length</span>:<span class="ident">expr</span>,$((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">refN</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ident</span>)),<span class="op">+</span>} <span class="op">=&gt;</span> {
+    <span class="kw">impl</span> <span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>: <span class="ident">ToPyObject</span>),<span class="op">+</span><span class="op">&gt;</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>) {
+        <span class="kw">type</span> <span class="ident">ObjectType</span> <span class="op">=</span> <span class="ident">PyTuple</span>;
 
-        <span class='kw'>fn</span> <span class='ident'>to_py_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
-            <span class='ident'>PyTuple</span>::<span class='ident'>new</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span>[
-                $(<span class='macro'>py_coerce_expr</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
+        <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyTuple</span> {
+            <span class="ident">PyTuple</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span>[
+                $(<span class="macro">py_coerce_expr</span><span class="macro">!</span>(<span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>)).<span class="ident">into_object</span>(),)<span class="op">+</span>
             ])
         }
 
-        <span class='kw'>fn</span> <span class='ident'>into_py_object</span>(<span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
-            <span class='ident'>PyTuple</span>::<span class='ident'>new</span>(<span class='ident'>py</span>, <span class='kw-2'>&amp;</span>[
-                $(<span class='macro'>py_coerce_expr</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>.<span class='ident'>into_py_object</span>(<span class='ident'>py</span>)).<span class='ident'>into_object</span>(),)<span class='op'>+</span>
+        <span class="kw">fn</span> <span class="ident">into_py_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyTuple</span> {
+            <span class="ident">PyTuple</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span>[
+                $(<span class="macro">py_coerce_expr</span><span class="macro">!</span>(<span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>.<span class="ident">into_py_object</span>(<span class="ident">py</span>)).<span class="ident">into_object</span>(),)<span class="op">+</span>
             ])
         }
     }
 
-    <span class='kw'>impl</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;s</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>: <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;s</span><span class='op'>&gt;</span>),<span class='op'>+</span><span class='op'>&gt;</span> <span class='ident'>FromPyObject</span><span class='op'>&lt;</span><span class='lifetime'>&#39;s</span><span class='op'>&gt;</span> <span class='kw'>for</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span>,)<span class='op'>+</span>) {
-        <span class='kw'>fn</span> <span class='ident'>extract</span>(<span class='ident'>py</span>: <span class='ident'>Python</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;s</span> <span class='ident'>PyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>PyResult</span><span class='op'>&lt;</span><span class='self'>Self</span><span class='op'>&gt;</span> {
-            <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>obj</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>));
-            <span class='kw'>let</span> <span class='ident'>slice</span> <span class='op'>=</span> <span class='ident'>t</span>.<span class='ident'>as_slice</span>(<span class='ident'>py</span>);
-            <span class='kw'>if</span> <span class='ident'>slice</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span> {
-                <span class='prelude-val'>Ok</span>((
-                    $( <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>slice</span>[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>].<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>T</span><span class='op'>&gt;</span>(<span class='ident'>py</span>)), )<span class='op'>+</span>
+    <span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;s</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span>),<span class="op">+</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> <span class="kw">for</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>,)<span class="op">+</span>) {
+        <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span>(<span class="ident">py</span>));
+            <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="ident">t</span>.<span class="ident">as_slice</span>(<span class="ident">py</span>);
+            <span class="kw">if</span> <span class="ident">slice</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">length</span> {
+                <span class="prelude-val">Ok</span>((
+                    $( <span class="macro">try</span><span class="macro">!</span>(<span class="ident">slice</span>[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>].<span class="ident">extract</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span>(<span class="ident">py</span>)), )<span class="op">+</span>
                 ))
-            } <span class='kw'>else</span> {
-                <span class='prelude-val'>Err</span>(<span class='ident'>wrong_tuple_length</span>(<span class='ident'>py</span>, <span class='ident'>t</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>length</span>))
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">wrong_tuple_length</span>(<span class="ident">py</span>, <span class="ident">t</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">length</span>))
             }
         }
     }
 });
 
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>1</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>2</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>3</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>4</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>5</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>),
-  (<span class='ident'>ref4</span>, <span class='number'>4</span>, <span class='ident'>E</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>6</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>),
-  (<span class='ident'>ref4</span>, <span class='number'>4</span>, <span class='ident'>E</span>), (<span class='ident'>ref5</span>, <span class='number'>5</span>, <span class='ident'>F</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>7</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>),
-  (<span class='ident'>ref4</span>, <span class='number'>4</span>, <span class='ident'>E</span>), (<span class='ident'>ref5</span>, <span class='number'>5</span>, <span class='ident'>F</span>), (<span class='ident'>ref6</span>, <span class='number'>6</span>, <span class='ident'>G</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>8</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>),
-  (<span class='ident'>ref4</span>, <span class='number'>4</span>, <span class='ident'>E</span>), (<span class='ident'>ref5</span>, <span class='number'>5</span>, <span class='ident'>F</span>), (<span class='ident'>ref6</span>, <span class='number'>6</span>, <span class='ident'>G</span>), (<span class='ident'>ref7</span>, <span class='number'>7</span>, <span class='ident'>H</span>));
-<span class='macro'>tuple_conversion</span><span class='macro'>!</span>(<span class='number'>9</span>, (<span class='ident'>ref0</span>, <span class='number'>0</span>, <span class='ident'>A</span>), (<span class='ident'>ref1</span>, <span class='number'>1</span>, <span class='ident'>B</span>), (<span class='ident'>ref2</span>, <span class='number'>2</span>, <span class='ident'>C</span>), (<span class='ident'>ref3</span>, <span class='number'>3</span>, <span class='ident'>D</span>),
-  (<span class='ident'>ref4</span>, <span class='number'>4</span>, <span class='ident'>E</span>), (<span class='ident'>ref5</span>, <span class='number'>5</span>, <span class='ident'>F</span>), (<span class='ident'>ref6</span>, <span class='number'>6</span>, <span class='ident'>G</span>), (<span class='ident'>ref7</span>, <span class='number'>7</span>, <span class='ident'>H</span>), (<span class='ident'>ref8</span>, <span class='number'>8</span>, <span class='ident'>I</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">1</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">2</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">3</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">4</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">5</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>),
+  (<span class="ident">ref4</span>, <span class="number">4</span>, <span class="ident">E</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">6</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>),
+  (<span class="ident">ref4</span>, <span class="number">4</span>, <span class="ident">E</span>), (<span class="ident">ref5</span>, <span class="number">5</span>, <span class="ident">F</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">7</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>),
+  (<span class="ident">ref4</span>, <span class="number">4</span>, <span class="ident">E</span>), (<span class="ident">ref5</span>, <span class="number">5</span>, <span class="ident">F</span>), (<span class="ident">ref6</span>, <span class="number">6</span>, <span class="ident">G</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">8</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>),
+  (<span class="ident">ref4</span>, <span class="number">4</span>, <span class="ident">E</span>), (<span class="ident">ref5</span>, <span class="number">5</span>, <span class="ident">F</span>), (<span class="ident">ref6</span>, <span class="number">6</span>, <span class="ident">G</span>), (<span class="ident">ref7</span>, <span class="number">7</span>, <span class="ident">H</span>));
+<span class="macro">tuple_conversion</span><span class="macro">!</span>(<span class="number">9</span>, (<span class="ident">ref0</span>, <span class="number">0</span>, <span class="ident">A</span>), (<span class="ident">ref1</span>, <span class="number">1</span>, <span class="ident">B</span>), (<span class="ident">ref2</span>, <span class="number">2</span>, <span class="ident">C</span>), (<span class="ident">ref3</span>, <span class="number">3</span>, <span class="ident">D</span>),
+  (<span class="ident">ref4</span>, <span class="number">4</span>, <span class="ident">E</span>), (<span class="ident">ref5</span>, <span class="number">5</span>, <span class="ident">F</span>), (<span class="ident">ref6</span>, <span class="number">6</span>, <span class="ident">G</span>), (<span class="ident">ref7</span>, <span class="number">7</span>, <span class="ident">H</span>), (<span class="ident">ref8</span>, <span class="number">8</span>, <span class="ident">I</span>));
 
-<span class='comment'>// Empty tuple:</span>
+<span class="comment">// Empty tuple:</span>
 
-<span class='doccomment'>/// An empty struct that represents the empty argument list.</span>
-<span class='doccomment'>/// Corresponds to the empty tuple `()` in Python.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// # Example</span>
-<span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// let gil_guard = cpython::Python::acquire_gil();</span>
-<span class='doccomment'>/// let py = gil_guard.python();</span>
-<span class='doccomment'>/// let os = py.import(&quot;os&quot;).unwrap();</span>
-<span class='doccomment'>/// let pid = os.call(py, &quot;get_pid&quot;, cpython::NoArgs, None);</span>
-<span class='doccomment'>/// ```</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>, <span class='ident'>Debug</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NoArgs</span>;
+<span class="doccomment">/// An empty struct that represents the empty argument list.</span>
+<span class="doccomment">/// Corresponds to the empty tuple `()` in Python.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// let gil_guard = cpython::Python::acquire_gil();</span>
+<span class="doccomment">/// let py = gil_guard.python();</span>
+<span class="doccomment">/// let os = py.import(&quot;os&quot;).unwrap();</span>
+<span class="doccomment">/// let pid = os.call(py, &quot;getpid&quot;, cpython::NoArgs, None).unwrap();</span>
+<span class="doccomment">/// ```</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NoArgs</span>;
 
-<span class='doccomment'>/// Converts `NoArgs` to an empty Python tuple.</span>
-<span class='kw'>impl</span> <span class='ident'>ToPyObject</span> <span class='kw'>for</span> <span class='ident'>NoArgs</span> {
-    <span class='kw'>type</span> <span class='ident'>ObjectType</span> <span class='op'>=</span> <span class='ident'>PyTuple</span>;
+<span class="doccomment">/// Converts `NoArgs` to an empty Python tuple.</span>
+<span class="kw">impl</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">NoArgs</span> {
+    <span class="kw">type</span> <span class="ident">ObjectType</span> <span class="op">=</span> <span class="ident">PyTuple</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>to_py_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>py</span>: <span class='ident'>Python</span>) <span class='op'>-&gt;</span> <span class='ident'>PyTuple</span> {
-        <span class='ident'>PyTuple</span>::<span class='ident'>empty</span>(<span class='ident'>py</span>)
+    <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyTuple</span> {
+        <span class="ident">PyTuple</span>::<span class="ident">empty</span>(<span class="ident">py</span>)
     }
 }
 
-<span class='doccomment'>/// Returns `Ok(NoArgs)` if the input is an empty Python tuple.</span>
-<span class='doccomment'>/// Otherwise, returns an error.</span>
-<span class='macro'>extract</span><span class='macro'>!</span>(<span class='ident'>obj</span> <span class='ident'>to</span> <span class='ident'>NoArgs</span>; <span class='ident'>py</span> <span class='op'>=&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>t</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>obj</span>.<span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='ident'>PyTuple</span><span class='op'>&gt;</span>(<span class='ident'>py</span>));
-    <span class='kw'>if</span> <span class='ident'>t</span>.<span class='ident'>len</span>(<span class='ident'>py</span>) <span class='op'>==</span> <span class='number'>0</span> {
-        <span class='prelude-val'>Ok</span>(<span class='ident'>NoArgs</span>)
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>wrong_tuple_length</span>(<span class='ident'>py</span>, <span class='ident'>t</span>, <span class='number'>0</span>))
+<span class="doccomment">/// Returns `Ok(NoArgs)` if the input is an empty Python tuple.</span>
+<span class="doccomment">/// Otherwise, returns an error.</span>
+<span class="macro">extract</span><span class="macro">!</span>(<span class="ident">obj</span> <span class="ident">to</span> <span class="ident">NoArgs</span>; <span class="ident">py</span> <span class="op">=&gt;</span> {
+    <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span>(<span class="ident">py</span>));
+    <span class="kw">if</span> <span class="ident">t</span>.<span class="ident">len</span>(<span class="ident">py</span>) <span class="op">==</span> <span class="number">0</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">NoArgs</span>)
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">wrong_tuple_length</span>(<span class="ident">py</span>, <span class="ident">t</span>, <span class="number">0</span>))
     }
 });
 
 
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>test</span> {
-    <span class='kw'>use</span> <span class='ident'>python</span>::{<span class='ident'>Python</span>, <span class='ident'>PythonObject</span>};
-    <span class='kw'>use</span> <span class='ident'>conversion</span>::<span class='ident'>ToPyObject</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+    <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_len</span>() {
-        <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-        <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
-        <span class='kw'>let</span> <span class='ident'>tuple</span> <span class='op'>=</span> (<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>).<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>tuple</span>.<span class='ident'>len</span>(<span class='ident'>py</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>((<span class='number'>1</span>, <span class='number'>2</span>, <span class='number'>3</span>), <span class='ident'>tuple</span>.<span class='ident'>into_object</span>().<span class='ident'>extract</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_len</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">tuple</span> <span class="op">=</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).<span class="ident">to_py_object</span>(<span class="ident">py</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">3</span>, <span class="ident">tuple</span>.<span class="ident">len</span>(<span class="ident">py</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="ident">tuple</span>.<span class="ident">into_object</span>().<span class="ident">extract</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>());
     }
 }
 
@@ -457,13 +459,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -497,7 +501,6 @@
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
     <script defer src="../../../search-index.js"></script>
 </body>

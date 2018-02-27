@@ -9,6 +9,7 @@
 
     <title>tests.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,6 +28,7 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
         
     </nav>
@@ -42,7 +44,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1"> 1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1"> 1</span>
 <span id="2"> 2</span>
 <span id="3"> 3</span>
 <span id="4"> 4</span>
@@ -92,55 +94,55 @@
 <span id="48">48</span>
 <span id="49">49</span>
 <span id="50">50</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright (c) 2015 Dmitry Trofimov</span>
-<span class='comment'>//</span>
-<span class='comment'>// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class='comment'>// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class='comment'>// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class='comment'>// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class='comment'>// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class='comment'>//</span>
-<span class='comment'>// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class='comment'>// substantial portions of the Software.</span>
-<span class='comment'>//</span>
-<span class='comment'>// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class='comment'>// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class='comment'>// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class='comment'>// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class='comment'>// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class='comment'>// DEALINGS IN THE SOFTWARE.</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright (c) 2015 Dmitry Trofimov</span>
+<span class="comment">//</span>
+<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
+<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
+<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="comment">//</span>
+<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
+<span class="comment">// substantial portions of the Software.</span>
+<span class="comment">//</span>
+<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
+<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class='kw'>use</span> {<span class='ident'>Python</span>, <span class='ident'>PyDict</span>, <span class='ident'>ToPyObject</span>, <span class='ident'>PyInt</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>collections</span>::{<span class='ident'>BTreeMap</span>, <span class='ident'>HashMap</span>};
+<span class="kw">use</span> {<span class="ident">Python</span>, <span class="ident">PyDict</span>, <span class="ident">ToPyObject</span>, <span class="ident">PyInt</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashMap</span>};
 
-<span class='comment'>// TODO: move these tests into the dict module</span>
-<span class='attribute'>#[<span class='ident'>test</span>]</span>
-<span class='kw'>fn</span> <span class='ident'>test_hashmap_to_python</span>() {
-    <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-    <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
+<span class="comment">// TODO: move these tests into the dict module</span>
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">test_hashmap_to_python</span>() {
+    <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
 
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>map</span> <span class='op'>=</span> <span class='ident'>HashMap</span>::<span class='op'>&lt;</span><span class='ident'>i32</span>, <span class='ident'>i32</span><span class='op'>&gt;</span>::<span class='ident'>new</span>();
-    <span class='ident'>map</span>.<span class='ident'>insert</span>(<span class='number'>1</span>, <span class='number'>1</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">i32</span><span class="op">&gt;</span>::<span class="ident">new</span>();
+    <span class="ident">map</span>.<span class="ident">insert</span>(<span class="number">1</span>, <span class="number">1</span>);
 
-    <span class='kw'>let</span> <span class='ident'>py_map</span> <span class='op'>=</span> <span class='ident'>map</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
+    <span class="kw">let</span> <span class="ident">py_map</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>);
 
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>py_map</span>.<span class='ident'>len</span>(<span class='ident'>py</span>) <span class='op'>==</span> <span class='number'>1</span>);
-    <span class='macro'>assert</span><span class='macro'>!</span>( <span class='ident'>py_map</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>1</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>() <span class='op'>==</span> <span class='number'>1</span>);
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">py_map</span>.<span class="ident">len</span>(<span class="ident">py</span>) <span class="op">==</span> <span class="number">1</span>);
+    <span class="macro">assert</span><span class="macro">!</span>( <span class="ident">py_map</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">1</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>() <span class="op">==</span> <span class="number">1</span>);
 }
 
-<span class='attribute'>#[<span class='ident'>test</span>]</span>
-<span class='kw'>fn</span> <span class='ident'>test_btreemap_to_python</span>() {
-    <span class='kw'>let</span> <span class='ident'>gil</span> <span class='op'>=</span> <span class='ident'>Python</span>::<span class='ident'>acquire_gil</span>();
-    <span class='kw'>let</span> <span class='ident'>py</span> <span class='op'>=</span> <span class='ident'>gil</span>.<span class='ident'>python</span>();
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">test_btreemap_to_python</span>() {
+    <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
 
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>map</span> <span class='op'>=</span> <span class='ident'>BTreeMap</span>::<span class='op'>&lt;</span><span class='ident'>i32</span>, <span class='ident'>i32</span><span class='op'>&gt;</span>::<span class='ident'>new</span>();
-    <span class='ident'>map</span>.<span class='ident'>insert</span>(<span class='number'>1</span>, <span class='number'>1</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">BTreeMap</span>::<span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">i32</span><span class="op">&gt;</span>::<span class="ident">new</span>();
+    <span class="ident">map</span>.<span class="ident">insert</span>(<span class="number">1</span>, <span class="number">1</span>);
 
-    <span class='kw'>let</span> <span class='ident'>py_map</span> <span class='op'>=</span> <span class='ident'>map</span>.<span class='ident'>to_py_object</span>(<span class='ident'>py</span>);
+    <span class="kw">let</span> <span class="ident">py_map</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">to_py_object</span>(<span class="ident">py</span>);
 
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>py_map</span>.<span class='ident'>len</span>(<span class='ident'>py</span>) <span class='op'>==</span> <span class='number'>1</span>);
-    <span class='macro'>assert</span><span class='macro'>!</span>( <span class='ident'>py_map</span>.<span class='ident'>get_item</span>(<span class='ident'>py</span>, <span class='number'>1</span>).<span class='ident'>unwrap</span>().<span class='ident'>extract</span>::<span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>(<span class='ident'>py</span>).<span class='ident'>unwrap</span>() <span class='op'>==</span> <span class='number'>1</span>);
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">py_map</span>.<span class="ident">len</span>(<span class="ident">py</span>) <span class="op">==</span> <span class="number">1</span>);
+    <span class="macro">assert</span><span class="macro">!</span>( <span class="ident">py_map</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="number">1</span>).<span class="ident">unwrap</span>().<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>() <span class="op">==</span> <span class="number">1</span>);
 }
 
 </pre>
@@ -161,13 +163,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -201,7 +205,6 @@
         window.rootPath = "../../../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
     <script defer src="../../../search-index.js"></script>
 </body>

@@ -9,6 +9,7 @@
 
     <title>cpython::PythonObjectWithTypeObject - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc trait">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -27,8 +28,9 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'PythonObjectWithTypeObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait PythonObjectWithTypeObject</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#required-methods">Required Methods</a><div class="sidebar-links"><a href="#tymethod.type_object">type_object</a></div><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'PythonObjectWithTypeObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
     <nav class="sub">
@@ -42,67 +44,72 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class='trait' href=''>PythonObjectWithTypeObject</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>cpython</a>::<wbr><a class="trait" href=''>PythonObjectWithTypeObject</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span><a class='srclink' href='../src/cpython/python.rs.html#71-74' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait PythonObjectWithTypeObject: <a class='trait' href='../cpython/trait.PythonObjectWithCheckedDowncast.html' title='cpython::PythonObjectWithCheckedDowncast'>PythonObjectWithCheckedDowncast</a> {
-    fn <a href='#tymethod.type_object' class='fnname'>type_object</a>(<a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a>;
+<pre class='rust trait'>pub trait PythonObjectWithTypeObject: <a class="trait" href="../cpython/trait.PythonObjectWithCheckedDowncast.html" title="trait cpython::PythonObjectWithCheckedDowncast">PythonObjectWithCheckedDowncast</a> {
+    fn <a href='#tymethod.type_object' class='fnname'>type_object</a>(_: <a class="struct" href="../cpython/struct.Python.html" title="struct cpython::Python">Python</a>) -&gt; <a class="struct" href="../cpython/struct.PyType.html" title="struct cpython::PyType">PyType</a>;
 }</pre><div class='docblock'><p>Trait implemented by Python object types that have a corresponding type object.</p>
 </div>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.type_object' class='method stab '><span id='type_object.v' class='invisible'><code>fn <a href='#tymethod.type_object' class='fnname'>type_object</a>(<a class='struct' href='../cpython/struct.Python.html' title='cpython::Python'>Python</a>) -&gt; <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></span></h3><div class='docblock'><p>Retrieves the type object for this Python object type.</p>
+        <h3 id='tymethod.type_object' class='method'><span id='type_object.v' class='invisible'><code>fn <a href='#tymethod.type_object' class='fnname'>type_object</a>(_: <a class="struct" href="../cpython/struct.Python.html" title="struct cpython::Python">Python</a>) -&gt; <a class="struct" href="../cpython/struct.PyType.html" title="struct cpython::PyType">PyType</a></code></span></h3><div class='docblock'><p>Retrieves the type object for this Python object type.</p>
 </div></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyObject.html' title='cpython::PyObject'>PyObject</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyType.html' title='cpython::PyType'>PyType</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyModule.html' title='cpython::PyModule'>PyModule</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyBytes.html' title='cpython::PyBytes'>PyBytes</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyUnicode.html' title='cpython::PyUnicode'>PyUnicode</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyString.html' title='cpython::PyString'>PyString</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyDict.html' title='cpython::PyDict'>PyDict</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyBool.html' title='cpython::PyBool'>PyBool</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyTuple.html' title='cpython::PyTuple'>PyTuple</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyList.html' title='cpython::PyList'>PyList</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyInt.html' title='cpython::PyInt'>PyInt</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyLong.html' title='cpython::PyLong'>PyLong</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/struct.PyFloat.html' title='cpython::PyFloat'>PyFloat</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.BaseException.html' title='cpython::exc::BaseException'>BaseException</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.Exception.html' title='cpython::exc::Exception'>Exception</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.StandardError.html' title='cpython::exc::StandardError'>StandardError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.LookupError.html' title='cpython::exc::LookupError'>LookupError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.AssertionError.html' title='cpython::exc::AssertionError'>AssertionError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.AttributeError.html' title='cpython::exc::AttributeError'>AttributeError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.EOFError.html' title='cpython::exc::EOFError'>EOFError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.EnvironmentError.html' title='cpython::exc::EnvironmentError'>EnvironmentError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.FloatingPointError.html' title='cpython::exc::FloatingPointError'>FloatingPointError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.IOError.html' title='cpython::exc::IOError'>IOError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.ImportError.html' title='cpython::exc::ImportError'>ImportError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.IndexError.html' title='cpython::exc::IndexError'>IndexError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.KeyError.html' title='cpython::exc::KeyError'>KeyError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.KeyboardInterrupt.html' title='cpython::exc::KeyboardInterrupt'>KeyboardInterrupt</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.MemoryError.html' title='cpython::exc::MemoryError'>MemoryError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.NameError.html' title='cpython::exc::NameError'>NameError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.NotImplementedError.html' title='cpython::exc::NotImplementedError'>NotImplementedError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.OSError.html' title='cpython::exc::OSError'>OSError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.OverflowError.html' title='cpython::exc::OverflowError'>OverflowError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.ReferenceError.html' title='cpython::exc::ReferenceError'>ReferenceError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.RuntimeError.html' title='cpython::exc::RuntimeError'>RuntimeError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.SyntaxError.html' title='cpython::exc::SyntaxError'>SyntaxError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.SystemError.html' title='cpython::exc::SystemError'>SystemError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.SystemExit.html' title='cpython::exc::SystemExit'>SystemExit</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.TypeError.html' title='cpython::exc::TypeError'>TypeError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.ValueError.html' title='cpython::exc::ValueError'>ValueError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.ZeroDivisionError.html' title='cpython::exc::ZeroDivisionError'>ZeroDivisionError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.UnicodeDecodeError.html' title='cpython::exc::UnicodeDecodeError'>UnicodeDecodeError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.UnicodeEncodeError.html' title='cpython::exc::UnicodeEncodeError'>UnicodeEncodeError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/exc/struct.UnicodeTranslateError.html' title='cpython::exc::UnicodeTranslateError'>UnicodeTranslateError</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/oldstyle/struct.PyClass.html' title='cpython::oldstyle::PyClass'>PyClass</a></code></li>
-<li><code>impl PythonObjectWithTypeObject for <a class='struct' href='../cpython/oldstyle/struct.PyInstance.html' title='cpython::oldstyle::PyInstance'>PyInstance</a></code></li>
+    <li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/object.rs.html#125-130' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyObject.html" title="struct cpython::PyObject">PyObject</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyType.html" title="struct cpython::PyType">PyType</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyModule.html" title="struct cpython::PyModule">PyModule</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyBytes.html" title="struct cpython::PyBytes">PyBytes</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyUnicode.html" title="struct cpython::PyUnicode">PyUnicode</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/string.rs.html#91-96' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyString.html" title="struct cpython::PyString">PyString</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyDict.html" title="struct cpython::PyDict">PyDict</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyBool.html" title="struct cpython::PyBool">PyBool</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyTuple.html" title="struct cpython::PyTuple">PyTuple</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyList.html" title="struct cpython::PyList">PyList</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyInt.html" title="struct cpython::PyInt">PyInt</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyLong.html" title="struct cpython::PyLong">PyLong</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/struct.PyFloat.html" title="struct cpython::PyFloat">PyFloat</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.BaseException.html" title="struct cpython::exc::BaseException">BaseException</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.Exception.html" title="struct cpython::exc::Exception">Exception</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.StandardError.html" title="struct cpython::exc::StandardError">StandardError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.LookupError.html" title="struct cpython::exc::LookupError">LookupError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.AssertionError.html" title="struct cpython::exc::AssertionError">AssertionError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.AttributeError.html" title="struct cpython::exc::AttributeError">AttributeError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.EOFError.html" title="struct cpython::exc::EOFError">EOFError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.EnvironmentError.html" title="struct cpython::exc::EnvironmentError">EnvironmentError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.FloatingPointError.html" title="struct cpython::exc::FloatingPointError">FloatingPointError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.IOError.html" title="struct cpython::exc::IOError">IOError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.ImportError.html" title="struct cpython::exc::ImportError">ImportError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.IndexError.html" title="struct cpython::exc::IndexError">IndexError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.KeyError.html" title="struct cpython::exc::KeyError">KeyError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.KeyboardInterrupt.html" title="struct cpython::exc::KeyboardInterrupt">KeyboardInterrupt</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.MemoryError.html" title="struct cpython::exc::MemoryError">MemoryError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.NameError.html" title="struct cpython::exc::NameError">NameError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.NotImplementedError.html" title="struct cpython::exc::NotImplementedError">NotImplementedError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.OSError.html" title="struct cpython::exc::OSError">OSError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.OverflowError.html" title="struct cpython::exc::OverflowError">OverflowError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.ReferenceError.html" title="struct cpython::exc::ReferenceError">ReferenceError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.RuntimeError.html" title="struct cpython::exc::RuntimeError">RuntimeError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.SyntaxError.html" title="struct cpython::exc::SyntaxError">SyntaxError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.SystemError.html" title="struct cpython::exc::SystemError">SystemError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.SystemExit.html" title="struct cpython::exc::SystemExit">SystemExit</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.TypeError.html" title="struct cpython::exc::TypeError">TypeError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.ValueError.html" title="struct cpython::exc::ValueError">ValueError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.ZeroDivisionError.html" title="struct cpython::exc::ZeroDivisionError">ZeroDivisionError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.BufferError.html" title="struct cpython::exc::BufferError">BufferError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.UnicodeDecodeError.html" title="struct cpython::exc::UnicodeDecodeError">UnicodeDecodeError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.UnicodeEncodeError.html" title="struct cpython::exc::UnicodeEncodeError">UnicodeEncodeError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/exc.rs.html#64-69' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/exc/struct.UnicodeTranslateError.html" title="struct cpython::exc::UnicodeTranslateError">UnicodeTranslateError</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/oldstyle/struct.PyClass.html" title="struct cpython::oldstyle::PyClass">PyClass</a></code></li>
+<li><div class='out-of-band'><a class='srclink' href='../src/cpython/objects/mod.rs.html#103-108' title='goto source code'>[src]</a></div><code>impl PythonObjectWithTypeObject for <a class="struct" href="../cpython/oldstyle/struct.PyInstance.html" title="struct cpython::oldstyle::PyInstance">PyInstance</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/cpython/trait.PythonObjectWithTypeObject.js">
                  </script></section>
@@ -122,13 +129,15 @@
                     <dd>Show this help dialog</dd>
                     <dt>S</dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt>↑</dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt>↓</dt>
                     <dd>Move down in search results</dd>
+                    <dt>↹</dt>
+                    <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
@@ -162,7 +171,6 @@
         window.rootPath = "../";
         window.currentCrate = "cpython";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>
