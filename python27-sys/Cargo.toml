@@ -16,8 +16,8 @@ authors = ["Daniel Grunwald <daniel@danielgrunwald.de>"]
 links = "python27"
 build = "build.rs"
 exclude = [
-    ".gitignore",
-    ".travis.yml",
+    "/.gitignore",
+    "/.travis.yml",
 ]
 workspace = ".."
 
