@@ -16,13 +16,13 @@ documentation = "http://dgrunwald.github.io/rust-cpython/doc/cpython/"
 categories = ["api-bindings", "development-tools::ffi"]
 license = "MIT"
 exclude = [
-    ".gitignore",
-    ".travis.yml",
-    "appveyor.yml",
-    ".cargo/config",
-    "python27-sys",
-    "python3-sys",
-    "extensions"
+    "/.gitignore",
+    "/.travis.yml",
+    "/appveyor.yml",
+    "/.cargo/config",
+    "/python27-sys/**",
+    "/python3-sys/**",
+    "/extensions/**"
 ]
 build = "build.rs"
 

@@ -6,6 +6,7 @@ authors = ["Daniel Grunwald <daniel@danielgrunwald.de>"]
 [lib]
 ## Python extension modules should be compiled as 'cdylib'
 crate-type = ["cdylib"]
+path = "src/hello.rs"
 
 [dependencies.cpython]
 path = "../.."
