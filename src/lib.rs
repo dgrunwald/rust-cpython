@@ -47,6 +47,17 @@
 //! You obtain a `Python` instance by acquiring the GIL,
 //! and have to pass it into all operations that call into the Python runtime.
 //!
+//! # Python 2.7
+//! The library will use the python3 bindings by default. To use the python2 bindings
+//! you must specific the `python27` feature explicitly in your `Cargo.toml`.
+//!
+//! ```ignore
+//! [dependencies.cpython]
+//! version = "*"
+//! default-features = false
+//! features = ["python27-sys"]
+//! ```
+//! 
 //! # Error Handling
 //! The vast majority of operations in this library will return `PyResult<...>`.
 //! This is an alias for the type `Result<..., PyErr>`.
