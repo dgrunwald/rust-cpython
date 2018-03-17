@@ -24,6 +24,9 @@ workspace = ".."
 [dependencies]
 libc = "0.2"
 
+[dependencies.python-sys]
+path = "../../python-sys"
+
 [build-dependencies]
 regex = "0.2"
 
@@ -44,6 +47,32 @@ python-3 = []
 python-3-4 = []
 python-3-5 = []
 python-3-6 = []
+
+python-3-6-0 = ["python-sys/python-3-6-0"]
+python-3-6-1 = ["python-sys/python-3-6-1"]
+python-3-6-2 = ["python-sys/python-3-6-2"]
+python-3-6-3 = ["python-sys/python-3-6-3"]
+python-3-6-4 = ["python-sys/python-3-6-4"]
+
+python-3-5-dev  = ["python-sys/python-3-5-dev"]
+python-3-5-0    = ["python-sys/python-3-5-0"]
+python-3-5-1    = ["python-sys/python-3-5-1"]
+python-3-5-2    = ["python-sys/python-3-5-2"]
+python-3-5-3    = ["python-sys/python-3-5-3"]
+python-3-5-4    = ["python-sys/python-3-5-4"]
+python-3-5-5    = ["python-sys/python-3-5-5"]
+python-3-5-5rc1 = ["python-sys/python-3-5-5rc1"]
+
+python-3-4-dev = ["python-sys/python-3-4-dev"]
+python-3-4-0 = ["python-sys/python-3-4-0"]
+python-3-4-1 = ["python-sys/python-3-4-1"]
+python-3-4-2 = ["python-sys/python-3-4-2"]
+python-3-4-3 = ["python-sys/python-3-4-3"]
+python-3-4-4 = ["python-sys/python-3-4-4"]
+python-3-4-5 = ["python-sys/python-3-4-5"]
+python-3-4-6 = ["python-sys/python-3-4-6"]
+python-3-4-7 = ["python-sys/python-3-4-7"]
+python-3-4-8 = ["python-sys/python-3-4-8"]
 
 # Restrict to PEP-384 stable ABI
 pep-384 = []
