@@ -25,7 +25,10 @@ workspace = ".."
 libc = "0.2"
 
 [dependencies.python-sys]
-path = "../../python-sys"
+path = "../python-sys"
+
+[build-dependencies.python-sys]
+path = "../python-sys"
 
 [build-dependencies]
 regex = "0.2"

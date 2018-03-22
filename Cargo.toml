@@ -101,5 +101,5 @@ build-python-3-4-7 = ["python3-sys/build-python-3-4-7"]
 build-python-3-4-8 = ["python3-sys/build-python-3-4-8"]
 
 [workspace]
-members = ["python27-sys", "python3-sys", "extensions/hello"]
+members = ["python-sys", "python27-sys", "python3-sys", "extensions/hello"]
 

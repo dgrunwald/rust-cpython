@@ -1,0 +1,56 @@
+[package]
+name = "python-sys"
+version = "0.1.0"
+authors = ["Sam Vevang <sam.vevang@gmail.com>"]
+
+[build-dependencies]
+regex = "0.2"
+
+[features]
+default = []
+
+# patch level builds based on python-build
+#build-python-2-7       = []
+#build-python-2-7-dev   = []
+#build-python-2-7-1     = []
+#build-python-2-7-10    = []
+#build-python-2-7-11    = []
+#build-python-2-7-12    = []
+#build-python-2-7-13    = []
+#build-python-2-7-14    = []
+#build-python-2-7-2     = []
+#build-python-2-7-3     = []
+#build-python-2-7-4     = []
+#build-python-2-7-5     = []
+#build-python-2-7-6     = []
+#build-python-2-7-7     = []
+#build-python-2-7-8     = []
+
+
+build-python-3-6-0 = []
+build-python-3-6-1 = []
+build-python-3-6-2 = []
+build-python-3-6-3 = []
+build-python-3-6-4 = []
+build-python-3-6-dev = []
+
+build-python-3-5-dev  = []
+build-python-3-5-0    = []
+build-python-3-5-1    = []
+build-python-3-5-2    = []
+build-python-3-5-3    = []
+build-python-3-5-4    = []
+build-python-3-5-5    = []
+build-python-3-5-5rc1 = []
+
+build-python-3-4-dev = []
+build-python-3-4-0 = []
+build-python-3-4-1 = []
+build-python-3-4-2 = []
+build-python-3-4-3 = []
+build-python-3-4-4 = []
+build-python-3-4-5 = []
+build-python-3-4-6 = []
+build-python-3-4-7 = []
+build-python-3-4-8 = []
+
