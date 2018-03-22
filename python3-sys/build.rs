@@ -1,4 +1,5 @@
 extern crate regex;
+extern crate python_sys;
 
 use std::process::Command;
 use std::collections::HashMap;
@@ -388,6 +389,10 @@ fn main() {
     // If you have troubles with your shell accepting '.' in a var name, 
     // try using 'env' (sorry but this isn't our fault - it just has to 
     // match the pkg-config package name, which is going to have a . in it).
+    match python_sys::python_path() {
+        Some(path) => env::set_var("PYTHON_SYS_EXECUTABLE", path),
+        None => ()
+    }
     let version = version_from_env().unwrap();
     let python_interpreter_path = configure_from_path(&version).unwrap();
     let mut config_map = get_config_vars(&python_interpreter_path).unwrap();
