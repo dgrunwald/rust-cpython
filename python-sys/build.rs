@@ -35,20 +35,20 @@ fn main() {
     else{
         python_install_path = None;
     }
-    generate_python_sys_helpers(python_install_path)
+    generate_python_sys_helpers(&python_install_path)
 }
 
 /// Generates code that can run pip etc. from the installed Python
 ///
 /// Creates a new module with a methods returning python_path
-fn generate_python_sys_helpers(python_path: Option<PathBuf>) {
+fn generate_python_sys_helpers(python_path: &Option<PathBuf>) {
     let out_dir = env::var("OUT_DIR").unwrap();
     let dest_path = Path::new(&out_dir).join("python_path_funcs.rs");
     let mut f = File::create(&dest_path).unwrap();
 
     let python_path_func = match python_path {
-        Some(pth) => String::from(format!("Some(\"{}\")", pth.to_str().unwrap())),
-        None => String::from("None")
+        &Some(ref pth) => String::from(format!("Some(\"{}\")", pth.to_str().unwrap())),
+        &None => String::from("None")
     };
 
     f.write_all(b"pub fn python_build_prefix() -> Option<&'static str> {")
@@ -57,6 +57,18 @@ fn generate_python_sys_helpers(python_path: Option<PathBuf>) {
         .unwrap();
     f.write_all(b"}").unwrap();
 
+    let python_version = version_from_cargo_feature().unwrap();
+
+    let python_version_suffix = match python_path {
+        &Some(ref pth) => String::from(format!("Some(\"{}.{}\")", python_version.major, python_version.minor)),
+        &None => String::from("None")
+    };
+
+    f.write_all(b"pub fn python_version_suffix() -> Option<&'static str> {")
+        .unwrap();
+    f.write_all(python_version_suffix.as_bytes())
+        .unwrap();
+    f.write_all(b"}").unwrap();
 }
 
 /// Leverages the `python-build` scripts in pyenv to build a particular version of python.
