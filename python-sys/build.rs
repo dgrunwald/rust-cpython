@@ -60,7 +60,7 @@ fn generate_python_sys_helpers(python_path: &Option<PathBuf>) {
     let python_version = version_from_cargo_feature().unwrap();
 
     let python_version_suffix = match python_path {
-        &Some(ref pth) => String::from(format!("Some(\"{}.{}\")", python_version.major, python_version.minor)),
+        &Some(ref _pth) => String::from(format!("Some(\"{}.{}\")", python_version.major, python_version.minor)),
         &None => String::from("None")
     };
 
