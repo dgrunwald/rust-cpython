@@ -10,6 +10,8 @@ regex = "0.2"
 default = []
 
 # patch level builds based on python-build
+
+# TODO python 2.7
 #build-python-2-7       = []
 #build-python-2-7-dev   = []
 #build-python-2-7-1     = []
