@@ -82,7 +82,8 @@ fn setup_python() -> PathBuf {
     let _ = Command::new("pyenv/plugins/python-build/install.sh")
         .env("PREFIX", &build_tool_install_dir)
         .output()
-        .expect("Could not create the python build tool install dir");
+        .expect("Could not install the python-build tool.");
+
     let python_version = format_python_version(version_from_cargo_feature().unwrap());
 
     // create the python directory
@@ -119,6 +120,9 @@ fn setup_python() -> PathBuf {
     python_install_dir
 }
 
+///
+/// Format the python version as a triple e.g. 3.6.dev
+///
 fn format_python_version(version: PythonVersion) -> std::string::String {
     let version_string = format!("{}.{}", version.major, version.minor);
     if version.patch.is_some() {

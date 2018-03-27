@@ -4,9 +4,6 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio, ExitStatus};
 use std::io::{Error, ErrorKind};
 
-// Move this down into the cpython::* namespace so that we can eliminate `python_sys` from
-// dependents of cpython.
-//
 pub fn install_python_package(code_path: PathBuf, requirements_path: Option<PathBuf>) -> Result<ExitStatus, Error> {
     let pip_path = python_sys::pip_path().unwrap();
     let python_path = python_sys::python_path().unwrap();
