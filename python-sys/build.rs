@@ -98,7 +98,7 @@ fn setup_python() -> PathBuf {
             python_configure_opts = "--enable-framework";
         }
         else{
-            python_configure_opts = "";
+            python_configure_opts = "--enable-shared";
         }
         let _status = Command::new(python_build_command)
             .args(&[
