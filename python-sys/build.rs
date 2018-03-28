@@ -26,10 +26,7 @@ fn main() {
 
     let python_install_path: Option<PathBuf>;
     if !version.is_err() {
-        println!("building python: {:?}", version);
         let pth = setup_python();
-        println!("cargo:rustc-env=COMPILED_PYTHON_INTERPRETER_PATH=\"{}\"", pth.to_str().unwrap());
-
         python_install_path = Some(pth)
     }
     else{
@@ -117,11 +114,6 @@ fn setup_python() -> PathBuf {
             std::process::exit(1);
         }
     }
-
-    println!(
-        r"cargo:rustc-link-search=native={}",
-        Path::new(&python_install_dir).join("lib").to_str().unwrap()
-    );
 
     python_install_dir
 }
