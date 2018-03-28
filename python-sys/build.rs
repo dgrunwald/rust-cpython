@@ -28,8 +28,7 @@ fn main() {
     if !version.is_err() {
         let pth = setup_python();
         python_install_path = Some(pth)
-    }
-    else{
+    } else {
         python_install_path = None;
     }
     generate_python_sys_helpers(&python_install_path)
@@ -45,26 +44,27 @@ fn generate_python_sys_helpers(python_path: &Option<PathBuf>) {
 
     let python_path_func = match python_path {
         &Some(ref pth) => String::from(format!("Some(\"{}\")", pth.to_str().unwrap())),
-        &None => String::from("None")
+        &None => String::from("None"),
     };
 
     f.write_all(b"pub fn python_build_prefix() -> Option<&'static str> {")
         .unwrap();
-    f.write_all(python_path_func.as_bytes())
-        .unwrap();
+    f.write_all(python_path_func.as_bytes()).unwrap();
     f.write_all(b"}").unwrap();
 
     let python_version = version_from_cargo_feature().unwrap();
 
     let python_version_suffix = match python_path {
-        &Some(ref _pth) => String::from(format!("Some(\"{}.{}\")", python_version.major, python_version.minor)),
-        &None => String::from("None")
+        &Some(ref _pth) => String::from(format!(
+            "Some(\"{}.{}\")",
+            python_version.major, python_version.minor
+        )),
+        &None => String::from("None"),
     };
 
     f.write_all(b"pub fn python_version_suffix() -> Option<&'static str> {")
         .unwrap();
-    f.write_all(python_version_suffix.as_bytes())
-        .unwrap();
+    f.write_all(python_version_suffix.as_bytes()).unwrap();
     f.write_all(b"}").unwrap();
 }
 
@@ -94,15 +94,14 @@ fn setup_python() -> PathBuf {
         let python_configure_opts;
         if cfg!(target_os = "macos") {
             python_configure_opts = "--enable-framework --with-enablepip";
-        }
-        else{
+        } else {
             python_configure_opts = "--enable-shared --with-enablepip";
         }
         let status = Command::new(python_build_command)
             .args(&[
-                  "-v".to_owned(),
-                  format!("{}", python_version),
-                  String::from(python_install_dir.to_str().unwrap())
+                "-v".to_owned(),
+                format!("{}", python_version),
+                String::from(python_install_dir.to_str().unwrap()),
             ])
             .env("PYTHON_CONFIGURE_OPTS", python_configure_opts)
             .stdout(Stdio::inherit())
@@ -162,8 +161,5 @@ fn version_from_cargo_feature() -> Result<PythonVersion, String> {
             None => (),
         }
     }
-    Err(
-        "Python version feature was not found."
-            .to_owned(),
-    )
+    Err("Python version feature was not found.".to_owned())
 }
