@@ -95,12 +95,12 @@ fn setup_python() -> PathBuf {
 
         let python_configure_opts;
         if cfg!(target_os = "macos") {
-            python_configure_opts = "--enable-framework";
+            python_configure_opts = "--enable-framework --with-enablepip";
         }
         else{
-            python_configure_opts = "--enable-shared";
+            python_configure_opts = "--enable-shared --with-enablepip";
         }
-        let _status = Command::new(python_build_command)
+        let status = Command::new(python_build_command)
             .args(&[
                   "-v".to_owned(),
                   format!("{}", python_version),
@@ -110,6 +110,12 @@ fn setup_python() -> PathBuf {
             .stdout(Stdio::inherit())
             .status()
             .expect("build failed for python");
+        if !status.success() {
+            writeln!(std::io::stderr(),
+                "\n\npython-sys: Error building python. See `cargo clean && cargo build -vv` for more info. \n \
+                For more detailed help look at https://github.com/pyenv/pyenv/wiki/Common-build-problems ").unwrap();
+            std::process::exit(1);
+        }
     }
 
     println!(
