@@ -68,25 +68,26 @@ fn generate_python_sys_helpers(python_path: &Option<PathBuf>) {
     f.write_all(b"}").unwrap();
 }
 
-/// Leverages the `python-build` scripts in pyenv to build a particular version of python.
-/// Build artifacts are deposited in the `OUT_DIR` and the python path is returned
+/// Leverages the `python-build` bash scripts in pyenv to build a particular version of python.
+/// Build artifacts are deposited in the `OUT_DIR` and the python path is returned.
 fn setup_python() -> PathBuf {
     let out_dir = env::var("OUT_DIR").unwrap();
 
+    // install the python-build tool
     let build_tool_install_dir = Path::new(&out_dir).join("python_build");
     let _ = fs::create_dir(&build_tool_install_dir);
-
     let _ = Command::new("pyenv/plugins/python-build/install.sh")
         .env("PREFIX", &build_tool_install_dir)
         .output()
         .expect("Could not install the python-build tool.");
 
-    let python_version = format_python_version(version_from_cargo_feature().unwrap());
-
     // create the python directory
+    let python_version = format_python_version(version_from_cargo_feature().unwrap());
     let python_install_dir = Path::new(&out_dir).join(format!("python{}-build", python_version));
     let _ = fs::create_dir(&python_install_dir);
 
+    // test if python is already built
+    // XXX fixme, it's possible this could be true and the python build is not complete
     if !python_install_dir.join("bin/python").exists() {
         let python_build_command = Path::new(&build_tool_install_dir).join("bin/python-build");
 
@@ -136,7 +137,7 @@ fn format_python_version(version: PythonVersion) -> std::string::String {
     }
 }
 
-/// Function copied from rust-python:
+/// Function copied and modified from rust-python:
 /// https://github.com/dgrunwald/rust-cpython/blob/master/python3-sys/build.rs
 ///
 /// Determine the python version we're supposed to be building
@@ -162,8 +163,7 @@ fn version_from_cargo_feature() -> Result<PythonVersion, String> {
         }
     }
     Err(
-        "Python version feature was not found. At least one python version \
-         feature must be enabled."
+        "Python version feature was not found."
             .to_owned(),
     )
 }
