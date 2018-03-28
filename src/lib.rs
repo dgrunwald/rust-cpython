@@ -196,6 +196,7 @@ mod function;
 pub mod buffer;
 //pub mod rustobject;
 pub mod py_class;
+pub mod pip_helpers;
 
 /// Private re-exports for macros. Do not use.
 #[doc(hidden)]

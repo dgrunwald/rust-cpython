@@ -46,6 +46,10 @@ optional = true
 path = "python3-sys"
 version = "0.2.0"
 
+[dependencies.python-sys]
+path = "python-sys"
+version = "0.1.0"
+
 [features]
 default = ["python3-sys"]
 
@@ -71,6 +75,35 @@ python-3-4 = ["python3-sys/python-3-4"]
 
 #pep-384 = ["python3-sys/pep-384"]
 
+# patch through the python-sys build features
+
+build-python-3-6-0 = ["python3-sys/build-python-3-6-0"]
+build-python-3-6-1 = ["python3-sys/build-python-3-6-1"]
+build-python-3-6-2 = ["python3-sys/build-python-3-6-2"]
+build-python-3-6-3 = ["python3-sys/build-python-3-6-3"]
+build-python-3-6-4 = ["python3-sys/build-python-3-6-4"]
+build-python-3-6-dev = ["python3-sys/build-python-3-6-dev"]
+
+build-python-3-5-dev  = ["python3-sys/build-python-3-5-dev"]
+build-python-3-5-0    = ["python3-sys/build-python-3-5-0"]
+build-python-3-5-1    = ["python3-sys/build-python-3-5-1"]
+build-python-3-5-2    = ["python3-sys/build-python-3-5-2"]
+build-python-3-5-3    = ["python3-sys/build-python-3-5-3"]
+build-python-3-5-4    = ["python3-sys/build-python-3-5-4"]
+build-python-3-5-5    = ["python3-sys/build-python-3-5-5"]
+build-python-3-5-5rc1 = ["python3-sys/build-python-3-5-5rc1"]
+
+build-python-3-4-dev = ["python3-sys/build-python-3-4-dev"]
+build-python-3-4-0 = ["python3-sys/build-python-3-4-0"]
+build-python-3-4-1 = ["python3-sys/build-python-3-4-1"]
+build-python-3-4-2 = ["python3-sys/build-python-3-4-2"]
+build-python-3-4-3 = ["python3-sys/build-python-3-4-3"]
+build-python-3-4-4 = ["python3-sys/build-python-3-4-4"]
+build-python-3-4-5 = ["python3-sys/build-python-3-4-5"]
+build-python-3-4-6 = ["python3-sys/build-python-3-4-6"]
+build-python-3-4-7 = ["python3-sys/build-python-3-4-7"]
+build-python-3-4-8 = ["python3-sys/build-python-3-4-8"]
+
 [workspace]
-members = ["python27-sys", "python3-sys", "extensions/hello"]
+members = ["python-sys", "python27-sys", "python3-sys", "extensions/hello"]
 
