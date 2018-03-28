@@ -21,7 +21,7 @@ pub fn install_python_package(code_path: PathBuf, requirements_path: Option<Path
     match python_sys::python_build_prefix() {
         Some(_prefix) => {
             Command::new(&python_path)
-                .args(&[code_path.join("setup.py").to_str().unwrap(), "install"])
+                .args(&[pip_path.to_str().unwrap(), "install", "-e", code_path.to_str().unwrap(), "--ignore-installed"])
                 .stdout(Stdio::inherit())
                 .status()
         },
