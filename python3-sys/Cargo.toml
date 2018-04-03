@@ -1,6 +1,6 @@
 [package]
 name = "python3-sys"
-version = "0.1.3"
+version = "0.2.0"
 description = "FFI Declarations for Python 3"
 readme = "README.md"
 keywords = [
@@ -16,8 +16,8 @@ authors = ["Daniel Grunwald <daniel@danielgrunwald.de>"]
 links = "python3"
 build = "build.rs"
 exclude = [
-    ".gitignore",
-    ".travis.yml",
+    "/.gitignore",
+    "/.travis.yml",
 ]
 workspace = ".."
 
