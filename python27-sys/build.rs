@@ -211,17 +211,22 @@ fn get_rustc_link_lib(
 }
 
 #[cfg(target_os = "macos")]
-fn get_macos_linkmodel() -> Result<String, String> {
+fn get_macos_linkmodel(expected_version: &PythonVersion) -> Result<String, String> {
     let script = "import sysconfig; print('framework' if sysconfig.get_config_var('PYTHONFRAMEWORK') else ('shared' if sysconfig.get_config_var('Py_ENABLE_SHARED') else 'static'));";
-    let out = run_python_script("python", script).unwrap();
+    let (_, interpreter_path, _) = find_interpreter_and_get_config(expected_version)?;
+    let out = run_python_script(&interpreter_path, script).unwrap();
     Ok(out.trim_end().to_owned())
 }
 
 #[cfg(target_os = "macos")]
-fn get_rustc_link_lib(_: &PythonVersion, ld_version: &str, _: bool) -> Result<String, String> {
+fn get_rustc_link_lib(
+    expected_version: &PythonVersion,
+    ld_version: &str,
+    _: bool,
+) -> Result<String, String> {
     // os x can be linked to a framework or static or dynamic, and
     // Py_ENABLE_SHARED is wrong; framework means shared library
-    match get_macos_linkmodel().unwrap().as_ref() {
+    match get_macos_linkmodel(expected_version).unwrap().as_ref() {
         "static" => Ok(format!("cargo:rustc-link-lib=static=python{}", ld_version)),
         "shared" => Ok(format!("cargo:rustc-link-lib=python{}", ld_version)),
         "framework" => Ok(format!("cargo:rustc-link-lib=python{}", ld_version)),
