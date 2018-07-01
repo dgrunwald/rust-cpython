@@ -46,9 +46,9 @@ use err::PyResult;
 pub struct PyObject {
     // PyObject owns one reference to the *PyObject
     // ptr is not null
-    #[cfg(feature="nightly")]
-    ptr: ptr::Shared<ffi::PyObject>,
-    #[cfg(not(feature="nightly"))]
+    #[cfg(feature="nonnull")]
+    ptr: ptr::NonNull<ffi::PyObject>,
+    #[cfg(not(feature="nonnull"))]
     ptr: *mut ffi::PyObject,
 }
 
@@ -65,25 +65,25 @@ impl Drop for PyObject {
 }
 
 #[inline]
-#[cfg(feature="nightly")]
-unsafe fn make_shared(ptr: *mut ffi::PyObject) -> ptr::Shared<ffi::PyObject> {
-    ptr::Shared::new(ptr).expect("ptr should not be null")
+#[cfg(feature="nonnull")]
+unsafe fn make_shared(ptr: *mut ffi::PyObject) -> ptr::NonNull<ffi::PyObject> {
+    ptr::NonNull::new_unchecked(ptr)
 }
 
 #[inline]
-#[cfg(not(feature="nightly"))]
+#[cfg(not(feature="nonnull"))]
 unsafe fn make_shared(ptr: *mut ffi::PyObject) -> *mut ffi::PyObject {
     ptr
 }
 
 #[inline]
-#[cfg(feature="nightly")]
-fn unpack_shared(ptr: ptr::Shared<ffi::PyObject>) -> *mut ffi::PyObject {
+#[cfg(feature="nonnull")]
+fn unpack_shared(ptr: ptr::NonNull<ffi::PyObject>) -> *mut ffi::PyObject {
     ptr.as_ptr()
 }
 
 #[inline]
-#[cfg(not(feature="nightly"))]
+#[cfg(not(feature="nonnull"))]
 fn unpack_shared(ptr: *mut ffi::PyObject) -> *mut ffi::PyObject {
     ptr
 }

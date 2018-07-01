@@ -18,7 +18,6 @@
 
 #![cfg_attr(feature="nightly", feature(
     const_fn, // for GILProtected::new (#24111)
-    shared, // for std::ptr::Shared (#27730)
     specialization, // for impl FromPyObject<'source> for Vec<...> (#31844)
 ))]
 
