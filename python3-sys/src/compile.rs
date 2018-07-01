@@ -12,6 +12,11 @@ pub struct PyFutureFeatures {
     pub ff_lineno: c_int,
 }
 
+// TODO: PyCF_MASK etc. constants
+
+// Note: struct PyCompilerFlags was moved from pythonrun.h to compile.h in Python 3.7;
+// We still have our version in pythonrun.rs
+
 #[cfg(not(Py_LIMITED_API))]
 pub const FUTURE_NESTED_SCOPES    : &'static str = "nested_scopes";
 #[cfg(not(Py_LIMITED_API))]
@@ -30,6 +35,8 @@ pub const FUTURE_UNICODE_LITERALS : &'static str = "unicode_literals";
 pub const FUTURE_BARRY_AS_BDFL    : &'static str = "barry_as_FLUFL";
 #[cfg(all(not(Py_LIMITED_API), Py_3_5))]
 pub const FUTURE_GENERATOR_STOP   : &'static str = "generator_stop";
+#[cfg(all(not(Py_LIMITED_API), Py_3_7))]
+pub const FUTURE_ANNOTATIONS      : &'static str = "annotations";
 
 #[cfg(not(Py_LIMITED_API))]
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {

@@ -19,7 +19,10 @@ pub struct PyCodeObject {
     pub co_varnames: *mut PyObject,
     pub co_freevars: *mut PyObject,
     pub co_cellvars: *mut PyObject,
+    #[cfg(not(Py_3_7))]
     pub co_cell2arg: *mut c_uchar,
+    #[cfg(Py_3_7)]
+    pub co_cell2arg: *mut Py_ssize_t,
     pub co_filename: *mut PyObject,
     pub co_name: *mut PyObject,
     #[cfg(not(Py_3_6))]
@@ -67,6 +70,13 @@ pub const CO_FUTURE_UNICODE_LITERALS : c_int = 0x20000;
 pub const CO_FUTURE_BARRY_AS_BDFL : c_int = 0x40000;
 #[cfg(Py_3_5)]
 pub const CO_FUTURE_GENERATOR_STOP : c_int = 0x80000;
+#[cfg(Py_3_7)]
+pub const CO_FUTURE_ANNOTATIONS : c_int = 0x100000;
+
+#[cfg(not(Py_3_7))]
+pub const CO_CELL_NOT_AN_ARG : c_uchar = 255;
+#[cfg(Py_3_7)]
+pub const CO_CELL_NOT_AN_ARG : Py_ssize_t = -1;
 
 pub const CO_MAXBLOCKS: usize = 20;
 

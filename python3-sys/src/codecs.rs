@@ -37,5 +37,8 @@ use object::PyObject;
      -> *mut PyObject;
     pub fn PyCodec_BackslashReplaceErrors(exc: *mut PyObject)
      -> *mut PyObject;
+	#[cfg(Py_3_5)]
+    pub fn PyCodec_NameReplaceErrors(exc: *mut PyObject)
+     -> *mut PyObject;
 }
 

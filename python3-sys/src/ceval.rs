@@ -3,19 +3,19 @@ use object::PyObject;
 use pystate::PyThreadState;
 
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
-    pub fn PyEval_CallObjectWithKeywords(func: *mut PyObject,
+    pub fn PyEval_CallObjectWithKeywords(callable: *mut PyObject,
                                          obj: *mut PyObject,
                                          kwargs: *mut PyObject)
      -> *mut PyObject;
 }
 
 #[inline]
-pub unsafe fn PyEval_CallObject(func: *mut PyObject, arg: *mut PyObject) -> *mut PyObject {
-    PyEval_CallObjectWithKeywords(func, arg, ::core::ptr::null_mut())
+pub unsafe fn PyEval_CallObject(callable: *mut PyObject, arg: *mut PyObject) -> *mut PyObject {
+    PyEval_CallObjectWithKeywords(callable, arg, ::core::ptr::null_mut())
 }
 
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
-    pub fn PyEval_CallFunction(obj: *mut PyObject,
+    pub fn PyEval_CallFunction(callable: *mut PyObject,
                                format: *const c_char, ...)
      -> *mut PyObject;
     pub fn PyEval_CallMethod(obj: *mut PyObject,
@@ -42,6 +42,7 @@ pub unsafe fn PyEval_CallObject(func: *mut PyObject, arg: *mut PyObject) -> *mut
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
     pub fn PyEval_GetFuncName(arg1: *mut PyObject) -> *const c_char;
     pub fn PyEval_GetFuncDesc(arg1: *mut PyObject) -> *const c_char;
+	#[cfg(not(Py_3_7))]
     pub fn PyEval_GetCallStats(arg1: *mut PyObject) -> *mut PyObject;
     pub fn PyEval_EvalFrame(arg1: *mut ::PyFrameObject) -> *mut PyObject;
     pub fn PyEval_EvalFrameEx(f: *mut ::PyFrameObject, exc: c_int)
@@ -54,7 +55,9 @@ pub unsafe fn PyEval_CallObject(func: *mut PyObject, arg: *mut PyObject) -> *mut
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
     pub fn PyEval_ThreadsInitialized() -> c_int;
     pub fn PyEval_InitThreads() -> ();
+	#[deprecated(since="0.2.1", note="Deprecated since Python 3.2: This function does not update the current thread state. Please use PyEval_RestoreThread() or PyEval_AcquireThread() instead.")]
     pub fn PyEval_AcquireLock() -> ();
+	#[deprecated(since="0.2.1", note="Deprecated since Python 3.2: This function does not update the current thread state. Please use PyEval_RestoreThread() or PyEval_AcquireThread() instead.")]
     pub fn PyEval_ReleaseLock() -> ();
     pub fn PyEval_AcquireThread(tstate: *mut PyThreadState) -> ();
     pub fn PyEval_ReleaseThread(tstate: *mut PyThreadState) -> ();

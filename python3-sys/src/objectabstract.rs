@@ -55,15 +55,19 @@ pub unsafe fn PyObject_Length(o: *mut PyObject) -> Py_ssize_t {
      -> c_int;
     pub fn PyObject_DelItem(o: *mut PyObject, key: *mut PyObject)
      -> c_int;
+	#[deprecated(since="0.2.1", note="Old Buffer API")]
     pub fn PyObject_AsCharBuffer(obj: *mut PyObject,
                                  buffer: *mut *const c_char,
                                  buffer_len: *mut Py_ssize_t)
      -> c_int;
+	#[deprecated(since="0.2.1", note="Old Buffer API")]
     pub fn PyObject_CheckReadBuffer(obj: *mut PyObject) -> c_int;
+	#[deprecated(since="0.2.1", note="Old Buffer API")]
     pub fn PyObject_AsReadBuffer(obj: *mut PyObject,
                                  buffer: *mut *const c_void,
                                  buffer_len: *mut Py_ssize_t)
      -> c_int;
+	#[deprecated(since="0.2.1", note="Old Buffer API")]
     pub fn PyObject_AsWriteBuffer(obj: *mut PyObject,
                                   buffer: *mut *mut c_void,
                                   buffer_len: *mut Py_ssize_t)

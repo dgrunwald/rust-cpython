@@ -127,6 +127,7 @@ mod codecs; // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3
 mod pyerrors; // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 
 mod pystate; // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
+// #[cfg(Py_3_7)] mod context; TODO
 
 #[cfg(Py_LIMITED_API)] mod pyarena {}
 #[cfg(not(Py_LIMITED_API))] mod pyarena; // TODO: incomplete

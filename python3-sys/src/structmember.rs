@@ -5,11 +5,17 @@ use object::PyObject;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct PyMemberDef {
+	#[cfg(not(Py_3_7))]
     pub name: *mut c_char,
-    pub type_code: c_int,
+	#[cfg(Py_3_7)]
+    pub name: *const c_char,
+	pub type_code: c_int,
     pub offset: Py_ssize_t,
     pub flags: c_int,
-    pub doc: *mut c_char
+    #[cfg(not(Py_3_7))]
+    pub doc: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub doc: *const c_char,
 }
 
 /* Types */

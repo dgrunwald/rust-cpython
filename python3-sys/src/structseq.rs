@@ -5,8 +5,14 @@ use object::{PyObject, PyTypeObject};
 #[repr(C)]
 #[derive(Copy)]
 pub struct PyStructSequence_Field {
+	#[cfg(not(Py_3_7))]
     pub name: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub name: *const c_char,
+    #[cfg(not(Py_3_7))]
     pub doc: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub doc: *const c_char,
 }
 impl Clone for PyStructSequence_Field {
     #[inline] fn clone(&self) -> PyStructSequence_Field { *self }
@@ -15,8 +21,14 @@ impl Clone for PyStructSequence_Field {
 #[repr(C)]
 #[derive(Copy)]
 pub struct PyStructSequence_Desc {
+	#[cfg(not(Py_3_7))]
     pub name: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub name: *const c_char,
+    #[cfg(not(Py_3_7))]
     pub doc: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub doc: *const c_char,
     pub fields: *mut PyStructSequence_Field,
     pub n_in_sequence: c_int,
 }

@@ -32,5 +32,13 @@ pub unsafe fn PySlice_Check(op: *mut PyObject) -> c_int {
                                 step: *mut Py_ssize_t,
                                 slicelength: *mut Py_ssize_t)
      -> c_int;
+	
+	#[cfg(Py_3_7)] // available since 3.6.1, but we don't have a cfg for the point releases
+	pub fn PySlice_Unpack(slice: *mut PyObject,
+                          start: *mut Py_ssize_t, stop: *mut Py_ssize_t, step: *mut Py_ssize_t) -> c_int;
+	#[cfg(Py_3_7)] // available since 3.6.1, but we don't have a cfg for the point releases
+	pub fn PySlice_AdjustIndices(length: Py_ssize_t,
+								 start: *mut Py_ssize_t, stop: *mut Py_ssize_t,
+								 step: Py_ssize_t) -> Py_ssize_t;
 }
 

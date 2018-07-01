@@ -69,6 +69,7 @@ extension-module-2-7 = [ "python27-sys/extension-module" ]
 # Optional features to support explicitly specifying python minor version.
 # If you don't care which minor version, just specify python3-sys as a 
 # feature.
+python-3-7 = ["python3-sys/python-3-7"]
 python-3-6 = ["python3-sys/python-3-6"]
 python-3-5 = ["python3-sys/python-3-5"]
 python-3-4 = ["python3-sys/python-3-4"]
