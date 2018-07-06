@@ -29,7 +29,7 @@ To use `cpython`, add this to your `Cargo.toml`:
 cpython = "0.1"
 ```
 
-Example program displaying the value of `sys.version`:
+#### Example program displaying the value of `sys.version`:
 
 ```rust
 extern crate cpython;
@@ -54,11 +54,18 @@ fn hello(py: Python) -> PyResult<()> {
 }
 ```
 
-Example library with python bindings:
-
+#### Example library with python bindings:
 The following two files will build with `cargo build`, and will generate a python-compatible library.
 On Mac OS, you will need to rename the output from \*.dylib to \*.so.
 On Windows, you will need to rename the output from \*.dll to \*.pyd.
+
+###### Note:
+At build time `python3-sys/build.rs` will look for interpreters in: 
+* `PYTHON_SYS_EXECUTABLE`
+* `python`
+* `python3`
+
+picking the first one that works and is compatible with the configured expected version (by default, any Python 3.X interpreter will do). If a specific interpreter is desired, the `PYTHON_SYS_EXECUTABLE` environment variable should point to it.
 
 **`Cargo.toml`:**
 ```toml
