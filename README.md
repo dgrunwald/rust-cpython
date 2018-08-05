@@ -16,9 +16,7 @@ Supported Python versions:
 * Python 2.7
 * Python 3.3 to 3.7
 
-Supported Rust version:
-* Rust 1.13.0 or later
-* On Windows, Rust 1.15.0 or later
+Requires Rust 1.21.0 or later.
 
 # Usage
 
@@ -26,7 +24,7 @@ To use `cpython`, add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cpython = "0.1"
+cpython = "0.2"
 ```
 
 Example program displaying the value of `sys.version`:
@@ -67,7 +65,7 @@ name = "rust2py"
 crate-type = ["cdylib"]
 
 [dependencies.cpython]
-version = "0.1"
+version = "0.2"
 features = ["extension-module"]
 ```
 

@@ -25,7 +25,7 @@ workspace = ".."
 libc = "0.2"
 
 [build-dependencies]
-regex = "0.2"
+regex = "1"
 
 [features]
 # This is examined by ./build.rs to determine which python version 

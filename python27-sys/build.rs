@@ -231,8 +231,8 @@ fn get_interpreter_version(line: &str) -> Result<PythonVersion, String> {
     let version_re = Regex::new(r"\((\d+), (\d+)\)").unwrap();
     match version_re.captures(&line) {
         Some(cap) => Ok(PythonVersion {
-            major: cap.at(1).unwrap().parse().unwrap(),
-            minor: Some(cap.at(2).unwrap().parse().unwrap())
+            major: cap.get(1).unwrap().as_str().parse().unwrap(),
+            minor: Some(cap.get(2).unwrap().as_str().parse().unwrap())
         }),
         None => Err(
             format!("Unexpected response to version query {}", line))
@@ -373,10 +373,10 @@ fn version_from_env() -> Result<PythonVersion, String> {
     vars.sort_by(|a, b| b.cmp(a));
     for (key, _) in vars {
         match re.captures(&key) {
-            Some(cap) => return Ok(PythonVersion { 
-                major: cap.at(1).unwrap().parse().unwrap(), 
-                minor: match cap.at(3) {
-                    Some(s) => Some(s.parse().unwrap()),
+            Some(cap) => return Ok(PythonVersion {
+                major: cap.get(1).unwrap().as_str().parse().unwrap(),
+                minor: match cap.get(3) {
+                    Some(s) => Some(s.as_str().parse().unwrap()),
                     None => None
                 }
             }),
