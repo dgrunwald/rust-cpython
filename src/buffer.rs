@@ -277,9 +277,9 @@ impl PyBuffer {
     /// Gets the buffer memory as a slice.
     ///
     /// This function succeeds if:
-    /// * the buffer format is compatible with `T`
-    /// * alignment and size of buffer elements is matching the expectations for type `T`
-    /// * the buffer is C-style contiguous
+    ///  * the buffer format is compatible with `T`
+    ///  * alignment and size of buffer elements is matching the expectations for type `T`
+    ///  * the buffer is C-style contiguous
     ///
     /// The returned slice uses type `Cell<T>` because it's theoretically possible for any call into the Python runtime
     /// to modify the values in the slice.
@@ -298,10 +298,10 @@ impl PyBuffer {
     /// Gets the buffer memory as a slice.
     ///
     /// This function succeeds if:
-    /// * the buffer is not read-only
-    /// * the buffer format is compatible with `T`
-    /// * alignment and size of buffer elements is matching the expectations for type `T`
-    /// * the buffer is C-style contiguous
+    ///  * the buffer is not read-only
+    ///  * the buffer format is compatible with `T`
+    ///  * alignment and size of buffer elements is matching the expectations for type `T`
+    ///  * the buffer is C-style contiguous
     ///
     /// The returned slice uses type `Cell<T>` because it's theoretically possible for any call into the Python runtime
     /// to modify the values in the slice.
@@ -321,9 +321,9 @@ impl PyBuffer {
     /// Gets the buffer memory as a slice.
     ///
     /// This function succeeds if:
-    /// * the buffer format is compatible with `T`
-    /// * alignment and size of buffer elements is matching the expectations for type `T`
-    /// * the buffer is Fortran-style contiguous
+    ///  * the buffer format is compatible with `T`
+    ///  * alignment and size of buffer elements is matching the expectations for type `T`
+    ///  * the buffer is Fortran-style contiguous
     ///
     /// The returned slice uses type `Cell<T>` because it's theoretically possible for any call into the Python runtime
     /// to modify the values in the slice.
@@ -342,10 +342,10 @@ impl PyBuffer {
     /// Gets the buffer memory as a slice.
     ///
     /// This function succeeds if:
-    /// * the buffer is not read-only
-    /// * the buffer format is compatible with `T`
-    /// * alignment and size of buffer elements is matching the expectations for type `T`
-    /// * the buffer is Fortran-style contiguous
+    ///  * the buffer is not read-only
+    ///  * the buffer format is compatible with `T`
+    ///  * alignment and size of buffer elements is matching the expectations for type `T`
+    ///  * the buffer is Fortran-style contiguous
     ///
     /// The returned slice uses type `Cell<T>` because it's theoretically possible for any call into the Python runtime
     /// to modify the values in the slice.

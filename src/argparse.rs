@@ -36,11 +36,11 @@ pub struct ParamDescription<'a> {
 
 /// Parse argument list
 ///
-/// * fname:  Name of the current function
-/// * params: Declared parameters of the function
-/// * args:   Positional arguments
-/// * kwargs: Keyword arguments
-/// * output: Output array that receives the arguments.
+///  * fname:  Name of the current function
+///  * params: Declared parameters of the function
+///  * args:   Positional arguments
+///  * kwargs: Keyword arguments
+///  * output: Output array that receives the arguments.
 ///           Must have same length as `params` and must be initialized to `None`.
 pub fn parse_args(
     py: Python,
@@ -107,11 +107,11 @@ pub fn parse_args(
 ///
 /// Syntax: `py_argparse!(py, fname, args, kwargs, (parameter-list) { body })`
 ///
-/// * `py`: the `Python` token
-/// * `fname`: expression of type `Option<&str>`: Name of the function used in error messages.
-/// * `args`: expression of type `&PyTuple`: The position arguments
-/// * `kwargs`: expression of type `Option<&PyDict>`: The named arguments
-/// * `parameter-list`: a comma-separated list of parameter declarations.
+///  * `py`: the `Python` token
+///  * `fname`: expression of type `Option<&str>`: Name of the function used in error messages.
+///  * `args`: expression of type `&PyTuple`: The position arguments
+///  * `kwargs`: expression of type `Option<&PyDict>`: The named arguments
+///  * `parameter-list`: a comma-separated list of parameter declarations.
 ///   Parameter declarations have one of these formats:
 ///    1. `name`
 ///    2. `name: ty`
@@ -126,7 +126,7 @@ pub fn parse_args(
 ///   `&PyObject` (format 1), `&PyTuple` (format 4) or `&PyDict` (format 6).
 ///   If a default value is specified, it must be a compile-time constant
 //    of type `ty`.
-/// * `body`: expression of type `PyResult<_>`.
+///  * `body`: expression of type `PyResult<_>`.
 ///     The extracted argument values are available in this scope.
 ///
 /// `py_argparse!()` expands to code that extracts values from `args` and `kwargs` and assigns

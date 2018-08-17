@@ -144,9 +144,9 @@ impl PyErr {
     /// Creates a new PyErr of type `T`.
     ///
     /// `value` can be:
-    /// * `NoArgs`: the exception instance will be created using python `T()`
-    /// * a tuple: the exception instance will be created using python `T(*tuple)`
-    /// * any other value: the exception instance will be created using python `T(value)`
+    ///  * `NoArgs`: the exception instance will be created using python `T()`
+    ///  * a tuple: the exception instance will be created using python `T(*tuple)`
+    ///  * any other value: the exception instance will be created using python `T(value)`
     ///
     /// Panics if `T` is not a python class derived from `BaseException`.
     ///
