@@ -51,8 +51,15 @@ pub unsafe fn PyEval_CallObject(callable: *mut PyObject, arg: *mut PyObject) -> 
     pub fn PyEval_RestoreThread(arg1: *mut PyThreadState) -> ();
 }
 
-#[cfg(py_sys_config = "WITH_THREAD")]
+#[cfg(Py_3_7)]
+pub unsafe fn PyEval_ThreadsInitialized() -> c_int {
+    //Changed in version 3.7: The GIL is now initialized by Py_Initialize().
+    ::pythonrun::Py_IsInitialized()
+}
+
+#[cfg(any(py_sys_config = "WITH_THREAD", Py_3_7))]
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+    #[cfg(not(Py_3_7))]
     pub fn PyEval_ThreadsInitialized() -> c_int;
     pub fn PyEval_InitThreads() -> ();
 	#[deprecated(since="0.2.1", note="Deprecated since Python 3.2: This function does not update the current thread state. Please use PyEval_RestoreThread() or PyEval_AcquireThread() instead.")]
