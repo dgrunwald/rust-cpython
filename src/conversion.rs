@@ -18,7 +18,7 @@
 
 use std;
 use ffi;
-use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PyClone};
+use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PyDrop, PyClone};
 use objects::PyObject;
 use err::PyResult;
 
@@ -50,7 +50,9 @@ pub trait ToPyObject {
         where F: FnOnce(*mut ffi::PyObject) -> R
     {
         let obj = self.to_py_object(py).into_object();
-        f(obj.as_ptr())
+        let res = f(obj.as_ptr());
+        obj.release_ref(py);
+        res
     }
 
     // FFI functions that accept a borrowed reference will use:
@@ -60,7 +62,7 @@ pub trait ToPyObject {
     // 2) input is PyObject
     //   -> with_borrowed_ptr() just forwards to the closure
     // 3) input is &str, int, ...
-    //   -> to_py_object() allocates new Python object; FFI call happens; PyObject::drop() calls Py_DECREF()
+    //   -> to_py_object() allocates new Python object; FFI call happens; release_ref() calls Py_DECREF()
     
     // FFI functions that steal a reference will use:
     //   let input = try!(input.into_py_object()); ffi::Call(input.steal_ptr())
