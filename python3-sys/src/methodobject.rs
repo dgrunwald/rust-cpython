@@ -16,17 +16,33 @@ pub type PyCFunction =
                               (slf: *mut PyObject, args: *mut PyObject)
                               -> *mut PyObject;
 
-#[cfg(all(Py_3_6, not(Py_LIMITED_API)))]
+#[cfg(all(Py_3_6, not(Py_LIMITED_API), not(Py_3_7)))]
 pub type _PyCFunctionFast =
     unsafe extern "C" fn
                               (slf: *mut PyObject, args: *mut *mut PyObject,
                                nargs: ::pyport::Py_ssize_t, kwnames: *mut PyObject)
                               -> *mut PyObject;
 
+#[cfg(all(Py_3_7, not(Py_LIMITED_API)))]
+pub type _PyCFunctionFast =
+    unsafe extern "C" fn(
+        slf: *mut PyObject,
+        args: *const *mut PyObject, nargs: ::pyport::Py_ssize_t
+    ) -> *mut PyObject;
+
 pub type PyCFunctionWithKeywords =
     unsafe extern "C" fn
                               (slf: *mut PyObject, args: *mut PyObject,
                                kwds: *mut PyObject) -> *mut PyObject;
+
+#[cfg(all(Py_3_7, not(Py_LIMITED_API)))]
+pub type _PyCFunctionFastWithKeywords =
+    unsafe extern "C" fn(
+        slf: *mut PyObject,
+        args: *const *mut PyObject, nargs: ::pyport::Py_ssize_t,
+        kwnames: *mut PyObject
+    ) -> *mut PyObject;
+
 pub type PyNoArgsFunction =
     unsafe extern "C" fn(slf: *mut PyObject)
                               -> *mut PyObject;

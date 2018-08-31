@@ -23,6 +23,8 @@ use object::PyObject;
                                          cpathname: *mut PyObject)
      -> *mut PyObject;
     pub fn PyImport_GetModuleDict() -> *mut PyObject;
+    #[cfg(Py_3_7)]
+    pub fn PyImport_GetModule(name: *mut PyObject) -> *mut PyObject;
     pub fn PyImport_AddModuleObject(name: *mut PyObject) -> *mut PyObject;
     pub fn PyImport_AddModule(name: *const c_char) -> *mut PyObject;
     pub fn PyImport_ImportModule(name: *const c_char)
@@ -60,6 +62,8 @@ pub unsafe fn PyImport_ImportModuleEx(name: *const c_char,
      -> c_int;
     pub fn PyImport_ImportFrozenModule(name: *const c_char)
      -> c_int;
+
+    // pub static mut PyNullImporter_Type: PyTypeObject; -- does not actually exist in shared library
 
     pub fn PyImport_AppendInittab(name: *const c_char,
                                   initfunc: Option<extern "C" fn() -> *mut PyObject>)

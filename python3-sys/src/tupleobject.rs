@@ -47,6 +47,7 @@ pub unsafe fn PyTuple_GET_ITEM(op: *mut PyObject, i: Py_ssize_t) -> *mut PyObjec
 #[inline(always)]
 #[cfg(not(Py_LIMITED_API))]
 pub unsafe fn PyTuple_GET_SIZE(op: *mut PyObject) -> Py_ssize_t {
+    debug_assert!(PyTuple_Check(op) != 0);
     Py_SIZE(op)
 }
 

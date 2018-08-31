@@ -16,10 +16,16 @@ pub type setter =
 #[repr(C)]
 #[derive(Copy)]
 pub struct PyGetSetDef {
+	#[cfg(not(Py_3_7))]
     pub name: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub name: *const c_char,
     pub get: Option<getter>,
     pub set: Option<setter>,
+	#[cfg(not(Py_3_7))]
     pub doc: *mut c_char,
+	#[cfg(Py_3_7)]
+    pub doc: *const c_char,
     pub closure: *mut c_void,
 }
 

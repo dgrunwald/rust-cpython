@@ -21,5 +21,7 @@ pub const PY_STDIOTEXTMODE : &'static str = "b";
     #[cfg(Py_3_6)]
     pub static mut Py_FileSystemDefaultEncodeErrors: *const c_char;
     pub static mut Py_HasFileSystemDefaultEncoding: c_int;
+    #[cfg(Py_3_7)]
+    pub static mut Py_UTF8Mode: c_int;
 }
 

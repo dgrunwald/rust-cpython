@@ -55,6 +55,7 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
     pub static mut PyExc_BaseException: *mut PyObject;
     pub static mut PyExc_Exception: *mut PyObject;
+    #[cfg(Py_3_5)] pub static mut PyExc_StopAsyncIteration: *mut PyObject;
     pub static mut PyExc_StopIteration: *mut PyObject;
     pub static mut PyExc_GeneratorExit: *mut PyObject;
     pub static mut PyExc_ArithmeticError: *mut PyObject;
@@ -66,8 +67,7 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
     pub static mut PyExc_FloatingPointError: *mut PyObject;
     pub static mut PyExc_OSError: *mut PyObject;
     pub static mut PyExc_ImportError: *mut PyObject;
-    #[cfg(Py_3_6)]
-    pub static mut PyExc_ModuleNotFoundError: *mut PyObject;
+    #[cfg(Py_3_6)] pub static mut PyExc_ModuleNotFoundError: *mut PyObject;
     pub static mut PyExc_IndexError: *mut PyObject;
     pub static mut PyExc_KeyError: *mut PyObject;
     pub static mut PyExc_KeyboardInterrupt: *mut PyObject;
@@ -75,6 +75,7 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
     pub static mut PyExc_NameError: *mut PyObject;
     pub static mut PyExc_OverflowError: *mut PyObject;
     pub static mut PyExc_RuntimeError: *mut PyObject;
+    #[cfg(Py_3_5)] pub static mut PyExc_RecursionError: *mut PyObject;
     pub static mut PyExc_NotImplementedError: *mut PyObject;
     pub static mut PyExc_SyntaxError: *mut PyObject;
     pub static mut PyExc_IndentationError: *mut PyObject;
@@ -104,11 +105,15 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
     pub static mut PyExc_NotADirectoryError: *mut PyObject;
     pub static mut PyExc_PermissionError: *mut PyObject;
     pub static mut PyExc_ProcessLookupError: *mut PyObject;
+
+    // Compatibility aliases
     pub static mut PyExc_TimeoutError: *mut PyObject;
     pub static mut PyExc_EnvironmentError: *mut PyObject;
     pub static mut PyExc_IOError: *mut PyObject;
     #[cfg(windows)] pub static mut PyExc_WindowsError: *mut PyObject;
-    pub static mut PyExc_RecursionErrorInst: *mut PyObject;
+    #[cfg(not(Py_3_7))] pub static mut PyExc_RecursionErrorInst: *mut PyObject;
+
+    // Predefined warning categories
     pub static mut PyExc_Warning: *mut PyObject;
     pub static mut PyExc_UserWarning: *mut PyObject;
     pub static mut PyExc_DeprecationWarning: *mut PyObject;

@@ -6,9 +6,9 @@ use pystate::PyThreadState;
 use pyarena::PyArena;
 
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" { // TODO: these moved to pylifecycle.h
-    pub fn Py_SetProgramName(arg1: *mut wchar_t) -> ();
+    pub fn Py_SetProgramName(arg1: *const wchar_t) -> ();
     pub fn Py_GetProgramName() -> *mut wchar_t;
-    pub fn Py_SetPythonHome(arg1: *mut wchar_t) -> ();
+    pub fn Py_SetPythonHome(arg1: *const wchar_t) -> ();
     pub fn Py_GetPythonHome() -> *mut wchar_t;
     pub fn Py_Initialize() -> ();
     pub fn Py_InitializeEx(arg1: c_int) -> ();
@@ -18,7 +18,7 @@ use pyarena::PyArena;
     pub fn Py_EndInterpreter(arg1: *mut PyThreadState) -> ();
 }
 
-// Note: PyCompilerFlags was moved to compile.h in PYthon 3.7;
+// Note: PyCompilerFlags was moved to compile.h in Python 3.7;
 // We still have our version in pythonrun.rs
 #[repr(C)]
 #[derive(Copy, Clone)]

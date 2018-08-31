@@ -27,9 +27,17 @@ pub struct PyFrameObject {
     pub f_stacktop: *mut *mut PyObject,
     pub f_trace: *mut PyObject,		/* Trace function */
 
+    #[cfg(not(Py_3_7))]
     pub f_exc_type: *mut PyObject,
+    #[cfg(not(Py_3_7))]
     pub f_exc_value: *mut PyObject,
+    #[cfg(not(Py_3_7))]
     pub f_exc_traceback: *mut PyObject,
+
+    #[cfg(Py_3_7)]
+    pub f_trace_lines: c_char,
+    #[cfg(Py_3_7)]
+    pub f_trace_opcodes: c_char,
 
     #[cfg(not(Py_3_4))]
     pub f_tstate: *mut PyThreadState,
