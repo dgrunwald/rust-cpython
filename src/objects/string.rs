@@ -435,11 +435,33 @@ impl <'source> FromPyObject<'source> for String {
     }
 }
 
+/// Allows extracting byte arrays from Python objects.
+/// For Python `bytes`, returns a reference to the existing immutable string data.
+/// For other types, converts to an owned `Vec<u8>`.
+impl <'source> FromPyObject<'source> for Cow<'source, [u8]> {
+    fn extract(py: Python, obj: &'source PyObject) -> PyResult<Self> {
+        if let Ok(bytes) = obj.cast_as::<PyBytes>(py) {
+            Ok(Cow::Borrowed(bytes.data(py)))
+        } else {
+            obj.extract::<Vec<u8>>(py).map(Cow::Owned)
+        }
+    }
+}
+
 impl RefFromPyObject for str {
     fn with_extracted<F, R>(py: Python, obj: &PyObject, f: F) -> PyResult<R>
         where F: FnOnce(&str) -> R
     {
-        let s = try!(obj.extract::<Cow<str>>(py));
+        let s = obj.extract::<Cow<str>>(py)?;
+        Ok(f(&s))
+    }
+}
+
+impl RefFromPyObject for [u8] {
+    fn with_extracted<F, R>(py: Python, obj: &PyObject, f: F) -> PyResult<R>
+        where F: FnOnce(&[u8]) -> R
+    {
+        let s = obj.extract::<Cow<[u8]>>(py)?;
         Ok(f(&s))
     }
 }
@@ -472,5 +494,28 @@ mod test {
             }).unwrap();
         assert!(called);
     }
+    
+    #[test]
+    fn test_extract_byte_str() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let py_bytes = py.eval("b'Hello'", None, None).unwrap();
+        let mut called = false;
+        RefFromPyObject::with_extracted(py, &py_bytes,
+            |s2: &[u8]| {
+                assert_eq!(b"Hello", s2);
+                called = true;
+            }).unwrap();
+        assert!(called);
+    }
+    
+    #[test]
+    #[cfg(feature="nightly")] // only works with specialization
+    fn test_extract_byte_str_to_vec() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let py_bytes = py.eval("b'Hello'", None, None).unwrap();
+        let v = py_bytes.extract::<Vec<u8>>(py).unwrap();
+        assert_eq!(b"Hello", &v[..]);
+    }
 }
-
