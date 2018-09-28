@@ -46,10 +46,7 @@ use err::PyResult;
 pub struct PyObject {
     // PyObject owns one reference to the *PyObject
     // ptr is not null
-    #[cfg(feature="nonnull")]
     ptr: ptr::NonNull<ffi::PyObject>,
-    #[cfg(not(feature="nonnull"))]
-    ptr: *mut ffi::PyObject,
 }
 
 // PyObject is thread-safe, because all operations on it require a Python<'p> token.
@@ -60,32 +57,8 @@ unsafe impl Sync for PyObject {}
 impl Drop for PyObject {
     fn drop(&mut self) {
         let _gil_guard = Python::acquire_gil();
-        unsafe { ffi::Py_DECREF(unpack_shared(self.ptr)); }
+        unsafe { ffi::Py_DECREF(self.ptr.as_ptr()); }
     }
-}
-
-#[inline]
-#[cfg(feature="nonnull")]
-unsafe fn make_shared(ptr: *mut ffi::PyObject) -> ptr::NonNull<ffi::PyObject> {
-    ptr::NonNull::new_unchecked(ptr)
-}
-
-#[inline]
-#[cfg(not(feature="nonnull"))]
-unsafe fn make_shared(ptr: *mut ffi::PyObject) -> *mut ffi::PyObject {
-    ptr
-}
-
-#[inline]
-#[cfg(feature="nonnull")]
-fn unpack_shared(ptr: ptr::NonNull<ffi::PyObject>) -> *mut ffi::PyObject {
-    ptr.as_ptr()
-}
-
-#[inline]
-#[cfg(not(feature="nonnull"))]
-fn unpack_shared(ptr: *mut ffi::PyObject) -> *mut ffi::PyObject {
-    ptr
 }
 
 impl PythonObject for PyObject {
@@ -136,7 +109,7 @@ impl PyObject {
     #[inline]
     pub unsafe fn from_owned_ptr(_py: Python, ptr: *mut ffi::PyObject) -> PyObject {
         debug_assert!(!ptr.is_null() && ffi::Py_REFCNT(ptr) > 0);
-        PyObject { ptr: make_shared(ptr) }
+        PyObject { ptr: ptr::NonNull::new_unchecked(ptr) }
     }
 
     /// Creates a PyObject instance for the given FFI pointer.
@@ -146,7 +119,7 @@ impl PyObject {
     pub unsafe fn from_borrowed_ptr(_py : Python, ptr : *mut ffi::PyObject) -> PyObject {
         debug_assert!(!ptr.is_null() && ffi::Py_REFCNT(ptr) > 0);
         ffi::Py_INCREF(ptr);
-        PyObject { ptr: make_shared(ptr) }
+        PyObject { ptr: ptr::NonNull::new_unchecked(ptr) }
     }
 
     /// Creates a PyObject instance for the given FFI pointer.
@@ -175,7 +148,7 @@ impl PyObject {
     /// Returns a borrowed pointer.
     #[inline]
     pub fn as_ptr(&self) -> *mut ffi::PyObject {
-        unpack_shared(self.ptr)
+        self.ptr.as_ptr()
     }
 
     /// Gets the underlying FFI pointer.

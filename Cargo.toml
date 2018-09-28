@@ -49,12 +49,12 @@ version = "0.2.1"
 [features]
 default = ["python3-sys"]
 
-# Enable use of std::ptr::NonNull to reduce the size of Option<PyObject>
-# Requires Rust 1.25.0.
+# Deprecated: nonnull feature no longer has any effect;
+# std::ptr::NonNull is now used unconditionally.
 nonnull = []
 
 # Enable additional features that require nightly rust
-nightly = [ "nonnull" ]
+nightly = []
 
 # Use this feature when building an extension module.
 # It tells the linker to keep the python symbols unresolved,
