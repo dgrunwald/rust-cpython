@@ -50,7 +50,7 @@ pub use self::_PyObject_DebugFree as PyObject_Free;
 /// Test if a type has a GC head
 #[inline(always)]
 pub unsafe fn PyType_IS_GC(t : *mut PyTypeObject) -> c_int {
-    PyType_HasFeature((t), Py_TPFLAGS_HAVE_GC)
+    PyType_HasFeature(t, Py_TPFLAGS_HAVE_GC)
 }
 
 /// Test if an object has a GC head
@@ -66,7 +66,7 @@ pub unsafe fn PyObject_IS_GC(o : *mut PyObject) -> c_int {
 /* Test if a type supports weak references */
 #[inline(always)]
 pub unsafe fn PyType_SUPPORTS_WEAKREFS(t : *mut PyTypeObject) -> c_int {
-    (PyType_HasFeature((t), Py_TPFLAGS_HAVE_WEAKREFS) != 0
+    (PyType_HasFeature(t, Py_TPFLAGS_HAVE_WEAKREFS) != 0
      && ((*t).tp_weaklistoffset > 0)) as c_int
 }
 

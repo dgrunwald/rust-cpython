@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use libc::{c_void, c_uchar, c_char, c_int};
 use pyport::Py_ssize_t;
 use object::*;
@@ -20,7 +21,7 @@ pub struct PyCodeObject {
     pub co_freevars: *mut PyObject,
     pub co_cellvars: *mut PyObject,
     #[cfg(not(Py_3_7))]
-    pub co_cell2arg: *mut c_uchar,
+    pub co_cell2arg: *mut libc::c_uchar,
     #[cfg(Py_3_7)]
     pub co_cell2arg: *mut Py_ssize_t,
     pub co_filename: *mut PyObject,

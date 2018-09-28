@@ -18,7 +18,6 @@
 
 use std;
 use std::{mem, str, char};
-use std::ascii::AsciiExt;
 use std::borrow::Cow;
 use libc::c_char;
 use ffi;
