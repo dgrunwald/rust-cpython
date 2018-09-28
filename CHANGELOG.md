@@ -10,6 +10,9 @@
 - Added [Rust Docstring support for instance methods][166], [static methods and class methods][179] (PRs by [@quark-zju] and [@AdamRzepka])
 - [Made macros work with Rust 2018][167] (PR by [@derekdreery])
 - [Support Rust raw identifiers for method and keyword names][183] (PR by [@quark-zju])
+- Added `impl RefFromPyObject for [u8]`. This allows using `&[u8]` as parameter type in `py_fn!`.
+  When passing a `bytes` object from Python, this allows accessing the data without a copy.
+  (other mutable Python objects will use a defensive copy)
 
 [166]: https://github.com/dgrunwald/rust-cpython/pull/166
 [183]: https://github.com/dgrunwald/rust-cpython/pull/183
