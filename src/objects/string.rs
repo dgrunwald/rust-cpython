@@ -437,6 +437,10 @@ impl ToPyObject for String {
 /// Allows extracting strings from Python objects.
 /// Accepts Python `str` and `unicode` objects.
 /// In Python 2.7, `str` is expected to be UTF-8 encoded.
+/// 
+/// Returns a `UnicodeDecodeError` if the input is not valid unicode
+/// (containing unpaired surrogates, or a Python 2.7 byte string that is
+/// not valid UTF-8).
 impl <'s> FromPyObject<'s> for Cow<'s, str> {
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
         obj.cast_as::<PyString>(py)?.to_string(py)
@@ -446,6 +450,10 @@ impl <'s> FromPyObject<'s> for Cow<'s, str> {
 /// Allows extracting strings from Python objects.
 /// Accepts Python `str` and `unicode` objects.
 /// In Python 2.7, `str` is expected to be UTF-8 encoded.
+/// 
+/// Returns a `UnicodeDecodeError` if the input is not valid unicode
+/// (containing unpaired surrogates, or a Python 2.7 byte string that is
+/// not valid UTF-8).
 impl <'s> FromPyObject<'s> for String {
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
         obj.extract::<Cow<str>>(py).map(Cow::into_owned)
