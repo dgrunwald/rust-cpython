@@ -98,4 +98,14 @@ fn sum_as_string_py(_: Python, a:i64, b:i64) -> PyResult<String> {
 }
 ```
 
+On windows and linux, you can build normally with cargo build --release. On Mac Os, you need to set additional linker arguments. The simplest solution is to create a `.cargo/config` with the following content:
+
+```
+[target.x86_64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-undefined",
+  "-C", "link-arg=dynamic_lookup",
+]
+```
+
 For `setup.py` integration, see https://github.com/fafhrd91/setuptools-rust
