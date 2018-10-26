@@ -25,7 +25,7 @@ use objects::{PyObject, PyTuple, PyDict, PyString};
 use conversion::ToPyObject;
 use err::{PyErr, PyResult, self};
 
-/// Trait that contains methods 
+/// Trait that contains methods
 pub trait ObjectProtocol : PythonObject {
     /// Determines whether this object has the given attribute.
     /// This is equivalent to the Python expression 'hasattr(self, attr_name)'.
@@ -88,8 +88,8 @@ pub trait ObjectProtocol : PythonObject {
         #[cfg(feature="python27-sys")]
         unsafe fn do_compare(py: Python, a: *mut ffi::PyObject, b: *mut ffi::PyObject) -> PyResult<Ordering> {
             let mut result = -1;
-            try!(err::error_on_minusone(py,
-                ffi::PyObject_Cmp(a, b, &mut result)));
+            err::error_on_minusone(py,
+                ffi::PyObject_Cmp(a, b, &mut result))?;
             Ok(if result < 0 {
                 Ordering::Less
             } else if result > 0 {
@@ -218,7 +218,7 @@ pub trait ObjectProtocol : PythonObject {
     fn call_method<A>(&self, py: Python, name: &str, args: A, kwargs: Option<&PyDict>) -> PyResult<PyObject>
         where A: ToPyObject<ObjectType=PyTuple>
     {
-        try!(self.getattr(py, name)).call(py, args, kwargs)
+        self.getattr(py, name)?.call(py, args, kwargs)
     }
 
     /// Retrieves the hash code of the object.
@@ -292,10 +292,10 @@ pub trait ObjectProtocol : PythonObject {
     /// is an iterator, this returns itself.
     #[inline]
     fn iter<'p>(&self, py: Python<'p>) -> PyResult<::objects::PyIterator<'p>> {
-        let obj = try!(unsafe {
+        let obj = unsafe {
             err::result_from_owned_ptr(py, ffi::PyObject_GetIter(self.as_ptr()))
-        });
-        Ok(try!(::objects::PyIterator::from_object(py, obj)))
+        }?;
+        Ok(::objects::PyIterator::from_object(py, obj)?)
     }
 }
 
@@ -306,7 +306,7 @@ impl fmt::Debug for PyObject {
         // TODO: we shouldn't use fmt::Error when repr() fails
         let gil_guard = Python::acquire_gil();
         let py = gil_guard.python();
-        let repr_obj = try!(self.repr(py).map_err(|_| fmt::Error));
+        let repr_obj = self.repr(py).map_err(|_| fmt::Error)?;
         f.write_str(&repr_obj.to_string_lossy(py))
     }
 }
@@ -316,7 +316,7 @@ impl fmt::Display for PyObject {
         // TODO: we shouldn't use fmt::Error when str() fails
         let gil_guard = Python::acquire_gil();
         let py = gil_guard.python();
-        let str_obj = try!(self.str(py).map_err(|_| fmt::Error));
+        let str_obj = self.str(py).map_err(|_| fmt::Error)?;
         f.write_str(&str_obj.to_string_lossy(py))
     }
 }

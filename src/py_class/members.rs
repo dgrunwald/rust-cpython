@@ -52,10 +52,10 @@ macro_rules! py_class_init_members {
         $( {
             // keep $init out of unsafe block; it might contain user code
             let init = $init;
-            let descriptor = try!(unsafe {
+            let descriptor = unsafe {
                 $crate::py_class::members::TypeMember::<$class>::into_descriptor(init, $py, &mut $type_object)
-            });
-            try!(dict.set_item($py, stringify!($name), descriptor));
+            }?;
+            dict.set_item($py, stringify!($name), descriptor)?;
         })*
         unsafe {
             assert!($type_object.tp_dict.is_null());

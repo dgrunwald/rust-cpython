@@ -65,7 +65,7 @@ impl PyModule {
             let slice = CStr::from_ptr(ptr).to_bytes();
             match std::str::from_utf8(slice) {
                 Ok(s) => Ok(s),
-                Err(e) => Err(PyErr::from_instance(py, try!(exc::UnicodeDecodeError::new_utf8(py, slice, e))))
+                Err(e) => Err(PyErr::from_instance(py, exc::UnicodeDecodeError::new_utf8(py, slice, e)?))
             }
         }
     }
@@ -113,7 +113,7 @@ impl PyModule {
     pub fn call<A>(&self, py: Python, name: &str, args: A, kwargs: Option<&PyDict>) -> PyResult<PyObject>
         where A: ToPyObject<ObjectType=PyTuple>
     {
-        try!(self.as_object().getattr(py, name)).call(py, args, kwargs)
+        self.as_object().getattr(py, name)?.call(py, args, kwargs)
     }
 
     /// Adds a member to the module.

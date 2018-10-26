@@ -6,8 +6,8 @@ use cpython::{PyObject, PyResult};
 use std::{cell, cmp, collections};
 
 py_module_initializer!(btree, initbtree, PyInit_btree, |py, m| {
-    try!(m.add(py, "__doc__", "Rust BTreeSet for Python."));
-    try!(m.add_class::<BTreeSet>(py));
+    m.add(py, "__doc__", "Rust BTreeSet for Python.")?;
+    m.add_class::<BTreeSet>(py)?;
     Ok(())
 });
 

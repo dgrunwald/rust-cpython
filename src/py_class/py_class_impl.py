@@ -117,7 +117,7 @@ base_case = '''
                     ( $( $data_name, )* ): Self::InitType
                 ) -> $crate::PyResult<$crate::PyObject>
                 {
-                    let obj = try!(<$base_type as $crate::py_class::BaseObject>::alloc(py, ty, ()));
+                    let obj = <$base_type as $crate::py_class::BaseObject>::alloc(py, ty, ())?;
                     $( $crate::py_class::data_init::<$data_ty>(py, &obj, $data_offset, $data_name); )*
                     Ok(obj)
                 }
@@ -132,11 +132,11 @@ base_case = '''
         py_coerce_item! {
             impl $class {
                 fn create_instance(py: $crate::Python $( , $data_name : $data_ty )* ) -> $crate::PyResult<$class> {
-                    let obj = try!(unsafe {
+                    let obj = unsafe {
                         <$class as $crate::py_class::BaseObject>::alloc(
                             py, &py.get_type::<$class>(), ( $($data_name,)* )
                         )
-                    });
+                    }?;
                     return Ok($class { _unsafe_inner: obj });
 
                     // hide statics in create_instance to avoid name conflicts

@@ -113,7 +113,7 @@ impl PySequence {
     /// Python statement `del o[i]`
     #[inline]
     pub fn del_item(&self, py: Python, i: isize) -> PyResult<()> {
-        unsafe { 
+        unsafe {
             err::error_on_minusone(py,
                 ffi::PySequence_DelItem(self.as_ptr(), i as Py_ssize_t))
         }
@@ -133,7 +133,7 @@ impl PySequence {
     /// equivalent of the Python statement `del o[i1:i2]`
     #[inline]
     pub fn del_slice(&self, py: Python, i1: isize, i2: isize) -> PyResult<()> {
-        unsafe { 
+        unsafe {
             err::error_on_minusone(py,
                 ffi::PySequence_DelSlice(self.as_ptr(), i1 as Py_ssize_t, i2 as Py_ssize_t))
         }
@@ -250,11 +250,11 @@ impl <'source, T> FromPyObject<'source> for Vec<T>
 fn extract_sequence<T>(py: Python, obj: &PyObject) -> PyResult<Vec<T>>
     where for<'a> T: FromPyObject<'a>
 {
-    let seq = try!(obj.cast_as::<PySequence>(py));
+    let seq = obj.cast_as::<PySequence>(py)?;
     let mut v = Vec::new();
-    for item in try!(seq.iter(py)) {
-        let item = try!(item);
-        v.push(try!(T::extract(py, &item)));
+    for item in seq.iter(py)? {
+        let item = item?;
+        v.push(T::extract(py, &item)?);
         item.release_ref(py);
     }
     Ok(v)
@@ -508,7 +508,7 @@ mod test {
         let v: Vec<i32> = py.eval("range(1, 5)", None, None).unwrap().extract(py).unwrap();
         assert!(v == [1, 2, 3, 4]);
     }
-    
+
     #[test]
     fn test_extract_bytearray_to_vec() {
         let gil = Python::acquire_gil();

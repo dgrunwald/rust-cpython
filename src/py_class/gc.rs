@@ -166,7 +166,7 @@ impl <T> Traversable for Option<T> where T: Traversable {
 impl <T> Traversable for Vec<T> where T: Traversable {
     fn traverse(&self, py: Python, visit: VisitProc) -> Result<(), TraverseError> {
         for val in self {
-            try!(val.traverse(py, visit));
+            val.traverse(py, visit)?;
         }
         Ok(())
     }

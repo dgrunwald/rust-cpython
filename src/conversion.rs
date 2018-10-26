@@ -63,9 +63,9 @@ pub trait ToPyObject {
     //   -> with_borrowed_ptr() just forwards to the closure
     // 3) input is &str, int, ...
     //   -> to_py_object() allocates new Python object; FFI call happens; release_ref() calls Py_DECREF()
-    
+
     // FFI functions that steal a reference will use:
-    //   let input = try!(input.into_py_object()); ffi::Call(input.steal_ptr())
+    //   let input = input.into_py_object()?; ffi::Call(input.steal_ptr())
     // 1) input is &PyObject
     //   -> into_py_object() calls Py_INCREF
     // 2) input is PyObject
@@ -80,7 +80,7 @@ py_impl_to_py_object_for_python_object!(PyObject);
 ///
 /// Normal usage is through the `PyObject::extract` helper method:
 /// ```let obj: PyObject = ...;
-/// let value = try!(obj.extract::<TargetType>(py));
+/// let value = obj.extract::<TargetType>(py)?;
 /// ```
 ///
 /// TODO: update this documentation
@@ -138,7 +138,7 @@ where T: PythonObjectWithCheckedDowncast
 
     #[inline]
     fn extract(py: Python, obj: &'prepared Self::Prepared) -> PyResult<T> {
-        Ok(try!(obj.clone_ref(py).cast_into(py)))
+        Ok(obj.clone_ref(py).cast_into(py)?)
     }
 }
 */
@@ -208,7 +208,7 @@ where T: ExtractPyObject<'prepared>
         if obj.as_ptr() == unsafe { ffi::Py_None() } {
             Ok(None)
         } else {
-            Ok(Some(try!(T::prepare_extract(py, obj))))
+            Ok(Some(T::prepare_extract(py, obj)?))
         }
     }
 
