@@ -116,11 +116,11 @@ macro_rules! tuple_conversion ({$length:expr,$(($refN:ident, $n:tt, $T:ident)),+
 
     impl <'s, $($T: FromPyObject<'s>),+> FromPyObject<'s> for ($($T,)+) {
         fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
-            let t = try!(obj.cast_as::<PyTuple>(py));
+            let t = obj.cast_as::<PyTuple>(py)?;
             let slice = t.as_slice(py);
             if slice.len() == $length {
                 Ok((
-                    $( try!(slice[$n].extract::<$T>(py)), )+
+                    $( slice[$n].extract::<$T>(py)?, )+
                 ))
             } else {
                 Err(wrong_tuple_length(py, t, $length))
@@ -171,7 +171,7 @@ impl ToPyObject for NoArgs {
 /// Returns `Ok(NoArgs)` if the input is an empty Python tuple.
 /// Otherwise, returns an error.
 extract!(obj to NoArgs; py => {
-    let t = try!(obj.cast_as::<PyTuple>(py));
+    let t = obj.cast_as::<PyTuple>(py)?;
     if t.len(py) == 0 {
         Ok(NoArgs)
     } else {

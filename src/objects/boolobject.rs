@@ -45,7 +45,7 @@ impl ToPyObject for bool {
 ///
 /// Fails with `TypeError` if the input is not a Python `bool`.
 extract!(obj to bool; py => {
-    Ok(try!(obj.cast_as::<PyBool>(py)).is_true())
+    Ok(obj.cast_as::<PyBool>(py)?.is_true())
 });
 
 #[cfg(test)]

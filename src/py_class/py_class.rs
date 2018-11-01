@@ -191,7 +191,7 @@ py_class!(class ClassWithGCSupport |py| {
 
     def __traverse__(&self, visit) {
         if let Some(ref obj) = *self.obj(py).borrow() {
-            try!(visit.call(obj))
+            visit.call(obj)?
         }
         Ok(())
     }

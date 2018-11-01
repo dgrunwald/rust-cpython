@@ -136,7 +136,7 @@ impl <'a> PyStringData<'a> {
             PyStringData::Utf8(data) => {
                 match str::from_utf8(data) {
                     Ok(s) => Ok(Cow::Borrowed(s)),
-                    Err(e) => Err(PyErr::from_instance(py, try!(exc::UnicodeDecodeError::new_utf8(py, data, e))))
+                    Err(e) => Err(PyErr::from_instance(py, exc::UnicodeDecodeError::new_utf8(py, data, e)?))
                 }
             }
             PyStringData::Latin1(data) => {
@@ -153,8 +153,8 @@ impl <'a> PyStringData<'a> {
                 match String::from_utf16(data) {
                     Ok(s) => Ok(Cow::Owned(s)),
                     Err(_) => Err(PyErr::from_instance(py,
-                        try!(exc::UnicodeDecodeError::new(py, cstr!("utf-16"),
-                            utf16_bytes(data), 0 .. 2*data.len(), cstr!("invalid utf-16")))
+                        exc::UnicodeDecodeError::new(py, cstr!("utf-16"),
+                            utf16_bytes(data), 0 .. 2*data.len(), cstr!("invalid utf-16"))?
                     ))
                 }
             },
@@ -165,8 +165,8 @@ impl <'a> PyStringData<'a> {
                 match data.iter().map(|&u| char::from_u32(u)).collect() {
                     Some(s) => Ok(Cow::Owned(s)),
                     None => Err(PyErr::from_instance(py,
-                        try!(exc::UnicodeDecodeError::new(py, cstr!("utf-32"),
-                            utf32_bytes(data), 0 .. 4*data.len(), cstr!("invalid utf-32")))
+                        exc::UnicodeDecodeError::new(py, cstr!("utf-32"),
+                            utf32_bytes(data), 0 .. 4*data.len(), cstr!("invalid utf-32"))?
                     ))
                 }
             }
@@ -358,7 +358,7 @@ impl PyUnicode {
     pub fn into_basestring(self) -> PyString {
         unsafe { self.0.unchecked_cast_into() }
     }
-    
+
     /// Gets the python string data in its underlying representation.
     pub fn data(&self, _py: Python) -> PyStringData {
         unsafe {
@@ -422,7 +422,7 @@ impl ToPyObject for String {
 /// In Python 2.7, `str` is expected to be UTF-8 encoded.
 impl <'source> FromPyObject<'source> for Cow<'source, str> {
     fn extract(py: Python, obj: &'source PyObject) -> PyResult<Self> {
-        try!(obj.cast_as::<PyString>(py)).to_string(py)
+        obj.cast_as::<PyString>(py)?.to_string(py)
     }
 }
 
@@ -494,7 +494,7 @@ mod test {
             }).unwrap();
         assert!(called);
     }
-    
+
     #[test]
     fn test_extract_byte_str() {
         let gil = Python::acquire_gil();
@@ -508,7 +508,7 @@ mod test {
             }).unwrap();
         assert!(called);
     }
-    
+
     #[test]
     #[cfg(feature="nightly")] // only works with specialization
     fn test_extract_byte_str_to_vec() {

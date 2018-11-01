@@ -154,7 +154,7 @@ macro_rules! int_fits_larger_int(
         }
 
         extract!(obj to $rust_type; py => {
-            let val = try!(obj.extract::<$larger_type>(py));
+            let val = obj.extract::<$larger_type>(py)?;
             match cast::<$larger_type, $rust_type>(val) {
                 Some(v) => Ok(v),
                 None => Err(overflow_error(py))
@@ -216,7 +216,7 @@ macro_rules! int_convert_u64_or_i64 (
                             None => Err(overflow_error(py))
                         }
                     } else {
-                        let num = try!(err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr)));
+                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr))?;
                         err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()))
                     }
                 }
@@ -229,7 +229,7 @@ macro_rules! int_convert_u64_or_i64 (
                     if ffi::PyLong_Check(ptr) != 0 {
                         err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(ptr))
                     } else {
-                        let num = try!(err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr)));
+                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr))?;
                         err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()))
                     }
                 }
@@ -298,7 +298,7 @@ impl ToPyObject for f32 {
 }
 
 extract!(obj to f32; py => {
-    Ok(try!(obj.extract::<f64>(py)) as f32)
+    Ok(obj.extract::<f64>(py)? as f32)
 });
 
 #[cfg(test)]
@@ -348,7 +348,7 @@ mod test {
         assert_eq!(v as u64, obj.extract::<u64>(py).unwrap());
         assert!(obj.extract::<i32>(py).is_err());
     }
-    
+
     #[test]
     fn test_i64_max() {
         let gil = Python::acquire_gil();
@@ -359,7 +359,7 @@ mod test {
         assert_eq!(v as u64, obj.extract::<u64>(py).unwrap());
         assert!(obj.extract::<u32>(py).is_err());
     }
-    
+
     #[test]
     fn test_i64_min() {
         let gil = Python::acquire_gil();
@@ -370,7 +370,7 @@ mod test {
         assert!(obj.extract::<i32>(py).is_err());
         assert!(obj.extract::<u64>(py).is_err());
     }
-    
+
     #[test]
     fn test_u64_max() {
         let gil = Python::acquire_gil();

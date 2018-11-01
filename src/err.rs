@@ -426,7 +426,7 @@ pub unsafe fn result_cast_from_owned_ptr<T>(py : Python, p : *mut ffi::PyObject)
     if p.is_null() {
         Err(PyErr::fetch(py))
     } else {
-        Ok(try!(PyObject::from_owned_ptr(py, p).cast_into(py)))
+        Ok(PyObject::from_owned_ptr(py, p).cast_into(py)?)
     }
 }
 
