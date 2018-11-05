@@ -267,28 +267,20 @@ fn find_interpreter_and_get_config(expected_version: &PythonVersion) ->
                                interpreter_version));
         }
     }
-    {
-        let (executable, interpreter_version, lines) =
-            get_config_from_interpreter("python")?;
-        if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, executable.to_owned(), lines));
-        }
-    }
-    {
-        let major_interpreter_path = &format!("python{}", expected_version.major);
-        let (executable, interpreter_version, lines) = get_config_from_interpreter(
-            major_interpreter_path)?;
-        if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, executable.to_owned(), lines));
-        }
-    }
+
+    let mut possible_names = vec![
+        "python".to_string(),
+        format!("python{}", expected_version.major),
+    ];
     if let Some(minor) = expected_version.minor {
-        let minor_interpreter_path = &format!("python{}.{}",
-            expected_version.major, minor);
-        let (executable, interpreter_version, lines) = get_config_from_interpreter(
-            minor_interpreter_path)?;
-        if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, executable.to_owned(), lines));
+        possible_names.push(format!("python{}.{}", expected_version.major, minor));
+    }
+
+    for name in possible_names.iter() {
+        if let Some((executable, interpreter_version, lines)) = get_config_from_interpreter(name).ok() {
+            if matching_version(expected_version, &interpreter_version) {
+                return Ok((interpreter_version, executable.to_owned(), lines));
+            }
         }
     }
     Err(format!("No python interpreter found of version {}",
