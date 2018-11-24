@@ -66,7 +66,7 @@ pub unsafe fn PyImport_ImportModuleEx(name: *const c_char,
     // pub static mut PyNullImporter_Type: PyTypeObject; -- does not actually exist in shared library
 
     pub fn PyImport_AppendInittab(name: *const c_char,
-                                  initfunc: Option<extern "C" fn() -> *mut PyObject>)
+                                  initfunc: Option<unsafe extern "C" fn() -> *mut PyObject>)
      -> c_int;
 }
 
