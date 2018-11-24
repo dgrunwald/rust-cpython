@@ -38,6 +38,8 @@ pub use setobject::*;
 pub use methodobject::*;
 pub use moduleobject::*;
 pub use fileobject::*;
+#[cfg(Py_3_5)]
+pub use fileutils::*;
 pub use pycapsule::*;
 pub use traceback::*;
 pub use sliceobject::*;
@@ -153,7 +155,8 @@ mod eval; // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 mod pystrtod; // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 // mod pystrcmp; TODO nothing interesting for Rust?
 // mod dtoa; TODO excluded by PEP-384
-// mod fileutils; TODO no public functions?
+#[cfg(Py_3_5)]
+mod fileutils;
 // mod pyfpe; TODO probably not interesting for rust
 
 // Additional headers that are not exported by Python.h
