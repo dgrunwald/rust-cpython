@@ -15,6 +15,8 @@ use pyarena::PyArena;
     pub fn Py_Initialize() -> ();
     pub fn Py_InitializeEx(arg1: c_int) -> ();
     pub fn Py_Finalize() -> ();
+    #[cfg(Py_3_6)]
+    pub fn Py_FinalizeEx() -> c_int;
     pub fn Py_IsInitialized() -> c_int;
     pub fn Py_NewInterpreter() -> *mut PyThreadState;
     pub fn Py_EndInterpreter(arg1: *mut PyThreadState) -> ();
