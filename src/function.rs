@@ -63,17 +63,17 @@ macro_rules! py_method_def {
 ///
 /// Form 1:
 ///
-/// * `py` must be an expression of type `Python`
-/// * `f` must be the name of a function that is compatible with the specified
+///  * `py` must be an expression of type `Python`
+///  * `f` must be the name of a function that is compatible with the specified
 ///    parameter list, except that a single parameter of type `Python` is prepended.
 ///    The function must return `PyResult<T>` for some `T` that implements `ToPyObject`.
 ///
 /// Form 2:
 ///
-/// * `py` must be an identifier refers to a `Python` value.
+///  * `py` must be an identifier refers to a `Python` value.
 ///   The function body will also have access to a `Python` variable of this name.
-/// * `f` must be an identifier.
-/// * The function return type must be `PyResult<T>` for some `T` that
+///  * `f` must be an identifier.
+///  * The function return type must be `PyResult<T>` for some `T` that
 ///   implements `ToPyObject`.
 ///
 /// # Example
