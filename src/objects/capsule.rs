@@ -13,12 +13,122 @@ pub struct PyCapsule(PyObject);
 
 pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 
+/// Macro to retrieve a function pointer capsule
+///
+/// For general explanations about Capsules, see [`PyCapsule`].
+///
+/// This macro takes the following arguments:
+/// - segments of the full Python dotted name of the capsule
+/// - `$rustmod`, a suitable name to define a module
+/// - signature of the wished function (the macro will insert the `extern unsafe fn`)
+///
+/// The macro defines a Rust module with a retrieval function such as:
+///
+/// ```ignore
+/// mod $rustmod {
+///     pub type CapsFn = unsafe extern "C" ( ... ) -> ... ;
+///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsFn) { ... }
+/// }
+/// ```
+///
+/// # Examples
+/// There is in the Python library no capsule enclosing a function pointer directly,
+/// although the documentation presents it as a valid use-case. For this example, we'll
+/// therefore have to create one, using the [`PyCapsule`] constructor, and to set it in an
+/// existing  module (not to imply that a real extension should follow that example
+/// and set capsules in modules they don't define!)
+///
+///
+/// ```
+/// #[macro_use] extern crate cpython;
+/// extern crate libc;
+/// use cpython::{PyCapsule, Python, FromPyObject};
+/// use libc::{c_int, c_void};
+///
+/// extern "C" fn inc(a: c_int) -> c_int {
+///     a + 1
+/// }
+///
+/// /// for testing purposes, stores a capsule named `sys.capsfn`` pointing to `inc()`.
+/// fn create_capsule() {
+///     let gil = Python::acquire_gil();
+///     let py = gil.python();
+///     let pymod = py.import("sys").unwrap();
+///     let caps = PyCapsule::new(py, inc as *mut c_void, "sys.capsfn").unwrap();
+///     pymod.add(py, "capsfn", caps).unwrap();
+///  }
+///
+/// py_capsule_fn!(sys, capsfn, capsmod, (a: c_int) -> c_int);
+///
+/// // One could, e.g., reexport if needed:
+/// pub use capsmod::CapsFn;
+///
+/// fn retrieve_use_capsule() {
+///     let gil = Python::acquire_gil();
+///     let py = gil.python();
+///     let fun = capsmod::retrieve(py).unwrap();
+///     assert_eq!( unsafe { fun(1) }, 2);
+///
+///     // let's demonstrate the (reexported) function type
+///     let g: CapsFn = fun;
+/// }
+///
+/// fn main() {
+///     create_capsule();
+///     retrieve_use_capsule();
+///     retrieve_use_capsule();
+/// }
+/// ```
+/// [`PyCapsule`]: struct.PyCapsule.html
+#[macro_export]
+macro_rules! py_capsule_fn {
+    ($($capsmod:ident).+, $capsname:ident, $rustmod:ident, $( $sig: tt)* ) => (
+        mod $rustmod {
+            use super::*;
+            use std::sync::Once;
+            use $crate::PyClone;
+
+            pub type CapsFn = unsafe extern "C" fn $( $sig )*;
+
+            static mut CAPS_FN: Option<$crate::PyResult<CapsFn>> = None;
+
+            static INIT: Once = Once::new();
+
+            fn import(py: $crate::Python) -> $crate::PyResult<CapsFn> {
+                unsafe {
+                    let caps_name =
+                        std::ffi::CStr::from_bytes_with_nul_unchecked(
+                            concat!($( stringify!($capsmod), "."),*,
+                                    stringify!($capsname),
+                                    "\0").as_bytes());
+                    Ok(::std::mem::transmute($crate::PyCapsule::import(py, caps_name)?))
+                }
+            }
+
+            pub fn retrieve(py: $crate::Python) -> $crate::PyResult<CapsFn> {
+                unsafe {
+                    INIT.call_once(|| { CAPS_FN = Some(import(py)) });
+                    match CAPS_FN.as_ref().unwrap() {
+                        Ok(f) => Ok(*f),
+                        Err(ref e) => Err(e.clone_ref(py)),
+                    }
+                }
+            }
+        }
+    )
+}
+
 /// Capsules are the preferred way to export/import C APIs between extension modules,
 /// see [Providing a C API for an Extension Module](https://docs.python.org/3/extending/extending.html#using-capsules).
 ///
 /// In particular, capsules can be very useful to start adding Rust extensions besides
 /// existing traditional C ones, be it for gradual rewrites or to extend with new functionality.
 /// They can also be used for interaction between independently compiled Rust extensions if needed.
+///
+/// Capsules can point to data, usually static arrays of constants and function pointers,
+/// or to function pointers directly. These two cases have to be handled differently in Rust,
+/// and the latter is possible only for architectures were data and function pointers have
+/// the same sizes.
 ///
 /// # Examples
 /// ## Using a capsule defined in another extension module
@@ -178,6 +288,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// ```
 /// Another Rust extension could then declare `CapsData` and use `PyCapsule::import_data` to
 /// fetch it back.
+///
 impl PyCapsule {
     /// Retrieve the contents of a capsule pointing to some data as a reference.
     ///
