@@ -13,6 +13,153 @@ pub struct PyCapsule(PyObject);
 
 pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 
+
+/// Macro to retrieve a Python capsule pointing to an array of data, with a layer of caching.
+///
+/// For more details on capsules, see [`PyCapsule`]
+///
+/// The caller has to define an appropriate `repr(C)` `struct` first, and put it in
+/// scope (`use`) if needed along the macro invocation.
+///
+/// The arguments of this macro are
+/// - the segments of the full dotted name of the targetted capsule,
+/// - `$rustmod`, a suitable module name,
+/// - `$ruststruct`, the name of the target `struct`.
+///
+/// The macro defines a Rust module with a retrieval function such as:
+///
+/// ```ignore
+/// mod $rustmod {
+///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<&'a $ruststruct> { ... }
+/// }
+/// ```
+///
+/// The `retrieve()` function is unsafe for the same reasons as [`PyCapsule::import_data`],
+/// upon which it relies.
+///
+/// # Examples
+/// This retrieves and uses one of the simplest capsules in the Python standard library, found in
+/// the `unicodedata` module. The C API enclosed in this capsule is the same for all Python
+/// versions supported by this crate.
+///
+/// In this case, as with all capsules from the Python standard library, the capsule data
+/// is an array (`static struct`) with constants and function pointers.
+/// ```
+/// #[macro_use] extern crate cpython;
+/// extern crate libc;
+///
+/// use cpython::{Python, PyCapsule};
+/// use libc::{c_char, c_int};
+/// use std::ffi::{c_void, CStr, CString};
+/// use std::mem;
+/// use std::ptr::null_mut;
+///
+/// #[allow(non_camel_case_types)]
+/// type Py_UCS4 = u32;
+/// const UNICODE_NAME_MAXLEN: usize = 256;
+///
+/// #[repr(C)]
+/// pub struct unicode_name_CAPI {
+///     // the `ucd` signature arguments are actually optional (can be `NULL`) FFI PyObject
+///     // pointers used to pass alternate (former) versions of Unicode data.
+///     // We won't need to use them with an actual value in these examples, so it's enough to
+///     // specify them as `*mut c_void`, and it spares us a direct reference to the lower
+///     // level Python FFI bindings.
+///     size: c_int,
+///     getname: unsafe extern "C" fn(
+///         ucd: *mut c_void,
+///         code: Py_UCS4,
+///         buffer: *mut c_char,
+///         buflen: c_int,
+///         with_alias_and_seq: c_int,
+///     ) -> c_int,
+///     getcode: unsafe extern "C" fn(
+///         ucd: *mut c_void,
+///         name: *const c_char,
+///         namelen: c_int,
+///         code: *mut Py_UCS4,
+///     ) -> c_int,
+/// }
+///
+/// #[derive(Debug, PartialEq)]
+/// pub enum UnicodeDataError {
+///     InvalidCode,
+///     UnknownName,
+/// }
+///
+/// impl unicode_name_CAPI {
+///     pub fn get_name(&self, code: Py_UCS4) -> Result<CString, UnicodeDataError> {
+///         let mut buf: Vec<c_char> = Vec::with_capacity(UNICODE_NAME_MAXLEN);
+///         let buf_ptr = buf.as_mut_ptr();
+///         if unsafe {
+///           ((*self).getname)(null_mut(), code, buf_ptr, UNICODE_NAME_MAXLEN as c_int, 0)
+///         } != 1 {
+///             return Err(UnicodeDataError::InvalidCode);
+///         }
+///         mem::forget(buf);
+///         Ok(unsafe { CString::from_raw(buf_ptr) })
+///     }
+///
+///     pub fn get_code(&self, name: &CStr) -> Result<Py_UCS4, UnicodeDataError> {
+///         let namelen = name.to_bytes().len() as c_int;
+///         let mut code: [Py_UCS4; 1] = [0; 1];
+///         if unsafe {
+///             ((*self).getcode)(null_mut(), name.as_ptr(), namelen, code.as_mut_ptr())
+///         } != 1 {
+///             return Err(UnicodeDataError::UnknownName);
+///         }
+///         Ok(code[0])
+///     }
+/// }
+///
+/// py_capsule!(unicodedata, ucnhash_CAPI, capsmod, unicode_name_CAPI);
+///
+/// fn main() {
+///     let gil = Python::acquire_gil();
+///     let py = gil.python();
+///
+///     let capi = unsafe { capsmod::retrieve(py).unwrap() };
+///     assert_eq!(capi.get_name(32).unwrap().to_str(), Ok("SPACE"));
+///     assert_eq!(capi.get_name(0), Err(UnicodeDataError::InvalidCode));
+///
+///     assert_eq!(capi.get_code(CStr::from_bytes_with_nul(b"COMMA\0").unwrap()), Ok(44));
+///     assert_eq!(capi.get_code(CStr::from_bytes_with_nul(b"\0").unwrap()),
+///                Err(UnicodeDataError::UnknownName));
+/// }
+/// ```
+/// [`PyCapsule`]: struct.PyCapsule.html
+/// [`PyCapsule::import_data`]: struct.PyCapsule.html#method.import_data
+#[macro_export]
+macro_rules! py_capsule {
+    ($($capsmod:ident).+, $capsname:ident, $rustmod:ident, $ruststruct: ident ) => (
+        mod $rustmod {
+            use super::*;
+            use std::sync::Once;
+            use $crate::PyClone;
+
+            static mut CAPS_DATA: Option<$crate::PyResult<&$ruststruct>> = None;
+
+            static INIT: Once = Once::new();
+
+            pub unsafe fn retrieve<'a>(py: $crate::Python) -> $crate::PyResult<&'a $ruststruct> {
+                INIT.call_once(|| {
+                    let caps_name =
+                        std::ffi::CStr::from_bytes_with_nul_unchecked(
+                            concat!($( stringify!($capsmod), "."),*,
+                                    stringify!($capsname),
+                                    "\0").as_bytes());
+                    CAPS_DATA = Some($crate::PyCapsule::import_data(py, caps_name));
+                });
+                match CAPS_DATA {
+                    Some(Ok(d)) => Ok(d),
+                    Some(Err(ref e)) => Err(e.clone_ref(py)),
+                    _ => panic!("Uninitialized"), // can't happen
+                }
+            }
+        }
+    )
+}
+
 /// Macro to retrieve a function pointer capsule
 ///
 /// For general explanations about Capsules, see [`PyCapsule`].
@@ -138,6 +285,8 @@ macro_rules! py_capsule_fn {
 /// library. For instance the `struct` referenced by `datetime.datetime_CAPI` gets a new member
 /// in version 3.7.
 ///
+/// Note: this example is a lower-level version of the [`py_capsule!`] example. Only the
+/// capsule retrieval actually differs.
 /// ```
 /// #[macro_use] extern crate cpython;
 /// extern crate libc;
@@ -174,12 +323,13 @@ macro_rules! py_capsule_fn {
 ///         code: *mut Py_UCS4,
 ///     ) -> c_int,
 /// }
-
+///
 /// #[derive(Debug, PartialEq)]
 /// pub enum UnicodeDataError {
 ///     InvalidCode,
 ///     UnknownName,
 /// }
+///
 /// impl unicode_name_CAPI {
 ///     pub fn get_name(&self, code: Py_UCS4) -> Result<CString, UnicodeDataError> {
 ///         let mut buf: Vec<c_char> = Vec::with_capacity(UNICODE_NAME_MAXLEN);
@@ -289,6 +439,7 @@ macro_rules! py_capsule_fn {
 /// Another Rust extension could then declare `CapsData` and use `PyCapsule::import_data` to
 /// fetch it back.
 ///
+/// [`py_capsule!`]: macro.py_capsule.html
 impl PyCapsule {
     /// Retrieve the contents of a capsule pointing to some data as a reference.
     ///
