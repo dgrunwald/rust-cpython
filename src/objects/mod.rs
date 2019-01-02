@@ -38,7 +38,7 @@ pub use self::num::PyLong as PyInt;
 pub use self::num::{PyLong, PyFloat};
 pub use self::sequence::PySequence;
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! pyobject_newtype(
     ($name: ident) => (
         py_impl_to_py_object_for_python_object!($name);
