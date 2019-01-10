@@ -18,8 +18,15 @@ matrix:
       dist: xenial
       sudo: true
       env: RUST_VERSION=nightly
+    - os: osx
+      language: generic
+      env: RUST_VERSION=1.25.0
+    - os: osx
+      language: generic
+      env: RUST_VERSION=nightly
 sudo: false
 install:
+  - python -V
   - python -c "import sysconfig; print('\n'.join(map(repr,sorted(sysconfig.get_config_vars().items()))))"
   - curl -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain "$RUST_VERSION"
   - export PATH="$HOME/.cargo/bin:$PATH"
