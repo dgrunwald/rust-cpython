@@ -349,8 +349,8 @@ macro_rules! py_capsule {
 ///
 /// ```ignore
 /// mod $rustmod {
-///     pub type CapsFn = unsafe extern "C" ( ... ) -> ... ;
-///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsFn) { ... }
+///     pub type CapsuleFn = unsafe extern "C" ( ... ) -> ... ;
+///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsuleFn) { ... }
 /// }
 /// ```
 ///
@@ -384,7 +384,7 @@ macro_rules! py_capsule {
 /// py_capsule_fn!(sys, capsfn, capsmod, (a: c_int) -> c_int);
 ///
 /// // One could, e.g., reexport if needed:
-/// pub use capsmod::CapsFn;
+/// pub use capsmod::CapsuleFn;
 ///
 /// fn retrieve_use_capsule() {
 ///     let gil = Python::acquire_gil();
@@ -393,7 +393,7 @@ macro_rules! py_capsule {
 ///     assert_eq!( unsafe { fun(1) }, 2);
 ///
 ///     // let's demonstrate the (reexported) function type
-///     let g: CapsFn = fun;
+///     let g: CapsuleFn = fun;
 /// }
 ///
 /// fn main() {
@@ -411,13 +411,13 @@ macro_rules! py_capsule_fn {
             use std::sync::Once;
             use $crate::PyClone;
 
-            pub type CapsFn = unsafe extern "C" fn $( $sig )*;
+            pub type CapsuleFn = unsafe extern "C" fn $( $sig )*;
 
-            static mut CAPS_FN: Option<$crate::PyResult<CapsFn>> = None;
+            static mut CAPS_FN: Option<$crate::PyResult<CapsuleFn>> = None;
 
             static INIT: Once = Once::new();
 
-            fn import(py: $crate::Python) -> $crate::PyResult<CapsFn> {
+            fn import(py: $crate::Python) -> $crate::PyResult<CapsuleFn> {
                 unsafe {
                     let caps_name =
                         std::ffi::CStr::from_bytes_with_nul_unchecked(
@@ -428,7 +428,7 @@ macro_rules! py_capsule_fn {
                 }
             }
 
-            pub fn retrieve(py: $crate::Python) -> $crate::PyResult<CapsFn> {
+            pub fn retrieve(py: $crate::Python) -> $crate::PyResult<CapsuleFn> {
                 unsafe {
                     INIT.call_once(|| { CAPS_FN = Some(import(py)) });
                     match CAPS_FN.as_ref().unwrap() {
