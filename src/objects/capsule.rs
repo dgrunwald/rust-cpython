@@ -160,9 +160,11 @@ macro_rules! py_capsule {
     )
 }
 
-/// Macro to retrieve a function pointer capsule
+/// Macro to retrieve a function pointer capsule.
 ///
-/// For general explanations about Capsules, see [`PyCapsule`].
+/// This is not suitable for architectures where the sizes of function and data pointers
+/// differ.
+/// For general explanations about capsules, see [`PyCapsule`].
 ///
 /// This macro takes the following arguments:
 /// - segments of the full Python dotted name of the capsule
@@ -460,7 +462,9 @@ impl PyCapsule {
     ///
     /// This is suitable in particular for later conversion as a function pointer
     /// with `mem::transmute`, for architectures where data and function pointers have
-    /// the same size (see details about this the documentation of the Rust standard library).
+    /// the same size (see details about this in the
+    /// [documentation](https://doc.rust-lang.org/std/mem/fn.transmute.html#examples)
+    /// of the Rust standard library).
     pub fn import(py: Python, name: &CStr) -> PyResult<*mut c_void> {
         let caps_ptr = unsafe { PyCapsule_Import(name.as_ptr(), 0) };
         if caps_ptr.is_null() {
