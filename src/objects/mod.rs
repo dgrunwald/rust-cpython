@@ -30,6 +30,7 @@ pub use self::iterator::PyIterator;
 pub use self::boolobject::PyBool;
 pub use self::tuple::{PyTuple, NoArgs};
 pub use self::dict::PyDict;
+pub use self::set::PySet;
 pub use self::list::PyList;
 #[cfg(feature="python27-sys")]
 pub use self::num::PyInt;
@@ -126,6 +127,7 @@ mod typeobject;
 mod module;
 mod string;
 mod dict;
+mod set;
 mod iterator;
 mod boolobject;
 mod tuple;
