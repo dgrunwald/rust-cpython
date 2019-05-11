@@ -195,16 +195,20 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// The caller has to define an appropriate `repr(C)` `struct` first, and put it in
 /// scope (`use`) if needed along the macro invocation.
 ///
-/// The arguments of this macro are
-/// - the segments of the full dotted name of the targetted capsule,
-/// - `$rustmod`, a suitable module name,
-/// - `$ruststruct`, the name of the target `struct`.
-///
-/// The macro defines a Rust module with a retrieval function such as:
+/// # Usage
 ///
 /// ```ignore
-/// mod $rustmod {
-///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<&'a $ruststruct> { ... }
+///   py_capsule!(from some.python.module import capsulename as rustmodule for CapsuleStruct)
+/// ```
+///
+/// where `CapsuleStruct` is the above mentioned `struct` defined by the caller.
+///
+/// The macro defines a Rust module named `rustmodule`, as specified by the caller.
+/// This module provides a retrieval function with the following signature:
+///
+/// ```ignore
+/// mod rustmodule {
+///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<&'a CapsuleStruct> { ... }
 /// }
 /// ```
 ///
@@ -286,7 +290,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 ///     }
 /// }
 ///
-/// py_capsule!(unicodedata, ucnhash_CAPI, capsmod, unicode_name_CAPI);
+/// py_capsule!(from unicodedata import ucnhash_CAPI as capsmod for unicode_name_CAPI);
 ///
 /// fn main() {
 ///     let gil = Python::acquire_gil();
@@ -305,7 +309,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// [`PyCapsule::import_data`]: struct.PyCapsule.html#method.import_data
 #[macro_export]
 macro_rules! py_capsule {
-    ($($capsmod:ident).+, $capsname:ident, $rustmod:ident, $ruststruct: ident ) => (
+    (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident for $ruststruct: ident ) => (
         mod $rustmod {
             use super::*;
             use std::sync::Once;
@@ -340,19 +344,26 @@ macro_rules! py_capsule {
 /// differ.
 /// For general explanations about capsules, see [`PyCapsule`].
 ///
-/// This macro takes the following arguments:
-/// - segments of the full Python dotted name of the capsule
-/// - `$rustmod`, a suitable name to define a module
-/// - signature of the wished function (the macro will insert the `extern unsafe fn`)
+/// # Usage
 ///
-/// The macro defines a Rust module with a retrieval function such as:
+/// ```ignore
+///    py_capsule_fn!(from some.python.module import capsulename as rustmodule: fn(args) -> ret_type)
+/// ```
+///
+/// Similarly to [py_capsule!](macro_py_capsule), the macro defines
+///
+/// - a Rust module according to the name provided by the caller (here, `rustmodule`)
+/// - a type alias for the given signature
+/// - a retrieval function:
 ///
 /// ```ignore
 /// mod $rustmod {
-///     pub type CapsuleFn = unsafe extern "C" ( ... ) -> ... ;
+///     pub type CapsuleFn = unsafe extern "C" (args) -> ret_type ;
 ///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsuleFn) { ... }
 /// }
 /// ```
+///
+/// The first call to `retrieve()` is cached for subsequent calls.
 ///
 /// # Examples
 /// There is in the Python library no capsule enclosing a function pointer directly,
@@ -381,7 +392,7 @@ macro_rules! py_capsule {
 ///     pymod.add(py, "capsfn", caps).unwrap();
 ///  }
 ///
-/// py_capsule_fn!(sys, capsfn, capsmod, (a: c_int) -> c_int);
+/// py_capsule_fn!(from sys import capsfn as capsmod: fn(a: c_int) -> c_int);
 ///
 /// // One could, e.g., reexport if needed:
 /// pub use capsmod::CapsuleFn;
@@ -399,13 +410,14 @@ macro_rules! py_capsule {
 /// fn main() {
 ///     create_capsule();
 ///     retrieve_use_capsule();
+///     // second call uses the cached function pointer
 ///     retrieve_use_capsule();
 /// }
 /// ```
 /// [`PyCapsule`]: struct.PyCapsule.html
 #[macro_export]
 macro_rules! py_capsule_fn {
-    ($($capsmod:ident).+, $capsname:ident, $rustmod:ident, $( $sig: tt)* ) => (
+    (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident : fn$( $sig: tt)* ) => (
         mod $rustmod {
             use super::*;
             use std::sync::Once;
