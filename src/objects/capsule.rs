@@ -187,7 +187,6 @@ pub struct PyCapsule(PyObject);
 
 pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 
-
 /// Macro to retrieve a Python capsule pointing to an array of data, with a layer of caching.
 ///
 /// For more details on capsules, see [`PyCapsule`]
@@ -491,11 +490,10 @@ impl PyCapsule {
     ///
     /// May panic when running out of memory.
     ///
-    pub fn new_data<T>(
-        py: Python,
-        data: &mut T,
-        name: impl Into<Vec<u8>>,
-    ) -> Result<Self, NulError> {
+    pub fn new_data<T, N>(py: Python, data: &mut T, name: N) -> Result<Self, NulError>
+    where
+        N: Into<Vec<u8>>,
+    {
         Self::new(py, data as *mut T as *mut c_void, name)
     }
 
@@ -516,11 +514,10 @@ impl PyCapsule {
     ///
     /// # Errors
     /// This method returns `NulError` if `name` contains a 0 byte (see also `CString::new`)
-    pub fn new(
-        py: Python,
-        pointer: *mut c_void,
-        name: impl Into<Vec<u8>>,
-    ) -> Result<Self, NulError> {
+    pub fn new<N>(py: Python, pointer: *mut c_void, name: N) -> Result<Self, NulError>
+    where
+        N: Into<Vec<u8>>,
+    {
         let name = CString::new(name)?;
         let caps = unsafe {
             Ok(err::cast_from_owned_ptr_or_panic(
@@ -548,7 +545,10 @@ impl PyCapsule {
     ///
     /// # Errors
     /// This method returns `NulError` if `name` contains a 0 byte (see also `CString::new`)
-    pub unsafe fn data_ref<'a, T>(&self, name: impl Into<Vec<u8>>) -> Result<&'a T, NulError> {
+    pub unsafe fn data_ref<'a, T, N>(&self, name: N) -> Result<&'a T, NulError>
+    where
+        N: Into<Vec<u8>>,
+    {
         Ok(self.data_ref_cstr(&CString::new(name)?))
     }
 
