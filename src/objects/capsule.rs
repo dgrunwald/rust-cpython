@@ -35,8 +35,8 @@ use std::mem;
 /// extern crate libc;
 ///
 /// use cpython::{Python, PyCapsule};
-/// use libc::{c_char, c_int};
-/// use std::ffi::{c_void, CStr, CString};
+/// use libc::{c_void, c_char, c_int};
+/// use std::ffi::{CStr, CString};
 /// use std::mem;
 /// use std::ptr::null_mut;
 ///
@@ -130,9 +130,9 @@ use std::mem;
 /// extern crate cpython;
 /// extern crate libc;
 ///
-/// use libc::c_int;
+/// use libc::{c_void, c_int};
 /// use cpython::{PyCapsule, Python};
-/// use std::ffi::{c_void, CStr, CString};
+/// use std::ffi::{CStr, CString};
 ///
 /// #[repr(C)]
 /// struct CapsData {
@@ -146,13 +146,15 @@ use std::mem;
 ///
 /// const DATA: CapsData = CapsData{value: 1, fun: add};
 ///
-/// let gil = Python::acquire_gil();
-/// let py = gil.python();
-/// let caps = PyCapsule::new_data(py, &mut DATA, "somemod.capsdata").unwrap();
+/// fn main() {
+///     let gil = Python::acquire_gil();
+///     let py = gil.python();
+///     let caps = PyCapsule::new_data(py, &mut DATA, "somemod.capsdata").unwrap();
 ///
-/// let retrieved: &CapsData = unsafe {caps.data_ref("somemod.capsdata")}.unwrap();
-/// assert_eq!(retrieved.value, 1);
-/// assert_eq!((retrieved.fun)(2 as c_int, 3 as c_int), 5);
+///     let retrieved: &CapsData = unsafe {caps.data_ref("somemod.capsdata")}.unwrap();
+///     assert_eq!(retrieved.value, 1);
+///     assert_eq!((retrieved.fun)(2 as c_int, 3 as c_int), 5);
+/// }
 /// ```
 ///
 /// Of course, a more realistic example would be to store the capsule in a Python module,
@@ -443,8 +445,8 @@ macro_rules! py_capsule_fn {
                 unsafe {
                     INIT.call_once(|| { CAPS_FN = Some(import(py)) });
                     match CAPS_FN.as_ref().unwrap() {
-                        Ok(f) => Ok(*f),
-                        Err(ref e) => Err(e.clone_ref(py)),
+                        &Ok(f) => Ok(f),
+                        &Err(ref e) => Err(e.clone_ref(py)),
                     }
                 }
             }
@@ -509,7 +511,10 @@ impl PyCapsule {
     /// extern "C" fn inc(a: i32) -> i32 {
     ///     a + 1
     /// }
-    /// let ptr = inc as *mut c_void;
+    ///
+    /// fn main() {
+    ///     let ptr = inc as *mut c_void;
+    /// }
     /// ```
     ///
     /// # Errors
