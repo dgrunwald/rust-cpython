@@ -38,7 +38,7 @@ use std::mem;
 /// use libc::{c_void, c_char, c_int};
 /// use std::ffi::{CStr, CString};
 /// use std::mem;
-/// use std::ptr::null_mut;
+/// use std::ptr::null;
 ///
 /// #[allow(non_camel_case_types)]
 /// type Py_UCS4 = u32;
@@ -49,21 +49,21 @@ use std::mem;
 ///     // the `ucd` signature arguments are actually optional (can be `NULL`) FFI PyObject
 ///     // pointers used to pass alternate (former) versions of Unicode data.
 ///     // We won't need to use them with an actual value in these examples, so it's enough to
-///     // specify them as `*mut c_void`, and it spares us a direct reference to the lower
+///     // specify them as `*const c_void`, and it spares us a direct reference to the lower
 ///     // level Python FFI bindings.
 ///     size: c_int,
 ///     getname: unsafe extern "C" fn(
-///         ucd: *mut c_void,
+///         ucd: *const c_void,
 ///         code: Py_UCS4,
-///         buffer: *mut c_char,
+///         buffer: *const c_char,
 ///         buflen: c_int,
 ///         with_alias_and_seq: c_int,
 ///     ) -> c_int,
 ///     getcode: unsafe extern "C" fn(
-///         ucd: *mut c_void,
+///         ucd: *const c_void,
 ///         name: *const c_char,
 ///         namelen: c_int,
-///         code: *mut Py_UCS4,
+///         code: *const Py_UCS4,
 ///     ) -> c_int,
 /// }
 ///
@@ -78,7 +78,7 @@ use std::mem;
 ///         let mut buf: Vec<c_char> = Vec::with_capacity(UNICODE_NAME_MAXLEN);
 ///         let buf_ptr = buf.as_mut_ptr();
 ///         if unsafe {
-///           ((*self).getname)(null_mut(), code, buf_ptr, UNICODE_NAME_MAXLEN as c_int, 0)
+///           ((*self).getname)(null(), code, buf_ptr, UNICODE_NAME_MAXLEN as c_int, 0)
 ///         } != 1 {
 ///             return Err(UnicodeDataError::InvalidCode);
 ///         }
@@ -90,7 +90,7 @@ use std::mem;
 ///         let namelen = name.to_bytes().len() as c_int;
 ///         let mut code: [Py_UCS4; 1] = [0; 1];
 ///         if unsafe {
-///             ((*self).getcode)(null_mut(), name.as_ptr(), namelen, code.as_mut_ptr())
+///             ((*self).getcode)(null(), name.as_ptr(), namelen, code.as_mut_ptr())
 ///         } != 1 {
 ///             return Err(UnicodeDataError::UnknownName);
 ///         }
@@ -126,6 +126,12 @@ use std::mem;
 /// In this example, we enclose some data and a function in a capsule, using an intermediate
 /// `struct` as enclosing type, then retrieve them back and use them.
 ///
+/// Warning: you definitely need to declare the data as `static`. If it's
+/// only `const`, it's possible it would get cloned elsewhere, with the orginal
+/// location being deallocated before it's actually used from another Python
+/// extension.
+///
+///
 /// ```
 /// extern crate cpython;
 /// extern crate libc;
@@ -144,12 +150,12 @@ use std::mem;
 ///     a + b
 /// }
 ///
-/// const DATA: CapsData = CapsData{value: 1, fun: add};
+/// static DATA: CapsData = CapsData{value: 1, fun: add};
 ///
 /// fn main() {
 ///     let gil = Python::acquire_gil();
 ///     let py = gil.python();
-///     let caps = PyCapsule::new_data(py, &mut DATA, "somemod.capsdata").unwrap();
+///     let caps = PyCapsule::new_data(py, &DATA, "somemod.capsdata").unwrap();
 ///
 ///     let retrieved: &CapsData = unsafe {caps.data_ref("somemod.capsdata")}.unwrap();
 ///     assert_eq!(retrieved.value, 1);
@@ -174,10 +180,10 @@ use std::mem;
 /// # fn add(a: c_int, b: c_int) -> c_int {
 /// #     a + b
 /// # }
-/// # const DATA: CapsData = CapsData{value: 1, fun: add};
+/// # static DATA: CapsData = CapsData{value: 1, fun: add};
 /// py_module_initializer!(somemod, initsomemod, PyInit_somemod, |py, m| {
 ///   m.add(py, "__doc__", "A module holding a capsule")?;
-///   m.add(py, "capsdata", PyCapsule::new_data(py, &mut DATA, "somemod.capsdata").unwrap())?;
+///   m.add(py, "capsdata", PyCapsule::new_data(py, &DATA, "somemod.capsdata").unwrap())?;
 ///   Ok(())
 /// });
 /// ```
@@ -231,7 +237,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// use libc::{c_char, c_int};
 /// use std::ffi::{c_void, CStr, CString};
 /// use std::mem;
-/// use std::ptr::null_mut;
+/// use std::ptr::null;
 ///
 /// #[allow(non_camel_case_types)]
 /// type Py_UCS4 = u32;
@@ -242,21 +248,21 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 ///     // the `ucd` signature arguments are actually optional (can be `NULL`) FFI PyObject
 ///     // pointers used to pass alternate (former) versions of Unicode data.
 ///     // We won't need to use them with an actual value in these examples, so it's enough to
-///     // specify them as `*mut c_void`, and it spares us a direct reference to the lower
+///     // specify them as `const c_void`, and it spares us a direct reference to the lower
 ///     // level Python FFI bindings.
 ///     size: c_int,
 ///     getname: unsafe extern "C" fn(
-///         ucd: *mut c_void,
+///         ucd: *const c_void,
 ///         code: Py_UCS4,
-///         buffer: *mut c_char,
+///         buffer: *const c_char,
 ///         buflen: c_int,
 ///         with_alias_and_seq: c_int,
 ///     ) -> c_int,
 ///     getcode: unsafe extern "C" fn(
-///         ucd: *mut c_void,
+///         ucd: *const c_void,
 ///         name: *const c_char,
 ///         namelen: c_int,
-///         code: *mut Py_UCS4,
+///         code: *const Py_UCS4,
 ///     ) -> c_int,
 /// }
 ///
@@ -271,7 +277,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 ///         let mut buf: Vec<c_char> = Vec::with_capacity(UNICODE_NAME_MAXLEN);
 ///         let buf_ptr = buf.as_mut_ptr();
 ///         if unsafe {
-///           ((*self).getname)(null_mut(), code, buf_ptr, UNICODE_NAME_MAXLEN as c_int, 0)
+///           ((*self).getname)(null(), code, buf_ptr, UNICODE_NAME_MAXLEN as c_int, 0)
 ///         } != 1 {
 ///             return Err(UnicodeDataError::InvalidCode);
 ///         }
@@ -283,7 +289,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 ///         let namelen = name.to_bytes().len() as c_int;
 ///         let mut code: [Py_UCS4; 1] = [0; 1];
 ///         if unsafe {
-///             ((*self).getcode)(null_mut(), name.as_ptr(), namelen, code.as_mut_ptr())
+///             ((*self).getcode)(null(), name.as_ptr(), namelen, code.as_mut_ptr())
 ///         } != 1 {
 ///             return Err(UnicodeDataError::UnknownName);
 ///         }
@@ -389,7 +395,7 @@ macro_rules! py_capsule {
 ///     let gil = Python::acquire_gil();
 ///     let py = gil.python();
 ///     let pymod = py.import("sys").unwrap();
-///     let caps = PyCapsule::new(py, inc as *mut c_void, "sys.capsfn").unwrap();
+///     let caps = PyCapsule::new(py, inc as *const c_void, "sys.capsfn").unwrap();
 ///     pymod.add(py, "capsfn", caps).unwrap();
 ///  }
 ///
@@ -477,7 +483,7 @@ impl PyCapsule {
     /// the same size (see details about this in the
     /// [documentation](https://doc.rust-lang.org/std/mem/fn.transmute.html#examples)
     /// of the Rust standard library).
-    pub fn import(py: Python, name: &CStr) -> PyResult<*mut c_void> {
+    pub fn import(py: Python, name: &CStr) -> PyResult<*const c_void> {
         let caps_ptr = unsafe { PyCapsule_Import(name.as_ptr(), 0) };
         if caps_ptr.is_null() {
             return Err(PyErr::fetch(py));
@@ -492,11 +498,11 @@ impl PyCapsule {
     ///
     /// May panic when running out of memory.
     ///
-    pub fn new_data<T, N>(py: Python, data: &mut T, name: N) -> Result<Self, NulError>
+    pub fn new_data<T, N>(py: Python, data: &'static T, name: N) -> Result<Self, NulError>
     where
         N: Into<Vec<u8>>,
     {
-        Self::new(py, data as *mut T as *mut c_void, name)
+        Self::new(py, data as *const T as *const c_void, name)
     }
 
     /// Creates a new capsule from a raw void pointer
@@ -513,13 +519,13 @@ impl PyCapsule {
     /// }
     ///
     /// fn main() {
-    ///     let ptr = inc as *mut c_void;
+    ///     let ptr = inc as *const c_void;
     /// }
     /// ```
     ///
     /// # Errors
     /// This method returns `NulError` if `name` contains a 0 byte (see also `CString::new`)
-    pub fn new<N>(py: Python, pointer: *mut c_void, name: N) -> Result<Self, NulError>
+    pub fn new<N>(py: Python, pointer: *const c_void, name: N) -> Result<Self, NulError>
     where
         N: Into<Vec<u8>>,
     {
@@ -527,7 +533,7 @@ impl PyCapsule {
         let caps = unsafe {
             Ok(err::cast_from_owned_ptr_or_panic(
                 py,
-                PyCapsule_New(pointer, name.as_ptr(), None),
+                PyCapsule_New(pointer as *mut c_void, name.as_ptr(), None),
             ))
         };
         // it is required that the capsule name outlives the call as a char*
