@@ -399,7 +399,7 @@ macro_rules! py_capsule {
 ///     pymod.add(py, "capsfn", caps).unwrap();
 ///  }
 ///
-/// py_capsule_fn!(from sys import capsfn as capsmod: fn(a: c_int) -> c_int);
+/// py_capsule_fn!(from sys import capsfn as capsmod signature (a: c_int) -> c_int);
 ///
 /// // One could, e.g., reexport if needed:
 /// pub use capsmod::CapsuleFn;
@@ -424,7 +424,7 @@ macro_rules! py_capsule {
 /// [`PyCapsule`]: struct.PyCapsule.html
 #[macro_export]
 macro_rules! py_capsule_fn {
-    (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident : fn$( $sig: tt)* ) => (
+    (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident signature $( $sig: tt)* ) => (
         mod $rustmod {
             use super::*;
             use std::sync::Once;
