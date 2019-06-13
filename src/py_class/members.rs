@@ -119,6 +119,10 @@ impl <T> TypeMember<T> for InstanceMethodDescriptor<T> where T: PythonObject {
 #[doc(hidden)]
 macro_rules! py_class_class_method {
     ($py:ident, $class:ident :: $f:ident [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
+        py_class_class_method!($py, $class::$f, { "" } [ $( { $pname : $ptype = $detail } )* ])
+    }};
+
+    ($py:ident, $class:ident :: $f:ident, { $doc:expr } [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
         unsafe extern "C" fn wrap_class_method(
             cls: *mut $crate::_detail::ffi::PyObject,
             args: *mut $crate::_detail::ffi::PyObject,
@@ -142,7 +146,8 @@ macro_rules! py_class_class_method {
         unsafe {
             let method_def = py_method_def!(_cpython__py_class__members__stringify!($f),
                 $crate::_detail::ffi::METH_CLASS,
-                wrap_class_method);
+                wrap_class_method,
+                $doc);
             $crate::py_class::members::create_class_method_descriptor(method_def)
         }
     }}
@@ -169,6 +174,10 @@ impl <T> TypeMember<T> for ClassMethodDescriptor where T: PythonObject {
 #[doc(hidden)]
 macro_rules! py_class_static_method {
     ($py:ident, $class:ident :: $f:ident [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
+        py_class_static_method!($py, $class::$f, { "" } [ $( { $pname : $ptype = $detail } )* ])
+    }};
+
+    ($py:ident, $class:ident :: $f:ident, { $doc:expr } [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
         unsafe extern "C" fn wrap_static_method(
             _slf: *mut $crate::_detail::ffi::PyObject,
             args: *mut $crate::_detail::ffi::PyObject,
@@ -189,7 +198,8 @@ macro_rules! py_class_static_method {
         unsafe {
             let method_def = py_method_def!(_cpython__py_class__members__stringify!($f),
                 $crate::_detail::ffi::METH_STATIC,
-                wrap_static_method);
+                wrap_static_method,
+                $doc);
             $crate::_detail::py_fn_impl($py, method_def)
         }
     }}
