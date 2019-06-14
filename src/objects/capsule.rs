@@ -354,7 +354,8 @@ macro_rules! py_capsule {
 /// # Usage
 ///
 /// ```ignore
-///    py_capsule_fn!(from some.python.module import capsulename as rustmodule: fn(args) -> ret_type)
+///    py_capsule_fn!(from some.python.module import capsulename as rustmodule
+///                       signature (args) -> ret_type)
 /// ```
 ///
 /// Similarly to [py_capsule!](macro_py_capsule), the macro defines
