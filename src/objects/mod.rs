@@ -112,10 +112,11 @@ macro_rules! pyobject_newtype(
 );
 
 macro_rules! extract(
-    ($obj:ident to $t:ty; $py:ident => $body: block) => {
+    ($obj:ident to $t:ty; $(#[$meta:meta])* $py:ident => $body: block) => {
         impl <'source> ::conversion::FromPyObject<'source>
             for $t
         {
+            $(#[$meta])*
             fn extract($py: Python, $obj: &'source PyObject) -> PyResult<Self> {
                 $body
             }
