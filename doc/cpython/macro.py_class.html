@@ -1,68 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, py_class">
-
-    <title>cpython::py_class - Rust</title>
-
-    <link rel="stylesheet" type="text/css" href="../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../main.css">
-    
-
-    
-    
-</head>
-<body class="rustdoc macro">
-    <!--[if lte IE 8]>
-    <div class="warning">
-        This old browser is unsupported and will most likely display funky
-        things.
-    </div>
-    <![endif]-->
-
-    
-
-    <nav class="sidebar">
-        <div class="sidebar-menu">&#9776;</div>
-        
-        <p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_class', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </nav>
-
-    <nav class="sub">
-        <form class="search-form js-only">
-            <div class="search-container">
-                <input class="search-input" name="search"
-                       autocomplete="off"
-                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
-                       type="search">
-            </div>
-        </form>
-    </nav>
-
-    <section id='main' class="content">
-<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_class</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../src/cpython/py_class/py_class.rs.html#401-460' title='goto source code'>[src]</a></span></h1>
-<pre class="rust macro">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_class"><title>cpython::py_class - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_class', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cpython/py_class/py_class.rs.html#401-460' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_class</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class</span> {
     (<span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=&gt;</span> { ... };
     (<span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=&gt;</span> { ... };
-}</pre>
-<div class='docblock'><p>Defines new python extension class.
+}</pre></div>
+</div><div class='docblock'><p>Defines new python extension class.
 A <code>py_class!</code> macro invocation generates code that declares a new Python class.
 Additionally, it generates a Rust struct of the same name, which allows accessing
 instances of that Python class from Rust.</p>
-
-<h1 id='syntax' class='section-header'><a href='#syntax'>Syntax</a></h1>
+<h1 id="syntax" class="section-header"><a href="#syntax">Syntax</a></h1>
 <p><code>py_class!(pub class MyType |py| { ... })</code></p>
-
 <ul>
 <li><code>pub</code> makes the generated Rust struct visible outside the current module. It has no effect on the visibility from Python.</li>
 <li><code>MyType</code> is the name of the Python class.</li>
@@ -70,9 +16,8 @@ instances of that Python class from Rust.</p>
 in all function bodies.</li>
 <li><code>{ ... }</code> is the class body, described in more detail below.</li>
 </ul>
-
-<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
-<pre class="rust rust-example-rendered">
+<h1 id="example" class="section-header"><a href="#example">Example</a></h1>
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
 <span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">Python</span>, <span class="ident">PyResult</span>, <span class="ident">PyDict</span>};
 
@@ -93,12 +38,11 @@ in all function bodies.</li>
     <span class="kw">let</span> <span class="ident">dict</span> <span class="op">=</span> <span class="ident">PyDict</span>::<span class="ident">new</span>(<span class="ident">py</span>);
     <span class="ident">dict</span>.<span class="ident">set_item</span>(<span class="ident">py</span>, <span class="string">&quot;MyType&quot;</span>, <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">MyType</span><span class="op">&gt;</span>()).<span class="ident">unwrap</span>();
     <span class="ident">py</span>.<span class="ident">run</span>(<span class="string">&quot;assert MyType(42).half() == 21&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">dict</span>)).<span class="ident">unwrap</span>();
-}</pre>
-
-<h1 id='generated-rust-type' class='section-header'><a href='#generated-rust-type'>Generated Rust type</a></h1>
+}</pre></div>
+<h1 id="generated-rust-type" class="section-header"><a href="#generated-rust-type">Generated Rust type</a></h1>
 <p>The above example generates the following Rust type:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">struct</span> <span class="ident">MyType</span> { ... }
 
 <span class="kw">impl</span> <span class="ident">ToPythonObject</span> <span class="kw">for</span> <span class="ident">MyType</span> { ... }
@@ -122,8 +66,7 @@ in all function bodies.</li>
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;half() was called with self={:?}&quot;</span>, <span class="self">self</span>.<span class="ident">number</span>(<span class="ident">py</span>));
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">number</span>(<span class="ident">py</span>) <span class="op">/</span> <span class="number">2</span>)
     }
-}</pre>
-
+}</pre></div>
 <ul>
 <li>The generated type implements a number of traits from the <code>cpython</code> crate.</li>
 <li>The inherent <code>create_instance</code> method can create new Python objects
@@ -133,47 +76,38 @@ given the values for the data fields.</li>
 <li>To convert from <code>MyType</code> to <code>PyObject</code>, use <code>as_object()</code> or <code>into_object()</code> (from the <code>PythonObject</code> trait).</li>
 <li>To convert <code>PyObject</code> to <code>MyType</code>, use <code>obj.cast_as::&lt;MyType&gt;(py)</code> or <code>obj.cast_into::&lt;MyType&gt;(py)</code>.</li>
 </ul>
-
-<h1 id='py_class-body' class='section-header'><a href='#py_class-body'>py_class body</a></h1>
+<h1 id="py_class-body" class="section-header"><a href="#py_class-body">py_class body</a></h1>
 <p>The body of a <code>py_class!</code> supports the following definitions:</p>
-
-<h2 id='data-declarations' class='section-header'><a href='#data-declarations'>Data declarations</a></h2>
+<h2 id="data-declarations" class="section-header"><a href="#data-declarations">Data declarations</a></h2>
 <p><code>data data_name: data_type;</code></p>
-
 <p>Declares a data field within the Python class.
 Used to store Rust data directly in the Python object instance.</p>
-
 <p>Because Python code can pass all Python objects to other threads,
-<code>data_type</code> must be <code>Send + &#39;static</code>.</p>
-
+<code>data_type</code> must be <code>Send + 'static</code>.</p>
 <p>Because Python object instances can be freely shared (Python has no concept of &quot;ownership&quot;),
 data fields cannot be declared as <code>mut</code>.
 If mutability is required, you have to use interior mutability (<code>Cell</code> or <code>RefCell</code>).</p>
-
 <p>If data members are used to store references to other Python objects, make sure
 to read the section &quot;Garbage Collector Integration&quot;.</p>
-
 <p>Data declarations are not accessible from Python.
-On the Rust side, data is accessed through the automatically generated accessor functions:
-<code>ignore impl MyType { fn data_name&lt;&#39;a&gt;(&amp;&#39;a self, py: Python&lt;&#39;a&gt;) -&gt; &amp;&#39;a data_type { ... } }</code></p>
+On the Rust side, data is accessed through the automatically generated accessor functions:</p>
 
-<h2 id='instance-methods' class='section-header'><a href='#instance-methods'>Instance methods</a></h2>
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<span class="kw">impl</span> <span class="ident">MyType</span> {
+    <span class="kw">fn</span> <span class="ident">data_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">data_type</span> { ... }
+}</pre></div>
+<h2 id="instance-methods" class="section-header"><a href="#instance-methods">Instance methods</a></h2>
 <p><code>def method_name(&amp;self, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
-
 <p>Declares an instance method callable from Python.</p>
-
 <ul>
 <li>Because Python objects are potentially shared, the self parameter must always
 be a shared reference (<code>&amp;self</code>).</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
 </ul>
-
-<h2 id='class-methods' class='section-header'><a href='#class-methods'>Class methods</a></h2>
+<h2 id="class-methods" class="section-header"><a href="#class-methods">Class methods</a></h2>
 <p><code>@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
-
 <p>Declares a class method callable from Python.</p>
-
 <ul>
 <li>The first parameter is the type object of the class on which the method is called.
 This may be the type object of a derived class.</li>
@@ -181,22 +115,16 @@ This may be the type object of a derived class.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
 </ul>
-
-<h2 id='static-methods' class='section-header'><a href='#static-methods'>Static methods</a></h2>
+<h2 id="static-methods" class="section-header"><a href="#static-methods">Static methods</a></h2>
 <p><code>@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
-
 <p>Declares a static method callable from Python.</p>
-
 <ul>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
 </ul>
-
-<h2 id='new' class='section-header'><a href='#new'><strong>new</strong></a></h2>
+<h2 id="new" class="section-header"><a href="#new"><strong>new</strong></a></h2>
 <p><code>def __new__(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
-
 <p>Declares a constructor method callable from Python.</p>
-
 <ul>
 <li>If no <code>__new__</code> method is declared, object instances can only be created from Rust (via <code>MyType::create_instance</code>),
 but not from Python.</li>
@@ -207,23 +135,19 @@ This may be the type object of a derived class declared in Python.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.
 Usually, <code>T</code> will be <code>MyType</code>.</li>
 </ul>
-
-<h2 id='garbage-collector-integration' class='section-header'><a href='#garbage-collector-integration'>Garbage Collector Integration</a></h2>
+<h2 id="garbage-collector-integration" class="section-header"><a href="#garbage-collector-integration">Garbage Collector Integration</a></h2>
 <p>If your type owns references to other python objects, you will need to
-integrate with Python&#39;s garbage collector so that the GC is aware of
+integrate with Python's garbage collector so that the GC is aware of
 those references.
 To do this, implement the special member functions <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.</p>
-
 <p><code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.</p>
-
 <p><code>__clear__</code> must clear out any mutable references to other python objects
 (thus breaking reference cycles). Immutable references do not have to be cleared,
 as every cycle must contain at least one mutable reference.</p>
-
 <p>Example:</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">cell</span>};
 <span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyDrop</span>};
@@ -233,7 +157,7 @@ as every cycle must contain at least one mutable reference.</p>
 
     <span class="ident">def</span> <span class="ident">__traverse__</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">visit</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">obj</span>) <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">obj</span>(<span class="ident">py</span>).<span class="ident">borrow</span>() {
-            <span class="macro">try</span><span class="macro">!</span>(<span class="ident">visit</span>.<span class="ident">call</span>(<span class="ident">obj</span>))
+            <span class="ident">visit</span>.<span class="ident">call</span>(<span class="ident">obj</span>)<span class="question-mark">?</span>
         }
         <span class="prelude-val">Ok</span>(())
     }
@@ -244,40 +168,35 @@ as every cycle must contain at least one mutable reference.</p>
         <span class="comment">// see Caution note below.</span>
         <span class="ident">old_obj</span>.<span class="ident">release_ref</span>(<span class="ident">py</span>);
     }
-});</pre>
-
+});</pre></div>
 <p>Caution: <code>__traverse__</code> may be called by the garbage collector:</p>
-
 <ul>
 <li>during any python operation that takes a <code>Python</code> token as argument</li>
 <li>indirectly from the <code>PyObject</code> (or derived type) <code>Drop</code> implementation</li>
 <li>if your code releases the GIL, at any time by other threads.</li>
 </ul>
-
 <p>If you are using <code>RefCell&lt;PyObject&gt;</code>, you must not perform any of the above
 operations while your code holds a mutable borrow, or you may cause the borrow
 in <code>__traverse__</code> to panic.</p>
-
 <p>This is why the example above uses the <code>mem::replace</code>/<code>release_ref</code> dance:
 <code>release_ref</code> (or the implicit <code>Drop</code>) can only be called safely in a separate
 statement, after the mutable borrow on the <code>RefCell</code> has expired.</p>
-
 <p>Note that this restriction applies not only to <code>__clear__</code>, but to all methods
 that use <code>RefCell::borrow_mut</code>.</p>
-
-<h2 id='iterator-types' class='section-header'><a href='#iterator-types'>Iterator Types</a></h2>
+<h2 id="iterator-types" class="section-header"><a href="#iterator-types">Iterator Types</a></h2>
 <p>Iterators can be defined using the Python special methods <code>__iter__</code> and <code>__next__</code>:</p>
-
 <ul>
-<li><code>def __iter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><p><code>def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;impl ToPyObject&gt;&gt;</code></p>
-
-<p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p></li>
+<li>
+<p><code>def __iter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __next__(&amp;self) -&gt; PyResult&lt;Option&lt;impl ToPyObject&gt;&gt;</code></p>
+<p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
+</li>
 </ul>
-
 <p>Example:</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyClone</span>, <span class="ident">PyResult</span>};
@@ -292,203 +211,182 @@ that use <code>RefCell::borrow_mut</code>.</p>
     <span class="ident">def</span> <span class="ident">__next__</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">iter</span>(<span class="ident">py</span>).<span class="ident">borrow_mut</span>().<span class="ident">next</span>())
     }
-});</pre>
-
-<h2 id='string-conversions' class='section-header'><a href='#string-conversions'>String Conversions</a></h2>
+});</pre></div>
+<h2 id="string-conversions" class="section-header"><a href="#string-conversions">String Conversions</a></h2>
 <ul>
-<li><code>def __repr__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></li>
-<li><p><code>def __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
-
+<li>
+<p><code>def __repr__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
+</li>
+<li>
+<p><code>def __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
 <p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
-
 <p>In Python 2.7, Unicode strings returned by <code>__str__</code> and <code>__repr__</code> will be converted to byte strings
-by the Python runtime, which results in an exception if the string contains non-ASCII characters.</p></li>
-<li><p><code>def __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;</code></p>
-
+by the Python runtime, which results in an exception if the string contains non-ASCII characters.</p>
+</li>
+<li>
+<p><code>def __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;</code></p>
 <p>On Python 3.x, provides the conversion to <code>bytes</code>.
-On Python 2.7, <code>__bytes__</code> is allowed but has no effect.</p></li>
-<li><p><code>def __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;</code></p>
-
+On Python 2.7, <code>__bytes__</code> is allowed but has no effect.</p>
+</li>
+<li>
+<p><code>def __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;</code></p>
 <p>On Python 2.7, provides the conversion to <code>unicode</code>.
-On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p></li>
-<li><p><code>def __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
-
+On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p>
+</li>
+<li>
+<p><code>def __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
 <p>Special method that is used by the <code>format()</code> builtin and the <code>str.format()</code> method.
-Possible return types are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p></li>
+Possible return types are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
+</li>
 </ul>
-
-<h2 id='comparison-operators' class='section-header'><a href='#comparison-operators'>Comparison operators</a></h2>
+<h2 id="comparison-operators" class="section-header"><a href="#comparison-operators">Comparison operators</a></h2>
 <ul>
-<li><p><code>def __richcmp__(&amp;self, other: impl FromPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
+<li>
+<p><code>def __richcmp__(&amp;self, other: impl FromPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
 <p>Overloads Python comparison operations (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, and <code>&gt;=</code>).
 The <code>op</code> argument indicates the comparison operation being performed.
 The return type will normally be <code>PyResult&lt;bool&gt;</code>, but any Python object can be returned.</p>
-
 <p>If <code>other</code> is not of the type specified in the signature, the generated code will
-automatically <code>return NotImplemented</code>.</p></li>
-<li><p><code>def __hash__(&amp;self) -&gt; PyResult&lt;impl PrimInt&gt;</code></p>
-
+automatically <code>return NotImplemented</code>.</p>
+</li>
+<li>
+<p><code>def __hash__(&amp;self) -&gt; PyResult&lt;impl PrimInt&gt;</code></p>
 <p>Objects that compare equal must have the same hash value.
-The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is one of Rust&#39;s primitive integer types.</p></li>
+The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is one of Rust's primitive integer types.</p>
+</li>
 </ul>
-
-<h2 id='emulating-container-types' class='section-header'><a href='#emulating-container-types'>Emulating Container Types</a></h2>
+<h2 id="emulating-container-types" class="section-header"><a href="#emulating-container-types">Emulating Container Types</a></h2>
 <ul>
-<li><p><code>def __len__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
-
-<p>Called by the built-in Python function <code>len()</code>.</p></li>
-<li><p><code>def __length_hint__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
-
+<li>
+<p><code>def __len__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
+<p>Called by the built-in Python function <code>len()</code>.</p>
+</li>
+<li>
+<p><code>def __length_hint__(&amp;self) -&gt; PyResult&lt;usize&gt;</code></p>
 <p>Should return an estimated length for the object.
 This method is purely an optimization and is never required for correctness.</p>
-
-<p><code>__length_hint__</code> is new in Python 3.4; older versions will ignore the method.</p></li>
-<li><p><code>def __getitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
-<p>Called by the Python subscript operator <code>self[key]</code>.</p></li>
-<li><p><code>def __setitem__(&amp;self, key: impl FromPyObject, value: impl FromPyObject) -&gt; PyResult&lt;()&gt;</code></p>
-
-<p>Called by Python <code>self[key] = value</code>.</p></li>
-<li><p><code>def __delitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;()&gt;</code></p>
-
-<p>Called by Python <code>del self[key]</code>.</p></li>
-<li><p><code>def __reversed__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
+<p><code>__length_hint__</code> is new in Python 3.4; older versions will ignore the method.</p>
+</li>
+<li>
+<p><code>def __getitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+<p>Called by the Python subscript operator <code>self[key]</code>.</p>
+</li>
+<li>
+<p><code>def __setitem__(&amp;self, key: impl FromPyObject, value: impl FromPyObject) -&gt; PyResult&lt;()&gt;</code></p>
+<p>Called by Python <code>self[key] = value</code>.</p>
+</li>
+<li>
+<p><code>def __delitem__(&amp;self, key: impl FromPyObject) -&gt; PyResult&lt;()&gt;</code></p>
+<p>Called by Python <code>del self[key]</code>.</p>
+</li>
+<li>
+<p><code>def __reversed__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
 <p>Called by the <code>reversed()</code> built-in.
-It should return a new iterator object that iterates over all the objects in the container in reverse order.</p></li>
-<li><p><code>def __contains__(&amp;self, item: impl FromPyObject) -&gt; PyResult&lt;bool&gt;</code></p>
-
+It should return a new iterator object that iterates over all the objects in the container in reverse order.</p>
+</li>
+<li>
+<p><code>def __contains__(&amp;self, item: impl FromPyObject) -&gt; PyResult&lt;bool&gt;</code></p>
 <p>Called by Python <code>item in self</code>.
 For mapping types, this should consider the keys of the mapping rather than the values
 or the key-item pairs.</p>
-
 <p>If extraction of the <code>item</code> parameter fails with <code>TypeError</code>,
-<code>__contains__</code> will return <code>Ok(false)</code>.</p></li>
+<code>__contains__</code> will return <code>Ok(false)</code>.</p>
+</li>
 </ul>
-
-<h2 id='arithmetic-methods' class='section-header'><a href='#arithmetic-methods'>Arithmetic methods</a></h2>
+<h2 id="arithmetic-methods" class="section-header"><a href="#arithmetic-methods">Arithmetic methods</a></h2>
 <ul>
-<li><code>def __add__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __sub__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __mul__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __lshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __rshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __and__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><code>def __xor__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
-<li><p><code>def __or__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
+<li>
+<p><code>def __add__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __sub__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __mul__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __lshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __rshift__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __and__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __xor__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __or__(lhs, rhs) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
 <p>The parameters <code>lhs</code> and <code>rhs</code> must not be given an explicit type.
 Within the method bodies, both parameters will implicitly have type <code>&amp;PyObject</code>.</p>
-
 <p>There are no separate &quot;reversed&quot; versions of these methods (<code>__radd__()</code>, etc.)
 Instead, if the first operand cannot perform the operation,
 the same method of the second operand is called, with the operands in the same order.</p>
-
-<p>This means that you can&#39;t rely on the first parameter of these methods being <code>self</code>
+<p>This means that you can't rely on the first parameter of these methods being <code>self</code>
 or being the correct type, and you should test the types of both operands before deciding what to do.
-If you can&#39;t handle the combination of types you&#39;ve been given,
-you should return <code>Ok(py.NotImplemented())</code>.</p></li>
-<li><p><code>def __iadd__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __isub__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __imul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __imatmul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __itruediv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __ifloordiv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __imod__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __ilshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __irshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __iand__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __ixor__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p></li>
-<li><p><code>def __ior__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
+If you can't handle the combination of types you've been given,
+you should return <code>Ok(py.NotImplemented())</code>.</p>
+</li>
+<li>
+<p><code>def __iadd__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __isub__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __imul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __imatmul__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __itruediv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __ifloordiv__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __imod__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __ilshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __irshift__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __iand__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __ixor__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
+</li>
+<li>
+<p><code>def __ior__(&amp;self, other: impl FromPyObject) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
 <p>Handles inplace operations if possible, falling back to the non-inplace versions.
 These methods must return a new reference! In the common case of returning the
 same (mutated) object, you will want to return <code>Ok(self.clone_ref(py))</code>.</p>
-
-<p>If you can&#39;t handle the combination of types you&#39;ve been given,
-you should return <code>Ok(py.NotImplemented())</code>.</p></li>
+<p>If you can't handle the combination of types you've been given,
+you should return <code>Ok(py.NotImplemented())</code>.</p>
+</li>
 </ul>
-
-<h2 id='context-manager' class='section-header'><a href='#context-manager'>Context Manager</a></h2>
+<h2 id="context-manager" class="section-header"><a href="#context-manager">Context Manager</a></h2>
 <ul>
 <li><code>def __enter__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&gt;</code></li>
 <li><code>def __exit__(&amp;self, ty: Option&lt;PyType&gt;, value: PyObject, traceback: PyObject) -&gt; PyResult&lt;bool&gt;</code></li>
 </ul>
-
-<h2 id='other-special-methods' class='section-header'><a href='#other-special-methods'>Other Special Methods</a></h2>
+<h2 id="other-special-methods" class="section-header"><a href="#other-special-methods">Other Special Methods</a></h2>
 <ul>
-<li><p><code>def __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
-
+<li>
+<p><code>def __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
 <p>Determines the &quot;truthyness&quot; of the object.</p>
-
 <p>Note that <code>py_class!</code> always expects this member to be called <code>__bool__</code>,
-even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p></li>
-<li><p><code>def __call__(&amp;self, parameter-list) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
-
+even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
+</li>
+<li>
+<p><code>def __call__(&amp;self, parameter-list) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
 <p>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.
-The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</p></li>
+The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</p>
+</li>
 </ul>
-</div></section>
-    <section id='search' class="content hidden"></section>
-
-    <section class="footer"></section>
-
-    <aside id="help" class="hidden">
-        <div>
-            <h1 class="hidden">Help</h1>
-
-            <div class="shortcuts">
-                <h2>Keyboard Shortcuts</h2>
-
-                <dl>
-                    <dt>?</dt>
-                    <dd>Show this help dialog</dd>
-                    <dt>S</dt>
-                    <dd>Focus the search field</dd>
-                    <dt>↑</dt>
-                    <dd>Move up in search results</dd>
-                    <dt>↓</dt>
-                    <dd>Move down in search results</dd>
-                    <dt>↹</dt>
-                    <dd>Switch tab</dd>
-                    <dt>&#9166;</dt>
-                    <dd>Go to active search result</dd>
-                    <dt style="width:31px;">+ / -</dt>
-                    <dd>Collapse/expand all sections</dd>
-                </dl>
-            </div>
-
-            <div class="infos">
-                <h2>Search Tricks</h2>
-
-                <p>
-                    Prefix searches with a type followed by a colon (e.g.
-                    <code>fn:</code>) to restrict the search to a given type.
-                </p>
-
-                <p>
-                    Accepted types are: <code>fn</code>, <code>mod</code>,
-                    <code>struct</code>, <code>enum</code>,
-                    <code>trait</code>, <code>type</code>, <code>macro</code>,
-                    and <code>const</code>.
-                </p>
-
-                <p>
-                    Search functions by type signature (e.g.
-                    <code>vec -> usize</code> or <code>* -> vec</code>)
-                </p>
-            </div>
-        </div>
-    </aside>
-
-    
-
-    <script>
-        window.rootPath = "../";
-        window.currentCrate = "cpython";
-    </script>
-    <script src="../main.js"></script>
-    <script defer src="../search-index.js"></script>
-</body>
-</html>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "cpython";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

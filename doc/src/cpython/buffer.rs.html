@@ -1,50 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/buffer.rs`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
-
-    <title>buffer.rs.html -- source</title>
-
-    <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
-    
-
-    
-    
-</head>
-<body class="rustdoc source">
-    <!--[if lte IE 8]>
-    <div class="warning">
-        This old browser is unsupported and will most likely display funky
-        things.
-    </div>
-    <![endif]-->
-
-    
-
-    <nav class="sidebar">
-        <div class="sidebar-menu">&#9776;</div>
-        
-        
-    </nav>
-
-    <nav class="sub">
-        <form class="search-form js-only">
-            <div class="search-container">
-                <input class="search-input" name="search"
-                       autocomplete="off"
-                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
-                       type="search">
-            </div>
-        </form>
-    </nav>
-
-    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/buffer.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>buffer.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cpython/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -694,7 +648,7 @@
 <span id="648">648</span>
 <span id="649">649</span>
 <span id="650">650</span>
-</pre><pre class="rust ">
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017 Daniel Grunwald</span>
 <span class="comment">//</span>
 <span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
@@ -748,7 +702,7 @@
             <span class="kw">match</span> <span class="ident">slice</span>[<span class="number">0</span>] {
                 <span class="string">b&#39;@&#39;</span> <span class="op">=&gt;</span> <span class="ident">native_element_type_from_type_char</span>(<span class="ident">slice</span>[<span class="number">1</span>]),
                 <span class="string">b&#39;=&#39;</span> <span class="op">|</span> <span class="string">b&#39;&lt;&#39;</span> <span class="op">|</span> <span class="string">b&#39;&gt;&#39;</span> <span class="op">|</span> <span class="string">b&#39;!&#39;</span> <span class="op">=&gt;</span> <span class="ident">standard_element_type_from_type_char</span>(<span class="ident">slice</span>[<span class="number">1</span>]),
-                _ <span class="op">=&gt;</span> <span class="ident">ElementType</span>::<span class="ident">Unknown</span>
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">ElementType</span>::<span class="ident">Unknown</span>
             }
         } <span class="kw">else</span> {
             <span class="ident">ElementType</span>::<span class="ident">Unknown</span>
@@ -776,7 +730,7 @@
         <span class="string">b&#39;e&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">2</span> },
         <span class="string">b&#39;f&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">4</span> },
         <span class="string">b&#39;d&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">8</span> },
-        _ <span class="op">=&gt;</span> <span class="ident">Unknown</span>
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">Unknown</span>
     }
 }
 
@@ -798,7 +752,7 @@
         <span class="string">b&#39;e&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">2</span> },
         <span class="string">b&#39;f&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">4</span> },
         <span class="string">b&#39;d&#39;</span> <span class="op">=&gt;</span> <span class="ident">Float</span> { <span class="ident">bytes</span>: <span class="number">8</span> },
-        _ <span class="op">=&gt;</span> <span class="ident">Unknown</span>
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">Unknown</span>
     }
 }
 
@@ -806,7 +760,7 @@
 <span class="kw">fn</span> <span class="ident">is_matching_endian</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="kw">match</span> <span class="ident">c</span> {
         <span class="string">b&#39;@&#39;</span> <span class="op">|</span> <span class="string">b&#39;=&#39;</span> <span class="op">|</span> <span class="string">b&#39;&lt;&#39;</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-        _ <span class="op">=&gt;</span> <span class="bool-val">false</span>
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>
     }
 }
 
@@ -814,7 +768,7 @@
 <span class="kw">fn</span> <span class="ident">is_matching_endian</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="kw">match</span> <span class="ident">c</span> {
         <span class="string">b&#39;@&#39;</span> <span class="op">|</span> <span class="string">b&#39;=&#39;</span> <span class="op">|</span> <span class="string">b&#39;&gt;&#39;</span> <span class="op">|</span> <span class="string">b&#39;!&#39;</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-        _ <span class="op">=&gt;</span> <span class="bool-val">false</span>
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>
     }
 }
 
@@ -974,9 +928,9 @@
     <span class="doccomment">/// Gets the buffer memory as a slice.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function succeeds if:</span>
-    <span class="doccomment">/// * the buffer format is compatible with `T`</span>
-    <span class="doccomment">/// * alignment and size of buffer elements is matching the expectations for type `T`</span>
-    <span class="doccomment">/// * the buffer is C-style contiguous</span>
+    <span class="doccomment">///  * the buffer format is compatible with `T`</span>
+    <span class="doccomment">///  * alignment and size of buffer elements is matching the expectations for type `T`</span>
+    <span class="doccomment">///  * the buffer is C-style contiguous</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned slice uses type `Cell&lt;T&gt;` because it&#39;s theoretically possible for any call into the Python runtime</span>
     <span class="doccomment">/// to modify the values in the slice.</span>
@@ -995,10 +949,10 @@
     <span class="doccomment">/// Gets the buffer memory as a slice.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function succeeds if:</span>
-    <span class="doccomment">/// * the buffer is not read-only</span>
-    <span class="doccomment">/// * the buffer format is compatible with `T`</span>
-    <span class="doccomment">/// * alignment and size of buffer elements is matching the expectations for type `T`</span>
-    <span class="doccomment">/// * the buffer is C-style contiguous</span>
+    <span class="doccomment">///  * the buffer is not read-only</span>
+    <span class="doccomment">///  * the buffer format is compatible with `T`</span>
+    <span class="doccomment">///  * alignment and size of buffer elements is matching the expectations for type `T`</span>
+    <span class="doccomment">///  * the buffer is C-style contiguous</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned slice uses type `Cell&lt;T&gt;` because it&#39;s theoretically possible for any call into the Python runtime</span>
     <span class="doccomment">/// to modify the values in the slice.</span>
@@ -1018,9 +972,9 @@
     <span class="doccomment">/// Gets the buffer memory as a slice.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function succeeds if:</span>
-    <span class="doccomment">/// * the buffer format is compatible with `T`</span>
-    <span class="doccomment">/// * alignment and size of buffer elements is matching the expectations for type `T`</span>
-    <span class="doccomment">/// * the buffer is Fortran-style contiguous</span>
+    <span class="doccomment">///  * the buffer format is compatible with `T`</span>
+    <span class="doccomment">///  * alignment and size of buffer elements is matching the expectations for type `T`</span>
+    <span class="doccomment">///  * the buffer is Fortran-style contiguous</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned slice uses type `Cell&lt;T&gt;` because it&#39;s theoretically possible for any call into the Python runtime</span>
     <span class="doccomment">/// to modify the values in the slice.</span>
@@ -1039,10 +993,10 @@
     <span class="doccomment">/// Gets the buffer memory as a slice.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function succeeds if:</span>
-    <span class="doccomment">/// * the buffer is not read-only</span>
-    <span class="doccomment">/// * the buffer format is compatible with `T`</span>
-    <span class="doccomment">/// * alignment and size of buffer elements is matching the expectations for type `T`</span>
-    <span class="doccomment">/// * the buffer is Fortran-style contiguous</span>
+    <span class="doccomment">///  * the buffer is not read-only</span>
+    <span class="doccomment">///  * the buffer format is compatible with `T`</span>
+    <span class="doccomment">///  * alignment and size of buffer elements is matching the expectations for type `T`</span>
+    <span class="doccomment">///  * the buffer is Fortran-style contiguous</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned slice uses type `Cell&lt;T&gt;` because it&#39;s theoretically possible for any call into the Python runtime</span>
     <span class="doccomment">/// to modify the values in the slice.</span>
@@ -1190,15 +1144,15 @@
 }
 
 <span class="kw">fn</span> <span class="ident">slice_length_error</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Slice length does not match buffer length.&quot;</span>))
+    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Slice length does not match buffer length.&quot;</span>))
 }
 
 <span class="kw">fn</span> <span class="ident">incompatible_format_error</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Slice type is incompatible with buffer format.&quot;</span>))
+    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Slice type is incompatible with buffer format.&quot;</span>))
 }
 
 <span class="kw">fn</span> <span class="ident">buffer_readonly_error</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Cannot write to read-only buffer.&quot;</span>))
+    <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">BufferError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="string">&quot;Cannot write to read-only buffer.&quot;</span>))
 }
 
 <span class="kw">impl</span> <span class="ident">PyDrop</span> <span class="kw">for</span> <span class="ident">PyBuffer</span> {
@@ -1345,67 +1299,5 @@
     }
 }
 
-</pre>
-</section>
-    <section id='search' class="content hidden"></section>
-
-    <section class="footer"></section>
-
-    <aside id="help" class="hidden">
-        <div>
-            <h1 class="hidden">Help</h1>
-
-            <div class="shortcuts">
-                <h2>Keyboard Shortcuts</h2>
-
-                <dl>
-                    <dt>?</dt>
-                    <dd>Show this help dialog</dd>
-                    <dt>S</dt>
-                    <dd>Focus the search field</dd>
-                    <dt>↑</dt>
-                    <dd>Move up in search results</dd>
-                    <dt>↓</dt>
-                    <dd>Move down in search results</dd>
-                    <dt>↹</dt>
-                    <dd>Switch tab</dd>
-                    <dt>&#9166;</dt>
-                    <dd>Go to active search result</dd>
-                    <dt style="width:31px;">+ / -</dt>
-                    <dd>Collapse/expand all sections</dd>
-                </dl>
-            </div>
-
-            <div class="infos">
-                <h2>Search Tricks</h2>
-
-                <p>
-                    Prefix searches with a type followed by a colon (e.g.
-                    <code>fn:</code>) to restrict the search to a given type.
-                </p>
-
-                <p>
-                    Accepted types are: <code>fn</code>, <code>mod</code>,
-                    <code>struct</code>, <code>enum</code>,
-                    <code>trait</code>, <code>type</code>, <code>macro</code>,
-                    and <code>const</code>.
-                </p>
-
-                <p>
-                    Search functions by type signature (e.g.
-                    <code>vec -> usize</code> or <code>* -> vec</code>)
-                </p>
-            </div>
-        </div>
-    </aside>
-
-    
-
-    <script>
-        window.rootPath = "../../";
-        window.currentCrate = "cpython";
-    </script>
-    <script src="../../main.js"></script>
-    <script defer src="../../search-index.js"></script>
-</body>
-</html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "cpython";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

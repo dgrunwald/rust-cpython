@@ -1,50 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/argparse.rs`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
-
-    <title>argparse.rs.html -- source</title>
-
-    <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
-    
-
-    
-    
-</head>
-<body class="rustdoc source">
-    <!--[if lte IE 8]>
-    <div class="warning">
-        This old browser is unsupported and will most likely display funky
-        things.
-    </div>
-    <![endif]-->
-
-    
-
-    <nav class="sidebar">
-        <div class="sidebar-menu">&#9776;</div>
-        
-        
-    </nav>
-
-    <nav class="sub">
-        <form class="search-form js-only">
-            <div class="search-container">
-                <input class="search-input" name="search"
-                       autocomplete="off"
-                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
-                       type="search">
-            </div>
-        </form>
-    </nav>
-
-    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/argparse.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>argparse.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cpython/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -550,7 +504,18 @@
 <span id="504">504</span>
 <span id="505">505</span>
 <span id="506">506</span>
-</pre><pre class="rust ">
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
 <span class="comment">//</span>
 <span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
@@ -587,13 +552,24 @@
     <span class="kw">pub</span> <span class="ident">is_optional</span>: <span class="ident">bool</span>
 }
 
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ParamDescription</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Name, with leading `r#` stripped.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">starts_with</span>(<span class="string">&quot;r#&quot;</span>) {
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>[<span class="number">2</span>..]
+        } <span class="kw">else</span> {
+            <span class="self">self</span>.<span class="ident">name</span>
+        }
+    }
+}
+
 <span class="doccomment">/// Parse argument list</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// * fname:  Name of the current function</span>
-<span class="doccomment">/// * params: Declared parameters of the function</span>
-<span class="doccomment">/// * args:   Positional arguments</span>
-<span class="doccomment">/// * kwargs: Keyword arguments</span>
-<span class="doccomment">/// * output: Output array that receives the arguments.</span>
+<span class="doccomment">///  * fname:  Name of the current function</span>
+<span class="doccomment">///  * params: Declared parameters of the function</span>
+<span class="doccomment">///  * args:   Positional arguments</span>
+<span class="doccomment">///  * kwargs: Keyword arguments</span>
+<span class="doccomment">///  * output: Output array that receives the arguments.</span>
 <span class="doccomment">///           Must have same length as `params` and must be initialized to `None`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_args</span>(
     <span class="ident">py</span>: <span class="ident">Python</span>,
@@ -606,7 +582,7 @@
     <span class="kw">let</span> <span class="ident">nargs</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">len</span>(<span class="ident">py</span>);
     <span class="kw">let</span> <span class="ident">nkeywords</span> <span class="op">=</span> <span class="ident">kwargs</span>.<span class="ident">map_or</span>(<span class="number">0</span>, <span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">len</span>(<span class="ident">py</span>));
     <span class="kw">if</span> <span class="ident">nargs</span> <span class="op">+</span> <span class="ident">nkeywords</span> <span class="op">&gt;</span> <span class="ident">params</span>.<span class="ident">len</span>() {
-        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>,
             <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{} takes at most {} argument{} ({} given)&quot;</span>,
                     <span class="ident">fname</span>.<span class="ident">unwrap_or</span>(<span class="string">&quot;function&quot;</span>),
                     <span class="kw">if</span> <span class="ident">fname</span>.<span class="ident">is_some</span>() { <span class="string">&quot;()&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;&quot;</span> },
@@ -618,14 +594,14 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">used_keywords</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="comment">// Iterate through the parameters and assign values to output:</span>
     <span class="kw">for</span> (<span class="ident">i</span>, (<span class="ident">p</span>, <span class="ident">out</span>)) <span class="kw">in</span> <span class="ident">params</span>.<span class="ident">iter</span>().<span class="ident">zip</span>(<span class="ident">output</span>).<span class="ident">enumerate</span>() {
-        <span class="kw">match</span> <span class="ident">kwargs</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="ident">p</span>.<span class="ident">name</span>)) {
+        <span class="kw">match</span> <span class="ident">kwargs</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">get_item</span>(<span class="ident">py</span>, <span class="ident">p</span>.<span class="ident">name</span>())) {
             <span class="prelude-val">Some</span>(<span class="ident">kwarg</span>) <span class="op">=&gt;</span> {
                 <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kwarg</span>);
                 <span class="ident">used_keywords</span> <span class="op">+=</span> <span class="number">1</span>;
                 <span class="kw">if</span> <span class="ident">i</span> <span class="op">&lt;</span> <span class="ident">nargs</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>,
                         <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Argument given by name (&#39;{}&#39;) and position ({})&quot;</span>,
-                                <span class="ident">p</span>.<span class="ident">name</span>, <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
+                                <span class="ident">p</span>.<span class="ident">name</span>(), <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
                 }
             },
             <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
@@ -634,9 +610,9 @@
                 } <span class="kw">else</span> {
                     <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">None</span>;
                     <span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">is_optional</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>,
                             <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Required argument (&#39;{}&#39;) (pos {}) not found&quot;</span>,
-                                    <span class="ident">p</span>.<span class="ident">name</span>, <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
+                                    <span class="ident">p</span>.<span class="ident">name</span>(), <span class="ident">i</span><span class="op">+</span><span class="number">1</span>)));
                     }
                 }
             }
@@ -645,9 +621,9 @@
     <span class="kw">if</span> <span class="ident">used_keywords</span> <span class="op">!=</span> <span class="ident">nkeywords</span> {
         <span class="comment">// check for extraneous keyword arguments</span>
         <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">_value</span>) <span class="kw">in</span> <span class="ident">kwargs</span>.<span class="ident">unwrap</span>().<span class="ident">items</span>(<span class="ident">py</span>) {
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="ident">key</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyString</span><span class="op">&gt;</span>(<span class="ident">py</span>)).<span class="ident">to_string</span>(<span class="ident">py</span>));
+            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PyString</span><span class="op">&gt;</span>(<span class="ident">py</span>)<span class="question-mark">?</span>.<span class="ident">to_string</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
             <span class="kw">if</span> <span class="op">!</span><span class="ident">params</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">name</span> <span class="op">==</span> <span class="ident">key</span>) {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, _<span class="op">&gt;</span>(<span class="ident">py</span>,
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>::<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exc</span>::<span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">py</span>,
                     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;&#39;{}&#39; is an invalid keyword argument for this function&quot;</span>,
                             <span class="ident">key</span>)));
             }
@@ -660,11 +636,11 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Syntax: `py_argparse!(py, fname, args, kwargs, (parameter-list) { body })`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// * `py`: the `Python` token</span>
-<span class="doccomment">/// * `fname`: expression of type `Option&lt;&amp;str&gt;`: Name of the function used in error messages.</span>
-<span class="doccomment">/// * `args`: expression of type `&amp;PyTuple`: The position arguments</span>
-<span class="doccomment">/// * `kwargs`: expression of type `Option&lt;&amp;PyDict&gt;`: The named arguments</span>
-<span class="doccomment">/// * `parameter-list`: a comma-separated list of parameter declarations.</span>
+<span class="doccomment">///  * `py`: the `Python` token</span>
+<span class="doccomment">///  * `fname`: expression of type `Option&lt;&amp;str&gt;`: Name of the function used in error messages.</span>
+<span class="doccomment">///  * `args`: expression of type `&amp;PyTuple`: The position arguments</span>
+<span class="doccomment">///  * `kwargs`: expression of type `Option&lt;&amp;PyDict&gt;`: The named arguments</span>
+<span class="doccomment">///  * `parameter-list`: a comma-separated list of parameter declarations.</span>
 <span class="doccomment">///   Parameter declarations have one of these formats:</span>
 <span class="doccomment">///    1. `name`</span>
 <span class="doccomment">///    2. `name: ty`</span>
@@ -679,7 +655,7 @@
 <span class="doccomment">///   `&amp;PyObject` (format 1), `&amp;PyTuple` (format 4) or `&amp;PyDict` (format 6).</span>
 <span class="doccomment">///   If a default value is specified, it must be a compile-time constant</span>
 <span class="comment">//    of type `ty`.</span>
-<span class="doccomment">/// * `body`: expression of type `PyResult&lt;_&gt;`.</span>
+<span class="doccomment">///  * `body`: expression of type `PyResult&lt;_&gt;`.</span>
 <span class="doccomment">///     The extracted argument values are available in this scope.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// `py_argparse!()` expands to code that extracts values from `args` and `kwargs` and assigns</span>
@@ -693,14 +669,14 @@
 <span class="doccomment">/// so `return` statements might behave unexpectedly in this case. (this only affects direct use</span>
 <span class="doccomment">/// of `py_argparse!`; `py_fn!` is unaffected as the body there is always in a separate function</span>
 <span class="doccomment">/// from the generated argument-parsing code).</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>) <span class="op">=&gt;</span> {
         <span class="macro">py_argparse_parse_plist</span><span class="macro">!</span> { <span class="ident">py_argparse_impl</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, } <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span> }
     };
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_parse_plist</span> {
     <span class="comment">// Parses a parameter-list into a format more suitable for consumption by Rust macros.</span>
@@ -720,7 +696,7 @@
     };
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_parse_plist_impl</span> {
     <span class="comment">// TT muncher macro that does the main work for py_argparse_parse_plist!.</span>
@@ -843,7 +819,7 @@
 
 <span class="comment">// The main py_argparse!() macro, except that it expects the parameter-list</span>
 <span class="comment">// in the output format of py_argparse_parse_plist!().</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_impl</span> {
     <span class="comment">// special case: function signature is (*args, **kwargs),</span>
@@ -890,7 +866,7 @@
 }
 
 <span class="comment">// Like py_argparse_impl!(), but accepts `*mut ffi::PyObject` for $args and $kwargs.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_raw</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fname</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">kwargs</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">plist</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>) <span class="op">=&gt;</span> {{
@@ -932,7 +908,7 @@
     );
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_argparse_extract</span> {
     <span class="comment">// base case</span>
@@ -966,7 +942,7 @@
     ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span>,
         [ { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> [ {} {<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>:<span class="ident">expr</span>} {} ] } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">*</span> ]
     ) <span class="op">=&gt;</span> {
-        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">obj</span><span class="op">|</span> <span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span>_<span class="op">&gt;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>)).<span class="ident">unwrap_or</span>(<span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>)) {
+        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">obj</span><span class="op">|</span> <span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>)).<span class="ident">unwrap_or</span>(<span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">default</span>)) {
             <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>) <span class="op">=&gt;</span> <span class="macro">py_argparse_extract</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>, [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="kw-2">*</span>]),
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>)
         }
@@ -1057,67 +1033,5 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">called</span>);
     }
 }
-</pre>
-</section>
-    <section id='search' class="content hidden"></section>
-
-    <section class="footer"></section>
-
-    <aside id="help" class="hidden">
-        <div>
-            <h1 class="hidden">Help</h1>
-
-            <div class="shortcuts">
-                <h2>Keyboard Shortcuts</h2>
-
-                <dl>
-                    <dt>?</dt>
-                    <dd>Show this help dialog</dd>
-                    <dt>S</dt>
-                    <dd>Focus the search field</dd>
-                    <dt>↑</dt>
-                    <dd>Move up in search results</dd>
-                    <dt>↓</dt>
-                    <dd>Move down in search results</dd>
-                    <dt>↹</dt>
-                    <dd>Switch tab</dd>
-                    <dt>&#9166;</dt>
-                    <dd>Go to active search result</dd>
-                    <dt style="width:31px;">+ / -</dt>
-                    <dd>Collapse/expand all sections</dd>
-                </dl>
-            </div>
-
-            <div class="infos">
-                <h2>Search Tricks</h2>
-
-                <p>
-                    Prefix searches with a type followed by a colon (e.g.
-                    <code>fn:</code>) to restrict the search to a given type.
-                </p>
-
-                <p>
-                    Accepted types are: <code>fn</code>, <code>mod</code>,
-                    <code>struct</code>, <code>enum</code>,
-                    <code>trait</code>, <code>type</code>, <code>macro</code>,
-                    and <code>const</code>.
-                </p>
-
-                <p>
-                    Search functions by type signature (e.g.
-                    <code>vec -> usize</code> or <code>* -> vec</code>)
-                </p>
-            </div>
-        </div>
-    </aside>
-
-    
-
-    <script>
-        window.rootPath = "../../";
-        window.currentCrate = "cpython";
-    </script>
-    <script src="../../main.js"></script>
-    <script defer src="../../search-index.js"></script>
-</body>
-</html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "cpython";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

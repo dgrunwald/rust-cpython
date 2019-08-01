@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_capsule_fn` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_capsule_fn"><title>cpython::py_capsule_fn - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_capsule_fn', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cpython/objects/capsule.rs.html#496-532' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_capsule_fn</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_capsule_fn</span> {
+    (<span class="ident">from</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">capsmod</span>:<span class="ident">ident</span>).<span class="op">+</span> <span class="ident">import</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">capsname</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rustmod</span>:<span class="ident">ident</span> <span class="ident">signature</span> $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sig</span>: <span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> { ... };
+}</pre></div>
+</div><div class='docblock'><p>Macro to retrieve a function pointer capsule.</p>
+<p>This is not suitable for architectures where the sizes of function and data pointers
+differ.
+For general explanations about capsules, see <a href="struct.PyCapsule.html"><code>PyCapsule</code></a>.</p>
+<h1 id="usage" class="section-header"><a href="#usage">Usage</a></h1>
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+   <span class="macro">py_capsule_fn</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">some</span>.<span class="ident">python</span>.<span class="ident">module</span> <span class="ident">import</span> <span class="ident">capsulename</span> <span class="kw">as</span> <span class="ident">rustmodule</span>
+                      <span class="ident">signature</span> (<span class="ident">args</span>) <span class="op">-&gt;</span> <span class="ident">ret_type</span>)</pre></div>
+<p>Similarly to <a href="macro_py_capsule">py_capsule!</a>, the macro defines</p>
+<ul>
+<li>a Rust module according to the name provided by the caller (here, <code>rustmodule</code>)</li>
+<li>a type alias for the given signature</li>
+<li>a retrieval function:</li>
+</ul>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<span class="kw">mod</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rustmod</span> {
+    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CapsuleFn</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> (<span class="ident">args</span>) <span class="op">-&gt;</span> <span class="ident">ret_type</span> ;
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">retrieve</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">CapsuleFn</span>) { ... }
+}</pre></div>
+<ul>
+<li>a <code>RawPyObject</code> type suitable for signatures that involve Python C objects;
+it can be used in <code>cpython</code> public API involving raw FFI pointers, such as
+<a href="struct.PyObject.html#method.from_owned_ptr%60"><code>from_owned_ptr</code></a>.</li>
+</ul>
+<p>The first call to <code>retrieve()</code> is cached for subsequent calls.</p>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1><h2 id="full-example-with-primitive-types" class="section-header"><a href="#full-example-with-primitive-types">Full example with primitive types</a></h2>
+<p>There is in the Python library no capsule enclosing a function pointer directly,
+although the documentation presents it as a valid use-case. For this example, we'll
+therefore have to create one, using the <a href="struct.PyCapsule.html"><code>PyCapsule</code></a> constructor, and to set it in an
+existing  module (not to imply that a real extension should follow that example
+and set capsules in modules they don't define!)</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyCapsule</span>, <span class="ident">Python</span>, <span class="ident">FromPyObject</span>};
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_int</span>, <span class="ident">c_void</span>};
+
+<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">inc</span>(<span class="ident">a</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
+    <span class="ident">a</span> <span class="op">+</span> <span class="number">1</span>
+}
+
+<span class="doccomment">/// for testing purposes, stores a capsule named `sys.capsfn`` pointing to `inc()`.</span>
+<span class="kw">fn</span> <span class="ident">create_capsule</span>() {
+    <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+    <span class="kw">let</span> <span class="ident">pymod</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">import</span>(<span class="string">&quot;sys&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">caps</span> <span class="op">=</span> <span class="ident">PyCapsule</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="ident">inc</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>, <span class="string">&quot;sys.capsfn&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="ident">pymod</span>.<span class="ident">add</span>(<span class="ident">py</span>, <span class="string">&quot;capsfn&quot;</span>, <span class="ident">caps</span>).<span class="ident">unwrap</span>();
+ }
+
+<span class="macro">py_capsule_fn</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">sys</span> <span class="ident">import</span> <span class="ident">capsfn</span> <span class="kw">as</span> <span class="ident">capsmod</span> <span class="ident">signature</span> (<span class="ident">a</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>);
+
+<span class="comment">// One could, e.g., reexport if needed:</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">capsmod</span>::<span class="ident">CapsuleFn</span>;
+
+<span class="kw">fn</span> <span class="ident">retrieve_use_capsule</span>() {
+    <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+    <span class="kw">let</span> <span class="ident">fun</span> <span class="op">=</span> <span class="ident">capsmod</span>::<span class="ident">retrieve</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+    <span class="macro">assert_eq</span><span class="macro">!</span>( <span class="kw">unsafe</span> { <span class="ident">fun</span>(<span class="number">1</span>) }, <span class="number">2</span>);
+
+    <span class="comment">// let&#39;s demonstrate the (reexported) function type</span>
+    <span class="kw">let</span> <span class="ident">g</span>: <span class="ident">CapsuleFn</span> <span class="op">=</span> <span class="ident">fun</span>;
+}
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="ident">create_capsule</span>();
+    <span class="ident">retrieve_use_capsule</span>();
+    <span class="comment">// second call uses the cached function pointer</span>
+    <span class="ident">retrieve_use_capsule</span>();
+}</pre></div>
+<h2 id="with-python-objects" class="section-header"><a href="#with-python-objects">With Python objects</a></h2>
+<p>In this example, we lend a Python object and receive a new one of which we take ownership.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyCapsule</span>, <span class="ident">PyObject</span>, <span class="ident">PyResult</span>, <span class="ident">Python</span>};
+
+<span class="macro">py_capsule_fn</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">some</span>.<span class="kw">mod</span> <span class="ident">import</span> <span class="ident">capsfn</span> <span class="kw">as</span> <span class="ident">capsmod</span>
+    <span class="ident">signature</span> (<span class="ident">raw</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">RawPyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">RawPyObject</span>);
+
+<span class="kw">fn</span> <span class="ident">retrieve_use_capsule</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">fun</span> <span class="op">=</span> <span class="ident">capsmod</span>::<span class="ident">retrieve</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">obj</span>.<span class="ident">as_ptr</span>();
+    <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">fun</span>(<span class="ident">raw</span>)) })
+}
+
+</pre></div>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "cpython";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
