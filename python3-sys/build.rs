@@ -94,7 +94,7 @@ config = sysconfig.get_config_vars();".to_owned();
     }
 
     let stdout = String::from_utf8(out.stdout).unwrap();
-    let split_stdout: Vec<&str> = stdout.trim_right().split(NEWLINE_SEQUENCE).collect();
+    let split_stdout: Vec<&str> = stdout.trim_end().split(NEWLINE_SEQUENCE).collect();
     if split_stdout.len() != SYSCONFIG_VALUES.len() + SYSCONFIG_FLAGS.len() {
         return Err(
             format!("python stdout len didn't return expected number of lines:
@@ -198,7 +198,7 @@ fn get_rustc_link_lib(_: &PythonVersion, ld_version: &str, enable_shared: bool) 
 fn get_macos_linkmodel() -> Result<String, String> {
     let script = "import sysconfig; print('framework' if sysconfig.get_config_var('PYTHONFRAMEWORK') else ('shared' if sysconfig.get_config_var('Py_ENABLE_SHARED') else 'static'));";
     let out = run_python_script("python", script).unwrap();
-    Ok(out.trim_right().to_owned())
+    Ok(out.trim_end().to_owned())
 }
 
 #[cfg(target_os="macos")]
