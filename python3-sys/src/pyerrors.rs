@@ -111,7 +111,7 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
     pub static mut PyExc_EnvironmentError: *mut PyObject;
     pub static mut PyExc_IOError: *mut PyObject;
     #[cfg(windows)] pub static mut PyExc_WindowsError: *mut PyObject;
-    #[cfg(not(Py_3_7))] pub static mut PyExc_RecursionErrorInst: *mut PyObject;
+    #[cfg(not(Py_3_6))] pub static mut PyExc_RecursionErrorInst: *mut PyObject;
 
     // Predefined warning categories
     pub static mut PyExc_Warning: *mut PyObject;

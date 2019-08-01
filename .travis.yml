@@ -1,26 +1,25 @@
 language: python
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
 env:
-  - RUST_VERSION=1.25.0
+  - RUST_VERSION=1.30.0
   - RUST_VERSION=nightly
 matrix:
   include:
     - python: "3.7"
       dist: xenial
       sudo: true
-      env: RUST_VERSION=1.25.0
+      env: RUST_VERSION=1.30.0
     - python: "3.7"
       dist: xenial
       sudo: true
       env: RUST_VERSION=nightly
     - os: osx
       language: generic
-      env: RUST_VERSION=1.25.0
+      env: RUST_VERSION=1.30.0
     - os: osx
       language: generic
       env: RUST_VERSION=nightly
