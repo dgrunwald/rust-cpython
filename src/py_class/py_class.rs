@@ -436,7 +436,7 @@ macro_rules! py_class {
                     /* traverse_proc: */ None,
                     /* traverse_data: */ [ /*name*/ ]
                 },
-                /* data: */ [ /* { offset, name, type } */ ]
+                /* data: */ [ /* { offset, name, type, init_expr, init_type } */ ]
                 // TODO: base type, documentation, ...
             }
             /* slots: */ {
@@ -465,7 +465,7 @@ macro_rules! py_class {
                     /* traverse_proc: */ None,
                     /* traverse_data: */ [ /*name*/ ]
                 },
-                /* data: */ [ /* { offset, name, type } */ ]
+                /* data: */ [ /* { offset, name, type, init_expr, init_type } */ ]
                 // TODO: base type, documentation, ...
             }
             /* slots: */ {
