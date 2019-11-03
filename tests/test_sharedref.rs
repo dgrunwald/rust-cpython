@@ -1,21 +1,11 @@
 #[macro_use]
 extern crate cpython;
 
-use cpython::{GILGuard, PySharedRef, PySharedRefCell, Python, PythonObject};
+use cpython::{GILGuard, PySharedRefCell, Python};
 
 py_class!(class Owner |py| {
-    data string_: PySharedRefCell<String>;
+    @shared data string: String;
 });
-
-// TODO: will be replaced with `py_class` macro.
-impl Owner {
-    /// Returns a safe reference to the shared `string_`.
-    fn string<'a>(&'a self, py: Python<'a>) -> PySharedRef<'a, String> {
-        let owner = self.as_object();
-        let data = self.string_(py);
-        unsafe { PySharedRef::new(py, owner, data) }
-    }
-}
 
 fn prepare_env() -> (GILGuard, Owner) {
     let gil = Python::acquire_gil();

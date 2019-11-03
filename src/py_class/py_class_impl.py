@@ -370,32 +370,35 @@ def data_decl():
         ''')
 
 def shared_data_decl():
-    generate_case('data $data_name:ident : $data_type:ty;',
+    # the storage type is PySharedRefCell<$data_type>, but unlike plain "data",
+    # its reference type is PySharedRef<'a, $data_type>.
+    generate_case('@shared data $data_name:ident : $data_type:ty;',
         new_info = '''
         /* info: */ {
             $base_type,
-            /* size: */ $crate::py_class::data_new_size::<$data_type>($size),
+            /* size: */ $crate::py_class::data_new_size::<$crate::PySharedRefCell<$data_type>>($size),
             $class_visibility,
             $gc,
             /* data: */ [
                 $($data)*
                 {
-                    $crate::py_class::data_offset::<$data_type>($size),
+                    $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size),
                     $data_name,
-                    $data_type
+                    $crate::PySharedRefCell<$data_type>
                 }
             ]
         }
         ''',
         new_impl='''
             impl $class {
-                fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> &'a $data_type {
+                fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> $crate::PySharedRef<'a, $data_type> {
                     unsafe {
-                        $crate::py_class::data_get::<$data_type>(
+                        let data = $crate::py_class::data_get::<$crate::PySharedRefCell<$data_type>>(
                             py,
                             &self._unsafe_inner,
-                            $crate::py_class::data_offset::<$data_type>($size)
-                        )
+                            $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size)
+                        );
+                        $crate::PySharedRef::new(py, &self._unsafe_inner, data)
                     }
                 }
             }
@@ -848,6 +851,7 @@ def main():
     print(macro_start)
     print(base_case)
     data_decl()
+    shared_data_decl()
     traverse_and_clear()
     for name, f in sorted(special_names.items()):
         f(name)

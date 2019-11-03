@@ -243,6 +243,53 @@ macro_rules! py_class_impl {
         }
         $members
     }};
+    { { @shared data $data_name:ident : $data_type:ty; $($tail:tt)* }
+        $class:ident $py:ident
+        /* info: */ {
+            $base_type: ty,
+            $size: expr,
+            $class_visibility: tt,
+            $gc: tt,
+            [ $( $data:tt )* ]
+        }
+        $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+    } => { py_class_impl! {
+        { $($tail)* }
+        $class $py
+        /* info: */ {
+            $base_type,
+            /* size: */ $crate::py_class::data_new_size::<$crate::PySharedRefCell<$data_type>>($size),
+            $class_visibility,
+            $gc,
+            /* data: */ [
+                $($data)*
+                {
+                    $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size),
+                    $data_name,
+                    $crate::PySharedRefCell<$data_type>
+                }
+            ]
+        }
+        $slots
+        /* impl: */ {
+            $($imp)*
+            impl $class {
+                fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> $crate::PySharedRef<'a, $data_type> {
+                    unsafe {
+                        let data = $crate::py_class::data_get::<$crate::PySharedRefCell<$data_type>>(
+                        py,
+                        &self._unsafe_inner,
+                        $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size)
+                        );
+                        $crate::PySharedRef::new(py, &self._unsafe_inner, data)
+                    }
+                }
+            }
+        }
+        $members
+    }};
     { { def __traverse__(&$slf:tt, $visit:ident) $body:block $($tail:tt)* }
         $class:ident $py:ident
         /* info: */ {

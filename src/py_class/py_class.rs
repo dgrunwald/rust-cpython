@@ -122,6 +122,22 @@ impl MyType {
 }
 ```
 
+## Shared data declarations
+`@shared data data_name: data_type;`
+
+Declares a "shareable" data field within the Python class.
+A data field of this type can be borrowed immutably by another Python object
+such as a Python iterator. See [PySharedRefCell] documentation for details.
+
+On the Rust side, data is accessed through the automatically generated accessor functions:
+```ignore
+impl MyType {
+    fn data_name<'a>(&'a self, py: Python<'a>) -> PySharedRef<'a, $data_type> { ... }
+}
+```
+
+[PySharedRefCell]: struct.PySharedRefCell.html
+
 ## Instance methods
 `def method_name(&self, parameter-list) -> PyResult<...> { ... }`
 
