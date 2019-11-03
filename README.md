@@ -24,7 +24,7 @@ To use `cpython`, add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cpython = "0.2"
+cpython = "0.3"
 ```
 
 #### Example program displaying the value of `sys.version`:
@@ -72,7 +72,7 @@ name = "rust2py"
 crate-type = ["cdylib"]
 
 [dependencies.cpython]
-version = "0.2"
+version = "0.3"
 features = ["extension-module"]
 ```
 
