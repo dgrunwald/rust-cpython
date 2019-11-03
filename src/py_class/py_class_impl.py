@@ -369,6 +369,38 @@ def data_decl():
             }
         ''')
 
+def shared_data_decl():
+    generate_case('data $data_name:ident : $data_type:ty;',
+        new_info = '''
+        /* info: */ {
+            $base_type,
+            /* size: */ $crate::py_class::data_new_size::<$data_type>($size),
+            $class_visibility,
+            $gc,
+            /* data: */ [
+                $($data)*
+                {
+                    $crate::py_class::data_offset::<$data_type>($size),
+                    $data_name,
+                    $data_type
+                }
+            ]
+        }
+        ''',
+        new_impl='''
+            impl $class {
+                fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> &'a $data_type {
+                    unsafe {
+                        $crate::py_class::data_get::<$data_type>(
+                            py,
+                            &self._unsafe_inner,
+                            $crate::py_class::data_offset::<$data_type>($size)
+                        )
+                    }
+                }
+            }
+        ''')
+
 def generate_class_method(special_name=None, decoration='',
         slot=None, add_member=False, value_macro=None, value_args=None):
     name_pattern = special_name or '$name:ident'
