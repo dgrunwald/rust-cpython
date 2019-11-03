@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables)]
 
-#[macro_use] extern crate cpython;
+extern crate cpython;
 
 use cpython::*;
 use std::{mem, isize, iter};
