@@ -340,7 +340,7 @@ fn len() {
 }
 
 py_class!(class Iterator |py| {
-    data iter: RefCell<Box<iter::Iterator<Item=i32> + Send>>;
+    data iter: RefCell<Box<dyn iter::Iterator<Item=i32> + Send>>;
 
     def __iter__(&self) -> PyResult<Iterator> {
         Ok(self.clone_ref(py))
