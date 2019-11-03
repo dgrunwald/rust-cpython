@@ -1,6 +1,7 @@
 # Change Log
 
 ## [Unreleased]
+- Added Python 3.8 support
 
 [Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.3.0...HEAD
 
