@@ -232,7 +232,7 @@ impl <'s, T> FromPyObject<'s> for Vec<T>
 impl <'s, T> FromPyObject<'s> for Vec<T>
     where for<'a> T: FromPyObject<'a>
 {
-    default fn extract(py: Python, obj: &'source PyObject) -> PyResult<Self> {
+    default fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
         extract_sequence(py, obj)
     }
 }
