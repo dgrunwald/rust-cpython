@@ -52,7 +52,16 @@ pub unsafe fn PyExceptionInstance_Class(x: *mut PyObject) -> *mut PyObject {
     (*x).ob_type as *mut PyObject
 }
 
+#[cfg(all(not(Py_3_8), not(Py_LIMITED_API)))]
+#[inline]
+pub unsafe fn PyExceptionClass_Name(x: *mut PyObject) -> *const c_char {
+    (*(*x).ob_type).tp_name
+}
+
 #[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+    #[cfg(Py_3_8)]
+    pub fn PyExceptionClass_Name(o: *mut PyObject) -> *const c_char;
+
     pub static mut PyExc_BaseException: *mut PyObject;
     pub static mut PyExc_Exception: *mut PyObject;
     #[cfg(Py_3_5)] pub static mut PyExc_StopAsyncIteration: *mut PyObject;
