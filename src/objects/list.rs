@@ -16,11 +16,11 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use python::{Python, PythonObject, ToPythonPointer, PyClone, PyDrop};
-use err::{self, PyErr, PyResult};
 use super::object::PyObject;
+use conversion::{FromPyObject, ToPyObject};
+use err::{self, PyErr, PyResult};
 use ffi::{self, Py_ssize_t};
-use conversion::{ToPyObject, FromPyObject};
+use python::{PyClone, PyDrop, Python, PythonObject, ToPythonPointer};
 
 /// Represents a Python `list`.
 pub struct PyList(PyObject);
@@ -32,7 +32,9 @@ impl PyList {
     pub fn new(py: Python, elements: &[PyObject]) -> PyList {
         unsafe {
             let ptr = ffi::PyList_New(elements.len() as Py_ssize_t);
-            let t = err::result_from_owned_ptr(py, ptr).unwrap().unchecked_cast_into::<PyList>();
+            let t = err::result_from_owned_ptr(py, ptr)
+                .unwrap()
+                .unchecked_cast_into::<PyList>();
             for (i, e) in elements.iter().enumerate() {
                 ffi::PyList_SetItem(ptr, i as Py_ssize_t, e.steal_ptr(py));
             }
@@ -44,9 +46,7 @@ impl PyList {
     #[inline]
     pub fn len(&self, _py: Python) -> usize {
         // non-negative Py_ssize_t should always fit into Rust usize
-        unsafe {
-            ffi::PyList_Size(self.0.as_ptr()) as usize
-        }
+        unsafe { ffi::PyList_Size(self.0.as_ptr()) as usize }
     }
 
     /// Gets the item at the specified index.
@@ -56,7 +56,10 @@ impl PyList {
         // TODO: do we really want to panic here?
         assert!(index < self.len(py));
         unsafe {
-            PyObject::from_borrowed_ptr(py, ffi::PyList_GetItem(self.0.as_ptr(), index as Py_ssize_t))
+            PyObject::from_borrowed_ptr(
+                py,
+                ffi::PyList_GetItem(self.0.as_ptr(), index as Py_ssize_t),
+            )
         }
     }
 
@@ -64,7 +67,8 @@ impl PyList {
     ///
     /// Panics if the index is out of range.
     pub fn set_item(&self, _py: Python, index: usize, item: PyObject) {
-        let r = unsafe { ffi::PyList_SetItem(self.0.as_ptr(), index as Py_ssize_t, item.steal_ptr()) };
+        let r =
+            unsafe { ffi::PyList_SetItem(self.0.as_ptr(), index as Py_ssize_t, item.steal_ptr()) };
         assert!(r == 0);
     }
 
@@ -83,9 +87,18 @@ impl PyList {
         self.insert(py, index, item);
     }
 
+    /// Appends an item to the end of the list
+    pub fn append(&self, _py: Python, item: PyObject) {
+        unsafe { ffi::PyList_Append(self.0.as_ptr(), item.as_ptr()) };
+    }
+
     #[inline]
     pub fn iter<'a, 'p>(&'a self, py: Python<'p>) -> PyListIterator<'a, 'p> {
-        PyListIterator { py: py, list: self, index: 0 }
+        PyListIterator {
+            py: py,
+            list: self,
+            index: 0,
+        }
     }
 }
 
@@ -93,10 +106,10 @@ impl PyList {
 pub struct PyListIterator<'a, 'p> {
     py: Python<'p>,
     list: &'a PyList,
-    index: usize
+    index: usize,
 }
 
-impl <'a, 'p> Iterator for PyListIterator<'a, 'p> {
+impl<'a, 'p> Iterator for PyListIterator<'a, 'p> {
     type Item = PyObject;
 
     #[inline]
@@ -115,11 +128,14 @@ impl <'a, 'p> Iterator for PyListIterator<'a, 'p> {
 }
 
 /// Converts a Rust slice to a Python `list`.
-/// 
+///
 /// Note: this conversion can be inefficient since a Python object is created
 /// for each element of the list. For primitive types `T`, consider using
 /// the buffer protocol instead.
-impl <T> ToPyObject for [T] where T: ToPyObject {
+impl<T> ToPyObject for [T]
+where
+    T: ToPyObject,
+{
     type ObjectType = PyList;
 
     fn to_py_object(&self, py: Python) -> PyList {
@@ -136,11 +152,14 @@ impl <T> ToPyObject for [T] where T: ToPyObject {
 }
 
 /// Converts a Rust slice to a Python `list`.
-/// 
+///
 /// Note: this conversion can be inefficient since a Python object is created
 /// for each element of the list. For primitive types `T`, consider using
 /// the buffer protocol instead.
-impl <T> ToPyObject for Vec<T> where T: ToPyObject {
+impl<T> ToPyObject for Vec<T>
+where
+    T: ToPyObject,
+{
     type ObjectType = PyList;
 
     fn to_py_object(&self, py: Python) -> PyList {
@@ -162,15 +181,15 @@ impl <T> ToPyObject for Vec<T> where T: ToPyObject {
 
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
     use objects::PyList;
+    use python::{Python, PythonObject};
 
     #[test]
     fn test_len() {
         let gil = Python::acquire_gil();
         let py = gil.python();
-        let v = vec![1,2,3,4];
+        let v = vec![1, 2, 3, 4];
         let list = v.to_py_object(py);
         assert_eq!(4, list.len(py));
     }
@@ -212,6 +231,19 @@ mod test {
         assert_eq!(5, list.len(py));
         assert_eq!(42, list.get_item(py, 0).extract::<i32>(py).unwrap());
         assert_eq!(2, list.get_item(py, 1).extract::<i32>(py).unwrap());
+    }
+
+    #[test]
+    fn test_append() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let v = vec![2, 3, 5, 7];
+        let list = v.to_py_object(py);
+        let val = 42i32.to_py_object(py).into_object();
+        assert_eq!(4, list.len(py));
+        list.append(py, val);
+        assert_eq!(5, list.len(py));
+        assert_eq!(42, list.get_item(py, 4).extract::<i32>(py).unwrap());
     }
 
     #[test]
