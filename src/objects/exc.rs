@@ -42,7 +42,11 @@ macro_rules! exc_type(
                     if ffi::PyObject_TypeCheck(obj.as_ptr(), ffi::$exc_name as *mut ffi::PyTypeObject) != 0 {
                         Ok(PythonObject::unchecked_downcast_from(obj))
                     } else {
-                        Err(PythonObjectDowncastError(py))
+                        Err(PythonObjectDowncastError::new(
+                            py,
+                            stringify!($name),
+                            obj.get_type(py),
+                        ))
                     }
                 }
             }
@@ -55,7 +59,11 @@ macro_rules! exc_type(
                     if ffi::PyObject_TypeCheck(obj.as_ptr(), ffi::$exc_name as *mut ffi::PyTypeObject) != 0 {
                         Ok(PythonObject::unchecked_downcast_borrow_from(obj))
                     } else {
-                        Err(PythonObjectDowncastError(py))
+                        Err(PythonObjectDowncastError::new(
+                            py,
+                            stringify!($name),
+                            obj.get_type(py),
+                        ))
                     }
                 }
             }
@@ -152,4 +160,3 @@ impl UnicodeDecodeError {
         UnicodeDecodeError::new(py, cstr!("utf-8"), input, pos .. pos+1, cstr!("invalid utf-8"))
     }
 }
-

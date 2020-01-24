@@ -80,7 +80,11 @@ macro_rules! py_exception {
                 if <$name as $crate::PythonObjectWithTypeObject>::type_object(py).is_instance(py, &obj) {
                     Ok(unsafe { $crate::PythonObject::unchecked_downcast_from(obj) })
                 } else {
-                    Err($crate::PythonObjectDowncastError(py))
+                    Err($crate::PythonObjectDowncastError::new(
+                        py,
+                        _cpython__err__stringify!($name),
+                        <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
+                    ))
                 }
             }
 
@@ -91,7 +95,11 @@ macro_rules! py_exception {
                 if <$name as $crate::PythonObjectWithTypeObject>::type_object(py).is_instance(py, obj) {
                     Ok(unsafe { $crate::PythonObject::unchecked_downcast_borrow_from(obj) })
                 } else {
-                    Err($crate::PythonObjectDowncastError(py))
+                    Err($crate::PythonObjectDowncastError::new(
+                        py,
+                        _cpython__err__stringify!($name),
+                        <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
+                    ))
                 }
             }
         }
@@ -390,7 +398,12 @@ impl PyClone for PyErr {
 /// Converts `PythonObjectDowncastError` to Python `TypeError`.
 impl <'p> std::convert::From<PythonObjectDowncastError<'p>> for PyErr {
     fn from(err: PythonObjectDowncastError<'p>) -> PyErr {
-        PyErr::new_lazy_init(err.0.get_type::<exc::TypeError>(), None)
+        let msg = format!(
+            "Expected type that converts to {} but received {}",
+            err.expected_type_name,
+            err.received_type.name(err.py),
+        ).to_py_object(err.py).into_object();
+        PyErr::new_lazy_init(err.py.get_type::<exc::TypeError>(), Some(msg))
     }
 }
 

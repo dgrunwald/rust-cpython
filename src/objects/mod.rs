@@ -82,7 +82,11 @@ macro_rules! pyobject_newtype(
                     if ::ffi::$checkfunction(obj.as_ptr()) != 0 {
                         Ok($name(obj))
                     } else {
-                        Err(::python::PythonObjectDowncastError(py))
+                        Err(::python::PythonObjectDowncastError::new(
+                            py,
+                            _cpython__objects__stringify!($name),
+                            obj.get_type(py)
+                        ))
                     }
                 }
             }
@@ -93,7 +97,11 @@ macro_rules! pyobject_newtype(
                     if ::ffi::$checkfunction(obj.as_ptr()) != 0 {
                         Ok(::std::mem::transmute(obj))
                     } else {
-                        Err(::python::PythonObjectDowncastError(py))
+                        Err(::python::PythonObjectDowncastError::new(
+                            py,
+                            _cpython__objects__stringify!($name),
+                            obj.get_type(py)
+                        ))
                     }
                 }
             }
@@ -123,6 +131,14 @@ macro_rules! extract(
         }
     }
 );
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! _cpython__objects__stringify {
+    ($($inner:tt)*) => {
+        stringify! { $($inner)* }
+    }
+}
 
 mod object;
 mod typeobject;

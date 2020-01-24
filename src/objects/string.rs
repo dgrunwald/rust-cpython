@@ -61,7 +61,7 @@ impl ::python::PythonObjectWithCheckedDowncast for PyString {
         if is_base_string(&obj) {
             Ok(PyString(obj))
         } else {
-            Err(PythonObjectDowncastError(py))
+            Err(PythonObjectDowncastError::new(py, "PyString", obj.get_type(py)))
         }
     }
 
@@ -71,7 +71,7 @@ impl ::python::PythonObjectWithCheckedDowncast for PyString {
             if is_base_string(obj) {
                 Ok(::std::mem::transmute(obj))
             } else {
-                Err(::python::PythonObjectDowncastError(py))
+                Err(::python::PythonObjectDowncastError::new(py, "PyString", obj.get_type(py)))
             }
         }
     }

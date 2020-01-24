@@ -56,7 +56,26 @@ pub trait PythonObject : ::conversion::ToPyObject + Send + Sized + 'static {
 }
 
 // Marker type that indicates an error while downcasting
-pub struct PythonObjectDowncastError<'p>(pub Python<'p>);
+pub struct PythonObjectDowncastError<'p> {
+    pub(crate) py: Python<'p>,
+    pub(crate) expected_type_name: String,
+    pub(crate) received_type: PyType,
+}
+
+impl<'p> PythonObjectDowncastError<'p> {
+    pub fn new(
+        py: Python<'p>,
+        expected_type_name: impl Into<String>,
+        received_type: PyType) -> Self
+    {
+        let expected_type_name = expected_type_name.into();
+        PythonObjectDowncastError {
+            py,
+            expected_type_name,
+            received_type,
+        }
+    }
+}
 
 /// Trait implemented by Python object types that allow a checked downcast.
 pub trait PythonObjectWithCheckedDowncast : PythonObject {
