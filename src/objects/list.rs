@@ -81,7 +81,7 @@ impl PyList {
     }
 
     // Old name for `insert`.
-    #[deprecated(since="0.3.1", note="use list.insert() instead")]
+    #[deprecated(since = "0.3.1", note = "use list.insert() instead")]
     #[doc(hidden)]
     pub fn insert_item(&self, py: Python, index: usize, item: PyObject) {
         self.insert(py, index, item);

@@ -19,10 +19,10 @@ endif
 all:
 
 clean:
-	-rm *.so
-	-rm *.out
-	-rm *_expanded.rs
-	-rm -r stamps
+	$(RM) *.so
+	$(RM) *.out
+	$(RM) *_expanded.rs
+	$(RM) -r stamps
 
 stamps:
 	mkdir stamps

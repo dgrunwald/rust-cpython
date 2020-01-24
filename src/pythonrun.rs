@@ -16,9 +16,9 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std::{sync, rc, marker};
 use ffi;
 use python::Python;
+use std::{marker, rc, sync};
 
 static START: sync::Once = sync::ONCE_INIT;
 
@@ -54,7 +54,8 @@ pub fn prepare_freethreaded_python() {
             // as we can't make the existing Python main thread acquire the GIL.
             assert!(ffi::PyEval_ThreadsInitialized() != 0);
         } else {
-            #[cfg(feature="python27-sys")] {
+            #[cfg(feature = "python27-sys")]
+            {
                 // If Python isn't initialized yet, we expect that Python threading isn't initialized either.
                 assert!(ffi::PyEval_ThreadsInitialized() == 0);
                 // Note: starting with Python 3.2 it's no longer possible to initialize threading
@@ -95,7 +96,7 @@ pub struct GILGuard {
     gstate: ffi::PyGILState_STATE,
     // hack to opt out of Send on stable rust, which doesn't
     // have negative impls
-    no_send: marker::PhantomData<rc::Rc<()>>
+    no_send: marker::PhantomData<rc::Rc<()>>,
 }
 
 /// The Drop implementation for GILGuard will release the GIL.
@@ -115,7 +116,10 @@ impl GILGuard {
             ::pythonrun::prepare_freethreaded_python();
         }
         let gstate = unsafe { ffi::PyGILState_Ensure() }; // acquire GIL
-        GILGuard { gstate: gstate, no_send: marker::PhantomData }
+        GILGuard {
+            gstate: gstate,
+            no_send: marker::PhantomData,
+        }
     }
 
     /// Retrieves the marker type that proves that the GIL was acquired.
@@ -141,28 +145,28 @@ impl GILGuard {
 /// }
 /// ```
 pub struct GILProtected<T> {
-    data: T
+    data: T,
 }
 
-unsafe impl<T: Send> Send for GILProtected<T> { }
+unsafe impl<T: Send> Send for GILProtected<T> {}
 
 /// Because `GILProtected` ensures that the contained data
 /// is only accessed while the GIL is acquired,
 /// it can implement `Sync` even if the contained data
 /// does not.
-unsafe impl<T: Send> Sync for GILProtected<T> { }
+unsafe impl<T: Send> Sync for GILProtected<T> {}
 
-impl <T> GILProtected<T> {
+impl<T> GILProtected<T> {
     /// Creates a new instance of `GILProtected`.
     #[inline]
-    #[cfg(feature="nightly")]
+    #[cfg(feature = "nightly")]
     pub const fn new(data: T) -> GILProtected<T> {
         GILProtected { data: data }
     }
 
     /// Creates a new instance of `GILProtected`.
     #[inline]
-    #[cfg(not(feature="nightly"))]
+    #[cfg(not(feature = "nightly"))]
     pub fn new(data: T) -> GILProtected<T> {
         GILProtected { data: data }
     }
@@ -181,4 +185,3 @@ impl <T> GILProtected<T> {
         self.data
     }
 }
-

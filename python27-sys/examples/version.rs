@@ -12,4 +12,3 @@ fn main() {
         println!("{}", get_str(python27_sys::Py_GetVersion()));
     }
 }
-

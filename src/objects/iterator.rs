@@ -16,11 +16,11 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use python::{Python, PythonObject, ToPythonPointer, PythonObjectDowncastError};
 use conversion::ToPyObject;
-use objects::PyObject;
 use err::{PyErr, PyResult};
 use ffi;
+use objects::PyObject;
+use python::{Python, PythonObject, PythonObjectDowncastError, ToPythonPointer};
 
 /// A python iterator object.
 ///
@@ -31,13 +31,20 @@ pub struct PyIterator<'p> {
     iter: PyObject,
 }
 
-impl <'p> PyIterator<'p> {
+impl<'p> PyIterator<'p> {
     /// Constructs a PyIterator from a Python iterator object.
-    pub fn from_object(py: Python<'p>, obj: PyObject) -> Result<PyIterator<'p>, PythonObjectDowncastError<'p>> {
+    pub fn from_object(
+        py: Python<'p>,
+        obj: PyObject,
+    ) -> Result<PyIterator<'p>, PythonObjectDowncastError<'p>> {
         if unsafe { ffi::PyIter_Check(obj.as_ptr()) != 0 } {
             Ok(PyIterator { py: py, iter: obj })
         } else {
-            Err(PythonObjectDowncastError::new(py, "PyIterator", obj.get_type(py)))
+            Err(PythonObjectDowncastError::new(
+                py,
+                "PyIterator",
+                obj.get_type(py),
+            ))
         }
     }
 
@@ -54,7 +61,7 @@ impl <'p> PyIterator<'p> {
     }
 }
 
-impl <'p> Iterator for PyIterator<'p> {
+impl<'p> Iterator for PyIterator<'p> {
     type Item = PyResult<PyObject>;
 
     /// Retrieves the next item from an iterator.
@@ -79,9 +86,9 @@ impl <'p> Iterator for PyIterator<'p> {
 
 #[cfg(test)]
 mod tests {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
     use objectprotocol::ObjectProtocol;
+    use python::{Python, PythonObject};
 
     #[test]
     fn vec_iter() {
@@ -94,4 +101,3 @@ mod tests {
         assert!(it.next().is_none());
     }
 }
-

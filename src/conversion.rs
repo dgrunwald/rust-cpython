@@ -16,21 +16,21 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std;
-use ffi;
-use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PyDrop, PyClone};
-use objects::PyObject;
 use err::PyResult;
+use ffi;
+use objects::PyObject;
+use python::{PyClone, PyDrop, Python, PythonObject, PythonObjectWithCheckedDowncast};
+use std;
 
 /// Conversion trait that allows various objects to be converted into Python objects.
-/// 
+///
 /// Note: The associated type `ObjectType` is used so that some Rust types
 /// convert to a more precise type of Python object.
 /// For example, `[T]::to_py_object()` will result in a `PyList`.
 /// You can always calls `val.to_py_object(py).into_py_object()` in order to obtain `PyObject`
 /// (the second into_py_object() call via the PythonObject trait corresponds to the upcast from `PyList` to `PyObject`).
 pub trait ToPyObject {
-    type ObjectType : PythonObject;
+    type ObjectType: PythonObject;
 
     /// Converts self into a Python object.
     fn to_py_object(&self, py: Python) -> Self::ObjectType;
@@ -41,7 +41,8 @@ pub trait ToPyObject {
     /// it can move out of the input object.
     #[inline]
     fn into_py_object(self, py: Python) -> Self::ObjectType
-      where Self: Sized
+    where
+        Self: Sized,
     {
         self.to_py_object(py)
     }
@@ -53,7 +54,8 @@ pub trait ToPyObject {
     /// to touch any reference counts when the input object already is a Python object.
     #[inline]
     fn with_borrowed_ptr<F, R>(&self, py: Python, f: F) -> R
-        where F: FnOnce(*mut ffi::PyObject) -> R
+    where
+        F: FnOnce(*mut ffi::PyObject) -> R,
     {
         let obj = self.to_py_object(py).into_object();
         let res = f(obj.as_ptr());
@@ -91,21 +93,19 @@ py_impl_to_py_object_for_python_object!(PyObject);
 ///
 /// Each target type for this conversion supports a different Python objects as input.
 /// Calls with an unsupported input object will result in an exception (usually a `TypeError`).
-/// 
+///
 /// This trait is also used by the `py_fn!` and `py_class!` and `py_argparse!` macros
 /// in order to translate from Python objects to the expected Rust parameter types.
 /// For example, the parameter `x` in `def method(self, x: i32)` will use
 /// `impl FromPyObject for i32` to convert the input Python object into a Rust `i32`.
 /// When these macros are used with reference parameters (`x: &str`), the trait
 /// `RefFromPyObject` is used instead.
-pub trait FromPyObject<'s> : Sized {
+pub trait FromPyObject<'s>: Sized {
     /// Extracts `Self` from the source `PyObject`.
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self>;
 }
 
-
 py_impl_from_py_object_for_python_object!(PyObject);
-
 
 /// RefFromPyObject is implemented by various types that can be extracted
 /// as a reference from a Python object.
@@ -122,7 +122,7 @@ py_impl_from_py_object_for_python_object!(PyObject);
 ///
 /// Each target type for this conversion supports a different Python objects as input.
 /// Calls with an unsupported input object will result in an exception (usually a `TypeError`).
-/// 
+///
 /// This trait is also used by the `py_fn!` and `py_class!` and `py_argparse!` macros
 /// in order to translate from Python objects to the expected Rust parameter types.
 /// For example, the parameter `x` in `def method(self, x: &[u8])` will use
@@ -131,19 +131,22 @@ py_impl_from_py_object_for_python_object!(PyObject);
 /// `FromPyObject` is used instead.
 pub trait RefFromPyObject {
     fn with_extracted<F, R>(py: Python, obj: &PyObject, f: F) -> PyResult<R>
-        where F: FnOnce(&Self) -> R;
+    where
+        F: FnOnce(&Self) -> R;
 }
 
-impl <T: ?Sized> RefFromPyObject for T
-    where for<'a> &'a T: FromPyObject<'a>
+impl<T: ?Sized> RefFromPyObject for T
+where
+    for<'a> &'a T: FromPyObject<'a>,
 {
     #[inline]
     fn with_extracted<F, R>(py: Python, obj: &PyObject, f: F) -> PyResult<R>
-        where F: FnOnce(&Self) -> R
+    where
+        F: FnOnce(&Self) -> R,
     {
         match FromPyObject::extract(py, obj) {
             Ok(val) => Ok(f(val)),
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         }
     }
 }
@@ -167,7 +170,10 @@ where T: PythonObjectWithCheckedDowncast
 */
 
 /// `ToPyObject` for references: calls to_py_object() on the underlying `T`.
-impl <'a, T: ?Sized> ToPyObject for &'a T where T: ToPyObject {
+impl<'a, T: ?Sized> ToPyObject for &'a T
+where
+    T: ToPyObject,
+{
     type ObjectType = T::ObjectType;
 
     #[inline]
@@ -182,7 +188,8 @@ impl <'a, T: ?Sized> ToPyObject for &'a T where T: ToPyObject {
 
     #[inline]
     fn with_borrowed_ptr<F, R>(&self, py: Python, f: F) -> R
-        where F: FnOnce(*mut ffi::PyObject) -> R
+    where
+        F: FnOnce(*mut ffi::PyObject) -> R,
     {
         <T as ToPyObject>::with_borrowed_ptr(*self, py, f)
     }
@@ -190,34 +197,40 @@ impl <'a, T: ?Sized> ToPyObject for &'a T where T: ToPyObject {
 
 /// `Option::Some<T>` is converted like `T`.
 /// `Option::None` is converted to Python `None`.
-impl <T> ToPyObject for Option<T> where T: ToPyObject {
+impl<T> ToPyObject for Option<T>
+where
+    T: ToPyObject,
+{
     type ObjectType = PyObject;
 
     fn to_py_object(&self, py: Python) -> PyObject {
         match *self {
             Some(ref val) => val.to_py_object(py).into_object(),
-            None => py.None()
+            None => py.None(),
         }
     }
 
     fn into_py_object(self, py: Python) -> PyObject {
         match self {
             Some(val) => val.into_py_object(py).into_object(),
-            None => py.None()
+            None => py.None(),
         }
     }
 }
 
 /// If the python value is None, returns `Option::None`.
 /// Otherwise, converts the python value to `T` and returns `Some(T)`.
-impl <'s, T> FromPyObject<'s> for Option<T> where T: FromPyObject<'s> {
+impl<'s, T> FromPyObject<'s> for Option<T>
+where
+    T: FromPyObject<'s>,
+{
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
         if obj.as_ptr() == unsafe { ffi::Py_None() } {
             Ok(None)
         } else {
             match T::extract(py, obj) {
                 Ok(v) => Ok(Some(v)),
-                Err(e) => Err(e)
+                Err(e) => Err(e),
             }
         }
     }
@@ -250,4 +263,3 @@ where T: ExtractPyObject<'prepared>
     }
 }
 */
-

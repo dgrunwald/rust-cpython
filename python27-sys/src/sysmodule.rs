@@ -1,7 +1,8 @@
-use libc::{c_int, c_char};
+use libc::{c_char, c_int};
 use object::PyObject;
 
-#[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+#[cfg_attr(windows, link(name = "pythonXY"))]
+extern "C" {
     pub fn PySys_GetObject(arg1: *mut c_char) -> *mut PyObject;
     pub fn PySys_SetObject(arg1: *mut c_char, arg2: *mut PyObject) -> c_int;
     pub fn PySys_SetArgv(arg1: c_int, arg2: *mut *mut c_char) -> ();

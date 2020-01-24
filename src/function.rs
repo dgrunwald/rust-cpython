@@ -16,15 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use libc;
-use std::{mem, ptr, io, any, marker};
-use std::panic;
-use std::ffi::{CString, CStr};
-use python::{Python, PythonObject, PyDrop};
-use objects::{PyObject, PyTuple, PyDict, PyString, exc};
 use conversion::ToPyObject;
-use ffi;
 use err::{self, PyResult};
+use ffi;
+use libc;
+use objects::{exc, PyDict, PyObject, PyString, PyTuple};
+use python::{PyDrop, Python, PythonObject};
+use std::ffi::{CStr, CString};
+use std::panic;
+use std::{any, io, marker, mem, ptr};
 
 #[macro_export(local_inner_macros)]
 #[doc(hidden)]
@@ -34,13 +34,16 @@ macro_rules! py_method_def {
     }};
 
     ($name: expr, $flags: expr, $wrap: expr, $doc: expr) => {{
-        static mut METHOD_DEF: $crate::_detail::ffi::PyMethodDef = $crate::_detail::ffi::PyMethodDef {
-            //ml_name: bytes!(stringify!($name), "\0"),
-            ml_name: 0 as *const $crate::_detail::libc::c_char,
-            ml_meth: None,
-            ml_flags: $crate::_detail::ffi::METH_VARARGS | $crate::_detail::ffi::METH_KEYWORDS | $flags,
-            ml_doc: 0 as *const $crate::_detail::libc::c_char
-        };
+        static mut METHOD_DEF: $crate::_detail::ffi::PyMethodDef =
+            $crate::_detail::ffi::PyMethodDef {
+                //ml_name: bytes!(stringify!($name), "\0"),
+                ml_name: 0 as *const $crate::_detail::libc::c_char,
+                ml_meth: None,
+                ml_flags: $crate::_detail::ffi::METH_VARARGS
+                    | $crate::_detail::ffi::METH_KEYWORDS
+                    | $flags,
+                ml_doc: 0 as *const $crate::_detail::libc::c_char,
+            };
         METHOD_DEF.ml_name = _cpython__concat!($name, "\0").as_ptr() as *const _;
         if $name.starts_with("r#") {
             METHOD_DEF.ml_name = METHOD_DEF.ml_name.add(2);
@@ -48,10 +51,10 @@ macro_rules! py_method_def {
         if !$doc.is_empty() {
             METHOD_DEF.ml_doc = _cpython__concat!($doc, "\0").as_ptr() as *const _;
         }
-        METHOD_DEF.ml_meth = Some(
-            ::std::mem::transmute::<$crate::_detail::ffi::PyCFunctionWithKeywords,
-                                  $crate::_detail::ffi::PyCFunction>($wrap)
-        );
+        METHOD_DEF.ml_meth = Some(::std::mem::transmute::<
+            $crate::_detail::ffi::PyCFunctionWithKeywords,
+            $crate::_detail::ffi::PyCFunction,
+        >($wrap));
         &mut METHOD_DEF
     }};
 }
@@ -87,14 +90,14 @@ macro_rules! py_method_def {
 ///   implements `ToPyObject`.
 ///
 /// # Errors
-/// 
+///
 /// * If argument parsing fails, the Rust function will not be called and an
 ///   appropriate Python exception is raised instead (usually `TypeError`
 ///   when the Python value does not match the expected type;
 ///   the implementation of `FromPyObject` for your type may document additional
 ///   errors).
 /// * If the Rust function panics, a Python `SystemError` will be raised.
-/// 
+///
 /// # Example
 /// ```
 /// #[macro_use] extern crate cpython;
@@ -172,8 +175,9 @@ pub trait CallbackConverter<S> {
 
 pub struct PyObjectCallbackConverter;
 
-impl <S> CallbackConverter<S> for PyObjectCallbackConverter
-    where S: ToPyObject
+impl<S> CallbackConverter<S> for PyObjectCallbackConverter
+where
+    S: ToPyObject,
 {
     type R = *mut ffi::PyObject;
 
@@ -189,9 +193,10 @@ impl <S> CallbackConverter<S> for PyObjectCallbackConverter
 
 pub struct PythonObjectCallbackConverter<T>(pub marker::PhantomData<T>);
 
-impl <T, S> CallbackConverter<S> for PythonObjectCallbackConverter<T>
-    where T: PythonObject,
-          S: ToPyObject<ObjectType=T>
+impl<T, S> CallbackConverter<S> for PythonObjectCallbackConverter<T>
+where
+    T: PythonObject,
+    S: ToPyObject<ObjectType = T>,
 {
     type R = *mut ffi::PyObject;
 
@@ -206,17 +211,16 @@ impl <T, S> CallbackConverter<S> for PythonObjectCallbackConverter<T>
 }
 
 pub unsafe fn handle_callback<F, T, C>(location: &str, _c: C, f: F) -> C::R
-    where F: FnOnce(Python) -> PyResult<T>,
-          F: panic::UnwindSafe,
-          C: CallbackConverter<T>
+where
+    F: FnOnce(Python) -> PyResult<T>,
+    F: panic::UnwindSafe,
+    C: CallbackConverter<T>,
 {
     let guard = AbortOnDrop(location);
     let ret = panic::catch_unwind(|| {
         let py = Python::assume_gil_acquired();
         match f(py) {
-            Ok(val) => {
-                C::convert(val, py)
-            }
+            Ok(val) => C::convert(val, py),
             Err(e) => {
                 e.restore(py);
                 C::error_value()
@@ -243,7 +247,7 @@ fn handle_panic(_py: Python, _panic: &dyn any::Any) {
 
 pub struct AbortOnDrop<'a>(pub &'a str);
 
-impl <'a> Drop for AbortOnDrop<'a> {
+impl<'a> Drop for AbortOnDrop<'a> {
     fn drop(&mut self) {
         use std::io::Write;
         let _ = writeln!(&mut io::stderr(), "Cannot unwind out of {}", self.0);
@@ -267,6 +271,5 @@ macro_rules! _cpython__concat {
         concat! { $($inner)* }
     }
 }
-
 
 // Tests for this file are in tests/test_function.rs

@@ -16,12 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use ffi;
-use python::{Python, PythonObject};
 use conversion::ToPyObject;
-use objects::{PyObject, PyList};
-use err::{self, PyResult, PyErr};
-use std::{mem, collections, hash, cmp};
+use err::{self, PyErr, PyResult};
+use ffi;
+use objects::{PyList, PyObject};
+use python::{Python, PythonObject};
+use std::{cmp, collections, hash, mem};
 
 /// Represents a Python `dict`.
 pub struct PyDict(PyObject);
@@ -33,17 +33,13 @@ impl PyDict {
     ///
     /// May panic when running out of memory.
     pub fn new(py: Python) -> PyDict {
-        unsafe {
-            err::cast_from_owned_ptr_or_panic(py, ffi::PyDict_New())
-        }
+        unsafe { err::cast_from_owned_ptr_or_panic(py, ffi::PyDict_New()) }
     }
 
     /// Return a new dictionary that contains the same key-value pairs as self.
     /// Corresponds to `dict(self)` in Python.
     pub fn copy(&self, py: Python) -> PyResult<PyDict> {
-        unsafe {
-            err::result_cast_from_owned_ptr(py, ffi::PyDict_Copy(self.0.as_ptr()))
-        }
+        unsafe { err::result_cast_from_owned_ptr(py, ffi::PyDict_Copy(self.0.as_ptr())) }
     }
 
     /// Empty an existing dictionary of all key-value pairs.
@@ -61,50 +57,59 @@ impl PyDict {
 
     /// Determine if the dictionary contains the specified key.
     /// This is equivalent to the Python expression `key in self`.
-    pub fn contains<K>(&self, py: Python, key: K) -> PyResult<bool> where K: ToPyObject {
+    pub fn contains<K>(&self, py: Python, key: K) -> PyResult<bool>
+    where
+        K: ToPyObject,
+    {
         key.with_borrowed_ptr(py, |key| unsafe {
             match ffi::PyDict_Contains(self.0.as_ptr(), key) {
                 1 => Ok(true),
                 0 => Ok(false),
-                _ => Err(PyErr::fetch(py))
+                _ => Err(PyErr::fetch(py)),
             }
         })
     }
 
     /// Gets an item from the dictionary.
     /// Returns None if the item is not present, or if an error occurs.
-    pub fn get_item<K>(&self, py: Python, key: K) -> Option<PyObject> where K: ToPyObject {
+    pub fn get_item<K>(&self, py: Python, key: K) -> Option<PyObject>
+    where
+        K: ToPyObject,
+    {
         key.with_borrowed_ptr(py, |key| unsafe {
-            PyObject::from_borrowed_ptr_opt(py,
-                ffi::PyDict_GetItem(self.0.as_ptr(), key))
+            PyObject::from_borrowed_ptr_opt(py, ffi::PyDict_GetItem(self.0.as_ptr(), key))
         })
     }
 
     /// Sets an item value.
     /// This is equivalent to the Python expression `self[key] = value`.
-    pub fn set_item<K, V>(&self, py: Python, key: K, value: V) -> PyResult<()> where K: ToPyObject, V: ToPyObject {
-        key.with_borrowed_ptr(py, move |key|
+    pub fn set_item<K, V>(&self, py: Python, key: K, value: V) -> PyResult<()>
+    where
+        K: ToPyObject,
+        V: ToPyObject,
+    {
+        key.with_borrowed_ptr(py, move |key| {
             value.with_borrowed_ptr(py, |value| unsafe {
-                err::error_on_minusone(py,
-                    ffi::PyDict_SetItem(self.0.as_ptr(), key, value))
-            }))
+                err::error_on_minusone(py, ffi::PyDict_SetItem(self.0.as_ptr(), key, value))
+            })
+        })
     }
 
     /// Deletes an item.
     /// This is equivalent to the Python expression `del self[key]`.
-    pub fn del_item<K>(&self, py: Python, key: K) -> PyResult<()> where K: ToPyObject {
+    pub fn del_item<K>(&self, py: Python, key: K) -> PyResult<()>
+    where
+        K: ToPyObject,
+    {
         key.with_borrowed_ptr(py, |key| unsafe {
-            err::error_on_minusone(py,
-                ffi::PyDict_DelItem(self.0.as_ptr(), key))
+            err::error_on_minusone(py, ffi::PyDict_DelItem(self.0.as_ptr(), key))
         })
     }
 
     // List of dict items.
     // This is equivalent to the python expression `list(dict.items())`.
     pub fn items_list(&self, py: Python) -> PyList {
-        unsafe {
-            err::cast_from_owned_ptr_or_panic(py, ffi::PyDict_Items(self.0.as_ptr()))
-        }
+        unsafe { err::cast_from_owned_ptr_or_panic(py, ffi::PyDict_Items(self.0.as_ptr())) }
     }
 
     /// Returns the list of (key,value) pairs in this dictionary.
@@ -118,8 +123,10 @@ impl PyDict {
             let mut key: *mut ffi::PyObject = mem::uninitialized();
             let mut value: *mut ffi::PyObject = mem::uninitialized();
             while ffi::PyDict_Next(self.0.as_ptr(), &mut pos, &mut key, &mut value) != 0 {
-                vec.push((PyObject::from_borrowed_ptr(py, key),
-                          PyObject::from_borrowed_ptr(py, value)));
+                vec.push((
+                    PyObject::from_borrowed_ptr(py, key),
+                    PyObject::from_borrowed_ptr(py, value),
+                ));
             }
         }
         vec
@@ -127,10 +134,11 @@ impl PyDict {
 }
 
 /// Converts a Rust `HashMap` to a Python `dict`.
-impl <K, V, H> ToPyObject for collections::HashMap<K, V, H>
-    where K: hash::Hash+cmp::Eq+ToPyObject,
-          V: ToPyObject,
-          H: hash::BuildHasher
+impl<K, V, H> ToPyObject for collections::HashMap<K, V, H>
+where
+    K: hash::Hash + cmp::Eq + ToPyObject,
+    V: ToPyObject,
+    H: hash::BuildHasher,
 {
     type ObjectType = PyDict;
 
@@ -138,15 +146,16 @@ impl <K, V, H> ToPyObject for collections::HashMap<K, V, H>
         let dict = PyDict::new(py);
         for (key, value) in self {
             dict.set_item(py, key, value).unwrap();
-        };
+        }
         dict
     }
 }
 
 /// Converts a Rust `BTreeMap` to a Python `dict`.
-impl <K, V> ToPyObject for collections::BTreeMap<K, V>
-    where K: cmp::Eq+ToPyObject,
-          V: ToPyObject
+impl<K, V> ToPyObject for collections::BTreeMap<K, V>
+where
+    K: cmp::Eq + ToPyObject,
+    V: ToPyObject,
 {
     type ObjectType = PyDict;
 
@@ -154,16 +163,16 @@ impl <K, V> ToPyObject for collections::BTreeMap<K, V>
         let dict = PyDict::new(py);
         for (key, value) in self {
             dict.set_item(py, key, value).unwrap();
-        };
+        }
         dict
     }
 }
 
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
     use objects::{PyDict, PyTuple};
+    use python::{Python, PythonObject};
     use std::collections::HashMap;
 
     #[test]
@@ -196,7 +205,10 @@ mod test {
         let mut v = HashMap::new();
         v.insert(7, 32);
         let dict = v.to_py_object(py);
-        assert_eq!(32, dict.get_item(py, 7i32).unwrap().extract::<i32>(py).unwrap());
+        assert_eq!(
+            32,
+            dict.get_item(py, 7i32).unwrap().extract::<i32>(py).unwrap()
+        );
         assert_eq!(None, dict.get_item(py, 8i32));
     }
 
@@ -209,8 +221,14 @@ mod test {
         let dict = v.to_py_object(py);
         assert!(dict.set_item(py, 7i32, 42i32).is_ok()); // change
         assert!(dict.set_item(py, 8i32, 123i32).is_ok()); // insert
-        assert_eq!(42i32, dict.get_item(py, 7i32).unwrap().extract::<i32>(py).unwrap());
-        assert_eq!(123i32, dict.get_item(py, 8i32).unwrap().extract::<i32>(py).unwrap());
+        assert_eq!(
+            42i32,
+            dict.get_item(py, 7i32).unwrap().extract::<i32>(py).unwrap()
+        );
+        assert_eq!(
+            123i32,
+            dict.get_item(py, 8i32).unwrap().extract::<i32>(py).unwrap()
+        );
     }
 
     #[test]
@@ -225,7 +243,6 @@ mod test {
         assert_eq!(32i32, *v.get(&7i32).unwrap()); // not updated!
         assert_eq!(None, v.get(&8i32));
     }
-
 
     #[test]
     fn test_del_item() {
@@ -252,7 +269,7 @@ mod test {
 
     #[test]
     fn test_items_list() {
-    let gil = Python::acquire_gil();
+        let gil = Python::acquire_gil();
         let py = gil.python();
         let mut v = HashMap::new();
         v.insert(7, 32);
@@ -273,7 +290,7 @@ mod test {
 
     #[test]
     fn test_items() {
-    let gil = Python::acquire_gil();
+        let gil = Python::acquire_gil();
         let py = gil.python();
         let mut v = HashMap::new();
         v.insert(7, 32);
@@ -283,12 +300,11 @@ mod test {
         // Can't just compare against a vector of tuples since we don't have a guaranteed ordering.
         let mut key_sum = 0;
         let mut value_sum = 0;
-        for (key, value)  in dict.items(py) {
+        for (key, value) in dict.items(py) {
             key_sum += key.extract::<i32>(py).unwrap();
             value_sum += value.extract::<i32>(py).unwrap();
         }
         assert_eq!(7 + 8 + 9, key_sum);
         assert_eq!(32 + 42 + 123, value_sum);
     }
-
 }

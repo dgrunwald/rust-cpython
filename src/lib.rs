@@ -20,9 +20,7 @@
     const_fn, // for GILProtected::new (#24111)
     specialization, // for impl FromPyObject<'s> for Vec<...> (#31844)
 ))]
-
 #![allow(unused_imports)] // because some imports are only necessary with python 2.x or 3.x
-
 
 //! Rust bindings to the Python interpreter.
 //!
@@ -90,30 +88,33 @@
 
 extern crate libc;
 
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 extern crate python27_sys as ffi;
 
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 extern crate python3_sys as ffi;
 
-pub use ffi::Py_ssize_t;
-pub use err::{PyErr, PyResult};
-pub use objects::*;
-pub use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PythonObjectDowncastError, PythonObjectWithTypeObject, PyClone, PyDrop};
-pub use pythonrun::{GILGuard, GILProtected, prepare_freethreaded_python};
 pub use conversion::{FromPyObject, RefFromPyObject, ToPyObject};
-pub use py_class::{CompareOp};
-pub use objectprotocol::{ObjectProtocol};
+pub use err::{PyErr, PyResult};
+pub use ffi::Py_ssize_t;
+pub use objectprotocol::ObjectProtocol;
+pub use objects::*;
+pub use py_class::CompareOp;
+pub use python::{
+    PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError,
+    PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject,
+};
+pub use pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
 
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 #[allow(non_camel_case_types)]
 pub type Py_hash_t = libc::c_long;
 
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 #[allow(non_camel_case_types)]
 pub type Py_hash_t = ffi::Py_hash_t;
 
-use std::{ptr, mem};
+use std::{mem, ptr};
 
 /// Constructs a `&'static CStr` literal.
 macro_rules! cstr(
@@ -126,19 +127,33 @@ macro_rules! cstr(
 );
 
 // AST coercion macros (https://danielkeep.github.io/tlborm/book/blk-ast-coercion.html)
-#[macro_export] #[doc(hidden)]
-macro_rules! py_coerce_expr { ($s:expr) => {$s} }
-#[macro_export] #[doc(hidden)]
-macro_rules! py_coerce_item { ($s:item) => {$s} }
-
-#[macro_export] #[doc(hidden)]
-macro_rules! py_replace_expr {
-    ($_t:tt $sub:expr) => {$sub};
+#[macro_export]
+#[doc(hidden)]
+macro_rules! py_coerce_expr {
+    ($s:expr) => {
+        $s
+    };
+}
+#[macro_export]
+#[doc(hidden)]
+macro_rules! py_coerce_item {
+    ($s:item) => {
+        $s
+    };
 }
 
-#[macro_export] #[doc(hidden)]
+#[macro_export]
+#[doc(hidden)]
+macro_rules! py_replace_expr {
+    ($_t:tt $sub:expr) => {
+        $sub
+    };
+}
+
+#[macro_export]
+#[doc(hidden)]
 macro_rules! py_impl_to_py_object_for_python_object {
-    ($T: ty) => (
+    ($T: ty) => {
         /// Identity conversion: allows using existing `PyObject` instances where
         /// `T: ToPyObject` is expected.
         impl $crate::ToPyObject for $T {
@@ -156,18 +171,20 @@ macro_rules! py_impl_to_py_object_for_python_object {
 
             #[inline]
             fn with_borrowed_ptr<F, R>(&self, _py: $crate::Python, f: F) -> R
-                where F: FnOnce(*mut $crate::_detail::ffi::PyObject) -> R
+            where
+                F: FnOnce(*mut $crate::_detail::ffi::PyObject) -> R,
             {
                 f($crate::PythonObject::as_object(self).as_ptr())
             }
         }
-    )
+    };
 }
 
-#[macro_export] #[doc(hidden)]
+#[macro_export]
+#[doc(hidden)]
 macro_rules! py_impl_from_py_object_for_python_object {
     ($T:ty) => {
-        impl <'s> $crate::FromPyObject<'s> for $T {
+        impl<'s> $crate::FromPyObject<'s> for $T {
             #[inline]
             fn extract(py: $crate::Python, obj: &'s $crate::PyObject) -> $crate::PyResult<$T> {
                 use $crate::PyClone;
@@ -175,24 +192,24 @@ macro_rules! py_impl_from_py_object_for_python_object {
             }
         }
 
-        impl <'s> $crate::FromPyObject<'s> for &'s $T {
+        impl<'s> $crate::FromPyObject<'s> for &'s $T {
             #[inline]
             fn extract(py: $crate::Python, obj: &'s $crate::PyObject) -> $crate::PyResult<&'s $T> {
                 Ok(obj.cast_as::<$T>(py)?)
             }
         }
-    }
+    };
 }
 
-mod python;
-mod err;
-mod conversion;
-mod objects;
-mod objectprotocol;
-mod pythonrun;
 pub mod argparse;
-mod function;
 pub mod buffer;
+mod conversion;
+mod err;
+mod function;
+mod objectprotocol;
+mod objects;
+mod python;
+mod pythonrun;
 //pub mod rustobject;
 pub mod py_class;
 
@@ -200,14 +217,16 @@ pub mod py_class;
 #[doc(hidden)]
 pub mod _detail {
     pub mod ffi {
-        pub use ::ffi::*;
+        pub use ffi::*;
     }
     pub mod libc {
-        pub use ::libc::{c_char, c_void, c_int};
+        pub use libc::{c_char, c_int, c_void};
     }
     pub use err::{from_owned_ptr_or_panic, result_from_owned_ptr};
-    pub use function::{handle_callback, py_fn_impl, AbortOnDrop,
-        PyObjectCallbackConverter, PythonObjectCallbackConverter};
+    pub use function::{
+        handle_callback, py_fn_impl, AbortOnDrop, PyObjectCallbackConverter,
+        PythonObjectCallbackConverter,
+    };
 }
 
 /// Expands to an `extern "C"` function that allows Python to load
@@ -266,7 +285,7 @@ pub mod _detail {
 /// ```
 ///
 #[macro_export]
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 macro_rules! py_module_initializer {
     ($name: ident, $py2: ident, $py3: ident, |$py_id: ident, $m_id: ident| $body: expr) => {
         #[no_mangle]
@@ -279,15 +298,14 @@ macro_rules! py_module_initializer {
             let name = concat!(stringify!($name), "\0").as_ptr() as *const _;
             $crate::py_module_initializer_impl(name, init)
         }
-    }
+    };
 }
 
-
 #[doc(hidden)]
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 pub unsafe fn py_module_initializer_impl(
     name: *const libc::c_char,
-    init: fn(Python, &PyModule) -> PyResult<()>
+    init: fn(Python, &PyModule) -> PyResult<()>,
 ) {
     let guard = function::AbortOnDrop("py_module_initializer");
     let py = Python::assume_gil_acquired();
@@ -308,14 +326,14 @@ pub unsafe fn py_module_initializer_impl(
     };
     let ret = match init(py, &module) {
         Ok(()) => (),
-        Err(e) => e.restore(py)
+        Err(e) => e.restore(py),
     };
     mem::forget(guard);
     ret
 }
 
 #[macro_export]
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 macro_rules! py_module_initializer {
     ($name: ident, $py2: ident, $py3: ident, |$py_id: ident, $m_id: ident| $body: expr) => {
         #[no_mangle]
@@ -325,20 +343,21 @@ macro_rules! py_module_initializer {
             fn init($py_id: $crate::Python, $m_id: &$crate::PyModule) -> $crate::PyResult<()> {
                 $body
             }
-            static mut MODULE_DEF: $crate::_detail::ffi::PyModuleDef = $crate::_detail::ffi::PyModuleDef_INIT;
+            static mut MODULE_DEF: $crate::_detail::ffi::PyModuleDef =
+                $crate::_detail::ffi::PyModuleDef_INIT;
             // We can't convert &'static str to *const c_char within a static initializer,
             // so we'll do it here in the module initialization:
             MODULE_DEF.m_name = concat!(stringify!($name), "\0").as_ptr() as *const _;
             $crate::py_module_initializer_impl(&mut MODULE_DEF, init)
         }
-    }
+    };
 }
 
 #[doc(hidden)]
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 pub unsafe fn py_module_initializer_impl(
     def: *mut ffi::PyModuleDef,
-    init: fn(Python, &PyModule) -> PyResult<()>
+    init: fn(Python, &PyModule) -> PyResult<()>,
 ) -> *mut ffi::PyObject {
     let guard = function::AbortOnDrop("py_module_initializer");
     let py = Python::assume_gil_acquired();

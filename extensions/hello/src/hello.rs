@@ -1,6 +1,7 @@
-#[macro_use] extern crate cpython;
+#[macro_use]
+extern crate cpython;
 
-use cpython::{PyObject, PyResult, Python, PyTuple, PyDict};
+use cpython::{PyDict, PyObject, PyResult, PyTuple, Python};
 
 // Our module is named 'hello', and can be imported using `import hello`.
 // This requires that the output binary file is named `hello.so` (or Windows: `hello.pyd`).
@@ -35,4 +36,3 @@ fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyObject
     }
     Ok(py.None())
 }
-

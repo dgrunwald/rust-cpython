@@ -16,12 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use python::{Python, PythonObject, ToPythonPointer, PyDrop};
-use err::{self, PyErr, PyResult};
-use super::object::PyObject;
 use super::exc;
-use ffi::{self, Py_ssize_t};
+use super::object::PyObject;
 use conversion::{FromPyObject, ToPyObject};
+use err::{self, PyErr, PyResult};
+use ffi::{self, Py_ssize_t};
+use python::{PyDrop, Python, PythonObject, ToPythonPointer};
 use std::slice;
 
 /// Represents a Python tuple object.
@@ -45,9 +45,7 @@ impl PyTuple {
 
     /// Retrieves the empty tuple.
     pub fn empty(py: Python) -> PyTuple {
-        unsafe {
-            err::result_cast_from_owned_ptr::<PyTuple>(py, ffi::PyTuple_New(0)).unwrap()
-        }
+        unsafe { err::result_cast_from_owned_ptr::<PyTuple>(py, ffi::PyTuple_New(0)).unwrap() }
     }
 
     /// Gets the length of the tuple.
@@ -67,7 +65,10 @@ impl PyTuple {
         // It's quite inconsistent that this method takes `Python` when `len()` does not.
         assert!(index < self.len(py));
         unsafe {
-            PyObject::from_borrowed_ptr(py, ffi::PyTuple_GET_ITEM(self.0.as_ptr(), index as Py_ssize_t))
+            PyObject::from_borrowed_ptr(
+                py,
+                ffi::PyTuple_GET_ITEM(self.0.as_ptr(), index as Py_ssize_t),
+            )
         }
     }
 
@@ -78,11 +79,10 @@ impl PyTuple {
         // (We don't even need a Python token, thanks to immutability)
         unsafe {
             let ptr = self.0.as_ptr() as *mut ffi::PyTupleObject;
-            PyObject::borrow_from_owned_ptr_slice(
-                slice::from_raw_parts(
-                    (*ptr).ob_item.as_ptr(),
-                    self.len(py)
-                ))
+            PyObject::borrow_from_owned_ptr_slice(slice::from_raw_parts(
+                (*ptr).ob_item.as_ptr(),
+                self.len(py),
+            ))
         }
     }
 
@@ -93,8 +93,15 @@ impl PyTuple {
 }
 
 fn wrong_tuple_length(py: Python, t: &PyTuple, expected_length: usize) -> PyErr {
-    let msg = format!("Expected tuple of length {}, but got tuple of length {}.", expected_length, t.len(py));
-    PyErr::new_lazy_init(py.get_type::<exc::ValueError>(), Some(msg.to_py_object(py).into_object()))
+    let msg = format!(
+        "Expected tuple of length {}, but got tuple of length {}.",
+        expected_length,
+        t.len(py)
+    );
+    PyErr::new_lazy_init(
+        py.get_type::<exc::ValueError>(),
+        Some(msg.to_py_object(py).into_object()),
+    )
 }
 
 macro_rules! tuple_conversion ({$length:expr,$(($refN:ident, $n:tt, $T:ident)),+} => {
@@ -116,7 +123,7 @@ macro_rules! tuple_conversion ({$length:expr,$(($refN:ident, $n:tt, $T:ident)),+
     }
 
     /// Converts a Python `tuple` to a Rust tuple.
-    /// 
+    ///
     /// Note: only accepts Python `tuple` (or derived classes);
     /// other types are not accepted.
     impl <'s, $($T: FromPyObject<'s>),+> FromPyObject<'s> for ($($T,)+) {
@@ -138,16 +145,56 @@ tuple_conversion!(1, (ref0, 0, A));
 tuple_conversion!(2, (ref0, 0, A), (ref1, 1, B));
 tuple_conversion!(3, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C));
 tuple_conversion!(4, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D));
-tuple_conversion!(5, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D),
-  (ref4, 4, E));
-tuple_conversion!(6, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D),
-  (ref4, 4, E), (ref5, 5, F));
-tuple_conversion!(7, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D),
-  (ref4, 4, E), (ref5, 5, F), (ref6, 6, G));
-tuple_conversion!(8, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D),
-  (ref4, 4, E), (ref5, 5, F), (ref6, 6, G), (ref7, 7, H));
-tuple_conversion!(9, (ref0, 0, A), (ref1, 1, B), (ref2, 2, C), (ref3, 3, D),
-  (ref4, 4, E), (ref5, 5, F), (ref6, 6, G), (ref7, 7, H), (ref8, 8, I));
+tuple_conversion!(
+    5,
+    (ref0, 0, A),
+    (ref1, 1, B),
+    (ref2, 2, C),
+    (ref3, 3, D),
+    (ref4, 4, E)
+);
+tuple_conversion!(
+    6,
+    (ref0, 0, A),
+    (ref1, 1, B),
+    (ref2, 2, C),
+    (ref3, 3, D),
+    (ref4, 4, E),
+    (ref5, 5, F)
+);
+tuple_conversion!(
+    7,
+    (ref0, 0, A),
+    (ref1, 1, B),
+    (ref2, 2, C),
+    (ref3, 3, D),
+    (ref4, 4, E),
+    (ref5, 5, F),
+    (ref6, 6, G)
+);
+tuple_conversion!(
+    8,
+    (ref0, 0, A),
+    (ref1, 1, B),
+    (ref2, 2, C),
+    (ref3, 3, D),
+    (ref4, 4, E),
+    (ref5, 5, F),
+    (ref6, 6, G),
+    (ref7, 7, H)
+);
+tuple_conversion!(
+    9,
+    (ref0, 0, A),
+    (ref1, 1, B),
+    (ref2, 2, C),
+    (ref3, 3, D),
+    (ref4, 4, E),
+    (ref5, 5, F),
+    (ref6, 6, G),
+    (ref7, 7, H),
+    (ref8, 8, I)
+);
 
 // Empty tuple:
 
@@ -186,12 +233,10 @@ extract!(obj to NoArgs;
     }
 );
 
-
-
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
+    use python::{Python, PythonObject};
 
     #[test]
     fn test_len() {
@@ -202,4 +247,3 @@ mod test {
         assert_eq!((1, 2, 3), tuple.into_object().extract(py).unwrap());
     }
 }
-

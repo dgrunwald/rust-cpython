@@ -19,19 +19,19 @@
 //! This module contains logic for parsing a python argument list.
 //! See also the macros `py_argparse!`, `py_fn!` and `py_method!`.
 
-use std::ptr;
-use python::{Python, PythonObject};
-use objects::{PyObject, PyTuple, PyDict, PyString, exc};
 use conversion::{RefFromPyObject, ToPyObject};
-use ffi;
 use err::{self, PyResult};
+use ffi;
+use objects::{exc, PyDict, PyObject, PyString, PyTuple};
+use python::{Python, PythonObject};
+use std::ptr;
 
 /// Description of a python parameter; used for `parse_args()`.
 pub struct ParamDescription<'a> {
     /// The name of the parameter.
     pub name: &'a str,
     /// Whether the parameter is optional.
-    pub is_optional: bool
+    pub is_optional: bool,
 }
 
 impl<'a> ParamDescription<'a> {
@@ -55,23 +55,27 @@ impl<'a> ParamDescription<'a> {
 ///           Must have same length as `params` and must be initialized to `None`.
 pub fn parse_args(
     py: Python,
-    fname: Option<&str>, params: &[ParamDescription],
-    args: &PyTuple, kwargs: Option<&PyDict>,
-    output: &mut[Option<PyObject>]
-) -> PyResult<()>
-{
+    fname: Option<&str>,
+    params: &[ParamDescription],
+    args: &PyTuple,
+    kwargs: Option<&PyDict>,
+    output: &mut [Option<PyObject>],
+) -> PyResult<()> {
     assert!(params.len() == output.len());
     let nargs = args.len(py);
     let nkeywords = kwargs.map_or(0, |d| d.len(py));
     if nargs + nkeywords > params.len() {
-        return Err(err::PyErr::new::<exc::TypeError, _>(py,
-            format!("{}{} takes at most {} argument{} ({} given)",
-                    fname.unwrap_or("function"),
-                    if fname.is_some() { "()" } else { "" },
-                    params.len(),
-                    if params.len() != 1 { "s" } else { "" },
-                    nargs + nkeywords
-                )));
+        return Err(err::PyErr::new::<exc::TypeError, _>(
+            py,
+            format!(
+                "{}{} takes at most {} argument{} ({} given)",
+                fname.unwrap_or("function"),
+                if fname.is_some() { "()" } else { "" },
+                params.len(),
+                if params.len() != 1 { "s" } else { "" },
+                nargs + nkeywords
+            ),
+        ));
     }
     let mut used_keywords = 0;
     // Iterate through the parameters and assign values to output:
@@ -81,20 +85,30 @@ pub fn parse_args(
                 *out = Some(kwarg);
                 used_keywords += 1;
                 if i < nargs {
-                    return Err(err::PyErr::new::<exc::TypeError, _>(py,
-                        format!("Argument given by name ('{}') and position ({})",
-                                p.name(), i+1)));
+                    return Err(err::PyErr::new::<exc::TypeError, _>(
+                        py,
+                        format!(
+                            "Argument given by name ('{}') and position ({})",
+                            p.name(),
+                            i + 1
+                        ),
+                    ));
                 }
-            },
+            }
             None => {
                 if i < nargs {
                     *out = Some(args.get_item(py, i));
                 } else {
                     *out = None;
                     if !p.is_optional {
-                        return Err(err::PyErr::new::<exc::TypeError, _>(py,
-                            format!("Required argument ('{}') (pos {}) not found",
-                                    p.name(), i+1)));
+                        return Err(err::PyErr::new::<exc::TypeError, _>(
+                            py,
+                            format!(
+                                "Required argument ('{}') (pos {}) not found",
+                                p.name(),
+                                i + 1
+                            ),
+                        ));
                     }
                 }
             }
@@ -105,9 +119,10 @@ pub fn parse_args(
         for (key, _value) in kwargs.unwrap().items(py) {
             let key = key.cast_as::<PyString>(py)?.to_string(py)?;
             if !params.iter().any(|p| p.name == key) {
-                return Err(err::PyErr::new::<exc::TypeError, _>(py,
-                    format!("'{}' is an invalid keyword argument for this function",
-                            key)));
+                return Err(err::PyErr::new::<exc::TypeError, _>(
+                    py,
+                    format!("'{}' is an invalid keyword argument for this function", key),
+                ));
             }
         }
     }
@@ -352,7 +367,8 @@ macro_rules! py_argparse_impl {
 #[doc(hidden)]
 macro_rules! py_argparse_raw {
     ($py:ident, $fname:expr, $args:expr, $kwargs:expr, $plist:tt $body:block) => {{
-        let args: $crate::PyTuple = $crate::PyObject::from_borrowed_ptr($py, $args).unchecked_cast_into();
+        let args: $crate::PyTuple =
+            $crate::PyObject::from_borrowed_ptr($py, $args).unchecked_cast_into();
         let kwargs: Option<$crate::PyDict> = $crate::argparse::get_kwargs($py, $kwargs);
         let ret = py_argparse_impl!($py, $fname, &args, kwargs.as_ref(), $body, $plist);
         $crate::PyDrop::release_ref(args, $py);
@@ -442,24 +458,30 @@ macro_rules! py_argparse_extract {
 }
 
 #[doc(hidden)] // used in py_argparse_extract!() macro
-pub fn with_extracted_or_default<P: ?Sized, R, F>(py: Python, obj: Option<&PyObject>, f: F, default: &'static P) -> PyResult<R>
-    where F: FnOnce(&P) -> PyResult<R>,
-          P: RefFromPyObject
+pub fn with_extracted_or_default<P: ?Sized, R, F>(
+    py: Python,
+    obj: Option<&PyObject>,
+    f: F,
+    default: &'static P,
+) -> PyResult<R>
+where
+    F: FnOnce(&P) -> PyResult<R>,
+    P: RefFromPyObject,
 {
     match obj {
         Some(obj) => match P::with_extracted(py, obj, f) {
             Ok(result) => result,
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         },
-        None => f(default)
+        None => f(default),
     }
 }
 
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
-    use objects::PyTuple;
     use conversion::ToPyObject;
+    use objects::PyTuple;
+    use python::{Python, PythonObject};
 
     #[test]
     pub fn test_parse() {
@@ -472,7 +494,8 @@ mod test {
             assert_eq!(y, 42);
             called = true;
             Ok(())
-        }).unwrap();
+        })
+        .unwrap();
         assert!(called);
     }
 
@@ -486,7 +509,8 @@ mod test {
             assert_eq!(*x, tuple.get_item(py, 0));
             called = true;
             Ok(())
-        }).unwrap();
+        })
+        .unwrap();
         assert!(called);
     }
 
@@ -501,7 +525,8 @@ mod test {
             assert_eq!(y, "foo");
             called = true;
             Ok(())
-        }).unwrap();
+        })
+        .unwrap();
         assert!(called);
 
         let mut called = false;
@@ -511,7 +536,8 @@ mod test {
             assert_eq!(y, "abc");
             called = true;
             Ok(())
-        }).unwrap();
+        })
+        .unwrap();
         assert!(called);
     }
 }

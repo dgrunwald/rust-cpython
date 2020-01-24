@@ -1,10 +1,11 @@
+use intobject::PyIntObject;
 use libc::{c_int, c_long};
 use object::*;
-use intobject::PyIntObject;
 
 pub type PyBoolObject = PyIntObject;
 
-#[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+#[cfg_attr(windows, link(name = "pythonXY"))]
+extern "C" {
     pub static mut PyBool_Type: PyTypeObject;
     static mut _Py_ZeroStruct: PyIntObject;
     static mut _Py_TrueStruct: PyIntObject;
@@ -12,8 +13,8 @@ pub type PyBoolObject = PyIntObject;
 }
 
 #[inline(always)]
-pub unsafe fn PyBool_Check(op : *mut PyObject) -> c_int {
-    let u : *mut PyTypeObject = &mut PyBool_Type;
+pub unsafe fn PyBool_Check(op: *mut PyObject) -> c_int {
+    let u: *mut PyTypeObject = &mut PyBool_Type;
     (Py_TYPE(op) == u) as c_int
 }
 
@@ -26,4 +27,3 @@ pub unsafe fn Py_False() -> *mut PyObject {
 pub unsafe fn Py_True() -> *mut PyObject {
     &mut _Py_TrueStruct as *mut PyBoolObject as *mut PyObject
 }
-

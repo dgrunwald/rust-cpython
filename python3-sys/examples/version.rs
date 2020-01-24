@@ -12,4 +12,3 @@ fn main() {
         println!("{}", get_str(python3_sys::Py_GetVersion()));
     }
 }
-
