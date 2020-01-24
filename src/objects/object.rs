@@ -16,11 +16,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std::{mem, ptr};
-use ffi;
-use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject, PythonObjectDowncastError};
-use objects::PyType;
 use err::PyResult;
+use ffi;
+use objects::PyType;
+use python::{
+    Python, PythonObject, PythonObjectDowncastError, PythonObjectWithCheckedDowncast,
+    PythonObjectWithTypeObject,
+};
+use std::{mem, ptr};
 
 /// Represents a reference to a Python object.
 ///
@@ -57,7 +60,9 @@ unsafe impl Sync for PyObject {}
 impl Drop for PyObject {
     fn drop(&mut self) {
         let _gil_guard = Python::acquire_gil();
-        unsafe { ffi::Py_DECREF(self.ptr.as_ptr()); }
+        unsafe {
+            ffi::Py_DECREF(self.ptr.as_ptr());
+        }
     }
 }
 
@@ -85,12 +90,18 @@ impl PythonObject for PyObject {
 
 impl PythonObjectWithCheckedDowncast for PyObject {
     #[inline]
-    fn downcast_from<'p>(_py: Python<'p>, obj: PyObject) -> Result<PyObject, PythonObjectDowncastError<'p>> {
+    fn downcast_from<'p>(
+        _py: Python<'p>,
+        obj: PyObject,
+    ) -> Result<PyObject, PythonObjectDowncastError<'p>> {
         Ok(obj)
     }
 
     #[inline]
-    fn downcast_borrow_from<'a, 'p>(_py: Python<'p>, obj: &'a PyObject) -> Result<&'a PyObject, PythonObjectDowncastError<'p>> {
+    fn downcast_borrow_from<'a, 'p>(
+        _py: Python<'p>,
+        obj: &'a PyObject,
+    ) -> Result<&'a PyObject, PythonObjectDowncastError<'p>> {
         Ok(obj)
     }
 }
@@ -109,17 +120,21 @@ impl PyObject {
     #[inline]
     pub unsafe fn from_owned_ptr(_py: Python, ptr: *mut ffi::PyObject) -> PyObject {
         debug_assert!(!ptr.is_null() && ffi::Py_REFCNT(ptr) > 0);
-        PyObject { ptr: ptr::NonNull::new_unchecked(ptr) }
+        PyObject {
+            ptr: ptr::NonNull::new_unchecked(ptr),
+        }
     }
 
     /// Creates a PyObject instance for the given FFI pointer.
     /// Calls Py_INCREF() on the ptr.
     /// Undefined behavior if the pointer is NULL or invalid.
     #[inline]
-    pub unsafe fn from_borrowed_ptr(_py : Python, ptr : *mut ffi::PyObject) -> PyObject {
+    pub unsafe fn from_borrowed_ptr(_py: Python, ptr: *mut ffi::PyObject) -> PyObject {
         debug_assert!(!ptr.is_null() && ffi::Py_REFCNT(ptr) > 0);
         ffi::Py_INCREF(ptr);
-        PyObject { ptr: ptr::NonNull::new_unchecked(ptr) }
+        PyObject {
+            ptr: ptr::NonNull::new_unchecked(ptr),
+        }
     }
 
     /// Creates a PyObject instance for the given FFI pointer.
@@ -164,7 +179,7 @@ impl PyObject {
     /// Transmutes an FFI pointer to `&PyObject`.
     /// Undefined behavior if the pointer is NULL or invalid.
     #[inline]
-    pub unsafe fn borrow_from_ptr<'a>(ptr : &'a *mut ffi::PyObject) -> &'a PyObject {
+    pub unsafe fn borrow_from_ptr<'a>(ptr: &'a *mut ffi::PyObject) -> &'a PyObject {
         debug_assert!(!ptr.is_null());
         mem::transmute(ptr)
     }
@@ -172,7 +187,7 @@ impl PyObject {
     /// Transmutes a slice of owned FFI pointers to `&[PyObject]`.
     /// Undefined behavior if any pointer in the slice is NULL or invalid.
     #[inline]
-    pub unsafe fn borrow_from_owned_ptr_slice<'a>(ptr : &'a [*mut ffi::PyObject]) -> &'a [PyObject] {
+    pub unsafe fn borrow_from_owned_ptr_slice<'a>(ptr: &'a [*mut ffi::PyObject]) -> &'a [PyObject] {
         mem::transmute(ptr)
     }
 
@@ -184,9 +199,7 @@ impl PyObject {
 
     /// Gets the Python type object for this object's type.
     pub fn get_type(&self, py: Python) -> PyType {
-        unsafe {
-            PyType::from_type_ptr(py, (*self.as_ptr()).ob_type)
-        }
+        unsafe { PyType::from_type_ptr(py, (*self.as_ptr()).ob_type) }
     }
 
     /// Casts the PyObject to a concrete Python object type.
@@ -194,7 +207,8 @@ impl PyObject {
     /// This is a wrapper function around `PythonObject::unchecked_downcast_from()`.
     #[inline]
     pub unsafe fn unchecked_cast_into<T>(self) -> T
-        where T: PythonObject
+    where
+        T: PythonObject,
     {
         PythonObject::unchecked_downcast_from(self)
     }
@@ -204,7 +218,8 @@ impl PyObject {
     /// This is a wrapper function around `PythonObjectWithCheckedDowncast::downcast_from()`.
     #[inline]
     pub fn cast_into<'p, T>(self, py: Python<'p>) -> Result<T, PythonObjectDowncastError<'p>>
-        where T: PythonObjectWithCheckedDowncast
+    where
+        T: PythonObjectWithCheckedDowncast,
     {
         PythonObjectWithCheckedDowncast::downcast_from(py, self)
     }
@@ -214,7 +229,8 @@ impl PyObject {
     /// This is a wrapper function around `PythonObject::unchecked_downcast_borrow_from()`.
     #[inline]
     pub unsafe fn unchecked_cast_as<'s, T>(&'s self) -> &'s T
-        where T: PythonObject
+    where
+        T: PythonObject,
     {
         PythonObject::unchecked_downcast_borrow_from(self)
     }
@@ -223,8 +239,12 @@ impl PyObject {
     /// Fails with `PythonObjectDowncastError` if the object is not of the expected type.
     /// This is a wrapper function around `PythonObjectWithCheckedDowncast::downcast_borrow_from()`.
     #[inline]
-    pub fn cast_as<'s, 'p, T>(&'s self, py: Python<'p>) -> Result<&'s T, PythonObjectDowncastError<'p>>
-        where T: PythonObjectWithCheckedDowncast
+    pub fn cast_as<'s, 'p, T>(
+        &'s self,
+        py: Python<'p>,
+    ) -> Result<&'s T, PythonObjectDowncastError<'p>>
+    where
+        T: PythonObjectWithCheckedDowncast,
     {
         PythonObjectWithCheckedDowncast::downcast_borrow_from(py, self)
     }
@@ -233,7 +253,8 @@ impl PyObject {
     /// This is a wrapper function around `FromPyObject::from_py_object()`.
     #[inline]
     pub fn extract<'a, T>(&'a self, py: Python) -> PyResult<T>
-        where T: ::conversion::FromPyObject<'a>
+    where
+        T: ::conversion::FromPyObject<'a>,
     {
         ::conversion::FromPyObject::extract(py, self)
     }
@@ -243,20 +264,25 @@ impl PyObject {
 /// `obj1 == obj2` in rust is equivalent to `obj1 is obj2` in Python.
 impl PartialEq for PyObject {
     #[inline]
-    fn eq(&self, o : &PyObject) -> bool {
+    fn eq(&self, o: &PyObject) -> bool {
         self.as_ptr() == o.as_ptr()
     }
 }
 
 /// PyObject implements the `==` operator using reference equality:
 /// `obj1 == obj2` in rust is equivalent to `obj1 is obj2` in Python.
-impl Eq for PyObject { }
+impl Eq for PyObject {}
 
 #[test]
 fn test_sizeof() {
     // should be a static_assert, but size_of is not a compile-time const
     // these are necessary for the transmutes in this module
-    assert_eq!(mem::size_of::<PyObject>(), mem::size_of::<*mut ffi::PyObject>());
-    assert_eq!(mem::size_of::<PyType>(), mem::size_of::<*mut ffi::PyTypeObject>());
+    assert_eq!(
+        mem::size_of::<PyObject>(),
+        mem::size_of::<*mut ffi::PyObject>()
+    );
+    assert_eq!(
+        mem::size_of::<PyType>(),
+        mem::size_of::<*mut ffi::PyTypeObject>()
+    );
 }
-

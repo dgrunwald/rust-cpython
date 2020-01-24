@@ -1,6 +1,7 @@
-#[macro_use] extern crate cpython;
+#[macro_use]
+extern crate cpython;
 
-use cpython::{PyResult, Python, NoArgs, ObjectProtocol, PyDict};
+use cpython::{NoArgs, ObjectProtocol, PyDict, PyResult, Python};
 use std::sync::atomic;
 use std::sync::atomic::Ordering::Relaxed;
 
@@ -17,12 +18,30 @@ fn no_args() {
     let obj = py_fn!(py, f());
 
     assert_eq!(CALL_COUNT.load(Relaxed), 0);
-    assert_eq!(obj.call(py, NoArgs, None).unwrap().extract::<i32>(py).unwrap(), 0);
-    assert_eq!(obj.call(py, NoArgs, None).unwrap().extract::<i32>(py).unwrap(), 1);
+    assert_eq!(
+        obj.call(py, NoArgs, None)
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        0
+    );
+    assert_eq!(
+        obj.call(py, NoArgs, None)
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        1
+    );
     assert_eq!(CALL_COUNT.load(Relaxed), 2);
     assert!(obj.call(py, (1,), None).is_err());
     assert_eq!(CALL_COUNT.load(Relaxed), 2);
-    assert_eq!(obj.call(py, NoArgs, Some(&PyDict::new(py))).unwrap().extract::<i32>(py).unwrap(), 2);
+    assert_eq!(
+        obj.call(py, NoArgs, Some(&PyDict::new(py)))
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        2
+    );
     assert_eq!(CALL_COUNT.load(Relaxed), 3);
     let dict = PyDict::new(py);
     dict.set_item(py, "param", 42).unwrap();
@@ -41,12 +60,24 @@ fn one_arg() {
     let obj = py_fn!(py, f(i: usize));
 
     assert!(obj.call(py, NoArgs, None).is_err());
-    assert_eq!(obj.call(py, (1,), None).unwrap().extract::<i32>(py).unwrap(), 2);
+    assert_eq!(
+        obj.call(py, (1,), None)
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        2
+    );
     assert!(obj.call(py, (1, 2), None).is_err());
 
     let dict = PyDict::new(py);
     dict.set_item(py, "i", 42).unwrap();
-    assert_eq!(obj.call(py, NoArgs, Some(&dict)).unwrap().extract::<i32>(py).unwrap(), 84);
+    assert_eq!(
+        obj.call(py, NoArgs, Some(&dict))
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        84
+    );
     assert!(obj.call(py, (1,), Some(&dict)).is_err());
     dict.set_item(py, "j", 10).unwrap();
     assert!(obj.call(py, NoArgs, Some(&dict)).is_err());
@@ -62,7 +93,13 @@ fn inline_two_args() {
     });
 
     assert!(obj.call(py, NoArgs, None).is_err());
-    assert_eq!(obj.call(py, (6, 7), None).unwrap().extract::<i32>(py).unwrap(), 42);
+    assert_eq!(
+        obj.call(py, (6, 7), None)
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        42
+    );
 }
 
 /* TODO: reimplement flexible sig support
@@ -88,4 +125,3 @@ fn flexible_sig() {
     assert_eq!(obj.call(py, (1,2,3), Some(&dict)).unwrap().extract::<i32>(py).unwrap(), 203);
 }
 */
-

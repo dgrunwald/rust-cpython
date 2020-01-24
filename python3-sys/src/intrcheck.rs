@@ -1,6 +1,7 @@
 use libc::c_int;
 
-#[cfg_attr(windows, link(name="pythonXY"))] extern "C" {
+#[cfg_attr(windows, link(name = "pythonXY"))]
+extern "C" {
     #[cfg(all(unix, Py_3_7))]
     pub fn PyOS_BeforeFork() -> ();
     #[cfg(all(unix, Py_3_7))]
@@ -12,4 +13,3 @@ use libc::c_int;
     pub fn PyOS_InitInterrupts() -> ();
     pub fn PyOS_AfterFork() -> ();
 }
-

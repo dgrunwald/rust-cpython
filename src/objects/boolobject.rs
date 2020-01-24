@@ -1,8 +1,8 @@
+use super::PyObject;
+use conversion::ToPyObject;
+use err::PyResult;
 use ffi;
 use python::Python;
-use err::PyResult;
-use super::PyObject;
-use conversion::{ToPyObject};
 
 /// Represents a Python `bool`.
 pub struct PyBool(PyObject);
@@ -13,7 +13,11 @@ impl PyBool {
     /// Depending on `val`, returns `py.True()` or `py.False()`.
     #[inline]
     pub fn get(py: Python, val: bool) -> PyBool {
-        if val { py.True() } else { py.False() }
+        if val {
+            py.True()
+        } else {
+            py.False()
+        }
     }
 
     /// Gets whether this boolean is `true`.
@@ -34,10 +38,17 @@ impl ToPyObject for bool {
 
     #[inline]
     fn with_borrowed_ptr<F, R>(&self, _py: Python, f: F) -> R
-        where F: FnOnce(*mut ffi::PyObject) -> R
+    where
+        F: FnOnce(*mut ffi::PyObject) -> R,
     {
         // Avoid unnecessary Py_INCREF/Py_DECREF pair
-        f(unsafe { if *self { ffi::Py_True() } else { ffi::Py_False() } })
+        f(unsafe {
+            if *self {
+                ffi::Py_True()
+            } else {
+                ffi::Py_False()
+            }
+        })
     }
 }
 
@@ -52,8 +63,8 @@ extract!(obj to bool;
 
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
+    use python::{Python, PythonObject};
 
     #[test]
     fn test_true() {

@@ -16,29 +16,29 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+pub use self::module::PyModule;
 pub use self::object::PyObject;
 pub use self::typeobject::PyType;
-pub use self::module::PyModule;
 
-pub use self::string::{PyBytes, PyString, PyStringData};
-#[cfg(feature="python27-sys")]
-pub use self::string::PyUnicode;
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 pub use self::string::PyString as PyUnicode;
+#[cfg(feature = "python27-sys")]
+pub use self::string::PyUnicode;
+pub use self::string::{PyBytes, PyString, PyStringData};
 
-pub use self::iterator::PyIterator;
 pub use self::boolobject::PyBool;
-pub use self::tuple::{PyTuple, NoArgs};
-pub use self::dict::PyDict;
-pub use self::set::PySet;
-pub use self::list::PyList;
-#[cfg(feature="python27-sys")]
-pub use self::num::PyInt;
-#[cfg(feature="python3-sys")]
-pub use self::num::PyLong as PyInt;
-pub use self::num::{PyLong, PyFloat};
-pub use self::sequence::PySequence;
 pub use self::capsule::PyCapsule;
+pub use self::dict::PyDict;
+pub use self::iterator::PyIterator;
+pub use self::list::PyList;
+#[cfg(feature = "python27-sys")]
+pub use self::num::PyInt;
+#[cfg(feature = "python3-sys")]
+pub use self::num::PyLong as PyInt;
+pub use self::num::{PyFloat, PyLong};
+pub use self::sequence::PySequence;
+pub use self::set::PySet;
+pub use self::tuple::{NoArgs, PyTuple};
 
 #[macro_export(local_inner_macros)]
 macro_rules! pyobject_newtype(
@@ -140,23 +140,22 @@ macro_rules! _cpython__objects__stringify {
     }
 }
 
-mod object;
-mod typeobject;
-mod module;
-mod string;
-mod dict;
-mod set;
-mod iterator;
 mod boolobject;
-mod tuple;
-mod list;
-mod num;
-mod sequence;
 mod capsule;
+mod dict;
 pub mod exc;
+mod iterator;
+mod list;
+mod module;
+mod num;
+mod object;
+mod sequence;
+mod set;
+mod string;
+mod tuple;
+mod typeobject;
 
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 pub mod oldstyle;
 
 mod tests;
-

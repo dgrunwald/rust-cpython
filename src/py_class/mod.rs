@@ -16,21 +16,30 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-mod py_class;
-#[cfg(feature="python27-sys")]
-mod py_class_impl2;
-#[cfg(feature="python3-sys")]
-mod py_class_impl3;
-#[doc(hidden)] pub mod slots;
-#[doc(hidden)] pub mod members;
 pub mod gc;
 
-use libc;
-use std::{mem, ptr, cell};
-use python::{self, Python, PythonObject};
-use objects::{PyObject, PyType, PyModule};
+#[doc(hidden)]
+pub mod members;
+
+mod py_class;
+
+#[cfg(feature = "python27-sys")]
+#[rustfmt::skip]
+mod py_class_impl2;
+
+#[cfg(feature = "python3-sys")]
+#[rustfmt::skip]
+mod py_class_impl3;
+
+#[doc(hidden)]
+pub mod slots;
+
 use err::{self, PyResult};
 use ffi;
+use libc;
+use objects::{PyModule, PyObject, PyType};
+use python::{self, Python, PythonObject};
+use std::{cell, mem, ptr};
 
 // TODO: consider moving CompareOp to a different module, so that it isn't exported via two paths
 #[derive(Debug)]
@@ -40,13 +49,13 @@ pub enum CompareOp {
     Eq = ffi::Py_EQ as isize,
     Ne = ffi::Py_NE as isize,
     Gt = ffi::Py_GT as isize,
-    Ge = ffi::Py_GE as isize
+    Ge = ffi::Py_GE as isize,
 }
 
 /// Trait implemented by the types produced by the `py_class!()` macro.
 ///
 /// This is an unstable implementation detail; do not implement manually!
-pub trait PythonObjectFromPyClassMacro : python::PythonObjectWithTypeObject {
+pub trait PythonObjectFromPyClassMacro: python::PythonObjectWithTypeObject {
     /// Initializes the class.
     ///
     /// module_name: the name of the parent module into which the class will be placed.
@@ -80,7 +89,8 @@ pub unsafe fn data_get<'a, T>(_py: Python<'a>, obj: &'a PyObject, offset: usize)
 #[inline]
 #[doc(hidden)]
 pub unsafe fn data_init<'a, T>(_py: Python<'a>, obj: &'a PyObject, offset: usize, value: T)
-    where T: Send + 'static
+where
+    T: Send + 'static,
 {
     let ptr = (obj.as_ptr() as *mut u8).offset(offset as isize) as *mut T;
     ptr::write(ptr, value)
@@ -100,7 +110,7 @@ pub fn is_ready(_py: Python, ty: &ffi::PyTypeObject) -> bool {
 }
 
 /// A PythonObject that is usable as a base type with the `py_class!()` macro.
-pub trait BaseObject : PythonObject {
+pub trait BaseObject: PythonObject {
     /// Gets the size of the object, in bytes.
     fn size() -> usize;
 
@@ -149,4 +159,3 @@ impl BaseObject for PyObject {
         }
     }
 }
-

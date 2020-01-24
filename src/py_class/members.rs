@@ -16,17 +16,20 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std::marker;
-use python::{Python, PythonObject};
 use conversion::ToPyObject;
-use objects::PyObject;
 use err::{self, PyResult};
 use ffi;
+use objects::PyObject;
+use python::{Python, PythonObject};
+use std::marker;
 
 /// Represents something that can be added as a member to a Python class/type.
 ///
 /// T: type of rust class used for instances of the Python class/type.
-pub trait TypeMember<T> where T: PythonObject {
+pub trait TypeMember<T>
+where
+    T: PythonObject,
+{
     /// Convert the type member into a python object
     /// that can be stored in the type dict.
     ///
@@ -36,7 +39,11 @@ pub trait TypeMember<T> where T: PythonObject {
     unsafe fn into_descriptor(self, py: Python, ty: *mut ffi::PyTypeObject) -> PyResult<PyObject>;
 }
 
-impl <T, S> TypeMember<T> for S where T: PythonObject, S: ToPyObject {
+impl<T, S> TypeMember<T> for S
+where
+    T: PythonObject,
+    S: ToPyObject,
+{
     #[inline]
     unsafe fn into_descriptor(self, py: Python, _ty: *mut ffi::PyTypeObject) -> PyResult<PyObject> {
         Ok(self.into_py_object(py).into_object())
@@ -108,13 +115,16 @@ macro_rules! py_class_instance_method {
 pub struct InstanceMethodDescriptor<T>(*mut ffi::PyMethodDef, marker::PhantomData<fn(&T)>);
 
 #[inline]
-pub unsafe fn create_instance_method_descriptor<T>(method_def: *mut ffi::PyMethodDef)
-  -> InstanceMethodDescriptor<T>
-{
+pub unsafe fn create_instance_method_descriptor<T>(
+    method_def: *mut ffi::PyMethodDef,
+) -> InstanceMethodDescriptor<T> {
     InstanceMethodDescriptor(method_def, marker::PhantomData)
 }
 
-impl <T> TypeMember<T> for InstanceMethodDescriptor<T> where T: PythonObject {
+impl<T> TypeMember<T> for InstanceMethodDescriptor<T>
+where
+    T: PythonObject,
+{
     #[inline]
     unsafe fn into_descriptor(self, py: Python, ty: *mut ffi::PyTypeObject) -> PyResult<PyObject> {
         err::result_from_owned_ptr(py, ffi::PyDescr_NewMethod(ty, self.0))
@@ -162,19 +172,21 @@ macro_rules! py_class_class_method {
 pub struct ClassMethodDescriptor(*mut ffi::PyMethodDef);
 
 #[inline]
-pub unsafe fn create_class_method_descriptor(method_def: *mut ffi::PyMethodDef)
-  -> ClassMethodDescriptor
-{
+pub unsafe fn create_class_method_descriptor(
+    method_def: *mut ffi::PyMethodDef,
+) -> ClassMethodDescriptor {
     ClassMethodDescriptor(method_def)
 }
 
-impl <T> TypeMember<T> for ClassMethodDescriptor where T: PythonObject {
+impl<T> TypeMember<T> for ClassMethodDescriptor
+where
+    T: PythonObject,
+{
     #[inline]
     unsafe fn into_descriptor(self, py: Python, ty: *mut ffi::PyTypeObject) -> PyResult<PyObject> {
         err::result_from_owned_ptr(py, ffi::PyDescr_NewClassMethod(ty, self.0))
     }
 }
-
 
 #[macro_export]
 #[doc(hidden)]

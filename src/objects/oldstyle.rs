@@ -18,13 +18,13 @@
 
 //! This module contains support for old-style classes. Only available in Python 2.x.
 
-use ffi;
-use python::{Python, PythonObject, ToPythonPointer};
-use conversion::ToPyObject;
-use err::{self, PyResult};
+use super::dict::PyDict;
 use super::object::PyObject;
 use super::tuple::PyTuple;
-use super::dict::PyDict;
+use conversion::ToPyObject;
+use err::{self, PyResult};
+use ffi;
+use python::{Python, PythonObject, ToPythonPointer};
 
 /// Represents an old-style Python class.
 ///
@@ -46,12 +46,20 @@ impl PyClass {
 
     /// Create a new instance of the class.
     /// The parameters args and kw are used as the positional and keyword parameters to the object’s constructor.
-    pub fn create_instance<T>(&self, py: Python, args: T, kw: Option<&PyDict>) -> PyResult<PyInstance>
-        where T: ToPyObject<ObjectType=PyTuple>
+    pub fn create_instance<T>(
+        &self,
+        py: Python,
+        args: T,
+        kw: Option<&PyDict>,
+    ) -> PyResult<PyInstance>
+    where
+        T: ToPyObject<ObjectType = PyTuple>,
     {
         args.with_borrowed_ptr(py, |args| unsafe {
-            err::result_cast_from_owned_ptr(py,
-                ffi::PyInstance_New(self.as_ptr(), args, kw.as_ptr()))
+            err::result_cast_from_owned_ptr(
+                py,
+                ffi::PyInstance_New(self.as_ptr(), args, kw.as_ptr()),
+            )
         })
     }
 
@@ -59,9 +67,10 @@ impl PyClass {
     /// The dict parameter will be used as the object’s __dict__.
     pub fn create_instance_raw(&self, py: Python, dict: &PyDict) -> PyResult<PyInstance> {
         unsafe {
-            err::result_cast_from_owned_ptr(py,
-                ffi::PyInstance_NewRaw(self.as_ptr(), dict.as_object().as_ptr()))
+            err::result_cast_from_owned_ptr(
+                py,
+                ffi::PyInstance_NewRaw(self.as_ptr(), dict.as_object().as_ptr()),
+            )
         }
     }
 }
-

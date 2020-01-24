@@ -1,4 +1,4 @@
-.PHONY: default build test doc extensions clean cog
+.PHONY: default build test doc extensions clean
 
 ifndef PY
 PY := $(word 2, $(subst ., ,$(shell python --version 2>&1)))
@@ -35,11 +35,13 @@ src/py_class/py_class_impl2.rs: src/py_class/py_class_impl.py
 src/py_class/py_class_impl3.rs: src/py_class/py_class_impl.py
 	PY=3 python $< >$@
 
-# To use this target: pip install cogapp
-cog: python27-sys/build.rs
-	cog.py -r $^
+python27-sys/build.rs: python3-sys/build.rs
+	@echo "// THIS FILE IS GENERATED FROM python3-sys/build.rs" > $@
+	@echo "// DO NOT MODIFY" >> $@
+	@echo "" >> $@
+	cat "$<" >> "$@"
 
-build: src/py_class/py_class_impl2.rs src/py_class/py_class_impl3.rs
+build: src/py_class/py_class_impl2.rs src/py_class/py_class_impl3.rs python27-sys/build.rs
 	cargo build $(CARGO_FLAGS)
 
 test: build
@@ -56,8 +58,8 @@ extensions: build
 	make -C extensions/tests PY=$(PY)
 
 clean:
-	rm -r target
-	make -C extensions/ clean
+	$(RM) -r target
+	make -C extensions/tests clean
 
 gh-pages:
 	git clone --branch gh-pages git@github.com:dgrunwald/rust-cpython.git gh-pages
@@ -65,9 +67,9 @@ gh-pages:
 .PHONY: gh-pages-doc
 gh-pages-doc: doc | gh-pages
 	cd gh-pages && git pull
-	rm -r gh-pages/doc
+	$(RM) -r gh-pages/doc
 	cp -r target/doc gh-pages/
-	rm gh-pages/doc/.lock
+	$(RM) gh-pages/doc/.lock
 	cd gh-pages && git add .
 	cd gh-pages && git commit -m "Update documentation"
 

@@ -3,18 +3,21 @@ use std::io::Write;
 
 const CFG_KEY: &'static str = "py_sys_config";
 
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 const PYTHONSYS_ENV_VAR: &'static str = "DEP_PYTHON27_PYTHON_FLAGS";
 
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 const PYTHONSYS_ENV_VAR: &'static str = "DEP_PYTHON3_PYTHON_FLAGS";
 
 fn main() {
-    if cfg!(feature="python27-sys") {
-        if env::var_os("CARGO_FEATURE_PY_LINK_MODE_DEFAULT").is_some() ||
-           env::var_os("CARGO_FEATURE_PY_LINK_MODE_UNRESOLVED_STATIC").is_some() {
-            writeln!(std::io::stderr(),
-                "Cannot use link mode control with Python 2.7");
+    if cfg!(feature = "python27-sys") {
+        if env::var_os("CARGO_FEATURE_PY_LINK_MODE_DEFAULT").is_some()
+            || env::var_os("CARGO_FEATURE_PY_LINK_MODE_UNRESOLVED_STATIC").is_some()
+        {
+            writeln!(
+                std::io::stderr(),
+                "Cannot use link mode control with Python 2.7"
+            );
             std::process::exit(1);
         }
     }
@@ -24,10 +27,13 @@ fn main() {
     let flags = match env::var(PYTHONSYS_ENV_VAR) {
         Ok(flags) => flags,
         Err(_) => {
-            writeln!(std::io::stderr(),
+            writeln!(
+                std::io::stderr(),
                 "Environment variable {} not found - this is supposed to be \
                  exported from the pythonXX-sys dependency, so the build chain is broken",
-                PYTHONSYS_ENV_VAR).unwrap();
+                PYTHONSYS_ENV_VAR
+            )
+            .unwrap();
             std::process::exit(1);
         }
     };

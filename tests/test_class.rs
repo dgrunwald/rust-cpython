@@ -2,23 +2,25 @@
 
 extern crate cpython;
 
-use cpython::*;
-use std::{mem, isize, iter};
-use std::cell::{Cell, RefCell};
-use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, Ordering};
 use cpython::_detail::ffi;
+use cpython::*;
+use std::cell::{Cell, RefCell};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::{isize, iter, mem};
 
 macro_rules! py_run {
     ($py:expr, $val:ident, $code:expr) => {{
         let d = PyDict::new($py);
         d.set_item($py, stringify!($val), &$val).unwrap();
         $py.run($code, None, Some(&d)).expect($code);
-    }}
+    }};
 }
 
 macro_rules! py_assert {
-    ($py:expr, $val:ident, $assertion:expr) => { py_run!($py, $val, concat!("assert ", $assertion)) };
+    ($py:expr, $val:ident, $assertion:expr) => {
+        py_run!($py, $val, concat!("assert ", $assertion))
+    };
 }
 
 macro_rules! py_expect_exception {
@@ -30,9 +32,8 @@ macro_rules! py_expect_exception {
         if !err.matches($py, $py.get_type::<exc::$err>()) {
             panic!(format!("Expected {} but got {:?}", stringify!($err), err))
         }
-    }}
+    }};
 }
-
 
 py_class!(class EmptyClass |py| { });
 
@@ -57,8 +58,20 @@ fn empty_class_in_module() {
     module.add_class::<EmptyClassInModule>(py).unwrap();
 
     let ty = module.get(py, "EmptyClassInModule").unwrap();
-    assert_eq!(ty.getattr(py, "__name__").unwrap().extract::<String>(py).unwrap(), "EmptyClassInModule");
-    assert_eq!(ty.getattr(py, "__module__").unwrap().extract::<String>(py).unwrap(), "test_module.nested");
+    assert_eq!(
+        ty.getattr(py, "__name__")
+            .unwrap()
+            .extract::<String>(py)
+            .unwrap(),
+        "EmptyClassInModule"
+    );
+    assert_eq!(
+        ty.getattr(py, "__module__")
+            .unwrap()
+            .extract::<String>(py)
+            .unwrap(),
+        "test_module.nested"
+    );
 }
 
 py_class!(class EmptyClassWithNew |py| {
@@ -72,7 +85,11 @@ fn empty_class_with_new() {
     let gil = Python::acquire_gil();
     let py = gil.python();
     let typeobj = py.get_type::<EmptyClassWithNew>();
-    assert!(typeobj.call(py, NoArgs, None).unwrap().cast_into::<EmptyClassWithNew>(py).is_ok());
+    assert!(typeobj
+        .call(py, NoArgs, None)
+        .unwrap()
+        .cast_into::<EmptyClassWithNew>(py)
+        .is_ok());
 }
 
 py_class!(class NewWithOneArg |py| {
@@ -87,7 +104,11 @@ fn new_with_one_arg() {
     let gil = Python::acquire_gil();
     let py = gil.python();
     let typeobj = py.get_type::<NewWithOneArg>();
-    let obj = typeobj.call(py, (42,), None).unwrap().cast_into::<NewWithOneArg>(py).unwrap();
+    let obj = typeobj
+        .call(py, (42,), None)
+        .unwrap()
+        .cast_into::<NewWithOneArg>(py)
+        .unwrap();
     assert_eq!(*obj._data(py), 42);
 }
 
@@ -104,13 +125,17 @@ fn new_with_two_args() {
     let gil = Python::acquire_gil();
     let py = gil.python();
     let typeobj = py.get_type::<NewWithTwoArgs>();
-    let obj = typeobj.call(py, (10, 20), None).unwrap().cast_into::<NewWithTwoArgs>(py).unwrap();
+    let obj = typeobj
+        .call(py, (10, 20), None)
+        .unwrap()
+        .cast_into::<NewWithTwoArgs>(py)
+        .unwrap();
     assert_eq!(*obj._data1(py), 10);
     assert_eq!(*obj._data2(py), 20);
 }
 
 struct TestDropCall {
-    drop_called: Arc<AtomicBool>
+    drop_called: Arc<AtomicBool>,
 }
 impl Drop for TestDropCall {
     fn drop(&mut self) {
@@ -130,9 +155,15 @@ fn data_is_dropped() {
 
     let drop_called1 = Arc::new(AtomicBool::new(false));
     let drop_called2 = Arc::new(AtomicBool::new(false));
-    let inst = DataIsDropped::create_instance(py,
-        TestDropCall { drop_called: drop_called1.clone() },
-        TestDropCall { drop_called: drop_called2.clone() });
+    let inst = DataIsDropped::create_instance(
+        py,
+        TestDropCall {
+            drop_called: drop_called1.clone(),
+        },
+        TestDropCall {
+            drop_called: drop_called2.clone(),
+        },
+    );
     assert!(drop_called1.load(Ordering::Relaxed) == false);
     assert!(drop_called2.load(Ordering::Relaxed) == false);
     drop(inst);
@@ -181,9 +212,12 @@ fn instance_method_with_args() {
     assert!(obj.method(py, 6).unwrap() == 42);
     let d = PyDict::new(py);
     d.set_item(py, "obj", obj).unwrap();
-    py.run("assert obj.method(3) == 21", None, Some(&d)).unwrap();
-    py.run("assert obj.method(multiplier=6) == 42", None, Some(&d)).unwrap();
-    py.run("assert obj.match(match=3) == 3", None, Some(&d)).unwrap();
+    py.run("assert obj.method(3) == 21", None, Some(&d))
+        .unwrap();
+    py.run("assert obj.method(multiplier=6) == 42", None, Some(&d))
+        .unwrap();
+    py.run("assert obj.match(match=3) == 3", None, Some(&d))
+        .unwrap();
 }
 
 py_class!(class ClassMethod |py| {
@@ -204,8 +238,18 @@ fn class_method() {
 
     let d = PyDict::new(py);
     d.set_item(py, "C", py.get_type::<ClassMethod>()).unwrap();
-    py.run("assert C.method() == 'ClassMethod.method()!'", None, Some(&d)).unwrap();
-    py.run("assert C().method() == 'ClassMethod.method()!'", None, Some(&d)).unwrap();
+    py.run(
+        "assert C.method() == 'ClassMethod.method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
+    py.run(
+        "assert C().method() == 'ClassMethod.method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
 }
 
 py_class!(class ClassMethodWithArgs |py| {
@@ -221,8 +265,14 @@ fn class_method_with_args() {
     let py = gil.python();
 
     let d = PyDict::new(py);
-    d.set_item(py, "C", py.get_type::<ClassMethodWithArgs>()).unwrap();
-    py.run("assert C.method('abc') == 'ClassMethodWithArgs.method(abc)'", None, Some(&d)).unwrap();
+    d.set_item(py, "C", py.get_type::<ClassMethodWithArgs>())
+        .unwrap();
+    py.run(
+        "assert C.method('abc') == 'ClassMethodWithArgs.method(abc)'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
 }
 
 py_class!(class StaticMethod |py| {
@@ -244,8 +294,18 @@ fn static_method() {
     assert_eq!(StaticMethod::method(py).unwrap(), "StaticMethod.method()!");
     let d = PyDict::new(py);
     d.set_item(py, "C", py.get_type::<StaticMethod>()).unwrap();
-    py.run("assert C.method() == 'StaticMethod.method()!'", None, Some(&d)).unwrap();
-    py.run("assert C().method() == 'StaticMethod.method()!'", None, Some(&d)).unwrap();
+    py.run(
+        "assert C.method() == 'StaticMethod.method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
+    py.run(
+        "assert C().method() == 'StaticMethod.method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
 }
 
 py_class!(class StaticMethodWithArgs |py| {
@@ -262,8 +322,10 @@ fn static_method_with_args() {
 
     assert_eq!(StaticMethodWithArgs::method(py, 1234).unwrap(), "0x4d2");
     let d = PyDict::new(py);
-    d.set_item(py, "C", py.get_type::<StaticMethodWithArgs>()).unwrap();
-    py.run("assert C.method(1337) == '0x539'", None, Some(&d)).unwrap();
+    d.set_item(py, "C", py.get_type::<StaticMethodWithArgs>())
+        .unwrap();
+    py.run("assert C.method(1337) == '0x539'", None, Some(&d))
+        .unwrap();
 }
 
 py_class!(class StaticData |py| {
@@ -304,10 +366,14 @@ fn gc_integration() {
     let py = gil.python();
 
     let drop_called = Arc::new(AtomicBool::new(false));
-    let inst = GCIntegration::create_instance(py,
+    let inst = GCIntegration::create_instance(
+        py,
         RefCell::new(py.None()),
-        TestDropCall { drop_called: drop_called.clone() }
-    ).unwrap();
+        TestDropCall {
+            drop_called: drop_called.clone(),
+        },
+    )
+    .unwrap();
     *inst.self_ref(py).borrow_mut() = inst.as_object().clone_ref(py);
     inst.release_ref(py);
 
@@ -395,7 +461,7 @@ fn string_methods() {
 }
 
 #[test]
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 fn python2_string_methods() {
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -405,7 +471,7 @@ fn python2_string_methods() {
 }
 
 #[test]
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 fn python3_string_methods() {
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -413,7 +479,6 @@ fn python3_string_methods() {
     let obj = StringMethods::create_instance(py).unwrap();
     py_assert!(py, obj, "bytes(obj) == b'bytes'");
 }
-
 
 py_class!(class Comparisons |py| {
     data val: i32;
@@ -426,7 +491,6 @@ py_class!(class Comparisons |py| {
         Ok(*self.val(py) != 0)
     }
 });
-
 
 #[test]
 fn comparisons() {
@@ -444,7 +508,6 @@ fn comparisons() {
     py_assert!(py, one, "bool(one) is True");
     py_assert!(py, zero, "not zero");
 }
-
 
 py_class!(class Sequence |py| {
     def __len__(&self) -> PyResult<usize> {
@@ -470,7 +533,6 @@ fn sequence() {
     py_assert!(py, c, "list(c) == [0, 1, 2, 3, 4]");
     py_assert!(py, c, "c['abc'] == 'abc'");
 }
-
 
 py_class!(class Callable |py| {
     def __call__(&self, arg: i32) -> PyResult<i32> {
@@ -744,7 +806,7 @@ fn rich_comparisons() {
 }
 
 #[test]
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 fn rich_comparisons_python_3_type_error() {
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -824,28 +886,60 @@ fn inplace_operations() {
     let py = gil.python();
 
     let c = InPlaceOperations::create_instance(py, Cell::new(0)).unwrap();
-    py_run!(py, c, "d = c; c += 1; assert repr(c) == repr(d) == 'IPO(1)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c += 1; assert repr(c) == repr(d) == 'IPO(1)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(10)).unwrap();
-    py_run!(py, c, "d = c; c -= 1; assert repr(c) == repr(d) == 'IPO(9)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c -= 1; assert repr(c) == repr(d) == 'IPO(9)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(3)).unwrap();
-    py_run!(py, c, "d = c; c *= 3; assert repr(c) == repr(d) == 'IPO(9)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c *= 3; assert repr(c) == repr(d) == 'IPO(9)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(3)).unwrap();
-    py_run!(py, c, "d = c; c <<= 2; assert repr(c) == repr(d) == 'IPO(12)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c <<= 2; assert repr(c) == repr(d) == 'IPO(12)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(12)).unwrap();
-    py_run!(py, c, "d = c; c >>= 2; assert repr(c) == repr(d) == 'IPO(3)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c >>= 2; assert repr(c) == repr(d) == 'IPO(3)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(12)).unwrap();
-    py_run!(py, c, "d = c; c &= 10; assert repr(c) == repr(d) == 'IPO(8)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c &= 10; assert repr(c) == repr(d) == 'IPO(8)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(12)).unwrap();
-    py_run!(py, c, "d = c; c |= 3; assert repr(c) == repr(d) == 'IPO(15)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c |= 3; assert repr(c) == repr(d) == 'IPO(15)'"
+    );
 
     let c = InPlaceOperations::create_instance(py, Cell::new(12)).unwrap();
-    py_run!(py, c, "d = c; c ^= 5; assert repr(c) == repr(d) == 'IPO(9)'");
+    py_run!(
+        py,
+        c,
+        "d = c; c ^= 5; assert repr(c) == repr(d) == 'IPO(9)'"
+    );
 }
 
 py_class!(class ContextManager |py| {
@@ -879,7 +973,11 @@ fn context_manager() {
     assert!(c.exit_called(py).get());
 
     c.exit_called(py).set(false);
-    py_expect_exception!(py, c, "with c as x:\n  raise NotImplementedError", NotImplementedError);
+    py_expect_exception!(
+        py,
+        c,
+        "with c as x:\n  raise NotImplementedError",
+        NotImplementedError
+    );
     assert!(c.exit_called(py).get());
 }
-

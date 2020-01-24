@@ -16,12 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use libc;
 use ffi;
-use std::mem;
-use python::{Python, PythonObject, PyDrop, ToPythonPointer};
-use objects::PyObject;
 use function::AbortOnDrop;
+use libc;
+use objects::PyObject;
+use python::{PyDrop, Python, PythonObject, ToPythonPointer};
+use std::mem;
 
 // TODO: what's the semantics of the traverse return code?
 // If it's just a normal python exception, we might want to use PyErr instead.
@@ -34,12 +34,13 @@ pub struct VisitProc<'a> {
     /// VisitProc contains a Python instance to ensure that
     /// 1) it is cannot be moved out of the traverse() call
     /// 2) it cannot be sent to other threads
-    _py: Python<'a>
+    _py: Python<'a>,
 }
 
-impl <'a> VisitProc<'a> {
+impl<'a> VisitProc<'a> {
     pub fn call<T>(&self, obj: &T) -> Result<(), TraverseError>
-        where T: PythonObject
+    where
+        T: PythonObject,
     {
         let r = unsafe { (self.visit)(obj.as_ptr(), self.arg) };
         if r == 0 {
@@ -72,12 +73,15 @@ macro_rules! py_class_tp_traverse {
         unsafe extern "C" fn tp_traverse(
             slf: *mut $crate::_detail::ffi::PyObject,
             visit: $crate::_detail::ffi::visitproc,
-            arg: *mut $crate::_detail::libc::c_void
-        ) -> $crate::_detail::libc::c_int
-        {
+            arg: *mut $crate::_detail::libc::c_void,
+        ) -> $crate::_detail::libc::c_int {
             $crate::py_class::gc::tp_traverse::<$class_name, _>(
                 concat!(stringify!($class_name), ".__traverse__"),
-                slf, visit, arg, $traverse_proc)
+                slf,
+                visit,
+                arg,
+                $traverse_proc,
+            )
         }
         Some(tp_traverse)
     }};
@@ -89,18 +93,23 @@ pub unsafe fn tp_traverse<C, F>(
     slf: *mut ffi::PyObject,
     visit: ffi::visitproc,
     arg: *mut libc::c_void,
-    callback: F
+    callback: F,
 ) -> libc::c_int
-where C: PythonObject,
-      F: FnOnce(&C, Python, VisitProc) -> Result<(), TraverseError>
+where
+    C: PythonObject,
+    F: FnOnce(&C, Python, VisitProc) -> Result<(), TraverseError>,
 {
     let guard = AbortOnDrop(location);
     let py = Python::assume_gil_acquired();
-    let visit = VisitProc { visit: visit, arg: arg, _py: py };
+    let visit = VisitProc {
+        visit: visit,
+        arg: arg,
+        _py: py,
+    };
     let slf = PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<C>();
     let ret = match callback(&slf, py, visit) {
         Ok(()) => 0,
-        Err(TraverseError(code)) => code
+        Err(TraverseError(code)) => code,
     };
     slf.release_ref(py);
     mem::forget(guard);
@@ -112,25 +121,23 @@ where C: PythonObject,
 macro_rules! py_class_tp_clear {
     ($class_name:ident) => {{
         unsafe extern "C" fn tp_clear(
-            slf: *mut $crate::_detail::ffi::PyObject
-        ) -> $crate::_detail::libc::c_int
-        {
+            slf: *mut $crate::_detail::ffi::PyObject,
+        ) -> $crate::_detail::libc::c_int {
             $crate::py_class::gc::tp_clear::<$class_name, _>(
                 concat!(stringify!($class_name), ".__clear__"),
-                slf, $class_name::__clear__)
+                slf,
+                $class_name::__clear__,
+            )
         }
         Some(tp_clear)
-    }}
+    }};
 }
 
 #[doc(hidden)]
-pub unsafe fn tp_clear<C, F>(
-    location: &str,
-    slf: *mut ffi::PyObject,
-    callback: F
-) -> libc::c_int
-where C: PythonObject,
-      F: FnOnce(&C, Python)
+pub unsafe fn tp_clear<C, F>(location: &str, slf: *mut ffi::PyObject, callback: F) -> libc::c_int
+where
+    C: PythonObject,
+    F: FnOnce(&C, Python),
 {
     let guard = AbortOnDrop(location);
     let py = Python::assume_gil_acquired();
@@ -172,4 +179,3 @@ impl <T> Traversable for Vec<T> where T: Traversable {
     }
 }
 */
-

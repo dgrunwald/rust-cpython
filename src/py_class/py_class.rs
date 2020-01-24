@@ -397,7 +397,7 @@ py_class!(class MyIterator |py| {
 
 
 # Errors
- 
+
 * If argument parsing fails, the Rust method body will not be called and an
   appropriate Python exception is raised instead (usually `TypeError`
   when the Python value does not match the expected type;

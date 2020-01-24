@@ -1,6 +1,6 @@
 extern crate cpython;
 
-use cpython::{Python, PyDict, PyResult};
+use cpython::{PyDict, PyResult, Python};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -13,7 +13,13 @@ fn hello(py: Python) -> PyResult<()> {
 
     let locals = PyDict::new(py);
     locals.set_item(py, "os", py.import("os")?)?;
-    let user: String = py.eval("os.getenv('USER') or os.getenv('USERNAME')", None, Some(&locals))?.extract(py)?;
+    let user: String = py
+        .eval(
+            "os.getenv('USER') or os.getenv('USERNAME')",
+            None,
+            Some(&locals),
+        )?
+        .extract(py)?;
 
     println!("Hello {}, I'm Python {}", user, version);
     Ok(())

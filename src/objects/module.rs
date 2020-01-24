@@ -16,15 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std;
+use conversion::ToPyObject;
+use err::{self, PyErr, PyResult};
 use ffi;
 use libc::c_char;
-use python::{Python, PythonObject, PyDrop};
 use objectprotocol::ObjectProtocol;
-use conversion::ToPyObject;
-use objects::{PyObject, PyTuple, PyDict, exc};
+use objects::{exc, PyDict, PyObject, PyTuple};
 use py_class::PythonObjectFromPyClassMacro;
-use err::{self, PyResult, PyErr};
+use python::{PyDrop, Python, PythonObject};
+use std;
 use std::ffi::{CStr, CString};
 
 /// Represents a Python module object.
@@ -36,17 +36,13 @@ impl PyModule {
     /// Create a new module object with the `__name__` attribute set to name.
     pub fn new(py: Python, name: &str) -> PyResult<PyModule> {
         let name = CString::new(name).unwrap();
-        unsafe {
-            err::result_cast_from_owned_ptr(py, ffi::PyModule_New(name.as_ptr()))
-        }
+        unsafe { err::result_cast_from_owned_ptr(py, ffi::PyModule_New(name.as_ptr())) }
     }
 
     /// Import the Python module with the specified name.
     pub fn import(py: Python, name: &str) -> PyResult<PyModule> {
         let name = CString::new(name).unwrap();
-        unsafe {
-            err::result_cast_from_owned_ptr(py, ffi::PyImport_ImportModule(name.as_ptr()))
-        }
+        unsafe { err::result_cast_from_owned_ptr(py, ffi::PyImport_ImportModule(name.as_ptr())) }
     }
 
     /// Return the dictionary object that implements module's namespace;
@@ -65,7 +61,10 @@ impl PyModule {
             let slice = CStr::from_ptr(ptr).to_bytes();
             match std::str::from_utf8(slice) {
                 Ok(s) => Ok(s),
-                Err(e) => Err(PyErr::from_instance(py, exc::UnicodeDecodeError::new_utf8(py, slice, e)?))
+                Err(e) => Err(PyErr::from_instance(
+                    py,
+                    exc::UnicodeDecodeError::new_utf8(py, slice, e)?,
+                )),
             }
         }
     }
@@ -110,8 +109,15 @@ impl PyModule {
     /// // Call function with a single argument:
     /// sys.call(py, "setrecursionlimit", (1000,), None).unwrap();
     /// ```
-    pub fn call<A>(&self, py: Python, name: &str, args: A, kwargs: Option<&PyDict>) -> PyResult<PyObject>
-        where A: ToPyObject<ObjectType=PyTuple>
+    pub fn call<A>(
+        &self,
+        py: Python,
+        name: &str,
+        args: A,
+        kwargs: Option<&PyDict>,
+    ) -> PyResult<PyObject>
+    where
+        A: ToPyObject<ObjectType = PyTuple>,
     {
         self.as_object().getattr(py, name)?.call(py, args, kwargs)
     }
@@ -119,7 +125,10 @@ impl PyModule {
     /// Adds a member to the module.
     ///
     /// This is a convenience function which can be used from the module's initialization function.
-    pub fn add<V>(&self, py: Python, name: &str, value: V) -> PyResult<()> where V: ToPyObject {
+    pub fn add<V>(&self, py: Python, name: &str, value: V) -> PyResult<()>
+    where
+        V: ToPyObject,
+    {
         self.as_object().setattr(py, name, value)
     }
 
@@ -129,10 +138,9 @@ impl PyModule {
     /// sets `new_type.__module__` to this module's name,
     /// and adds the type to this module.
     pub fn add_class<'p, T>(&self, py: Python<'p>) -> PyResult<()>
-        where T: PythonObjectFromPyClassMacro
+    where
+        T: PythonObjectFromPyClassMacro,
     {
         T::add_to_module(py, self)
     }
 }
-
-

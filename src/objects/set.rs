@@ -16,12 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use ffi;
-use python::{Python, PythonObject};
 use conversion::ToPyObject;
+use err::{self, PyErr, PyResult};
+use ffi;
 use objects::PyObject;
-use err::{self, PyResult, PyErr};
-use std::{mem, collections, hash, cmp, ptr};
+use python::{Python, PythonObject};
+use std::{cmp, collections, hash, mem, ptr};
 
 /// Represents a Python `set`.
 pub struct PySet(PyObject);
@@ -32,7 +32,10 @@ impl PySet {
     /// Creates a new set from any iterable
     ///
     /// Corresponds to `set(iterable)` in Python.
-    pub fn new<I>(py: Python, iterable: I) -> PyResult<PySet> where I: ToPyObject {
+    pub fn new<I>(py: Python, iterable: I) -> PyResult<PySet>
+    where
+        I: ToPyObject,
+    {
         iterable.with_borrowed_ptr(py, |iterable| unsafe {
             err::result_cast_from_owned_ptr(py, ffi::PySet_New(iterable))
         })
@@ -42,19 +45,14 @@ impl PySet {
     ///
     /// Corresponds to `set()` in Python
     #[inline]
-        pub fn empty(py: Python) -> PyResult<PySet> {
-        unsafe {
-            err::result_cast_from_owned_ptr(py,
-                ffi::PySet_New(ptr::null_mut()))
-        }
+    pub fn empty(py: Python) -> PyResult<PySet> {
+        unsafe { err::result_cast_from_owned_ptr(py, ffi::PySet_New(ptr::null_mut())) }
     }
 
     /// Empty an existing set of all values.
     #[inline]
     pub fn clear(&self, py: Python) -> PyResult<()> {
-        unsafe { err::error_on_minusone(py,
-                     ffi::PySet_Clear(self.0.as_ptr())
-                 )}
+        unsafe { err::error_on_minusone(py, ffi::PySet_Clear(self.0.as_ptr())) }
     }
 
     /// Return the number of items in the set
@@ -66,31 +64,38 @@ impl PySet {
 
     /// Determine if the set contains the specified value.
     /// This is equivalent to the Python expression `value in self`.
-    pub fn contains<V>(&self, py: Python, value: V) -> PyResult<bool> where V: ToPyObject {
+    pub fn contains<V>(&self, py: Python, value: V) -> PyResult<bool>
+    where
+        V: ToPyObject,
+    {
         value.with_borrowed_ptr(py, |key| unsafe {
             match ffi::PySet_Contains(self.0.as_ptr(), key) {
                 1 => Ok(true),
                 0 => Ok(false),
-                _ => Err(PyErr::fetch(py))
+                _ => Err(PyErr::fetch(py)),
             }
         })
     }
 
     /// Add a value.
     /// This is equivalent to the Python expression `self.add(value)`.
-    pub fn add<V>(&self, py: Python, value: V) -> PyResult<()> where V: ToPyObject {
+    pub fn add<V>(&self, py: Python, value: V) -> PyResult<()>
+    where
+        V: ToPyObject,
+    {
         value.with_borrowed_ptr(py, |value| unsafe {
-            err::error_on_minusone(py,
-                ffi::PySet_Add(self.0.as_ptr(), value))
+            err::error_on_minusone(py, ffi::PySet_Add(self.0.as_ptr(), value))
         })
     }
 
     /// Discard a value
     /// This is equivalent to the Python expression `self.discard(value)`.
-    pub fn discard<V>(&self, py: Python, value: V) -> PyResult<()> where V: ToPyObject {
+    pub fn discard<V>(&self, py: Python, value: V) -> PyResult<()>
+    where
+        V: ToPyObject,
+    {
         value.with_borrowed_ptr(py, |value| unsafe {
-            err::error_on_minusone(py,
-                ffi::PySet_Discard(self.0.as_ptr(), value))
+            err::error_on_minusone(py, ffi::PySet_Discard(self.0.as_ptr(), value))
         })
     }
 
@@ -98,20 +103,19 @@ impl PySet {
     /// This is equivalent to the Python expression `self.pop(value)`.
     /// We get KeyError if the set is empty
     pub fn pop(&self, py: Python) -> PyResult<PyObject> {
-        let as_opt = unsafe {
-            PyObject::from_borrowed_ptr_opt(py,
-                ffi::PySet_Pop(self.0.as_ptr()))
-        };
+        let as_opt =
+            unsafe { PyObject::from_borrowed_ptr_opt(py, ffi::PySet_Pop(self.0.as_ptr())) };
         match as_opt {
             None => Err(PyErr::fetch(py)),
-            Some(obj) => Ok(obj)
+            Some(obj) => Ok(obj),
         }
     }
 }
 
-impl <V, H> ToPyObject for collections::HashSet<V, H>
-    where V: hash::Hash+cmp::Eq+ToPyObject,
-          H: hash::BuildHasher
+impl<V, H> ToPyObject for collections::HashSet<V, H>
+where
+    V: hash::Hash + cmp::Eq + ToPyObject,
+    H: hash::BuildHasher,
 {
     type ObjectType = PySet;
 
@@ -119,13 +123,14 @@ impl <V, H> ToPyObject for collections::HashSet<V, H>
         let set = PySet::empty(py).unwrap();
         for value in self {
             set.add(py, value).unwrap();
-        };
+        }
         set
     }
 }
 
-impl <V> ToPyObject for collections::BTreeSet<V>
-    where V: cmp::Eq+ToPyObject,
+impl<V> ToPyObject for collections::BTreeSet<V>
+where
+    V: cmp::Eq + ToPyObject,
 {
     type ObjectType = PySet;
 
@@ -133,18 +138,17 @@ impl <V> ToPyObject for collections::BTreeSet<V>
         let set = PySet::empty(py).unwrap();
         for value in self {
             set.add(py, value).unwrap();
-        };
+        }
         set
     }
 }
-
 
 #[cfg(test)]
 mod test {
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
     use objects::PySet;
-    use std::collections::{HashSet, BTreeSet};
+    use python::{Python, PythonObject};
+    use std::collections::{BTreeSet, HashSet};
 
     #[test]
     fn test_len() {

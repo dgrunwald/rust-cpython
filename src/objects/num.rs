@@ -19,13 +19,13 @@
 extern crate num_traits;
 
 use self::num_traits::cast::cast;
-use libc::{c_long, c_double};
-use python::{Python, PythonObject, PyClone};
-use err::{self, PyResult, PyErr};
-use super::object::PyObject;
 use super::exc;
+use super::object::PyObject;
+use conversion::{FromPyObject, ToPyObject};
+use err::{self, PyErr, PyResult};
 use ffi;
-use conversion::{ToPyObject, FromPyObject};
+use libc::{c_double, c_long};
+use python::{PyClone, Python, PythonObject};
 
 /// Represents a Python `int` object.
 ///
@@ -38,9 +38,9 @@ use conversion::{ToPyObject, FromPyObject};
 /// by using [ToPyObject](trait.ToPyObject.html)
 /// and [extract](struct.PyObject.html#method.extract)
 /// with the primitive Rust integer types.
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 pub struct PyInt(PyObject);
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 pyobject_newtype!(PyInt, PyInt_Check, PyInt_Type);
 
 /// In Python 2.x, represents a Python `long` object.
@@ -63,7 +63,7 @@ pyobject_newtype!(PyLong, PyLong_Check, PyLong_Type);
 pub struct PyFloat(PyObject);
 pyobject_newtype!(PyFloat, PyFloat_Check, PyFloat_Type);
 
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 impl PyInt {
     /// Creates a new Python 2.7 `int` object.
     ///
@@ -71,9 +71,7 @@ impl PyInt {
     /// to avoid truncation if the value does not fit into a `c_long`,
     /// and to make your code compatible with Python 3.x.
     pub fn new(py: Python, val: c_long) -> PyInt {
-        unsafe {
-            err::cast_from_owned_ptr_or_panic(py, ffi::PyInt_FromLong(val))
-        }
+        unsafe { err::cast_from_owned_ptr_or_panic(py, ffi::PyInt_FromLong(val)) }
     }
 
     /// Gets the value of this integer.
@@ -87,13 +85,10 @@ impl PyInt {
     }
 }
 
-
 impl PyFloat {
     /// Creates a new Python `float` object.
     pub fn new(py: Python, val: c_double) -> PyFloat {
-        unsafe {
-            err::cast_from_owned_ptr_or_panic(py, ffi::PyFloat_FromDouble(val))
-        }
+        unsafe { err::cast_from_owned_ptr_or_panic(py, ffi::PyFloat_FromDouble(val)) }
     }
 
     /// Gets the value of this float.
@@ -131,7 +126,7 @@ macro_rules! int_fits_c_long(
         }
 
         /// Converts Python integers to Rust integers.
-        /// 
+        ///
         /// Returns OverflowError if the input integer does not fit the Rust type;
         /// or TypeError if the input is not an integer.
         extract!(obj to $rust_type; py => {
@@ -147,7 +142,6 @@ macro_rules! int_fits_c_long(
     )
 );
 
-
 macro_rules! int_fits_larger_int(
     ($rust_type:ty, $larger_type:ty) => (
         /// Conversion of Rust integer to Python `int`.
@@ -162,7 +156,7 @@ macro_rules! int_fits_larger_int(
         }
 
         /// Converts Python integers to Rust integers.
-        /// 
+        ///
         /// Returns OverflowError if the input integer does not fit the Rust type;
         /// or TypeError if the input is not an integer.
         extract!(obj to $rust_type; py => {
@@ -175,10 +169,11 @@ macro_rules! int_fits_larger_int(
     )
 );
 
-
-fn err_if_invalid_value<'p, T: PartialEq>
-    (py: Python, invalid_value: T, actual_value: T) -> PyResult<T>
-{
+fn err_if_invalid_value<'p, T: PartialEq>(
+    py: Python,
+    invalid_value: T,
+    actual_value: T,
+) -> PyResult<T> {
     if actual_value == invalid_value && PyErr::occurred(py) {
         Err(PyErr::fetch(py))
     } else {
@@ -217,7 +212,7 @@ macro_rules! int_convert_u64_or_i64 (
         }
 
         /// Converts Python integers to Rust integers.
-        /// 
+        ///
         /// Returns OverflowError if the input integer does not fit the Rust type;
         /// or TypeError if the input is not an integer.
         impl <'s> FromPyObject<'s> for $rust_type {
@@ -256,7 +251,6 @@ macro_rules! int_convert_u64_or_i64 (
     )
 );
 
-
 int_fits_c_long!(i8);
 int_fits_c_long!(u8);
 int_fits_c_long!(i16);
@@ -264,34 +258,38 @@ int_fits_c_long!(u16);
 int_fits_c_long!(i32);
 
 // If c_long is 64-bits, we can use more types with int_fits_c_long!:
-#[cfg(all(target_pointer_width="64", not(target_os="windows")))]
+#[cfg(all(target_pointer_width = "64", not(target_os = "windows")))]
 int_fits_c_long!(u32);
-#[cfg(any(target_pointer_width="32", target_os="windows"))]
+#[cfg(any(target_pointer_width = "32", target_os = "windows"))]
 int_fits_larger_int!(u32, u64);
 
-#[cfg(all(target_pointer_width="64", not(target_os="windows")))]
+#[cfg(all(target_pointer_width = "64", not(target_os = "windows")))]
 int_fits_c_long!(i64);
 
 // manual implementation for i64 on systems with 32-bit long
-#[cfg(any(target_pointer_width="32", target_os="windows"))]
+#[cfg(any(target_pointer_width = "32", target_os = "windows"))]
 int_convert_u64_or_i64!(i64, ffi::PyLong_FromLongLong, ffi::PyLong_AsLongLong);
 
-#[cfg(all(target_pointer_width="64", not(target_os="windows")))]
+#[cfg(all(target_pointer_width = "64", not(target_os = "windows")))]
 int_fits_c_long!(isize);
-#[cfg(any(target_pointer_width="32", target_os="windows"))]
+#[cfg(any(target_pointer_width = "32", target_os = "windows"))]
 int_fits_larger_int!(isize, i64);
 
 int_fits_larger_int!(usize, u64);
 
 // u64 has a manual implementation as it never fits into signed long
-int_convert_u64_or_i64!(u64, ffi::PyLong_FromUnsignedLongLong, ffi::PyLong_AsUnsignedLongLong);
+int_convert_u64_or_i64!(
+    u64,
+    ffi::PyLong_FromUnsignedLongLong,
+    ffi::PyLong_AsUnsignedLongLong
+);
 
 /// Conversion of Rust `f64` to Python `float`.
 impl ToPyObject for f64 {
     type ObjectType = PyFloat;
 
     fn to_py_object(&self, py: Python) -> PyFloat {
-       PyFloat::new(py, *self)
+        PyFloat::new(py, *self)
     }
 }
 
@@ -314,12 +312,12 @@ impl ToPyObject for f32 {
     type ObjectType = PyFloat;
 
     fn to_py_object(&self, py: Python) -> PyFloat {
-       PyFloat::new(py, *self as f64)
+        PyFloat::new(py, *self as f64)
     }
 }
 
 /// Converts Python `float` to Rust `f32`.
-/// 
+///
 /// This conversion loses precision as the 64-bit float from Python gets
 /// converted to a 32-bit float. Out-of-range numbers may also overflow to infinity.
 extract!(obj to f32; py => {
@@ -328,9 +326,9 @@ extract!(obj to f32; py => {
 
 #[cfg(test)]
 mod test {
-    use std;
-    use python::{Python, PythonObject};
     use conversion::ToPyObject;
+    use python::{Python, PythonObject};
+    use std;
 
     macro_rules! num_to_py_object_and_back (
         ($func_name:ident, $t1:ty, $t2:ty) => (
@@ -347,8 +345,8 @@ mod test {
 
     num_to_py_object_and_back!(to_from_f64, f64, f64);
     num_to_py_object_and_back!(to_from_f32, f32, f32);
-    num_to_py_object_and_back!(to_from_i8,   i8,  i8);
-    num_to_py_object_and_back!(to_from_u8,   u8,  u8);
+    num_to_py_object_and_back!(to_from_i8, i8, i8);
+    num_to_py_object_and_back!(to_from_u8, u8, u8);
     num_to_py_object_and_back!(to_from_i16, i16, i16);
     num_to_py_object_and_back!(to_from_u16, u16, u16);
     num_to_py_object_and_back!(to_from_i32, i32, i32);

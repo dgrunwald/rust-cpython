@@ -6,3 +6,4 @@
 *.so
 *.out
 extensions/stamps/
+extensions/tests/*.dSYM/

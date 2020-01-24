@@ -16,17 +16,17 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use ffi;
-use std::{mem, isize, ptr};
-use std::ffi::CString;
-use libc::{c_char, c_int};
-use python::{Python, PythonObject};
 use conversion::ToPyObject;
-use objects::PyObject;
-use function::CallbackConverter;
 use err::{PyErr, PyResult};
-use py_class::{CompareOp};
 use exc;
+use ffi;
+use function::CallbackConverter;
+use libc::{c_char, c_int};
+use objects::PyObject;
+use py_class::CompareOp;
+use python::{Python, PythonObject};
+use std::ffi::CString;
+use std::{isize, mem, ptr};
 use Py_hash_t;
 
 #[macro_export(local_inner_macros)]
@@ -65,17 +65,15 @@ macro_rules! py_class_type_object_flags {
         $traverse_proc: expr,
         $traverse_data: tt
     }) => {
-        $crate::py_class::slots::TPFLAGS_DEFAULT
-        | $crate::_detail::ffi::Py_TPFLAGS_HAVE_GC
+        $crate::py_class::slots::TPFLAGS_DEFAULT | $crate::_detail::ffi::Py_TPFLAGS_HAVE_GC
     };
 }
 
-#[cfg(feature="python27-sys")]
-pub const TPFLAGS_DEFAULT : ::libc::c_long = ffi::Py_TPFLAGS_DEFAULT
-                                           | ffi::Py_TPFLAGS_CHECKTYPES;
+#[cfg(feature = "python27-sys")]
+pub const TPFLAGS_DEFAULT: ::libc::c_long = ffi::Py_TPFLAGS_DEFAULT | ffi::Py_TPFLAGS_CHECKTYPES;
 
-#[cfg(feature="python3-sys")]
-pub const TPFLAGS_DEFAULT : ::libc::c_ulong = ffi::Py_TPFLAGS_DEFAULT;
+#[cfg(feature = "python3-sys")]
+pub const TPFLAGS_DEFAULT: ::libc::c_ulong = ffi::Py_TPFLAGS_DEFAULT;
 
 #[macro_export(local_inner_macros)]
 #[doc(hidden)]
@@ -92,27 +90,32 @@ macro_rules! py_class_type_object_dynamic_init {
     ) => {
         unsafe {
             $type_object.init_ob_type(&mut $crate::_detail::ffi::PyType_Type);
-            $type_object.tp_name = $crate::py_class::slots::build_tp_name($module_name, _cpython__py_class__slots__stringify!($class));
+            $type_object.tp_name = $crate::py_class::slots::build_tp_name(
+                $module_name,
+                _cpython__py_class__slots__stringify!($class),
+            );
             $type_object.tp_basicsize = <$class as $crate::py_class::BaseObject>::size()
-                                        as $crate::_detail::ffi::Py_ssize_t;
+                as $crate::_detail::ffi::Py_ssize_t;
         }
         // call slot macros outside of unsafe block
         *(unsafe { &mut $type_object.tp_as_sequence }) = py_class_as_sequence!($as_sequence);
         *(unsafe { &mut $type_object.tp_as_number }) = py_class_as_number!($as_number);
         py_class_as_mapping!($type_object, $as_mapping, $setdelitem);
-    }
+    };
 }
 
 pub fn build_tp_name(module_name: Option<&str>, type_name: &str) -> *mut c_char {
     let name = match module_name {
         Some(module_name) => CString::new(format!("{}.{}", module_name, type_name)),
-        None => CString::new(type_name)
+        None => CString::new(type_name),
     };
-    name.expect("Module name/type name must not contain NUL byte").into_raw()
+    name.expect("Module name/type name must not contain NUL byte")
+        .into_raw()
 }
 
 pub unsafe extern "C" fn tp_dealloc_callback<T>(obj: *mut ffi::PyObject)
-    where T: super::BaseObject
+where
+    T: super::BaseObject,
 {
     let guard = ::function::AbortOnDrop("Cannot unwind out of tp_dealloc");
     let py = Python::assume_gil_acquired();
@@ -148,7 +151,6 @@ macro_rules! py_class_wrap_newfunc {
         Some(wrap_newfunc)
     }}
 }
-
 
 #[macro_export]
 #[doc(hidden)]
@@ -241,9 +243,11 @@ macro_rules! py_class_mp_ass_subscript {
 }
 
 pub unsafe fn mp_ass_subscript_error(o: *mut ffi::PyObject, err: &[u8]) -> c_int {
-    ffi::PyErr_Format(ffi::PyExc_NotImplementedError,
+    ffi::PyErr_Format(
+        ffi::PyExc_NotImplementedError,
         err.as_ptr() as *const c_char,
-        (*ffi::Py_TYPE(o)).tp_name);
+        (*ffi::Py_TYPE(o)).tp_name,
+    );
     -1
 }
 
@@ -251,22 +255,18 @@ pub unsafe fn mp_ass_subscript_error(o: *mut ffi::PyObject, err: &[u8]) -> c_int
 #[doc(hidden)]
 macro_rules! py_class_unary_slot {
     ($class:ident :: $f:ident, $res_type:ty, $conv:expr) => {{
-        unsafe extern "C" fn wrap_unary(
-            slf: *mut $crate::_detail::ffi::PyObject)
-        -> $res_type
-        {
+        unsafe extern "C" fn wrap_unary(slf: *mut $crate::_detail::ffi::PyObject) -> $res_type {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
-            $crate::_detail::handle_callback(
-                LOCATION, $conv,
-                |py| {
-                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
-                    let ret = slf.$f(py);
-                    $crate::PyDrop::release_ref(slf, py);
-                    ret
-                })
+            $crate::_detail::handle_callback(LOCATION, $conv, |py| {
+                let slf =
+                    $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
+                let ret = slf.$f(py);
+                $crate::PyDrop::release_ref(slf, py);
+                ret
+            })
         }
         Some(wrap_unary)
-    }}
+    }};
 }
 
 #[macro_export]
@@ -275,26 +275,24 @@ macro_rules! py_class_binary_slot {
     ($class:ident :: $f:ident, $arg_type:ty, $res_type:ty, $conv:expr) => {{
         unsafe extern "C" fn wrap_binary(
             slf: *mut $crate::_detail::ffi::PyObject,
-            arg: *mut $crate::_detail::ffi::PyObject)
-        -> $res_type
-        {
+            arg: *mut $crate::_detail::ffi::PyObject,
+        ) -> $res_type {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
-            $crate::_detail::handle_callback(
-                LOCATION, $conv,
-                |py| {
-                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
-                    let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                    let ret = match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
-                        Ok(arg) => slf.$f(py, arg),
-                        Err(e) => Err(e)
-                    };
-                    $crate::PyDrop::release_ref(arg, py);
-                    $crate::PyDrop::release_ref(slf, py);
-                    ret
-                })
+            $crate::_detail::handle_callback(LOCATION, $conv, |py| {
+                let slf =
+                    $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
+                let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
+                let ret = match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
+                    Ok(arg) => slf.$f(py, arg),
+                    Err(e) => Err(e),
+                };
+                $crate::PyDrop::release_ref(arg, py);
+                $crate::PyDrop::release_ref(slf, py);
+                ret
+            })
         }
         Some(wrap_binary)
-    }}
+    }};
 }
 
 #[macro_export]
@@ -304,31 +302,29 @@ macro_rules! py_class_ternary_slot {
         unsafe extern "C" fn wrap_binary(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg1: *mut $crate::_detail::ffi::PyObject,
-            arg2: *mut $crate::_detail::ffi::PyObject)
-        -> $res_type
-        {
+            arg2: *mut $crate::_detail::ffi::PyObject,
+        ) -> $res_type {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
-            $crate::_detail::handle_callback(
-                LOCATION, $conv,
-                |py| {
-                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
-                    let arg1 = $crate::PyObject::from_borrowed_ptr(py, arg1);
-                    let arg2 = $crate::PyObject::from_borrowed_ptr(py, arg2);
-                    let ret = match <$arg1_type as $crate::FromPyObject>::extract(py, &arg1) {
-                        Ok(arg1) => match <$arg2_type as $crate::FromPyObject>::extract(py, &arg2) {
-                            Ok(arg2) => slf.$f(py, arg1, arg2),
-                            Err(e) => Err(e)
-                        },
-                        Err(e) => Err(e)
-                    };
-                    $crate::PyDrop::release_ref(arg1, py);
-                    $crate::PyDrop::release_ref(arg2, py);
-                    $crate::PyDrop::release_ref(slf, py);
-                    ret
-                })
+            $crate::_detail::handle_callback(LOCATION, $conv, |py| {
+                let slf =
+                    $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
+                let arg1 = $crate::PyObject::from_borrowed_ptr(py, arg1);
+                let arg2 = $crate::PyObject::from_borrowed_ptr(py, arg2);
+                let ret = match <$arg1_type as $crate::FromPyObject>::extract(py, &arg1) {
+                    Ok(arg1) => match <$arg2_type as $crate::FromPyObject>::extract(py, &arg2) {
+                        Ok(arg2) => slf.$f(py, arg1, arg2),
+                        Err(e) => Err(e),
+                    },
+                    Err(e) => Err(e),
+                };
+                $crate::PyDrop::release_ref(arg1, py);
+                $crate::PyDrop::release_ref(arg2, py);
+                $crate::PyDrop::release_ref(slf, py);
+                ret
+            })
         }
         Some(wrap_binary)
-    }}
+    }};
 }
 
 pub fn extract_op(py: Python, op: c_int) -> PyResult<CompareOp> {
@@ -341,7 +337,12 @@ pub fn extract_op(py: Python, op: c_int) -> PyResult<CompareOp> {
         ffi::Py_GE => Ok(CompareOp::Ge),
         _ => Err(PyErr::new_lazy_init(
             py.get_type::<exc::ValueError>(),
-            Some("tp_richcompare called with invalid comparison operator".to_py_object(py).into_object())))
+            Some(
+                "tp_richcompare called with invalid comparison operator"
+                    .to_py_object(py)
+                    .into_object(),
+            ),
+        )),
     }
 }
 
@@ -353,29 +354,29 @@ macro_rules! py_class_richcompare_slot {
         unsafe extern "C" fn tp_richcompare(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg: *mut $crate::_detail::ffi::PyObject,
-            op: $crate::_detail::libc::c_int)
-        -> $res_type
-        {
+            op: $crate::_detail::libc::c_int,
+        ) -> $res_type {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
-            $crate::_detail::handle_callback(
-                LOCATION, $conv,
-                |py| {
-                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
-                    let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                    let ret = match $crate::py_class::slots::extract_op(py, op) {
-                        Ok(op) => match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
-                            Ok(arg) => slf.$f(py, arg, op).map(|res| { res.into_py_object(py).into_object() }),
-                            Err(_) => Ok(py.NotImplemented())
-                        },
-                        Err(_) => Ok(py.NotImplemented())
-                    };
-                    $crate::PyDrop::release_ref(arg, py);
-                    $crate::PyDrop::release_ref(slf, py);
-                    ret
-                })
+            $crate::_detail::handle_callback(LOCATION, $conv, |py| {
+                let slf =
+                    $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
+                let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
+                let ret = match $crate::py_class::slots::extract_op(py, op) {
+                    Ok(op) => match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
+                        Ok(arg) => slf
+                            .$f(py, arg, op)
+                            .map(|res| res.into_py_object(py).into_object()),
+                        Err(_) => Ok(py.NotImplemented()),
+                    },
+                    Err(_) => Ok(py.NotImplemented()),
+                };
+                $crate::PyDrop::release_ref(arg, py);
+                $crate::PyDrop::release_ref(slf, py);
+                ret
+            })
         }
         Some(tp_richcompare)
-    }}
+    }};
 }
 
 // sq_contains is special-cased slot because it converts type errors to Ok(false)
@@ -385,26 +386,28 @@ macro_rules! py_class_contains_slot {
     ($class:ident :: $f:ident, $arg_type:ty) => {{
         unsafe extern "C" fn sq_contains(
             slf: *mut $crate::_detail::ffi::PyObject,
-            arg: *mut $crate::_detail::ffi::PyObject)
-        -> $crate::_detail::libc::c_int
-        {
+            arg: *mut $crate::_detail::ffi::PyObject,
+        ) -> $crate::_detail::libc::c_int {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
             $crate::_detail::handle_callback(
-                LOCATION, $crate::py_class::slots::BoolConverter,
+                LOCATION,
+                $crate::py_class::slots::BoolConverter,
                 |py| {
-                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
+                    let slf = $crate::PyObject::from_borrowed_ptr(py, slf)
+                        .unchecked_cast_into::<$class>();
                     let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
                     let ret = match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
                         Ok(arg) => slf.$f(py, arg),
-                        Err(e) => $crate::py_class::slots::type_error_to_false(py, e)
+                        Err(e) => $crate::py_class::slots::type_error_to_false(py, e),
                     };
                     $crate::PyDrop::release_ref(arg, py);
                     $crate::PyDrop::release_ref(slf, py);
                     ret
-                })
+                },
+            )
         }
         Some(sq_contains)
-    }}
+    }};
 }
 
 pub fn type_error_to_false(py: Python, e: PyErr) -> PyResult<bool> {
@@ -421,12 +424,12 @@ macro_rules! py_class_binary_numeric_slot {
     ($class:ident :: $f:ident) => {{
         unsafe extern "C" fn binary_numeric(
             lhs: *mut $crate::_detail::ffi::PyObject,
-            rhs: *mut $crate::_detail::ffi::PyObject)
-        -> *mut $crate::_detail::ffi::PyObject
-        {
+            rhs: *mut $crate::_detail::ffi::PyObject,
+        ) -> *mut $crate::_detail::ffi::PyObject {
             const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
             $crate::_detail::handle_callback(
-                LOCATION, $crate::_detail::PyObjectCallbackConverter,
+                LOCATION,
+                $crate::_detail::PyObjectCallbackConverter,
                 |py| {
                     let lhs = $crate::PyObject::from_borrowed_ptr(py, lhs);
                     let rhs = $crate::PyObject::from_borrowed_ptr(py, rhs);
@@ -434,10 +437,11 @@ macro_rules! py_class_binary_numeric_slot {
                     $crate::PyDrop::release_ref(lhs, py);
                     $crate::PyDrop::release_ref(rhs, py);
                     ret
-                })
+                },
+            )
         }
         Some(binary_numeric)
-    }}
+    }};
 }
 
 pub struct UnitCallbackConverter;
@@ -478,9 +482,9 @@ impl CallbackConverter<usize> for LenResultConverter {
 
 pub struct IterNextResultConverter;
 
-impl <T> CallbackConverter<Option<T>>
-    for IterNextResultConverter
-    where T: ToPyObject
+impl<T> CallbackConverter<Option<T>> for IterNextResultConverter
+where
+    T: ToPyObject,
 {
     type R = *mut ffi::PyObject;
 
@@ -490,7 +494,7 @@ impl <T> CallbackConverter<Option<T>>
             None => unsafe {
                 ffi::PyErr_SetNone(ffi::PyExc_StopIteration);
                 ptr::null_mut()
-            }
+            },
         }
     }
 
@@ -512,7 +516,7 @@ macro_rules! wrapping_cast {
                 self as $to
             }
         }
-    }
+    };
 }
 wrapping_cast!(u8, Py_hash_t);
 wrapping_cast!(u16, Py_hash_t);
@@ -527,8 +531,9 @@ wrapping_cast!(i64, Py_hash_t);
 
 pub struct HashConverter;
 
-impl <T> CallbackConverter<T> for HashConverter
-    where T: WrappingCastTo<Py_hash_t>
+impl<T> CallbackConverter<T> for HashConverter
+where
+    T: WrappingCastTo<Py_hash_t>,
 {
     type R = Py_hash_t;
 
@@ -564,7 +569,6 @@ impl CallbackConverter<bool> for BoolConverter {
     }
 }
 
-
 #[macro_export(local_inner_macros)]
 #[doc(hidden)]
 macro_rules! py_class_call_slot {
@@ -594,7 +598,10 @@ macro_rules! py_class_call_slot {
 }
 
 /// Used as implementation in the `sq_item` slot to forward calls to the `mp_subscript` slot.
-pub unsafe extern "C" fn sq_item(obj: *mut ffi::PyObject, index: ffi::Py_ssize_t) -> *mut ffi::PyObject {
+pub unsafe extern "C" fn sq_item(
+    obj: *mut ffi::PyObject,
+    index: ffi::Py_ssize_t,
+) -> *mut ffi::PyObject {
     let arg = ffi::PyLong_FromSsize_t(index);
     if arg.is_null() {
         return arg;

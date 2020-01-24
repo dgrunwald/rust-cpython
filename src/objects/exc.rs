@@ -18,14 +18,17 @@
 
 //! This module contains the python exception types.
 
-use libc::c_char;
-use std::{self, mem, ops};
-use std::ffi::CStr;
-use ffi;
-use python::{Python, PythonObject, PythonObjectWithCheckedDowncast, PythonObjectDowncastError, PythonObjectWithTypeObject};
-use err::{self, PyResult};
 use super::object::PyObject;
 use super::typeobject::PyType;
+use err::{self, PyResult};
+use ffi;
+use libc::c_char;
+use python::{
+    Python, PythonObject, PythonObjectDowncastError, PythonObjectWithCheckedDowncast,
+    PythonObjectWithTypeObject,
+};
+use std::ffi::CStr;
+use std::{self, mem, ops};
 
 macro_rules! exc_type(
     ($name:ident, $exc_name:ident) => (
@@ -80,62 +83,62 @@ macro_rules! exc_type(
 
 exc_type!(BaseException, PyExc_BaseException);
 exc_type!(Exception, PyExc_Exception);
-#[cfg(feature="python27-sys")]
+#[cfg(feature = "python27-sys")]
 exc_type!(StandardError, PyExc_StandardError);
 exc_type!(LookupError, PyExc_LookupError);
 exc_type!(AssertionError, PyExc_AssertionError);
 exc_type!(AttributeError, PyExc_AttributeError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(BlockingIOError, PyExc_BlockingIOError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(BrokenPipeError, PyExc_BrokenPipeError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ChildProcessError, PyExc_ChildProcessError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ConnectionAbortedError, PyExc_ConnectionAbortedError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ConnectionError, PyExc_ConnectionError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ConnectionRefusedError, PyExc_ConnectionRefusedError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ConnectionResetError, PyExc_ConnectionResetError);
 exc_type!(EOFError, PyExc_EOFError);
 exc_type!(EnvironmentError, PyExc_EnvironmentError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(FileExistsError, PyExc_FileExistsError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(FileNotFoundError, PyExc_FileNotFoundError);
 exc_type!(FloatingPointError, PyExc_FloatingPointError);
 exc_type!(IOError, PyExc_IOError);
 exc_type!(ImportError, PyExc_ImportError);
 exc_type!(IndexError, PyExc_IndexError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(InterruptedError, PyExc_InterruptedError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(IsADirectoryError, PyExc_IsADirectoryError);
 exc_type!(KeyError, PyExc_KeyError);
 exc_type!(KeyboardInterrupt, PyExc_KeyboardInterrupt);
 exc_type!(MemoryError, PyExc_MemoryError);
 exc_type!(NameError, PyExc_NameError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(NotADirectoryError, PyExc_NotADirectoryError);
 exc_type!(NotImplementedError, PyExc_NotImplementedError);
 exc_type!(OSError, PyExc_OSError);
 exc_type!(OverflowError, PyExc_OverflowError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(PermissionError, PyExc_PermissionError);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(ProcessLookupError, PyExc_ProcessLookupError);
 exc_type!(ReferenceError, PyExc_ReferenceError);
 exc_type!(RuntimeError, PyExc_RuntimeError);
 exc_type!(SyntaxError, PyExc_SyntaxError);
 exc_type!(SystemError, PyExc_SystemError);
 exc_type!(SystemExit, PyExc_SystemExit);
-#[cfg(feature="python3-sys")]
+#[cfg(feature = "python3-sys")]
 exc_type!(TimeoutError, PyExc_TimeoutError);
 exc_type!(TypeError, PyExc_TypeError);
 exc_type!(ValueError, PyExc_ValueError);
-#[cfg(target_os="windows")]
+#[cfg(target_os = "windows")]
 exc_type!(WindowsError, PyExc_WindowsError);
 exc_type!(ZeroDivisionError, PyExc_ZeroDivisionError);
 
@@ -146,17 +149,41 @@ exc_type!(UnicodeEncodeError, PyExc_UnicodeEncodeError);
 exc_type!(UnicodeTranslateError, PyExc_UnicodeTranslateError);
 
 impl UnicodeDecodeError {
-    pub fn new(py: Python, encoding: &CStr, input: &[u8], range: ops::Range<usize>, reason: &CStr) -> PyResult<UnicodeDecodeError> {
+    pub fn new(
+        py: Python,
+        encoding: &CStr,
+        input: &[u8],
+        range: ops::Range<usize>,
+        reason: &CStr,
+    ) -> PyResult<UnicodeDecodeError> {
         unsafe {
             let input: &[c_char] = mem::transmute(input);
-            err::result_cast_from_owned_ptr(py,
-                ffi::PyUnicodeDecodeError_Create(encoding.as_ptr(), input.as_ptr(), input.len() as ffi::Py_ssize_t,
-                    range.start as ffi::Py_ssize_t, range.end as ffi::Py_ssize_t, reason.as_ptr()))
+            err::result_cast_from_owned_ptr(
+                py,
+                ffi::PyUnicodeDecodeError_Create(
+                    encoding.as_ptr(),
+                    input.as_ptr(),
+                    input.len() as ffi::Py_ssize_t,
+                    range.start as ffi::Py_ssize_t,
+                    range.end as ffi::Py_ssize_t,
+                    reason.as_ptr(),
+                ),
+            )
         }
     }
 
-    pub fn new_utf8(py: Python, input: &[u8], err: std::str::Utf8Error) -> PyResult<UnicodeDecodeError> {
+    pub fn new_utf8(
+        py: Python,
+        input: &[u8],
+        err: std::str::Utf8Error,
+    ) -> PyResult<UnicodeDecodeError> {
         let pos = err.valid_up_to();
-        UnicodeDecodeError::new(py, cstr!("utf-8"), input, pos .. pos+1, cstr!("invalid utf-8"))
+        UnicodeDecodeError::new(
+            py,
+            cstr!("utf-8"),
+            input,
+            pos..pos + 1,
+            cstr!("invalid utf-8"),
+        )
     }
 }
