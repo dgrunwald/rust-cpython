@@ -10,7 +10,16 @@ const PYTHONSYS_ENV_VAR: &'static str = "DEP_PYTHON27_PYTHON_FLAGS";
 const PYTHONSYS_ENV_VAR: &'static str = "DEP_PYTHON3_PYTHON_FLAGS";
 
 fn main() {
-    // python{27,3.x}-sys/build.rs passes python interpreter compile flags via 
+    if cfg!(feature="python27-sys") {
+        if env::var_os("CARGO_FEATURE_PY_LINK_MODE_DEFAULT").is_some() ||
+           env::var_os("CARGO_FEATURE_PY_LINK_MODE_UNRESOLVED_STATIC").is_some() {
+            writeln!(std::io::stderr(),
+                "Cannot use link mode control with Python 2.7");
+            std::process::exit(1);
+        }
+    }
+
+    // python{27,3.x}-sys/build.rs passes python interpreter compile flags via
     // environment variable (using the 'links' mechanism in the cargo.toml).
     let flags = match env::var(PYTHONSYS_ENV_VAR) {
         Ok(flags) => flags,
