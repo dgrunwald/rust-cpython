@@ -71,9 +71,16 @@ impl PyList {
     /// Inserts an item at the specified index.
     ///
     /// Panics if the index is out of range.
-    pub fn insert_item(&self, _py: Python, index: usize, item: PyObject) {
+    pub fn insert(&self, _py: Python, index: usize, item: PyObject) {
         let r = unsafe { ffi::PyList_Insert(self.0.as_ptr(), index as Py_ssize_t, item.as_ptr()) };
         assert!(r == 0);
+    }
+
+    // Old name for `insert`.
+    #[deprecated(since="0.3.1", note="use list.insert() instead")]
+    #[doc(hidden)]
+    pub fn insert_item(&self, py: Python, index: usize, item: PyObject) {
+        self.insert(py, index, item);
     }
 
     #[inline]
@@ -193,7 +200,7 @@ mod test {
     }
 
     #[test]
-    fn test_insert_item() {
+    fn test_insert() {
         let gil = Python::acquire_gil();
         let py = gil.python();
         let v = vec![2, 3, 5, 7];
@@ -201,7 +208,7 @@ mod test {
         let val = 42i32.to_py_object(py).into_object();
         assert_eq!(4, list.len(py));
         assert_eq!(2, list.get_item(py, 0).extract::<i32>(py).unwrap());
-        list.insert_item(py, 0, val);
+        list.insert(py, 0, val);
         assert_eq!(5, list.len(py));
         assert_eq!(42, list.get_item(py, 0).extract::<i32>(py).unwrap());
         assert_eq!(2, list.get_item(py, 1).extract::<i32>(py).unwrap());
