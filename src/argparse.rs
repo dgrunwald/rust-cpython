@@ -69,7 +69,7 @@ pub fn parse_args(
                     fname.unwrap_or("function"),
                     if fname.is_some() { "()" } else { "" },
                     params.len(),
-                    if params.len() == 1 { "s" } else { "" },
+                    if params.len() != 1 { "s" } else { "" },
                     nargs + nkeywords
                 )));
     }

@@ -88,7 +88,11 @@ base_case = '''
                 if py.get_type::<$class>().is_instance(py, &obj) {
                     Ok($class { _unsafe_inner: obj })
                 } else {
-                    Err($crate::PythonObjectDowncastError(py))
+                    Err($crate::PythonObjectDowncastError::new(
+                        py,
+                        _cpython__py_class__py_class_impl__stringify!($class),
+                        obj.get_type(py),
+                    ))
                 }
             }
 
@@ -97,7 +101,11 @@ base_case = '''
                 if py.get_type::<$class>().is_instance(py, obj) {
                     unsafe { Ok(::std::mem::transmute(obj)) }
                 } else {
-                    Err($crate::PythonObjectDowncastError(py))
+                    Err($crate::PythonObjectDowncastError::new(
+                        py,
+                        _cpython__py_class__py_class_impl__stringify!($class),
+                        obj.get_type(py),
+                    ))
                 }
             }
         }
