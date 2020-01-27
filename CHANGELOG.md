@@ -1,9 +1,22 @@
 # Change Log
 
 ## [Unreleased]
-- Added Python 3.8 support
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.4.0...HEAD
+
+## 0.4.0 - 2020-01-27
+- This is planned to be the last version that will support Rust 2015.
+- Added [Python 3.8][187] support.
+- [Type errors][199] during downcasts now explain what the expected and actual types are. (PR by [@markbt])
+- Data items can now be shared between Python objects (e.g. for iterators) using [`PySharedRef`][189]. (PR by [@yuja])
+- [`PyList` can now be appended to with `append`][197].  The method for inserting items is renamed to `insert` for consistency.  (PR by [@binh-vu])
+
+[199]: https://github.com/dgrunwald/rust-cpython/pull/199
+[197]: https://github.com/dgrunwald/rust-cpython/pull/197
+[@binh-vu]: https://github.com/binh-vu
+[189]: https://github.com/dgrunwald/rust-cpython/pull/189
+[@yuja]: https://github.com/yuja
+[187]: https://github.com/dgrunwald/rust-cpython/pull/187
 
 ## 0.3.0 - 2019-08-01
 - Minumum Rust compiler version is now 1.30.
