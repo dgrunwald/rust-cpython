@@ -37,7 +37,7 @@ macro_rules! py_class_impl {
             $size:expr,
             { $( $class_visibility:tt )* },
             $gc:tt,
-            /* data: */ [ $( { $data_offset:expr, $data_name:ident, $data_ty:ty } )* ]
+            /* data: */ [ $( { $data_offset:expr, $data_name:ident, $data_ty:ty, $init_expr:expr, $init_ty:ty } )* ]
         }
         $slots:tt { $( $imp:item )* } $members:tt
     } => {
@@ -104,7 +104,7 @@ macro_rules! py_class_impl {
 
         py_coerce_item! {
             impl $crate::py_class::BaseObject for $class {
-                type InitType = ( $( $data_ty, )* );
+                type InitType = ( $( $init_ty, )* );
 
                 #[inline]
                 fn size() -> usize {
@@ -118,7 +118,7 @@ macro_rules! py_class_impl {
                 ) -> $crate::PyResult<$crate::PyObject>
                 {
                     let obj = <$base_type as $crate::py_class::BaseObject>::alloc(py, ty, ())?;
-                    $( $crate::py_class::data_init::<$data_ty>(py, &obj, $data_offset, $data_name); )*
+                    $( $crate::py_class::data_init::<$data_ty>(py, &obj, $data_offset, $init_expr); )*
                     Ok(obj)
                 }
 
@@ -131,7 +131,7 @@ macro_rules! py_class_impl {
         $($imp)*
         py_coerce_item! {
             impl $class {
-                fn create_instance(py: $crate::Python $( , $data_name : $data_ty )* ) -> $crate::PyResult<$class> {
+                fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
                     let obj = unsafe {
                         <$class as $crate::py_class::BaseObject>::alloc(
                             py, &py.get_type::<$class>(), ( $($data_name,)* )
@@ -222,7 +222,9 @@ macro_rules! py_class_impl {
                 {
                     $crate::py_class::data_offset::<$data_type>($size),
                     $data_name,
-                    $data_type
+                    $data_type,
+                    /* init_expr: */ $data_name,
+                    /* init_ty: */ $data_type
                 }
             ]
         }
@@ -237,6 +239,55 @@ macro_rules! py_class_impl {
                         &self._unsafe_inner,
                         $crate::py_class::data_offset::<$data_type>($size)
                         )
+                    }
+                }
+            }
+        }
+        $members
+    }};
+    { { @shared data $data_name:ident : $data_type:ty; $($tail:tt)* }
+        $class:ident $py:ident
+        /* info: */ {
+            $base_type: ty,
+            $size: expr,
+            $class_visibility: tt,
+            $gc: tt,
+            [ $( $data:tt )* ]
+        }
+        $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+    } => { py_class_impl! {
+        { $($tail)* }
+        $class $py
+        /* info: */ {
+            $base_type,
+            /* size: */ $crate::py_class::data_new_size::<$crate::PySharedRefCell<$data_type>>($size),
+            $class_visibility,
+            $gc,
+            /* data: */ [
+                $($data)*
+                {
+                    $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size),
+                    $data_name,
+                    /* data_ty: */ $crate::PySharedRefCell<$data_type>,
+                    /* init_expr: */ $crate::PySharedRefCell::<$data_type>::new($data_name),
+                    /* init_ty: */ $data_type
+                }
+            ]
+        }
+        $slots
+        /* impl: */ {
+            $($imp)*
+            impl $class {
+                fn $data_name<'a>(&'a self, py: $crate::Python<'a>) -> $crate::PySharedRef<'a, $data_type> {
+                    unsafe {
+                        let data = $crate::py_class::data_get::<$crate::PySharedRefCell<$data_type>>(
+                        py,
+                        &self._unsafe_inner,
+                        $crate::py_class::data_offset::<$crate::PySharedRefCell<$data_type>>($size)
+                        );
+                        $crate::PySharedRef::new(py, &self._unsafe_inner, data)
                     }
                 }
             }

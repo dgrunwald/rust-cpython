@@ -105,6 +105,7 @@ pub use python::{
     PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject,
 };
 pub use pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
+pub use sharedref::{PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked};
 
 #[cfg(feature = "python27-sys")]
 #[allow(non_camel_case_types)]
@@ -212,6 +213,7 @@ mod python;
 mod pythonrun;
 //pub mod rustobject;
 pub mod py_class;
+mod sharedref;
 
 /// Private re-exports for macros. Do not use.
 #[doc(hidden)]
