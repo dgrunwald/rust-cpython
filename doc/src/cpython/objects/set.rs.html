@@ -267,6 +267,10 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2018 Daniel Grunwald, Georges Racinet</span>
 <span class="comment">//</span>
@@ -286,12 +290,12 @@
 <span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
 <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyResult</span>, <span class="ident">PyErr</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">collections</span>, <span class="ident">hash</span>, <span class="ident">cmp</span>, <span class="ident">ptr</span>};
+<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">collections</span>, <span class="ident">hash</span>, <span class="ident">mem</span>, <span class="ident">ptr</span>};
 
 <span class="doccomment">/// Represents a Python `set`.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PySet</span>(<span class="ident">PyObject</span>);
@@ -302,7 +306,10 @@
     <span class="doccomment">/// Creates a new set from any iterable</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Corresponds to `set(iterable)` in Python.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">iterable</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PySet</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">I</span>: <span class="ident">ToPyObject</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">iterable</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PySet</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">I</span>: <span class="ident">ToPyObject</span>,
+    {
         <span class="ident">iterable</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">iterable</span><span class="op">|</span> <span class="kw">unsafe</span> {
             <span class="ident">err</span>::<span class="ident">result_cast_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_New</span>(<span class="ident">iterable</span>))
         })
@@ -312,109 +319,110 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Corresponds to `set()` in Python</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PySet</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">err</span>::<span class="ident">result_cast_from_owned_ptr</span>(<span class="ident">py</span>,
-                <span class="ident">ffi</span>::<span class="ident">PySet_New</span>(<span class="ident">ptr</span>::<span class="ident">null_mut</span>()))
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PySet</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> { <span class="ident">err</span>::<span class="ident">result_cast_from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_New</span>(<span class="ident">ptr</span>::<span class="ident">null_mut</span>())) }
     }
 
     <span class="doccomment">/// Empty an existing set of all values.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> { <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
-                     <span class="ident">ffi</span>::<span class="ident">PySet_Clear</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>())
-                 )}
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> { <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_Clear</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>())) }
     }
 
     <span class="doccomment">/// Return the number of items in the set</span>
     <span class="doccomment">/// This is equivalent to Python `len(self)`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PySet_Size</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) <span class="kw">as</span> <span class="ident">usize</span> }
     }
 
     <span class="doccomment">/// Determine if the set contains the specified value.</span>
     <span class="doccomment">/// This is equivalent to the Python expression `value in self`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">V</span>: <span class="ident">ToPyObject</span>,
+    {
         <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">PySet_Contains</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">key</span>) {
-                <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
-                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>))
+                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+                <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>)),
             }
         })
     }
 
     <span class="doccomment">/// Add a value.</span>
     <span class="doccomment">/// This is equivalent to the Python expression `self.add(value)`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">V</span>: <span class="ident">ToPyObject</span>,
+    {
         <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
-                <span class="ident">ffi</span>::<span class="ident">PySet_Add</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">value</span>))
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_Add</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">value</span>))
         })
     }
 
     <span class="doccomment">/// Discard a value</span>
     <span class="doccomment">/// This is equivalent to the Python expression `self.discard(value)`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">discard</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">ToPyObject</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">discard</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">V</span>: <span class="ident">ToPyObject</span>,
+    {
         <span class="ident">value</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>,
-                <span class="ident">ffi</span>::<span class="ident">PySet_Discard</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">value</span>))
+            <span class="ident">err</span>::<span class="ident">error_on_minusone</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_Discard</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">value</span>))
         })
     }
 
     <span class="doccomment">/// Pop a value</span>
     <span class="doccomment">/// This is equivalent to the Python expression `self.pop(value)`.</span>
     <span class="doccomment">/// We get KeyError if the set is empty</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">as_opt</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr_opt</span>(<span class="ident">py</span>,
-                <span class="ident">ffi</span>::<span class="ident">PySet_Pop</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()))
-        };
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">as_opt</span> <span class="op">=</span>
+            <span class="kw">unsafe</span> { <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr_opt</span>(<span class="ident">py</span>, <span class="ident">ffi</span>::<span class="ident">PySet_Pop</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>())) };
         <span class="kw">match</span> <span class="ident">as_opt</span> {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>)),
-            <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">obj</span>)
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>)),
+            <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">obj</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">H</span><span class="op">&gt;</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">collections</span>::<span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">H</span><span class="op">&gt;</span>
-    <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">hash</span>::<span class="ident">Hash</span><span class="op">+</span><span class="ident">cmp</span>::<span class="ident">Eq</span><span class="op">+</span><span class="ident">ToPyObject</span>,
-          <span class="ident">H</span>: <span class="ident">hash</span>::<span class="ident">BuildHasher</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">H</span><span class="op">&gt;</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">collections</span>::<span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">H</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">V</span>: <span class="ident">hash</span>::<span class="ident">Hash</span> <span class="op">+</span> <span class="ident">cmp</span>::<span class="ident">Eq</span> <span class="op">+</span> <span class="ident">ToPyObject</span>,
+    <span class="ident">H</span>: <span class="ident">hash</span>::<span class="ident">BuildHasher</span>,
 {
     <span class="kw">type</span> <span class="ident">ObjectType</span> <span class="op">=</span> <span class="ident">PySet</span>;
 
-    <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PySet</span> {
+    <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PySet</span> {
         <span class="kw">let</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">PySet</span>::<span class="ident">empty</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
         <span class="kw">for</span> <span class="ident">value</span> <span class="kw">in</span> <span class="self">self</span> {
             <span class="ident">set</span>.<span class="ident">add</span>(<span class="ident">py</span>, <span class="ident">value</span>).<span class="ident">unwrap</span>();
-        };
+        }
         <span class="ident">set</span>
     }
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">collections</span>::<span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
-    <span class="kw">where</span> <span class="ident">V</span>: <span class="ident">cmp</span>::<span class="ident">Eq</span><span class="op">+</span><span class="ident">ToPyObject</span>,
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">collections</span>::<span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">V</span>: <span class="ident">cmp</span>::<span class="ident">Eq</span> <span class="op">+</span> <span class="ident">ToPyObject</span>,
 {
     <span class="kw">type</span> <span class="ident">ObjectType</span> <span class="op">=</span> <span class="ident">PySet</span>;
 
-    <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PySet</span> {
+    <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PySet</span> {
         <span class="kw">let</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">PySet</span>::<span class="ident">empty</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
         <span class="kw">for</span> <span class="ident">value</span> <span class="kw">in</span> <span class="self">self</span> {
             <span class="ident">set</span>.<span class="ident">add</span>(<span class="ident">py</span>, <span class="ident">value</span>).<span class="ident">unwrap</span>();
-        };
+        }
         <span class="ident">set</span>
     }
 }
-
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
     <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
     <span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">PySet</span>;
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">HashSet</span>, <span class="ident">BTreeSet</span>};
+    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeSet</span>, <span class="ident">HashSet</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_len</span>() {
@@ -538,4 +546,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

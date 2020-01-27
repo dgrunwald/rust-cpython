@@ -6,5 +6,4 @@ implementors["cpython"] = [];
             } else {
                 window.pending_implementors = implementors;
             }
-        
-})()
+        })()

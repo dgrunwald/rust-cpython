@@ -144,6 +144,21 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
 <span class="comment">//</span>
@@ -163,95 +178,103 @@
 <span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">module</span>::<span class="ident">PyModule</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">module</span>::<span class="ident">PyModule</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::{<span class="ident">PyBytes</span>, <span class="ident">PyString</span>, <span class="ident">PyStringData</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::<span class="ident">PyUnicode</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python3-sys&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::<span class="ident">PyString</span> <span class="kw">as</span> <span class="ident">PyUnicode</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::<span class="ident">PyUnicode</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::{<span class="ident">PyBytes</span>, <span class="ident">PyString</span>, <span class="ident">PyStringData</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">iterator</span>::<span class="ident">PyIterator</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">boolobject</span>::<span class="ident">PyBool</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">tuple</span>::{<span class="ident">PyTuple</span>, <span class="ident">NoArgs</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">dict</span>::<span class="ident">PyDict</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">set</span>::<span class="ident">PySet</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">list</span>::<span class="ident">PyList</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::<span class="ident">PyInt</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python3-sys&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::<span class="ident">PyLong</span> <span class="kw">as</span> <span class="ident">PyInt</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::{<span class="ident">PyLong</span>, <span class="ident">PyFloat</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">sequence</span>::<span class="ident">PySequence</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">capsule</span>::<span class="ident">PyCapsule</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">dict</span>::<span class="ident">PyDict</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">iterator</span>::<span class="ident">PyIterator</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">list</span>::<span class="ident">PyList</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::<span class="ident">PyInt</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::<span class="ident">PyLong</span> <span class="kw">as</span> <span class="ident">PyInt</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num</span>::{<span class="ident">PyFloat</span>, <span class="ident">PyLong</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">sequence</span>::<span class="ident">PySequence</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">set</span>::<span class="ident">PySet</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">tuple</span>::{<span class="ident">NoArgs</span>, <span class="ident">PyTuple</span>};
 
 <span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">pyobject_newtype</span>(
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) <span class="op">=&gt;</span> (
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> (
         <span class="macro">py_impl_to_py_object_for_python_object</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
         <span class="macro">py_impl_from_py_object_for_python_object</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
 
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">as_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> {
+            <span class="kw">fn</span> <span class="ident">as_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> {
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
             }
 
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> {
+            <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> {
                 <span class="self">self</span>.<span class="number">0</span>
             }
 
             <span class="doccomment">/// Unchecked downcast from PyObject to Self.</span>
             <span class="doccomment">/// Undefined behavior if the input object does not have the expected type.</span>
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast_from</span>(<span class="ident">obj</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+            <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast_from</span>(<span class="ident">obj</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">obj</span>)
             }
 
             <span class="doccomment">/// Unchecked downcast from PyObject to Self.</span>
             <span class="doccomment">/// Undefined behavior if the input object does not have the expected type.</span>
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast_borrow_from</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">Self</span> {
+            <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast_borrow_from</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">Self</span> {
                 ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">obj</span>)
             }
         }
     );
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">ident</span>) <span class="op">=&gt;</span> (
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> (
         <span class="macro">pyobject_newtype</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
 
         <span class="kw">impl</span> ::<span class="ident">python</span>::<span class="ident">PythonObjectWithCheckedDowncast</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">downcast_from</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: ::<span class="ident">objects</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, ::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">downcast_from</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: ::<span class="ident">objects</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, ::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                 <span class="kw">unsafe</span> {
-                    <span class="kw">if</span> ::<span class="ident">ffi</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) <span class="op">!=</span> <span class="number">0</span> {
+                    <span class="kw">if</span> ::<span class="ident">ffi</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">obj</span>))
                     } <span class="kw">else</span> {
-                        <span class="prelude-val">Err</span>(::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>(<span class="ident">py</span>))
+                        <span class="prelude-val">Err</span>(::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>::<span class="ident">new</span>(
+                            <span class="ident">py</span>,
+                            <span class="macro">_cpython__objects__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>),
+                            <span class="ident">obj</span>.<span class="ident">get_type</span>(<span class="ident">py</span>)
+                        ))
                     }
                 }
             }
 
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">downcast_borrow_from</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> ::<span class="ident">objects</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, ::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">downcast_borrow_from</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> ::<span class="ident">objects</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, ::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                 <span class="kw">unsafe</span> {
-                    <span class="kw">if</span> ::<span class="ident">ffi</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) <span class="op">!=</span> <span class="number">0</span> {
+                    <span class="kw">if</span> ::<span class="ident">ffi</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="prelude-val">Ok</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">obj</span>))
                     } <span class="kw">else</span> {
-                        <span class="prelude-val">Err</span>(::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>(<span class="ident">py</span>))
+                        <span class="prelude-val">Err</span>(::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>::<span class="ident">new</span>(
+                            <span class="ident">py</span>,
+                            <span class="macro">_cpython__objects__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>),
+                            <span class="ident">obj</span>.<span class="ident">get_type</span>(<span class="ident">py</span>)
+                        ))
                     }
                 }
             }
         }
     );
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">ident</span>) <span class="op">=&gt;</span> (
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> (
         <span class="macro">pyobject_newtype</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>);
 
         <span class="kw">impl</span> ::<span class="ident">python</span>::<span class="ident">PythonObjectWithTypeObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">type_object</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span>) <span class="op">-&gt;</span> ::<span class="ident">objects</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span> {
+            <span class="kw">fn</span> <span class="ident">type_object</span>(<span class="ident">py</span>: ::<span class="ident">python</span>::<span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> ::<span class="ident">objects</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span> {
                 <span class="kw">unsafe</span> { ::<span class="ident">objects</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>::<span class="ident">from_type_ptr</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">ffi</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>) }
             }
         }
@@ -259,37 +282,44 @@
 );
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">extract</span>(
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">obj</span>:<span class="ident">ident</span> <span class="ident">to</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>; $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>: <span class="ident">block</span>) <span class="op">=&gt;</span> {
-        <span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> ::<span class="ident">conversion</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span>
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">obj</span>:<span class="ident">ident</span> <span class="ident">to</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>; $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>: <span class="ident">block</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> ::<span class="ident">conversion</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span>
             <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>
         {
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta</span>]</span>)<span class="op">*</span>
-            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">Python</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">Python</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
             }
         }
     }
 );
 
-<span class="kw">mod</span> <span class="ident">object</span>;
-<span class="kw">mod</span> <span class="ident">typeobject</span>;
-<span class="kw">mod</span> <span class="ident">module</span>;
-<span class="kw">mod</span> <span class="ident">string</span>;
-<span class="kw">mod</span> <span class="ident">dict</span>;
-<span class="kw">mod</span> <span class="ident">set</span>;
-<span class="kw">mod</span> <span class="ident">iterator</span>;
-<span class="kw">mod</span> <span class="ident">boolobject</span>;
-<span class="kw">mod</span> <span class="ident">tuple</span>;
-<span class="kw">mod</span> <span class="ident">list</span>;
-<span class="kw">mod</span> <span class="ident">num</span>;
-<span class="kw">mod</span> <span class="ident">sequence</span>;
-<span class="kw">mod</span> <span class="ident">capsule</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">exc</span>;
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">_cpython__objects__stringify</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro">stringify</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>)<span class="op">*</span> }
+    }
+}
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;python27-sys&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">boolobject</span>;
+<span class="kw">mod</span> <span class="ident">capsule</span>;
+<span class="kw">mod</span> <span class="ident">dict</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">exc</span>;
+<span class="kw">mod</span> <span class="ident">iterator</span>;
+<span class="kw">mod</span> <span class="ident">list</span>;
+<span class="kw">mod</span> <span class="ident">module</span>;
+<span class="kw">mod</span> <span class="ident">num</span>;
+<span class="kw">mod</span> <span class="ident">object</span>;
+<span class="kw">mod</span> <span class="ident">sequence</span>;
+<span class="kw">mod</span> <span class="ident">set</span>;
+<span class="kw">mod</span> <span class="ident">string</span>;
+<span class="kw">mod</span> <span class="ident">tuple</span>;
+<span class="kw">mod</span> <span class="ident">typeobject</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">oldstyle</span>;
 
 <span class="kw">mod</span> <span class="ident">tests</span>;
-
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
