@@ -17,7 +17,8 @@ fn main() {
             writeln!(
                 std::io::stderr(),
                 "Cannot use link mode control with Python 2.7"
-            );
+            )
+            .unwrap();
             std::process::exit(1);
         }
     }
