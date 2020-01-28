@@ -1,6 +1,7 @@
 use libc::{c_char, c_int, c_long, FILE};
-use object::PyObject;
-use pyport::Py_ssize_t;
+
+use crate::object::PyObject;
+use crate::pyport::Py_ssize_t;
 
 // 1 -> 2 in df88846ebca9186514e86bc2067242233ade4608 (Python 2.5)
 pub const Py_MARSHAL_VERSION: c_int = 2;

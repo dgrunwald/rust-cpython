@@ -1,8 +1,9 @@
-use code::*;
 use libc::{c_char, c_int, FILE};
-use object::*;
-use pyarena::PyArena;
-use pystate::PyThreadState;
+
+use crate::code::*;
+use crate::object::*;
+use crate::pyarena::PyArena;
+use crate::pystate::PyThreadState;
 
 pub const PyCF_MASK: c_int = (CO_FUTURE_DIVISION
     | CO_FUTURE_ABSOLUTE_IMPORT

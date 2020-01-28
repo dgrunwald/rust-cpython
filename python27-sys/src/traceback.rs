@@ -1,7 +1,8 @@
-use frameobject::PyFrameObject;
 use libc::c_int;
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::frameobject::PyFrameObject;
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

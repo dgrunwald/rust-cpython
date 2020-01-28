@@ -1,5 +1,6 @@
 use libc::{c_int, c_void, size_t};
-use object::PyObject;
+
+use crate::object::PyObject;
 
 #[allow(missing_copy_implementations)]
 pub enum PyArena {}

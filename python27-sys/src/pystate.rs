@@ -1,6 +1,7 @@
-use frameobject::PyFrameObject;
 use libc::{c_int, c_long};
-use object::PyObject;
+
+use crate::frameobject::PyFrameObject;
+use crate::object::PyObject;
 
 pub enum PyInterpreterState {}
 

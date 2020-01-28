@@ -1,5 +1,6 @@
 use libc::{c_char, c_int, c_long, c_uchar};
-use object::*;
+
+use crate::object::*;
 
 #[repr(C)]
 #[derive(Copy)]

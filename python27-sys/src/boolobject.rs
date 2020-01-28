@@ -1,6 +1,7 @@
-use intobject::PyIntObject;
 use libc::{c_int, c_long};
-use object::*;
+
+use crate::intobject::PyIntObject;
+use crate::object::*;
 
 pub type PyBoolObject = PyIntObject;
 

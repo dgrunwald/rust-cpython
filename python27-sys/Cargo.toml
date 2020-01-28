@@ -20,6 +20,7 @@ exclude = [
     "/.travis.yml",
 ]
 workspace = ".."
+edition = "2018"
 
 [dependencies]
 libc = "0.2"

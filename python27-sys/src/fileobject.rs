@@ -1,5 +1,6 @@
 use libc::{c_char, c_int, size_t, FILE};
-use object::*;
+
+use crate::object::*;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

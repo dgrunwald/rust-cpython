@@ -1,6 +1,7 @@
 use libc::{c_char, c_int, c_long};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
 #[allow(missing_copy_implementations)]
