@@ -1,7 +1,4 @@
-#[macro_use]
-extern crate cpython;
-
-use cpython::{PyDict, PyObject, PyResult, PyTuple, Python};
+use cpython::{py_fn, py_module_initializer, PyDict, PyObject, PyResult, PyTuple, Python};
 
 // Our module is named 'hello', and can be imported using `import hello`.
 // This requires that the output binary file is named `hello.so` (or Windows: `hello.pyd`).

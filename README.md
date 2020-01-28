@@ -30,8 +30,6 @@ cpython = "0.4"
 #### Example program displaying the value of `sys.version`:
 
 ```rust
-extern crate cpython;
-
 use cpython::{Python, PyDict, PyResult};
 
 fn main() {
@@ -78,9 +76,7 @@ features = ["extension-module"]
 
 **`src/lib.rs`**
 ```rust
-#[macro_use] extern crate cpython;
-
-use cpython::{PyResult, Python};
+use cpython::{PyResult, Python, py_module_initializer, py_fn};
 
 // add bindings to the generated python module
 // N.B: names: "rust2py" must be the name of the `.so` or `.pyd` file

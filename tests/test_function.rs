@@ -1,7 +1,4 @@
-#[macro_use]
-extern crate cpython;
-
-use cpython::{NoArgs, ObjectProtocol, PyDict, PyResult, Python};
+use cpython::{py_fn, NoArgs, ObjectProtocol, PyDict, PyResult, Python};
 use std::sync::atomic;
 use std::sync::atomic::Ordering::Relaxed;
 

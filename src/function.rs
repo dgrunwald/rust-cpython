@@ -27,11 +27,11 @@ use crate::ffi;
 use crate::objects::{exc, PyDict, PyObject, PyString, PyTuple};
 use crate::python::{PyDrop, Python, PythonObject};
 
-#[macro_export(local_inner_macros)]
+#[macro_export]
 #[doc(hidden)]
 macro_rules! py_method_def {
     ($name: expr, $flags: expr, $wrap: expr) => {{
-        py_method_def!($name, $flags, $wrap, "")
+        $crate::py_method_def!($name, $flags, $wrap, "")
     }};
 
     ($name: expr, $flags: expr, $wrap: expr, $doc: expr) => {{
@@ -45,12 +45,12 @@ macro_rules! py_method_def {
                     | $flags,
                 ml_doc: 0 as *const $crate::_detail::libc::c_char,
             };
-        METHOD_DEF.ml_name = _cpython__concat!($name, "\0").as_ptr() as *const _;
+        METHOD_DEF.ml_name = concat!($name, "\0").as_ptr() as *const _;
         if $name.starts_with("r#") {
             METHOD_DEF.ml_name = METHOD_DEF.ml_name.add(2);
         }
         if !$doc.is_empty() {
-            METHOD_DEF.ml_doc = _cpython__concat!($doc, "\0").as_ptr() as *const _;
+            METHOD_DEF.ml_doc = concat!($doc, "\0").as_ptr() as *const _;
         }
         METHOD_DEF.ml_meth = Some(std::mem::transmute::<
             $crate::_detail::ffi::PyCFunctionWithKeywords,
@@ -101,8 +101,7 @@ macro_rules! py_method_def {
 ///
 /// # Example
 /// ```
-/// #[macro_use] extern crate cpython;
-/// use cpython::{Python, PyResult, PyErr, PyDict};
+/// use cpython::{Python, PyResult, PyErr, PyDict, py_fn};
 /// use cpython::{exc};
 ///
 /// fn multiply(py: Python, lhs: i32, rhs: i32) -> PyResult<i32> {
@@ -120,17 +119,17 @@ macro_rules! py_method_def {
 ///     py.run("print(multiply(6, 7))", None, Some(&dict)).unwrap();
 /// }
 /// ```
-#[macro_export(local_inner_macros)]
+#[macro_export]
 macro_rules! py_fn {
     ($py:expr, $f:ident $plist:tt ) => {
-        py_argparse_parse_plist! { py_fn_impl { $py, $f } $plist }
+        $crate::py_argparse_parse_plist! { py_fn_impl { $py, $f } $plist }
     };
     ($py:ident, $f:ident $plist:tt -> $ret:ty { $($body:tt)* } ) => {
-        py_argparse_parse_plist! { py_fn_impl { $py, $f, $ret, { $($body)* } } $plist }
+        $crate::py_argparse_parse_plist! { py_fn_impl { $py, $f, $ret, { $($body)* } } $plist }
     };
 }
 
-#[macro_export(local_inner_macros)]
+#[macro_export]
 #[doc(hidden)]
 macro_rules! py_fn_impl {
     // Form 1: reference existing function
@@ -142,9 +141,9 @@ macro_rules! py_fn_impl {
         -> *mut $crate::_detail::ffi::PyObject
         {
             $crate::_detail::handle_callback(
-                _cpython__function__stringify!($f), $crate::_detail::PyObjectCallbackConverter,
+                stringify!($f), $crate::_detail::PyObjectCallbackConverter,
                 |py| {
-                    py_argparse_raw!(py, Some(_cpython__function__stringify!($f)), args, kwargs,
+                    $crate::py_argparse_raw!(py, Some(stringify!($f)), args, kwargs,
                         [ $( { $pname : $ptype = $detail } )* ]
                         {
                             $f(py $(, $pname )* )
@@ -153,13 +152,13 @@ macro_rules! py_fn_impl {
         }
         unsafe {
             $crate::_detail::py_fn_impl($py,
-                py_method_def!(_cpython__function__stringify!($f), 0, wrap))
+                $crate::py_method_def!(stringify!($f), 0, wrap))
         }
     }};
     // Form 2: inline function definition
     { $py:ident, $f:ident, $ret:ty, $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ] } => {{
         fn $f($py: $crate::Python $( , $pname : $ptype )* ) -> $ret $body
-        py_fn_impl!($py, $f [ $( { $pname : $ptype = $detail } )* ])
+        $crate::py_fn_impl!($py, $f [ $( { $pname : $ptype = $detail } )* ])
     }}
 }
 
@@ -253,23 +252,6 @@ impl<'a> Drop for AbortOnDrop<'a> {
         use std::io::Write;
         let _ = writeln!(&mut io::stderr(), "Cannot unwind out of {}", self.0);
         unsafe { libc::abort() }
-    }
-}
-
-// Rust 2018 support
-#[macro_export]
-#[doc(hidden)]
-macro_rules! _cpython__function__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__concat {
-    ($($inner:tt)*) => {
-        concat! { $($inner)* }
     }
 }
 

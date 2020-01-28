@@ -1,7 +1,4 @@
-#[macro_use]
-extern crate cpython;
-
-use cpython::{GILGuard, Python};
+use cpython::{py_class, GILGuard, Python};
 
 py_class!(class Owner |py| {
     @shared data string: String;

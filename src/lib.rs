@@ -64,8 +64,6 @@
 //!
 //! # Example
 //! ```
-//! extern crate cpython;
-//!
 //! use cpython::{Python, PyDict, PyResult};
 //!
 //! fn main() {
@@ -246,8 +244,7 @@ pub mod _detail {
 ///
 /// # Example
 /// ```
-/// #[macro_use] extern crate cpython;
-/// use cpython::{Python, PyResult, PyObject};
+/// use cpython::{Python, PyResult, PyObject, py_module_initializer, py_fn};
 ///
 /// py_module_initializer!(hello, inithello, PyInit_hello, |py, m| {
 ///     m.add(py, "__doc__", "Module documentation string")?;

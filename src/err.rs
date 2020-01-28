@@ -42,10 +42,7 @@ Defines a new exception type.
 
 # Example
 ```
-#[macro_use]
-extern crate cpython;
-
-use cpython::{Python, PyDict};
+use cpython::{Python, PyDict, py_exception};
 
 py_exception!(mymodule, CustomError);
 
@@ -61,12 +58,12 @@ fn main() {
 }
 ```
 */
-#[macro_export(local_inner_macros)]
+#[macro_export]
 macro_rules! py_exception {
     ($module: ident, $name: ident, $base: ty) => {
         pub struct $name($crate::PyObject);
 
-        pyobject_newtype!($name);
+        $crate::pyobject_newtype!($name);
 
         impl $name {
             pub fn new<'p, T: $crate::ToPyObject>(
@@ -90,7 +87,7 @@ macro_rules! py_exception {
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__err__stringify!($name),
+                        stringify!($name),
                         <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
                     ))
                 }
@@ -108,7 +105,7 @@ macro_rules! py_exception {
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__err__stringify!($name),
+                        stringify!($name),
                         <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
                     ))
                 }
@@ -125,11 +122,7 @@ macro_rules! py_exception {
                     if type_object.is_null() {
                         type_object = $crate::PyErr::new_type(
                             py,
-                            _cpython__err__concat!(
-                                _cpython__err__stringify!($module),
-                                ".",
-                                _cpython__err__stringify!($name)
-                            ),
+                            concat!(stringify!($module), ".", stringify!($name)),
                             Some($crate::PythonObject::into_object(py.get_type::<$base>())),
                             None,
                         )
@@ -142,7 +135,7 @@ macro_rules! py_exception {
         }
     };
     ($module: ident, $name: ident) => {
-        py_exception!($module, $name, $crate::exc::Exception);
+        $crate::py_exception!($module, $name, $crate::exc::Exception);
     };
 }
 
@@ -524,24 +517,6 @@ pub fn error_on_minusone(py: Python, result: libc::c_int) -> PyResult<()> {
         Ok(())
     } else {
         Err(PyErr::fetch(py))
-    }
-}
-
-// 2018 macros support
-//
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__err__concat {
-    ($($inner:tt)*) => {
-        concat! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__err__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
     }
 }
 

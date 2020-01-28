@@ -1,8 +1,6 @@
 #![crate_type = "dylib"]
 
-#[macro_use] extern crate cpython;
-
-use cpython::{PyObject, PyResult};
+use cpython::{PyObject, PyResult, py_module_initializer, py_class};
 use std::{cell, cmp, collections};
 
 py_module_initializer!(btree, initbtree, PyInit_btree, |py, m| {

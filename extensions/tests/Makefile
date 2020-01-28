@@ -21,7 +21,6 @@ all:
 clean:
 	$(RM) *.so
 	$(RM) *.out
-	$(RM) *_expanded.rs
 	$(RM) -r stamps
 
 stamps:
@@ -33,10 +32,10 @@ stamps/rust-cpython-$(PY): $(call rwildcard,../../src,*.rs) Makefile | stamps
 	touch "$@"
 
 %.so: %.rs stamps/rust-cpython-$(PY)
-	rustc $< -g -L $(TARGETDIR) -L $(TARGETDIR)/deps -o $@
+	rustc $< --edition 2018 -g -L $(TARGETDIR) -L $(TARGETDIR)/deps --extern cpython=$(TARGETDIR)/libcpython.rlib -o $@
 
 %_expanded.rs: %.rs stamps/rust-cpython-$(PY)
-	rustc $< -g -L $(TARGETDIR) -L $(TARGETDIR)/deps -Z unstable-options --pretty=expanded -o $@
+	rustc $< --edition 2018 -g -L $(TARGETDIR) -L $(TARGETDIR)/deps -Z unstable-options --pretty=expanded --extern cpython=$(TARGETDIR)/libcpython.rlib -o $@
 
 hello.out: hello.so
 	python$(PY) -c "import hello; hello.run(hello.val())" 2>&1 | tee $@

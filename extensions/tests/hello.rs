@@ -1,8 +1,6 @@
 #![crate_type = "dylib"]
 
-#[macro_use] extern crate cpython;
-
-use cpython::{PyObject, PyResult, Python, PyTuple, PyDict};
+use cpython::{PyObject, PyResult, Python, PyTuple, PyDict, py_module_initializer, py_fn};
 
 py_module_initializer!(hello, inithello, PyInit_hello, |py, m| {
     m.add(py, "__doc__", "Module documentation string")?;

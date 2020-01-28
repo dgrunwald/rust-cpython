@@ -33,8 +33,7 @@ in all function bodies.
 
 # Example
 ```
-#[macro_use] extern crate cpython;
-use cpython::{Python, PyResult, PyDict};
+use cpython::{Python, PyResult, PyDict, py_class};
 
 py_class!(class MyType |py| {
     data number: i32;
@@ -198,9 +197,8 @@ as every cycle must contain at least one mutable reference.
 Example:
 
 ```
-#[macro_use] extern crate cpython;
 use std::{mem, cell};
-use cpython::{PyObject, PyDrop};
+use cpython::{PyObject, PyDrop, py_class};
 
 py_class!(class ClassWithGCSupport |py| {
     data obj: cell::RefCell<Option<PyObject>>;
@@ -251,9 +249,8 @@ Iterators can be defined using the Python special methods `__iter__` and `__next
 Example:
 
 ```
-#[macro_use] extern crate cpython;
 use std::cell::RefCell;
-use cpython::{PyObject, PyClone, PyResult};
+use cpython::{PyObject, PyClone, PyResult, py_class};
 
 py_class!(class MyIterator |py| {
     data iter: RefCell<Box<Iterator<Item=PyObject> + Send>>;
@@ -425,7 +422,7 @@ py_class!(class MyIterator |py| {
 #[macro_export]
 macro_rules! py_class {
     (class $class:ident |$py: ident| { $( $body:tt )* }) => (
-        py_class_impl! {
+        $crate::py_class_impl! {
             { $( $body )* }
             $class $py
             /* info: */ {
@@ -454,7 +451,7 @@ macro_rules! py_class {
         }
     );
     (pub class $class:ident |$py: ident| { $( $body:tt )* }) => (
-        py_class_impl! {
+        $crate::py_class_impl! {
             { $( $body )* }
             $class $py
             /* info: */ {
@@ -489,7 +486,7 @@ macro_rules! py_class {
 macro_rules! py_class_impl_item {
     { $class:ident, $py:ident, $name:ident( $( $selfarg:tt )* )
         $res_type:ty; $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
-    } => { py_coerce_item! {
+    } => { $crate::py_coerce_item! {
         impl $class {
             pub fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
             -> $res_type $body

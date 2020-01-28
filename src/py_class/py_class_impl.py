@@ -30,7 +30,7 @@ header = '''
 '''
 
 macro_start = '''
-#[macro_export(local_inner_macros)]
+#[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_impl {
     // TT muncher macro. Results are accumulated in $info $slots $impls and $members.
@@ -49,12 +49,12 @@ base_case = '''
         }
         $slots:tt { $( $imp:item )* } $members:tt
     } => {
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             $($class_visibility)* struct $class { _unsafe_inner: $crate::PyObject }
         }
 
-        py_impl_to_py_object_for_python_object!($class);
-        py_impl_from_py_object_for_python_object!($class);
+        $crate::py_impl_to_py_object_for_python_object!($class);
+        $crate::py_impl_from_py_object_for_python_object!($class);
 
         impl $crate::PythonObject for $class {
             #[inline]
@@ -90,7 +90,7 @@ base_case = '''
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__py_class__py_class_impl__stringify!($class),
+                        stringify!($class),
                         obj.get_type(py),
                     ))
                 }
@@ -103,14 +103,14 @@ base_case = '''
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__py_class__py_class_impl__stringify!($class),
+                        stringify!($class),
                         obj.get_type(py),
                     ))
                 }
             }
         }
 
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             impl $crate::py_class::BaseObject for $class {
                 type InitType = ( $( $init_ty, )* );
 
@@ -137,7 +137,7 @@ base_case = '''
             }
         }
         $($imp)*
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             impl $class {
                 fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
                     let obj = unsafe {
@@ -149,7 +149,7 @@ base_case = '''
 
                     // hide statics in create_instance to avoid name conflicts
                     static mut TYPE_OBJECT : $crate::_detail::ffi::PyTypeObject
-                        = py_class_type_object_static_init!($class, $gc, $slots);
+                        = $crate::py_class_type_object_static_init!($class, $gc, $slots);
                     static mut INIT_ACTIVE: bool = false;
 
                     // trait implementations that need direct access to TYPE_OBJECT
@@ -161,7 +161,7 @@ base_case = '''
                                 } else {
                                     // automatically initialize the class on-demand
                                     <$class as $crate::py_class::PythonObjectFromPyClassMacro>::initialize(py, None)
-                                        .expect(_cpython__py_class__py_class_impl__concat!("An error occurred while initializing class ", _cpython__py_class__py_class_impl__stringify!($class)))
+                                        .expect(concat!("An error occurred while initializing class ", stringify!($class)))
                                 }
                             }
                         }
@@ -173,9 +173,9 @@ base_case = '''
                                 if $crate::py_class::is_ready(py, &TYPE_OBJECT) {
                                     return Ok($crate::PyType::from_type_ptr(py, &mut TYPE_OBJECT));
                                 }
-                                _cpython__py_class__py_class_impl__assert!(!INIT_ACTIVE,
-                                    _cpython__py_class__py_class_impl__concat!("Reentrancy detected: already initializing class ",
-                                    _cpython__py_class__py_class_impl__stringify!($class)));
+                                assert!(!INIT_ACTIVE,
+                                    concat!("Reentrancy detected: already initializing class ",
+                                    stringify!($class)));
                                 INIT_ACTIVE = true;
                                 let res = init(py, module_name);
                                 INIT_ACTIVE = false;
@@ -185,13 +185,13 @@ base_case = '''
 
                         fn add_to_module(py: $crate::Python, module: &$crate::PyModule) -> $crate::PyResult<()> {
                             let ty = <$class as $crate::py_class::PythonObjectFromPyClassMacro>::initialize(py, module.name(py).ok())?;
-                            module.add(py, _cpython__py_class__py_class_impl__stringify!($class), ty)
+                            module.add(py, stringify!($class), ty)
                         }
                     }
 
                     fn init($py: $crate::Python, module_name: Option<&str>) -> $crate::PyResult<$crate::PyType> {
-                        py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots);
-                        py_class_init_members!($class, $py, TYPE_OBJECT, $members);
+                        $crate::py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots);
+                        $crate::py_class_init_members!($class, $py, TYPE_OBJECT, $members);
                         unsafe {
                             if $crate::_detail::ffi::PyType_Ready(&mut TYPE_OBJECT) == 0 {
                                 Ok($crate::PyType::from_type_ptr($py, &mut TYPE_OBJECT))
@@ -293,7 +293,7 @@ def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slot
         write('\n{ $( $member_name:ident = $member_expr:expr; )* }')
     else:
         write('$members:tt')
-    write('\n} => { py_class_impl! {\n')
+    write('\n} => { $crate::py_class_impl! {\n')
     write('{ $($tail)* }\n')
     write('$class $py')
     write(new_info or '$info')
@@ -415,22 +415,22 @@ def generate_class_method(special_name=None, decoration='',
     def impl(with_params, with_docs):
         if with_docs:
             doc_prefix = '$(#[doc=$doc:expr])*'
-            value_suffix = ', { _cpython__py_class__py_class_impl__concat!($($doc, "\\n"),*) }'
+            value_suffix = ', { concat!($($doc, "\\n"),*) }'
         else:
             doc_prefix = value_suffix = ''
         if with_params:
             param_pattern = ', $($p:tt)+'
-            impl = '''py_argparse_parse_plist_impl!{
+            impl = '''$crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, %s($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }''' % name_use
-            value = 'py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
+            value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = 'py_class_impl_item! { $class, $py,%s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
+            impl = '$crate::py_class_impl_item! { $class, $py,%s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
                 % name_use
-            value = '%s!{%s []}' % (value_macro, value_args + value_suffix)
+            value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
         pattern = '%s def %s ($cls:ident%s) -> $res_type:ty { $( $body:tt )* }' \
             % (doc_prefix + decoration, name_pattern, param_pattern)
         slots = []
@@ -473,7 +473,7 @@ def traverse_and_clear():
         }
         ''',
         new_impl='''
-            py_coerce_item!{
+            $crate::py_coerce_item!{
                 impl $class {
                     fn __traverse__(&$slf,
                         $py: $crate::Python,
@@ -484,9 +484,9 @@ def traverse_and_clear():
             }
         ''')
     generate_case('def __clear__ (&$slf:ident) $body:block',
-        new_slots=[('tp_clear', 'py_class_tp_clear!($class)')],
+        new_slots=[('tp_clear', '$crate::py_class_tp_clear!($class)')],
         new_impl='''
-            py_coerce_item!{
+            $crate::py_coerce_item!{
                 impl $class {
                     fn __clear__(&$slf, $py: $crate::Python) $body
                 }
@@ -500,22 +500,22 @@ def generate_instance_method(special_name=None, decoration='',
     def impl(with_params, with_docs):
         if with_docs:
             doc_prefix = '$(#[doc=$doc:expr])*'
-            value_suffix = ', { _cpython__py_class__py_class_impl__concat!($($doc, "\\n"),*) }'
+            value_suffix = ', { concat!($($doc, "\\n"),*) }'
         else:
             doc_prefix = value_suffix = ''
         if with_params:
             param_pattern = ', $($p:tt)+'
-            impl = '''py_argparse_parse_plist_impl!{
+            impl = '''$crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, %s(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }''' % name_use
-            value = 'py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
+            value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = 'py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [] }' \
+            impl = '$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [] }' \
                 % name_use
-            value = '%s!{%s []}' % (value_macro, value_args + value_suffix)
+            value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
         pattern = '%s def %s (&$slf:ident%s) -> $res_type:ty { $( $body:tt )* }' \
             % (doc_prefix + decoration, name_pattern, param_pattern)
         slots = []
@@ -535,15 +535,15 @@ def static_method():
     generate_case(
         '$(#[doc=$doc:expr])* @staticmethod def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* }',
         new_impl='''
-            py_argparse_parse_plist!{
+            $crate::py_argparse_parse_plist!{
                 py_class_impl_item { $class, $py, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
         ''',
         new_members=[('$name', '''
-            py_argparse_parse_plist!{
+            $crate::py_argparse_parse_plist!{
                 py_class_static_method {$py, $class::$name, {
-                    _cpython__py_class__py_class_impl__concat!($($doc, "\\n"),*)
+                    concat!($($doc, "\\n"),*)
                 } }
                 ($($p)*)
             }
@@ -554,30 +554,6 @@ def static_data():
         new_members=[('$name', '$init')])
 
 macro_end = '''
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__concat {
-    ($($inner:tt)*) => {
-        concat! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__assert {
-    ($($inner:tt)*) => {
-        assert! { $($inner)* }
-    }
 }
 '''
 
@@ -592,7 +568,7 @@ def special_method(decorated_function):
 def error(special_name, msg):
     print('''
     { { def %s $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "%s" }
+        $crate::py_error! { "%s" }
     };''' % (special_name, msg))
 
 @special_method
@@ -636,24 +612,24 @@ def operator(special_name, slot,
         arg_pattern += ', ${0}:ident : ${0}_type:ty'.format(arg.name)
         param_list.append('{{ ${0} : ${0}_type = {{}} }}'.format(arg.name))
     if slot == 'sq_contains':
-        new_slots = [(slot, 'py_class_contains_slot!($class::%s, $%s_type)' % (special_name, args[0].name))]
+        new_slots = [(slot, '$crate::py_class_contains_slot!($class::%s, $%s_type)' % (special_name, args[0].name))]
     elif slot == 'tp_richcompare':
-        new_slots = [(slot, 'py_class_richcompare_slot!($class::%s, $%s_type, %s, %s)'
+        new_slots = [(slot, '$crate::py_class_richcompare_slot!($class::%s, $%s_type, %s, %s)'
                             % (special_name, args[0].name, res_ffi_type, res_conv))]
     elif len(args) == 0:
-        new_slots = [(slot, 'py_class_unary_slot!($class::%s, %s, %s)'
+        new_slots = [(slot, '$crate::py_class_unary_slot!($class::%s, %s, %s)'
                              % (special_name, res_ffi_type, res_conv))]
     elif len(args) == 1:
-        new_slots = [(slot, 'py_class_binary_slot!($class::%s, $%s_type, %s, %s)'
+        new_slots = [(slot, '$crate::py_class_binary_slot!($class::%s, $%s_type, %s, %s)'
                              % (special_name, args[0].name, res_ffi_type, res_conv))]
     elif len(args) == 2:
-        new_slots = [(slot, 'py_class_ternary_slot!($class::%s, $%s_type, $%s_type, %s, %s)'
+        new_slots = [(slot, '$crate::py_class_ternary_slot!($class::%s, $%s_type, $%s_type, %s, %s)'
                              % (special_name, args[0].name, args[1].name, res_ffi_type, res_conv))]
     else:
         raise ValueError('Unsupported argument count')
     generate_case(
         pattern='def %s(&$slf:ident%s) -> $res_type:ty { $($body:tt)* }' % (special_name, arg_pattern),
-        new_impl='py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [%s] }'
+        new_impl='$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [%s] }'
                  % (special_name, ' '.join(param_list)),
         new_slots=new_slots + list(additional_slots)
     )
@@ -674,9 +650,9 @@ def binary_numeric_operator(special_name, slot):
     generate_case(
         pattern='def %s($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* }'
             % special_name,
-        new_impl='py_class_impl_item! { $class, $py, %s() $res_type; { $($body)* } ' % special_name
+        new_impl='$crate::py_class_impl_item! { $class, $py, %s() $res_type; { $($body)* } ' % special_name
                 +'[ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }',
-        new_slots=[(slot, 'py_class_binary_numeric_slot!($class::%s)' % special_name)]
+        new_slots=[(slot, '$crate::py_class_binary_numeric_slot!($class::%s)' % special_name)]
     )
     error('Invalid signature for binary numeric operator %s' % special_name)(special_name)
 

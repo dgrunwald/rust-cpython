@@ -19,11 +19,5 @@ For a safe high-level API, see [rust-cpython](https://github.com/dgrunwald/rust-
 version = "*"
 ```
 
-In Rust, import the crate like this:
-
-```rust
-extern crate python27_sys as py;
-```
-
 Documentation for the python API is available on [https://docs.python.org/2/c-api/].
 

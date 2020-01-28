@@ -40,11 +40,11 @@ pub use self::sequence::PySequence;
 pub use self::set::PySet;
 pub use self::tuple::{NoArgs, PyTuple};
 
-#[macro_export(local_inner_macros)]
+#[macro_export]
 macro_rules! pyobject_newtype(
     ($name: ident) => (
-        py_impl_to_py_object_for_python_object!($name);
-        py_impl_from_py_object_for_python_object!($name);
+        $crate::py_impl_to_py_object_for_python_object!($name);
+        $crate::py_impl_from_py_object_for_python_object!($name);
 
         impl $crate::PythonObject for $name {
             #[inline]
@@ -84,7 +84,7 @@ macro_rules! pyobject_newtype(
                     } else {
                         Err(crate::python::PythonObjectDowncastError::new(
                             py,
-                            _cpython__objects__stringify!($name),
+                            stringify!($name),
                             obj.get_type(py)
                         ))
                     }
@@ -99,7 +99,7 @@ macro_rules! pyobject_newtype(
                     } else {
                         Err(crate::python::PythonObjectDowncastError::new(
                             py,
-                            _cpython__objects__stringify!($name),
+                            stringify!($name),
                             obj.get_type(py)
                         ))
                     }
@@ -131,14 +131,6 @@ macro_rules! extract(
         }
     }
 );
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__objects__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
-    }
-}
 
 mod boolobject;
 mod capsule;
