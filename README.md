@@ -24,7 +24,7 @@ To use `cpython`, add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cpython = "0.3"
+cpython = "0.4"
 ```
 
 #### Example program displaying the value of `sys.version`:
