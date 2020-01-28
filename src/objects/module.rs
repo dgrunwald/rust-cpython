@@ -79,8 +79,22 @@ impl PyModule {
     /// Gets the module filename.
     ///
     /// May fail if the module does not have a `__file__` attribute.
+    #[allow(deprecated)]
     pub fn filename<'a>(&'a self, py: Python) -> PyResult<&'a str> {
         unsafe { self.str_from_ptr(py, ffi::PyModule_GetFilename(self.0.as_ptr())) }
+    }
+
+    /// Gets the module filename object.
+    ///
+    /// May fail if the module does not have a `__file__` attribute.
+    #[cfg(feature = "python3-sys")]
+    pub fn filename_object<'a>(&'a self, py: Python) -> PyResult<PyObject> {
+        let ptr = unsafe { ffi::PyModule_GetFilenameObject(self.0.as_ptr()) };
+        if ptr.is_null() {
+            Err(PyErr::fetch(py))
+        } else {
+            Ok(unsafe { PyObject::from_borrowed_ptr(py, ptr) })
+        }
     }
 
     /// Gets a member from the module.
