@@ -86,26 +86,29 @@
 //! }
 //! ```
 
-extern crate libc;
+use std::{mem, ptr};
 
 #[cfg(feature = "python27-sys")]
-extern crate python27_sys as ffi;
+pub(crate) use python27_sys as ffi;
 
 #[cfg(feature = "python3-sys")]
-extern crate python3_sys as ffi;
+pub(crate) use python3_sys as ffi;
 
-pub use conversion::{FromPyObject, RefFromPyObject, ToPyObject};
-pub use err::{PyErr, PyResult};
 pub use ffi::Py_ssize_t;
-pub use objectprotocol::ObjectProtocol;
-pub use objects::*;
-pub use py_class::CompareOp;
-pub use python::{
+
+pub use crate::conversion::{FromPyObject, RefFromPyObject, ToPyObject};
+pub use crate::err::{PyErr, PyResult};
+pub use crate::objectprotocol::ObjectProtocol;
+pub use crate::objects::*;
+pub use crate::py_class::CompareOp;
+pub use crate::python::{
     PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError,
     PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject,
 };
-pub use pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
-pub use sharedref::{PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked};
+pub use crate::pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
+pub use crate::sharedref::{
+    PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked,
+};
 
 #[cfg(feature = "python27-sys")]
 #[allow(non_camel_case_types)]
@@ -115,14 +118,12 @@ pub type Py_hash_t = libc::c_long;
 #[allow(non_camel_case_types)]
 pub type Py_hash_t = ffi::Py_hash_t;
 
-use std::{mem, ptr};
-
 /// Constructs a `&'static CStr` literal.
 macro_rules! cstr(
     ($s: tt) => (
         // TODO: verify that $s is a string literal without nuls
         unsafe {
-            ::std::ffi::CStr::from_ptr(concat!($s, "\0").as_ptr() as *const _)
+            std::ffi::CStr::from_ptr(concat!($s, "\0").as_ptr() as *const _)
         }
     );
 );
@@ -219,13 +220,13 @@ mod sharedref;
 #[doc(hidden)]
 pub mod _detail {
     pub mod ffi {
-        pub use ffi::*;
+        pub use crate::ffi::*;
     }
     pub mod libc {
         pub use libc::{c_char, c_int, c_void};
     }
-    pub use err::{from_owned_ptr_or_panic, result_from_owned_ptr};
-    pub use function::{
+    pub use crate::err::{from_owned_ptr_or_panic, result_from_owned_ptr};
+    pub use crate::function::{
         handle_callback, py_fn_impl, AbortOnDrop, PyObjectCallbackConverter,
         PythonObjectCallbackConverter,
     };

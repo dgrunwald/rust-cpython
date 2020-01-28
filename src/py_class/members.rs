@@ -16,12 +16,13 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyResult};
-use ffi;
-use objects::PyObject;
-use python::{Python, PythonObject};
 use std::marker;
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::objects::PyObject;
+use crate::python::{Python, PythonObject};
 
 /// Represents something that can be added as a member to a Python class/type.
 ///

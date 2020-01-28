@@ -16,12 +16,13 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
-use objects::{PyList, PyObject};
-use python::{Python, PythonObject};
 use std::{cmp, collections, hash, mem};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objects::{PyList, PyObject};
+use crate::python::{Python, PythonObject};
 
 /// Represents a Python `dict`.
 pub struct PyDict(PyObject);
@@ -172,9 +173,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::{PyDict, PyTuple};
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objects::{PyDict, PyTuple};
+    use crate::python::{Python, PythonObject};
     use std::collections::HashMap;
 
     #[test]

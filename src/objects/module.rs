@@ -16,16 +16,16 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
 use libc::c_char;
-use objectprotocol::ObjectProtocol;
-use objects::{exc, PyDict, PyObject, PyTuple};
-use py_class::PythonObjectFromPyClassMacro;
-use python::{PyDrop, Python, PythonObject};
-use std;
 use std::ffi::{CStr, CString};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objectprotocol::ObjectProtocol;
+use crate::objects::{exc, PyDict, PyObject, PyTuple};
+use crate::py_class::PythonObjectFromPyClassMacro;
+use crate::python::{PyDrop, Python, PythonObject};
 
 /// Represents a Python module object.
 pub struct PyModule(PyObject);

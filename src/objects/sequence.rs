@@ -16,15 +16,16 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use buffer;
-use conversion::{FromPyObject, ToPyObject};
-use err;
-use err::{result_cast_from_owned_ptr, result_from_owned_ptr, PyErr, PyResult};
-use ffi;
-use ffi::Py_ssize_t;
-use objects::{PyIterator, PyList, PyObject, PyTuple};
-use python::{PyClone, PyDrop, Python, PythonObject, ToPythonPointer};
 use std::mem;
+
+use crate::buffer;
+use crate::conversion::{FromPyObject, ToPyObject};
+use crate::err;
+use crate::err::{result_cast_from_owned_ptr, result_from_owned_ptr, PyErr, PyResult};
+use crate::ffi;
+use crate::ffi::Py_ssize_t;
+use crate::objects::{PyIterator, PyList, PyObject, PyTuple};
+use crate::python::{PyClone, PyDrop, Python, PythonObject, ToPythonPointer};
 
 /// Represents a reference to a python object supporting the sequence protocol.
 pub struct PySequence(PyObject);
@@ -225,7 +226,7 @@ impl PySequence {
 
     #[inline]
     pub fn iter<'p>(&self, py: Python<'p>) -> PyResult<PyIterator<'p>> {
-        use objectprotocol::ObjectProtocol;
+        use crate::objectprotocol::ObjectProtocol;
         self.as_object().iter(py)
     }
 }
@@ -310,10 +311,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::{PyIterator, PyList, PySequence, PyTuple};
-    use python::{Python, PythonObject};
-    use std;
+    use crate::conversion::ToPyObject;
+    use crate::objects::{PyIterator, PyList, PySequence, PyTuple};
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_numbers_are_not_sequences() {

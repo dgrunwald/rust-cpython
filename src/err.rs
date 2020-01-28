@@ -16,20 +16,20 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use ffi;
 use libc;
 use libc::c_char;
+use std::ffi::CString;
+use std::ptr;
+
+use crate::conversion::ToPyObject;
+use crate::ffi;
 #[cfg(feature = "python27-sys")]
-use objects::oldstyle::PyClass;
-use objects::{exc, PyObject, PyType};
-use python::{
+use crate::objects::oldstyle::PyClass;
+use crate::objects::{exc, PyObject, PyType};
+use crate::python::{
     PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError, PythonObjectWithTypeObject,
     ToPythonPointer,
 };
-use std;
-use std::ffi::CString;
-use std::ptr;
 
 /**
 Defines a new exception type.
@@ -497,7 +497,7 @@ pub unsafe fn from_owned_ptr_or_panic(py: Python, p: *mut ffi::PyObject) -> PyOb
 
 pub unsafe fn result_cast_from_owned_ptr<T>(py: Python, p: *mut ffi::PyObject) -> PyResult<T>
 where
-    T: ::python::PythonObjectWithCheckedDowncast,
+    T: crate::python::PythonObjectWithCheckedDowncast,
 {
     if p.is_null() {
         Err(PyErr::fetch(py))
@@ -508,7 +508,7 @@ where
 
 pub unsafe fn cast_from_owned_ptr_or_panic<T>(py: Python, p: *mut ffi::PyObject) -> T
 where
-    T: ::python::PythonObjectWithCheckedDowncast,
+    T: crate::python::PythonObjectWithCheckedDowncast,
 {
     if p.is_null() {
         panic_after_error(py);
@@ -547,8 +547,8 @@ macro_rules! _cpython__err__stringify {
 
 #[cfg(test)]
 mod tests {
-    use objects::exc;
-    use {PyErr, Python};
+    use crate::objects::exc;
+    use crate::{PyErr, Python};
 
     #[test]
     fn set_typeerror() {

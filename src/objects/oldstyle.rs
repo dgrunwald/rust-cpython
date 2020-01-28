@@ -21,10 +21,10 @@
 use super::dict::PyDict;
 use super::object::PyObject;
 use super::tuple::PyTuple;
-use conversion::ToPyObject;
-use err::{self, PyResult};
-use ffi;
-use python::{Python, PythonObject, ToPythonPointer};
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::python::{Python, PythonObject, ToPythonPointer};
 
 /// Represents an old-style Python class.
 ///

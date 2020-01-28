@@ -78,7 +78,7 @@ base_case = '''
             /// Undefined behavior if the input object does not have the expected type.
             #[inline]
             unsafe fn unchecked_downcast_borrow_from<'a>(obj: &'a $crate::PyObject) -> &'a Self {
-                ::std::mem::transmute(obj)
+                std::mem::transmute(obj)
             }
         }
 
@@ -99,7 +99,7 @@ base_case = '''
             #[inline]
             fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, obj) {
-                    unsafe { Ok(::std::mem::transmute(obj)) }
+                    unsafe { Ok(std::mem::transmute(obj)) }
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
@@ -629,7 +629,7 @@ def operator(special_name, slot,
         elif res_type == 'PyObject':
             res_conv = '$crate::_detail::PyObjectCallbackConverter'
         else:
-            res_conv = '$crate::_detail::PythonObjectCallbackConverter::<$crate::%s>(::std::marker::PhantomData)' % res_type
+            res_conv = '$crate::_detail::PythonObjectCallbackConverter::<$crate::%s>(std::marker::PhantomData)' % res_type
     arg_pattern = ''
     param_list = []
     for arg in args:

@@ -25,6 +25,7 @@ exclude = [
     "/extensions/**"
 ]
 build = "build.rs"
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "dgrunwald/rust-cpython" }

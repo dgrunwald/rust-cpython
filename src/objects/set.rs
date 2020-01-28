@@ -16,12 +16,13 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
-use objects::PyObject;
-use python::{Python, PythonObject};
 use std::{cmp, collections, hash, mem, ptr};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objects::PyObject;
+use crate::python::{Python, PythonObject};
 
 /// Represents a Python `set`.
 pub struct PySet(PyObject);
@@ -145,9 +146,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::PySet;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objects::PySet;
+    use crate::python::{Python, PythonObject};
     use std::collections::{BTreeSet, HashSet};
 
     #[test]

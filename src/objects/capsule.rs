@@ -1,12 +1,13 @@
 //! Work wih Python capsules
 //!
-use super::object::PyObject;
-use err::{self, PyErr, PyResult};
-use ffi::{PyCapsule_GetPointer, PyCapsule_Import, PyCapsule_New};
 use libc::c_void;
-use python::{Python, ToPythonPointer};
 use std::ffi::{CStr, CString, NulError};
 use std::mem;
+
+use super::object::PyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi::{PyCapsule_GetPointer, PyCapsule_Import, PyCapsule_New};
+use crate::python::{Python, ToPythonPointer};
 
 /// Capsules are the preferred way to export/import C APIs between extension modules,
 /// see [Providing a C API for an Extension Module](https://docs.python.org/3/extending/extending.html#using-capsules).

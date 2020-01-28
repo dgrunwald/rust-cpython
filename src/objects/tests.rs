@@ -17,7 +17,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 use std::collections::{BTreeMap, HashMap};
-use {PyDict, PyInt, Python, ToPyObject};
+
+use crate::{PyDict, PyInt, Python, ToPyObject};
 
 // TODO: move these tests into the dict module
 #[test]

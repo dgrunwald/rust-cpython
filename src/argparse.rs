@@ -19,12 +19,13 @@
 //! This module contains logic for parsing a python argument list.
 //! See also the macros `py_argparse!`, `py_fn!` and `py_method!`.
 
-use conversion::{RefFromPyObject, ToPyObject};
-use err::{self, PyResult};
-use ffi;
-use objects::{exc, PyDict, PyObject, PyString, PyTuple};
-use python::{Python, PythonObject};
 use std::ptr;
+
+use crate::conversion::{RefFromPyObject, ToPyObject};
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::objects::{exc, PyDict, PyObject, PyString, PyTuple};
+use crate::python::{Python, PythonObject};
 
 /// Description of a python parameter; used for `parse_args()`.
 pub struct ParamDescription<'a> {
@@ -479,9 +480,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::PyTuple;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objects::PyTuple;
+    use crate::python::{Python, PythonObject};
 
     #[test]
     pub fn test_parse() {

@@ -68,21 +68,21 @@ macro_rules! pyobject_newtype(
             /// Undefined behavior if the input object does not have the expected type.
             #[inline]
             unsafe fn unchecked_downcast_borrow_from<'a>(obj: &'a $crate::PyObject) -> &'a Self {
-                ::std::mem::transmute(obj)
+                std::mem::transmute(obj)
             }
         }
     );
     ($name: ident, $checkfunction: ident) => (
         pyobject_newtype!($name);
 
-        impl ::python::PythonObjectWithCheckedDowncast for $name {
+        impl crate::python::PythonObjectWithCheckedDowncast for $name {
             #[inline]
-            fn downcast_from<'p>(py: ::python::Python<'p>, obj: ::objects::object::PyObject) -> Result<$name, ::python::PythonObjectDowncastError<'p>> {
+            fn downcast_from<'p>(py: crate::python::Python<'p>, obj: crate::objects::object::PyObject) -> Result<$name, crate::python::PythonObjectDowncastError<'p>> {
                 unsafe {
-                    if ::ffi::$checkfunction(obj.as_ptr()) != 0 {
+                    if crate::ffi::$checkfunction(obj.as_ptr()) != 0 {
                         Ok($name(obj))
                     } else {
-                        Err(::python::PythonObjectDowncastError::new(
+                        Err(crate::python::PythonObjectDowncastError::new(
                             py,
                             _cpython__objects__stringify!($name),
                             obj.get_type(py)
@@ -92,12 +92,12 @@ macro_rules! pyobject_newtype(
             }
 
             #[inline]
-            fn downcast_borrow_from<'a, 'p>(py: ::python::Python<'p>, obj: &'a ::objects::object::PyObject) -> Result<&'a $name, ::python::PythonObjectDowncastError<'p>> {
+            fn downcast_borrow_from<'a, 'p>(py: crate::python::Python<'p>, obj: &'a crate::objects::object::PyObject) -> Result<&'a $name, crate::python::PythonObjectDowncastError<'p>> {
                 unsafe {
-                    if ::ffi::$checkfunction(obj.as_ptr()) != 0 {
-                        Ok(::std::mem::transmute(obj))
+                    if crate::ffi::$checkfunction(obj.as_ptr()) != 0 {
+                        Ok(std::mem::transmute(obj))
                     } else {
-                        Err(::python::PythonObjectDowncastError::new(
+                        Err(crate::python::PythonObjectDowncastError::new(
                             py,
                             _cpython__objects__stringify!($name),
                             obj.get_type(py)
@@ -110,10 +110,10 @@ macro_rules! pyobject_newtype(
     ($name: ident, $checkfunction: ident, $typeobject: ident) => (
         pyobject_newtype!($name, $checkfunction);
 
-        impl ::python::PythonObjectWithTypeObject for $name {
+        impl crate::python::PythonObjectWithTypeObject for $name {
             #[inline]
-            fn type_object(py: ::python::Python) -> ::objects::typeobject::PyType {
-                unsafe { ::objects::typeobject::PyType::from_type_ptr(py, &mut ::ffi::$typeobject) }
+            fn type_object(py: crate::python::Python) -> crate::objects::typeobject::PyType {
+                unsafe { crate::objects::typeobject::PyType::from_type_ptr(py, &mut crate::ffi::$typeobject) }
             }
         }
     );
@@ -121,7 +121,7 @@ macro_rules! pyobject_newtype(
 
 macro_rules! extract(
     ($obj:ident to $t:ty; $(#[$meta:meta])* $py:ident => $body: block) => {
-        impl <'s> ::conversion::FromPyObject<'s>
+        impl <'s> crate::conversion::FromPyObject<'s>
             for $t
         {
             $(#[$meta])*

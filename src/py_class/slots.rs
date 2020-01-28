@@ -16,18 +16,19 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{PyErr, PyResult};
-use exc;
-use ffi;
-use function::CallbackConverter;
 use libc::{c_char, c_int};
-use objects::PyObject;
-use py_class::CompareOp;
-use python::{Python, PythonObject};
 use std::ffi::CString;
 use std::{isize, mem, ptr};
-use Py_hash_t;
+
+use crate::conversion::ToPyObject;
+use crate::err::{PyErr, PyResult};
+use crate::exc;
+use crate::ffi;
+use crate::function::CallbackConverter;
+use crate::objects::PyObject;
+use crate::py_class::CompareOp;
+use crate::python::{Python, PythonObject};
+use crate::Py_hash_t;
 
 #[macro_export(local_inner_macros)]
 #[doc(hidden)]
@@ -117,7 +118,7 @@ pub unsafe extern "C" fn tp_dealloc_callback<T>(obj: *mut ffi::PyObject)
 where
     T: super::BaseObject,
 {
-    let guard = ::function::AbortOnDrop("Cannot unwind out of tp_dealloc");
+    let guard = crate::function::AbortOnDrop("Cannot unwind out of tp_dealloc");
     let py = Python::assume_gil_acquired();
     let r = T::dealloc(py, obj);
     mem::forget(guard);

@@ -70,7 +70,7 @@ macro_rules! py_class_impl {
             /// Undefined behavior if the input object does not have the expected type.
             #[inline]
             unsafe fn unchecked_downcast_borrow_from<'a>(obj: &'a $crate::PyObject) -> &'a Self {
-                ::std::mem::transmute(obj)
+                std::mem::transmute(obj)
             }
         }
 
@@ -91,7 +91,7 @@ macro_rules! py_class_impl {
             #[inline]
             fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, obj) {
-                    unsafe { Ok(::std::mem::transmute(obj)) }
+                    unsafe { Ok(std::mem::transmute(obj)) }
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
@@ -1512,7 +1512,7 @@ macro_rules! py_class_impl {
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_repr: py_class_unary_slot!($class::__repr__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(::std::marker::PhantomData)),
+                tp_repr: py_class_unary_slot!($class::__repr__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(std::marker::PhantomData)),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
@@ -1685,7 +1685,7 @@ macro_rules! py_class_impl {
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_str: py_class_unary_slot!($class::__str__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(::std::marker::PhantomData)),
+                tp_str: py_class_unary_slot!($class::__str__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(std::marker::PhantomData)),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }

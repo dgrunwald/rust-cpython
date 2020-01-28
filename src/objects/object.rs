@@ -16,14 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use err::PyResult;
-use ffi;
-use objects::PyType;
-use python::{
+use std::{mem, ptr};
+
+use crate::err::PyResult;
+use crate::ffi;
+use crate::objects::PyType;
+use crate::python::{
     Python, PythonObject, PythonObjectDowncastError, PythonObjectWithCheckedDowncast,
     PythonObjectWithTypeObject,
 };
-use std::{mem, ptr};
 
 /// Represents a reference to a Python object.
 ///
@@ -254,9 +255,9 @@ impl PyObject {
     #[inline]
     pub fn extract<'a, T>(&'a self, py: Python) -> PyResult<T>
     where
-        T: ::conversion::FromPyObject<'a>,
+        T: crate::conversion::FromPyObject<'a>,
     {
-        ::conversion::FromPyObject::extract(py, self)
+        crate::conversion::FromPyObject::extract(py, self)
     }
 }
 

@@ -34,12 +34,13 @@ mod py_class_impl3;
 #[doc(hidden)]
 pub mod slots;
 
-use err::{self, PyResult};
-use ffi;
 use libc;
-use objects::{PyModule, PyObject, PyType};
-use python::{self, Python, PythonObject};
 use std::{cell, mem, ptr};
+
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::objects::{PyModule, PyObject, PyType};
+use crate::python::{self, Python, PythonObject};
 
 // TODO: consider moving CompareOp to a different module, so that it isn't exported via two paths
 #[derive(Debug)]

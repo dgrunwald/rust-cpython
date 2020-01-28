@@ -16,13 +16,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+use std::slice;
+
 use super::exc;
 use super::object::PyObject;
-use conversion::{FromPyObject, ToPyObject};
-use err::{self, PyErr, PyResult};
-use ffi::{self, Py_ssize_t};
-use python::{PyDrop, Python, PythonObject, ToPythonPointer};
-use std::slice;
+use crate::conversion::{FromPyObject, ToPyObject};
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi::{self, Py_ssize_t};
+use crate::python::{PyDrop, Python, PythonObject, ToPythonPointer};
 
 /// Represents a Python tuple object.
 pub struct PyTuple(PyObject);
@@ -235,8 +236,8 @@ extract!(obj to NoArgs;
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_len() {

@@ -16,16 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-extern crate num_traits;
+use libc::{c_double, c_long};
+use num_traits::cast::cast;
 
-use self::num_traits::cast::cast;
 use super::exc;
 use super::object::PyObject;
-use conversion::{FromPyObject, ToPyObject};
-use err::{self, PyErr, PyResult};
-use ffi;
-use libc::{c_double, c_long};
-use python::{PyClone, Python, PythonObject};
+use crate::conversion::{FromPyObject, ToPyObject};
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::python::{PyClone, Python, PythonObject};
 
 /// Represents a Python `int` object.
 ///
@@ -338,9 +337,8 @@ extract!(
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use python::{Python, PythonObject};
-    use std;
+    use crate::conversion::ToPyObject;
+    use crate::python::{Python, PythonObject};
 
     macro_rules! num_to_py_object_and_back (
         ($func_name:ident, $t1:ty, $t2:ty) => (

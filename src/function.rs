@@ -16,15 +16,16 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyResult};
-use ffi;
 use libc;
-use objects::{exc, PyDict, PyObject, PyString, PyTuple};
-use python::{PyDrop, Python, PythonObject};
 use std::ffi::{CStr, CString};
 use std::panic;
 use std::{any, io, marker, mem, ptr};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::objects::{exc, PyDict, PyObject, PyString, PyTuple};
+use crate::python::{PyDrop, Python, PythonObject};
 
 #[macro_export(local_inner_macros)]
 #[doc(hidden)]
@@ -51,7 +52,7 @@ macro_rules! py_method_def {
         if !$doc.is_empty() {
             METHOD_DEF.ml_doc = _cpython__concat!($doc, "\0").as_ptr() as *const _;
         }
-        METHOD_DEF.ml_meth = Some(::std::mem::transmute::<
+        METHOD_DEF.ml_meth = Some(std::mem::transmute::<
             $crate::_detail::ffi::PyCFunctionWithKeywords,
             $crate::_detail::ffi::PyCFunction,
         >($wrap));
@@ -169,7 +170,7 @@ pub unsafe fn py_fn_impl(py: Python, method_def: *mut ffi::PyMethodDef) -> PyObj
 pub trait CallbackConverter<S> {
     type R;
 
-    fn convert(S, Python) -> Self::R;
+    fn convert(val: S, py: Python) -> Self::R;
     fn error_value() -> Self::R;
 }
 

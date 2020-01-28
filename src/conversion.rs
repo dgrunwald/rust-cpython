@@ -16,11 +16,10 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use err::PyResult;
-use ffi;
-use objects::PyObject;
-use python::{PyClone, PyDrop, Python, PythonObject, PythonObjectWithCheckedDowncast};
-use std;
+use crate::err::PyResult;
+use crate::ffi;
+use crate::objects::PyObject;
+use crate::python::{PyClone, PyDrop, Python, PythonObject, PythonObjectWithCheckedDowncast};
 
 /// Conversion trait that allows various objects to be converted into Python objects.
 ///

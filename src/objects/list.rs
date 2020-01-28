@@ -17,10 +17,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 use super::object::PyObject;
-use conversion::{FromPyObject, ToPyObject};
-use err::{self, PyErr, PyResult};
-use ffi::{self, Py_ssize_t};
-use python::{PyClone, PyDrop, Python, PythonObject, ToPythonPointer};
+use crate::conversion::{FromPyObject, ToPyObject};
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi::{self, Py_ssize_t};
+use crate::python::{PyClone, PyDrop, Python, PythonObject, ToPythonPointer};
 
 /// Represents a Python `list`.
 pub struct PyList(PyObject);
@@ -181,9 +181,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::PyList;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objects::PyList;
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_len() {

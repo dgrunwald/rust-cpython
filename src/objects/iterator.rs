@@ -16,11 +16,11 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{PyErr, PyResult};
-use ffi;
-use objects::PyObject;
-use python::{Python, PythonObject, PythonObjectDowncastError, ToPythonPointer};
+use crate::conversion::ToPyObject;
+use crate::err::{PyErr, PyResult};
+use crate::ffi;
+use crate::objects::PyObject;
+use crate::python::{Python, PythonObject, PythonObjectDowncastError, ToPythonPointer};
 
 /// A python iterator object.
 ///
@@ -86,9 +86,9 @@ impl<'p> Iterator for PyIterator<'p> {
 
 #[cfg(test)]
 mod tests {
-    use conversion::ToPyObject;
-    use objectprotocol::ObjectProtocol;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objectprotocol::ObjectProtocol;
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn vec_iter() {
