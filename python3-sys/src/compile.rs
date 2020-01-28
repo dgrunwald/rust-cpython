@@ -1,8 +1,9 @@
-use code::*;
 use libc::{c_char, c_int};
-use object::PyObject;
-use pyarena::*;
-use pythonrun::*;
+
+use crate::code::*;
+use crate::object::PyObject;
+use crate::pyarena::*;
+use crate::pythonrun::*;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

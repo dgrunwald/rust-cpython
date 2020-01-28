@@ -1,9 +1,10 @@
 use core::ptr;
 use libc::{c_char, c_int, wchar_t, FILE};
-use object::*;
+
+use crate::object::*;
 #[cfg(not(Py_LIMITED_API))]
-use pyarena::PyArena;
-use pystate::PyThreadState;
+use crate::pyarena::PyArena;
+use crate::pystate::PyThreadState;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

@@ -1,5 +1,5 @@
 // This header is new in Python 3.6
-use object::PyObject;
+use crate::object::PyObject;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

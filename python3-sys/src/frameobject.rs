@@ -1,7 +1,8 @@
-use code::{PyCodeObject, CO_MAXBLOCKS};
 use libc::{c_char, c_int};
-use object::*;
-use pystate::PyThreadState;
+
+use crate::code::{PyCodeObject, CO_MAXBLOCKS};
+use crate::object::*;
+use crate::pystate::PyThreadState;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

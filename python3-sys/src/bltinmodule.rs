@@ -1,4 +1,4 @@
-use object::PyTypeObject;
+use crate::object::PyTypeObject;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
