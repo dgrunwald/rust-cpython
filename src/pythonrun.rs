@@ -20,7 +20,7 @@ use ffi;
 use python::Python;
 use std::{marker, rc, sync};
 
-static START: sync::Once = sync::ONCE_INIT;
+static START: sync::Once = sync::Once::new();
 
 /// Prepares the use of Python in a free-threaded context.
 ///
