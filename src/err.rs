@@ -224,6 +224,8 @@ impl PyErr {
     /// The error is cleared from the Python interpreter.
     /// If no error is set, returns a `SystemError`.
     pub fn fetch(py: Python) -> PyErr {
+        // TODO: Switch to std::mem::MaybeUninit once available.
+        #[allow(deprecated)]
         unsafe {
             let mut ptype: *mut ffi::PyObject = std::mem::uninitialized();
             let mut pvalue: *mut ffi::PyObject = std::mem::uninitialized();

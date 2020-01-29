@@ -118,6 +118,8 @@ impl PyDict {
         // PyDict_Next() is unsafe to use when the dictionary might be changed
         // by other python code.
         let mut vec = Vec::with_capacity(self.len(py));
+        // TODO: Switch to std::mem::MaybeUninit once available.
+        #[allow(deprecated)]
         unsafe {
             let mut pos = 0;
             let mut key: *mut ffi::PyObject = mem::uninitialized();
