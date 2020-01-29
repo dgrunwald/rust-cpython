@@ -42,7 +42,7 @@ use crate::python::{PyClone, Python};
 /// # use cpython::*;
 /// # use std::cell::RefCell;
 /// # use std::slice::Iter;
-/// py_class!(class List |py| {
+/// py_class!(pub class List |py| {
 ///     @shared data rust_vec: Vec<i32>;
 ///
 ///     def __iter__(&self) -> PyResult<ListIterator> {
@@ -54,7 +54,7 @@ use crate::python::{PyClone, Python};
 ///     }
 /// });
 ///
-/// py_class!(class ListIterator |py| {
+/// py_class!(pub class ListIterator |py| {
 ///     data rust_iter: RefCell<UnsafePyLeaked<Iter<'static, i32>>>;
 ///
 ///     def __next__(&self) -> PyResult<Option<PyInt>> {
