@@ -2,7 +2,7 @@
 
 use cpython::{PyObject, PyResult, Python, PyTuple, PyDict, py_module_initializer, py_fn};
 
-py_module_initializer!(hello, inithello, PyInit_hello, |py, m| {
+py_module_initializer!(hello, |py, m| {
     m.add(py, "__doc__", "Module documentation string")?;
     m.add(py, "run", py_fn!(py, run(*args, **kwargs)))?;
     m.add(py, "val", py_fn!(py, val()))?;

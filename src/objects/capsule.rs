@@ -174,11 +174,12 @@ use crate::python::{Python, ToPythonPointer};
 /// #     a + b
 /// # }
 /// # static DATA: CapsData = CapsData{value: 1, fun: add};
-/// py_module_initializer!(somemod, initsomemod, PyInit_somemod, |py, m| {
+/// py_module_initializer!(somemod, |py, m| {
 ///   m.add(py, "__doc__", "A module holding a capsule")?;
 ///   m.add(py, "capsdata", PyCapsule::new_data(py, &DATA, "somemod.capsdata").unwrap())?;
 ///   Ok(())
 /// });
+/// # fn main() {}
 /// ```
 /// Another Rust extension could then declare `CapsData` and use `PyCapsule::import_data` to
 /// fetch it back.

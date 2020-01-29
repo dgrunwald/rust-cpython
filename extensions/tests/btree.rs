@@ -3,7 +3,7 @@
 use cpython::{PyObject, PyResult, py_module_initializer, py_class};
 use std::{cell, cmp, collections};
 
-py_module_initializer!(btree, initbtree, PyInit_btree, |py, m| {
+py_module_initializer!(btree, |py, m| {
     m.add(py, "__doc__", "Rust BTreeSet for Python.")?;
     m.add_class::<BTreeSet>(py)?;
     Ok(())
