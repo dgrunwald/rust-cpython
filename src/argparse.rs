@@ -152,7 +152,7 @@ pub fn parse_args(
 ///   If no type is specified, the parameter implicitly uses
 ///   `&PyObject` (format 1), `&PyTuple` (format 4) or `&PyDict` (format 6).
 ///   If a default value is specified, it must be a compile-time constant
-//    of type `ty`.
+///   of type `ty`.
 ///  * `body`: expression of type `PyResult<_>`.
 ///     The extracted argument values are available in this scope.
 ///
@@ -161,8 +161,9 @@ pub fn parse_args(
 /// the body expression and returns of that evaluation.
 /// If extraction fails, `py_argparse!()` returns a failed `PyResult` without evaluating `body`.
 ///
-/// The `py_argparse!()` macro special-cases reference types (when `ty` starts with a `&` token):
-/// In this case, the macro uses the `RefFromPyObject` trait instead of the `FromPyObject` trait.
+/// The `py_argparse!()` macro special-cases reference types (when `ty` starts with a `&` token)
+/// and optional reference types (when `ty` is of the form `Option<&...>`).
+/// In these cases, the macro uses the `RefFromPyObject` trait instead of the `FromPyObject` trait.
 /// When using at least one reference parameter, the `body` block is placed within a closure,
 /// so `return` statements might behave unexpectedly in this case. (this only affects direct use
 /// of `py_argparse!`; `py_fn!` is unaffected as the body there is always in a separate function
@@ -273,6 +274,16 @@ macro_rules! py_argparse_parse_plist_impl {
             ($($tail)*)
         }
     };
+    // Maybe None simple parameter with reference extraction
+    { $callback:ident $initial_args:tt [ $($output:tt)* ]
+        ( $name:ident : Option<&$t:ty> , $($tail:tt)* )
+    } => {
+        $crate::py_argparse_parse_plist_impl! {
+            $callback $initial_args
+            [ $($output)* { $name: std::option::Option<&$t> = [ {opt} {} {$t} ] } ]
+            ($($tail)*)
+        }
+    };
     // Simple parameter
     { $callback:ident $initial_args:tt [ $($output:tt)* ]
         ( $name:ident : $t:ty , $($tail:tt)* )
@@ -290,6 +301,16 @@ macro_rules! py_argparse_parse_plist_impl {
         $crate::py_argparse_parse_plist_impl! {
             $callback $initial_args
             [ $($output)* { $name:&$crate::PyObject = [ {} {} {} ] } ]
+            ($($tail)*)
+        }
+    };
+    // Maybe None optional parameter with reference extraction
+    { $callback:ident $initial_args:tt [ $($output:tt)* ]
+        ( $name:ident : Option<&$t:ty> = $default:expr , $($tail:tt)* )
+    } => {
+        $crate::py_argparse_parse_plist_impl! {
+            $callback $initial_args
+            [ $($output)* { $name: std::option::Option<&$t> = [ {opt} {$default} {$t} ] } ]
             ($($tail)*)
         }
     };
@@ -392,14 +413,14 @@ pub unsafe fn get_kwargs(py: Python, ptr: *mut ffi::PyObject) -> Option<PyDict> 
 #[doc(hidden)]
 macro_rules! py_argparse_param_description {
     // normal parameter
-    { $pname:ident : $ptype:ty = [ {} {} $rtype:tt ] } => (
+    { $pname:ident : $ptype:ty = [ $info:tt {} $rtype:tt ] } => (
         $crate::argparse::ParamDescription {
             name: stringify!($pname),
             is_optional: false
         }
     );
     // optional parameters
-    { $pname:ident : $ptype:ty = [ {} {$default:expr} {$($rtype:tt)*} ] } => (
+    { $pname:ident : $ptype:ty = [ $info:tt {$default:expr} $rtype:tt ] } => (
         $crate::argparse::ParamDescription {
             name: stringify!($pname),
             is_optional: true
@@ -437,6 +458,24 @@ macro_rules! py_argparse_extract {
             Err(e) => Err(e)
         }
     };
+    // maybe none parameter with reference extraction
+    ( $py:expr, $iter:expr, $body:block,
+        [ { $pname:ident : $ptype:ty = [ {opt} {} {$rtype:ty} ] } $($tail:tt)* ]
+    ) => {{
+        // First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
+        // second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).
+        let v = $iter.next().unwrap().as_ref().unwrap();
+        let mut c = |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]);
+        let r = if v.as_ptr() == unsafe { $crate::_detail::ffi::Py_None() } {
+            Ok(c(None))
+        } else {
+            <$rtype as $crate::RefFromPyObject>::with_extracted($py, v, |r: &$rtype| c(Some(r)))
+        };
+        match r {
+            Ok(v) => v,
+            Err(e) => Err(e)
+        }
+    }};
     // optional parameter
     ( $py:expr, $iter:expr, $body:block,
         [ { $pname:ident : $ptype:ty = [ {} {$default:expr} {} ] } $($tail:tt)* ]
@@ -456,6 +495,16 @@ macro_rules! py_argparse_extract {
             |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
             $default)
     };
+    // maybe none optional parameter with reference extraction
+    ( $py:expr, $iter:expr, $body:block,
+        [ { $pname:ident : $ptype:ty = [ {opt} {$default:expr} {$rtype:ty} ] } $($tail:tt)* ]
+    ) => {{
+        //unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
+        $crate::argparse::with_extracted_optional_or_default($py,
+            $iter.next().unwrap().as_ref(),
+            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
+            $default)
+    }};
 }
 
 #[doc(hidden)] // used in py_argparse_extract!() macro
@@ -474,6 +523,32 @@ where
             Ok(result) => result,
             Err(e) => Err(e),
         },
+        None => f(default),
+    }
+}
+
+#[doc(hidden)] // used in py_argparse_extract!() macro
+pub fn with_extracted_optional_or_default<P: ?Sized, R, F>(
+    py: Python,
+    obj: Option<&PyObject>,
+    f: F,
+    default: Option<&'static P>,
+) -> PyResult<R>
+where
+    F: FnOnce(Option<&P>) -> PyResult<R>,
+    P: RefFromPyObject,
+{
+    match obj {
+        Some(obj) => {
+            if obj.as_ptr() == unsafe { crate::ffi::Py_None() } {
+                f(None)
+            } else {
+                match P::with_extracted(py, obj, |p| f(Some(p))) {
+                    Ok(result) => result,
+                    Err(e) => Err(e),
+                }
+            }
+        }
         None => f(default),
     }
 }

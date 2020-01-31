@@ -532,6 +532,35 @@ fn sequence() {
     py_assert!(py, c, "c['abc'] == 'abc'");
 }
 
+py_class!(class SequenceRef |py| {
+    def __getitem__(&self, key: &str) -> PyResult<String> {
+        if key.is_empty() {
+            return Err(PyErr::new::<exc::IndexError, NoArgs>(py, NoArgs));
+        }
+        Ok(format!("Item for {}", key))
+    }
+
+    def __delitem__(&self, key: &str) -> PyResult<()> {
+        if key.is_empty() {
+            return Err(PyErr::new::<exc::IndexError, NoArgs>(py, NoArgs));
+        }
+        Ok(())
+    }
+});
+
+#[test]
+fn sequence_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = SequenceRef::create_instance(py).unwrap();
+    py_assert!(py, c, "c['abc'] == 'Item for abc'");
+    py_run!(py, c, "del c['abc']");
+    py_expect_exception!(py, c, "c['']", IndexError);
+    py_expect_exception!(py, c, "c[42]", TypeError);
+    py_expect_exception!(py, c, "del c['']", IndexError);
+}
+
 py_class!(class Callable |py| {
     def __call__(&self, arg: i32) -> PyResult<i32> {
         Ok(arg * 6)
@@ -572,6 +601,56 @@ fn setitem() {
     assert_eq!(c.key(py).get(), 1);
     assert_eq!(c.val(py).get(), 2);
     py_expect_exception!(py, c, "del c[1]", NotImplementedError);
+}
+
+py_class!(class SetItemRef |py| {
+    data key: RefCell<String>;
+    data val: Cell<i32>;
+
+    def __setitem__(&self, key: &str, val: i32) -> PyResult<()> {
+        *self.key(py).borrow_mut() = key.to_string();
+        self.val(py).set(val);
+        Ok(())
+    }
+});
+
+#[test]
+fn setitem_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = SetItemRef::create_instance(py, RefCell::new(String::new()), Cell::new(0)).unwrap();
+    py_run!(py, c, "c['foo'] = 100");
+    assert_eq!(*c.key(py).borrow(), "foo");
+    assert_eq!(c.val(py).get(), 100);
+    py_expect_exception!(py, c, "c[None] = 1", TypeError);
+}
+
+py_class!(class SetItemOptRef |py| {
+    data key: RefCell<String>;
+    data val: Cell<i32>;
+
+    def __setitem__(&self, key: Option<&str>, val: i32) -> PyResult<()> {
+        if let Some(key) = key {
+            *self.key(py).borrow_mut() = key.to_string();
+            self.val(py).set(val);
+            Ok(())
+        } else {
+            Err(PyErr::new::<exc::IndexError, NoArgs>(py, NoArgs))
+        }
+    }
+});
+
+#[test]
+fn setitem_opt_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = SetItemOptRef::create_instance(py, RefCell::new(String::new()), Cell::new(0)).unwrap();
+    py_run!(py, c, "c['foo'] = 100");
+    assert_eq!(*c.key(py).borrow(), "foo");
+    assert_eq!(c.val(py).get(), 100);
+    py_expect_exception!(py, c, "c[None] = 1", IndexError);
 }
 
 py_class!(class DelItem |py| {
@@ -650,6 +729,41 @@ fn contains() {
     py_run!(py, c, "assert 1 in c");
     py_run!(py, c, "assert -1 not in c");
     py_run!(py, c, "assert 'wrong type' not in c");
+}
+
+py_class!(class ContainsRef |py| {
+    def __contains__(&self, item: &str) -> PyResult<bool> {
+        Ok(item.is_empty())
+    }
+});
+
+#[test]
+fn contains_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = ContainsRef::create_instance(py).unwrap();
+    py_run!(py, c, "assert '' in c");
+    py_run!(py, c, "assert 'hello' not in c");
+    py_run!(py, c, "assert 42 not in c");
+}
+
+py_class!(class ContainsOptRef |py| {
+    def __contains__(&self, item: Option<&str>) -> PyResult<bool> {
+        Ok(item.map_or(false, str::is_empty))
+    }
+});
+
+#[test]
+fn contains_opt_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = ContainsOptRef::create_instance(py).unwrap();
+    py_run!(py, c, "assert '' in c");
+    py_run!(py, c, "assert 'hello' not in c");
+    py_run!(py, c, "assert 42 not in c");
+    py_run!(py, c, "assert None not in c");
 }
 
 py_class!(class UnaryArithmetic |py| {
@@ -830,6 +944,74 @@ fn rich_comparisons_python_3_type_error() {
     py_expect_exception!(py, c2, "1 >= c2", TypeError);
 }
 
+py_class!(class RichComparisonsRef |py| {
+    def __repr__(&self) -> PyResult<&'static str> {
+        Ok("RCR")
+    }
+
+    def __richcmp__(&self, other: &str, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Lt => Ok("RCR" < other),
+            CompareOp::Le => Ok("RCR" <= other),
+            CompareOp::Eq => Ok("RCR" == other),
+            CompareOp::Ne => Ok("RCR" != other),
+            CompareOp::Gt => Ok("RCR" > other),
+            CompareOp::Ge => Ok("RCR" >= other),
+        }
+    }
+});
+
+#[test]
+fn rich_comparisons_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = RichComparisonsRef::create_instance(py).unwrap();
+    py_assert!(py, c, "c < 'ZZZ'");
+    py_assert!(py, c, "c <= 'ZZZ'");
+    py_assert!(py, c, "c <= 'RCR'");
+    py_assert!(py, c, "c == 'RCR'");
+    py_assert!(py, c, "c != 'RRR'");
+    py_assert!(py, c, "c > 'AAA'");
+    py_assert!(py, c, "c >= 'AAA'");
+    py_assert!(py, c, "c >= 'RCR'");
+}
+
+py_class!(class RichComparisonsOptRef |py| {
+    def __repr__(&self) -> PyResult<&'static str> {
+        Ok("RCR")
+    }
+
+    def __richcmp__(&self, other: Option<&str>, op: CompareOp) -> PyResult<bool> {
+        match other {
+            Some(other) => match op {
+                CompareOp::Lt => Ok("RCR" < other),
+                CompareOp::Le => Ok("RCR" <= other),
+                CompareOp::Eq => Ok("RCR" == other),
+                CompareOp::Ne => Ok("RCR" != other),
+                CompareOp::Gt => Ok("RCR" > other),
+                CompareOp::Ge => Ok("RCR" >= other),
+            },
+            None => match op {
+                CompareOp::Ne | CompareOp::Gt | CompareOp::Ge => Ok(true),
+                CompareOp::Eq | CompareOp::Lt | CompareOp::Le => Ok(false),
+            },
+        }
+    }
+});
+
+#[test]
+fn rich_comparisons_opt_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = RichComparisonsOptRef::create_instance(py).unwrap();
+    py_assert!(py, c, "c != None");
+    py_assert!(py, c, "c == 'RCR'");
+    py_assert!(py, c, "c > None");
+    py_assert!(py, c, "None <= c");
+}
+
 py_class!(class InPlaceOperations |py| {
     data value: Cell<u32>;
 
@@ -937,6 +1119,33 @@ fn inplace_operations() {
         py,
         c,
         "d = c; c ^= 5; assert repr(c) == repr(d) == 'IPO(9)'"
+    );
+}
+
+py_class!(class InPlaceOperationsRef |py| {
+    data value: RefCell<String>;
+
+    def __repr__(&self) -> PyResult<String> {
+        Ok(format!("IPOR({:?})", self.value(py).borrow()))
+    }
+
+    def __iadd__(&self, other: &str) -> PyResult<Self> {
+        let mut value = self.value(py).borrow_mut();
+        value.push_str(other);
+        Ok(self.clone_ref(py))
+    }
+});
+
+#[test]
+fn inplace_operations_ref() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = InPlaceOperationsRef::create_instance(py, RefCell::new(String::new())).unwrap();
+    py_run!(
+        py,
+        c,
+        r#"d = c; c += "hello"; c += ", world"; assert repr(c) == repr(d) == 'IPOR("hello, world")'"#
     );
 }
 
