@@ -47,7 +47,7 @@ base_case = '''
             $gc:tt,
             /* data: */ [ $( { $data_offset:expr, $data_name:ident, $data_ty:ty, $init_expr:expr, $init_ty:ty } )* ]
         }
-        $slots:tt { $( $imp:item )* } $members:tt
+        $slots:tt { $( $imp:item )* } $members:tt $props:tt
     } => {
         $crate::py_coerce_item! {
             $($class_visibility)* struct $class { _unsafe_inner: $crate::PyObject }
@@ -190,7 +190,7 @@ base_case = '''
                     }
 
                     fn init($py: $crate::Python, module_name: Option<&str>) -> $crate::PyResult<$crate::PyType> {
-                        $crate::py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots);
+                        $crate::py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots $props);
                         $crate::py_class_init_members!($class, $py, TYPE_OBJECT, $members);
                         unsafe {
                             if $crate::_detail::ffi::PyType_Ready(&mut TYPE_OBJECT) == 0 {
@@ -250,7 +250,7 @@ slot_groups = (
     ('sdi', 'setdelitem', ['sdi_setitem', 'sdi_delitem'])
 )
 
-def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slots=None, new_members=None):
+def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slots=None, new_members=None, new_props=None):
     write('{ { %s $($tail:tt)* }\n' % pattern)
     write('$class:ident $py:ident')
     if old_info is not None:
@@ -293,6 +293,11 @@ def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slot
         write('\n{ $( $member_name:ident = $member_expr:expr; )* }')
     else:
         write('$members:tt')
+    if new_props:
+        write('\n{ [ $( $prop_doc:tt $prop_getter_name:ident: $prop_type:ty, )* ]')
+        write('\n[ $( $prop_setter_name:ident : $prop_setter_value_type:tt => $prop_setter_setter:ident, )* ] }')
+    else:
+        write('$props:tt')
     write('\n} => { $crate::py_class_impl! {\n')
     write('{ $($tail)* }\n')
     write('$class $py')
@@ -335,6 +340,18 @@ def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slot
         write('}')
     else:
         write('$members')
+    if new_props:
+        getters, setters = new_props
+        write('\n/* props: */ {\n')
+        write('[ $( $prop_doc $prop_getter_name: $prop_type, )*\n')
+        for doc, name, ty in getters:
+            write('{ %s } %s: %s,\n' % (doc, name, ty))
+        write(']\n[ $( $prop_setter_name : $prop_setter_value_type => $prop_setter_setter, )*\n')
+        for name, ty, setter in setters:
+            write('%s : [ %s ] => %s,\n' % (name, ty, setter))
+        write(']\n}\n')
+    else:
+        write('$props')
     write('\n}};\n')
 
 def data_decl():
@@ -552,6 +569,24 @@ def static_method():
 def static_data():
     generate_case('static $name:ident = $init:expr;',
         new_members=[('$name', '$init')])
+
+def property_method():
+    generate_case('$(#[doc=$doc:expr])* @property def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }',
+        new_props=([('concat!($($doc, "\\n"),*)', '$name', '$res_type')], [])
+    )
+    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }',
+        new_props=([], [('$name', 'Option<&$value_type>', '$setter_name')])
+    )
+    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }',
+        new_props=([], [('$name', '&$value_type', '$setter_name')])
+    )
+    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }',
+        new_props=([], [('$name', '$value_type', '$setter_name')])
+    )
 
 macro_end = '''
 }
@@ -867,6 +902,7 @@ def main():
         value_args='$py, $class::$name')
     static_method()
     static_data()
+    property_method()
     print(macro_end)
 
 if __name__ == '__main__':
