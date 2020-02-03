@@ -2,10 +2,21 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.4.1...HEAD
+
+## 0.4.1 - 2020-02-03
+- [link-time inconsistency with build config][135] (original PR by [@svevang] adapted as [202])
+- [missing `pub` classifier][206] in `PySharedRef` example. (PR by [@Alphare])
+- README updates: copyright years, version number in examples
+
+[135]: https://github.com/dgrunwald/rust-cpython/pull/135
+[@svevang]: https://github.com/svevang
+[202]: https://github.com/dgrunwald/rust-cpython/pull/202
+[206]: https://github.com/dgrunwald/rust-cpython/pull/206
+[@Alphare]: https://github.com/Alphare
 
 ## 0.4.0 - 2020-01-27
-- This is planned to be the last version that will support Rust 2015.
+- The 0.4.x series is planned to be the last that will support Rust 2015.
 - Added [Python 3.8][187] support.
 - [Type errors][199] during downcasts now explain what the expected and actual types are. (PR by [@markbt])
 - Data items can now be shared between Python objects (e.g. for iterators) using [`PySharedRef`][189]. (PR by [@yuja])
