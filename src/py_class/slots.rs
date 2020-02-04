@@ -781,7 +781,7 @@ macro_rules! py_class_tp_getset {
     (
         $class:ident,
         {
-            [ $( { $( $doc:tt )* } $getter_name:ident: $prop_type:ty, )* ]
+            [ $( { $doc:expr } $getter_name:ident: $prop_type:ty, )* ]
             [ $( $setter_name:ident: $value_type:tt => $setter_setter:ident, )* ]
         }
     ) => {{
@@ -790,10 +790,10 @@ macro_rules! py_class_tp_getset {
         unsafe {
             static mut GETSET: &mut [$crate::_detail::ffi::PyGetSetDef] = &mut [
                 $($crate::_detail::ffi::PyGetSetDef {
-                    name: concat!(stringify!($getter_name), "\0").as_ptr() as *mut _,
+                    name: 0 as *mut _,
                     get: py_class_prop_getter!($class::$getter_name),
                     set: None,
-                    doc: concat!($( $doc )*, "\0").as_ptr() as *mut _,
+                    doc: 0 as *mut _,
                     closure: 0 as *mut _,
                 },)*
                 $crate::_detail::ffi::PyGetSetDef {
@@ -804,6 +804,14 @@ macro_rules! py_class_tp_getset {
                     closure: 0 as *mut _,
                 }
             ];
+            $(
+                GETSET[$getter_name].name = $crate::strip_raw!(
+                    concat!(stringify!($getter_name), "\0")
+                ).as_ptr() as *mut _;
+                if !$doc.is_empty() {
+                    GETSET[$getter_name].doc = concat!($doc, "\0").as_ptr() as *mut _;
+                }
+            )*
             $(
                 GETSET[$setter_name].set = py_class_prop_setter!($class::$setter_setter, $value_type);
             )*

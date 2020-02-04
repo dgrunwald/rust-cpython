@@ -393,3 +393,17 @@ pub unsafe fn py_module_initializer_impl(
     mem::forget(guard);
     ret
 }
+
+// Strip 'r#' prefix from stringified raw identifiers.
+#[macro_export]
+#[doc(hidden)]
+macro_rules! strip_raw {
+    ($s:expr) => {{
+        let s = $s;
+        if s.starts_with("r#") {
+            &s[2..]
+        } else {
+            s
+        }
+    }};
+}

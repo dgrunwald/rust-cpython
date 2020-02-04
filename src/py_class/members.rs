@@ -63,12 +63,7 @@ macro_rules! py_class_init_members {
             let descriptor = unsafe {
                 $crate::py_class::members::TypeMember::<$class>::into_descriptor(init, $py, &mut $type_object)
             }?;
-            let name = stringify!($name);
-            let name = if name.starts_with("r#") {
-                &name[2..]
-            } else {
-                name
-            };
+            let name = $crate::strip_raw!(stringify!($name));
             dict.set_item($py, name, descriptor)?;
         })*
         unsafe {

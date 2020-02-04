@@ -1229,7 +1229,8 @@ py_class!(class Properties |py| {
         Ok(())
     }
 
-    @property def read_only(&self) -> PyResult<bool> {
+    /// docs for match
+    @property def r#match(&self) -> PyResult<bool> {
         Ok(self.value(py).get() != 0)
     }
 });
@@ -1246,12 +1247,19 @@ fn properties() {
         RefCell::new(String::new()),
     )
     .unwrap();
+
+    py_run!(
+        py,
+        c,
+        "assert 'docs for match' in c.__class__.match.__doc__"
+    );
+
     py_run!(py, c, "assert c.prop == 0");
-    py_run!(py, c, "assert not c.read_only");
+    py_run!(py, c, "assert not c.match");
     py_run!(py, c, "c.prop = 42");
     assert_eq!(c.value(py).get(), 42);
-    py_run!(py, c, "assert c.read_only");
-    assert!(c.read_only(py).unwrap());
+    py_run!(py, c, "assert c.match");
+    assert!(c.r#match(py).unwrap());
 
     py_run!(py, c, "c.prop_by_ref = 'testing'");
     py_run!(py, c, "assert c.prop_by_ref == 'testing'");
