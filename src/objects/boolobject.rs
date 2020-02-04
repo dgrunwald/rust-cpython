@@ -1,8 +1,8 @@
 use super::PyObject;
-use conversion::ToPyObject;
-use err::PyResult;
-use ffi;
-use python::Python;
+use crate::conversion::ToPyObject;
+use crate::err::PyResult;
+use crate::ffi;
+use crate::python::Python;
 
 /// Represents a Python `bool`.
 pub struct PyBool(PyObject);
@@ -23,7 +23,7 @@ impl PyBool {
     /// Gets whether this boolean is `true`.
     #[inline]
     pub fn is_true(&self) -> bool {
-        self.0.as_ptr() == unsafe { ::ffi::Py_True() }
+        self.0.as_ptr() == unsafe { crate::ffi::Py_True() }
     }
 }
 
@@ -63,8 +63,8 @@ extract!(obj to bool;
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_true() {

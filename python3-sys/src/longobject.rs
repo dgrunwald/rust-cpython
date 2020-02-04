@@ -1,6 +1,7 @@
 use libc::{c_char, c_double, c_int, c_long, c_longlong, c_ulong, c_ulonglong, c_void, size_t};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 pub enum PyLongObject {}
 

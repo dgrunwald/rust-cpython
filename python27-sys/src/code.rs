@@ -1,6 +1,7 @@
 use libc::{c_char, c_int, c_void};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -95,5 +96,5 @@ pub unsafe fn PyCode_Check(op: *mut PyObject) -> c_int {
 
 #[inline]
 pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
-    ::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
+    crate::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
 }

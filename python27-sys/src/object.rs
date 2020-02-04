@@ -1,7 +1,8 @@
 use core::ptr;
 use libc::{c_char, c_double, c_int, c_long, c_uint, c_void, FILE};
-use methodobject::PyMethodDef;
-use pyport::Py_ssize_t;
+
+use crate::methodobject::PyMethodDef;
+use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -402,8 +403,8 @@ pub struct PyTypeObject {
     pub tp_iter: Option<getiterfunc>,
     pub tp_iternext: Option<iternextfunc>,
     pub tp_methods: *mut PyMethodDef,
-    pub tp_members: *mut ::structmember::PyMemberDef,
-    pub tp_getset: *mut ::descrobject::PyGetSetDef,
+    pub tp_members: *mut crate::structmember::PyMemberDef,
+    pub tp_getset: *mut crate::descrobject::PyGetSetDef,
     pub tp_base: *mut PyTypeObject,
     pub tp_dict: *mut PyObject,
     pub tp_descr_get: Option<descrgetfunc>,
@@ -474,8 +475,8 @@ pub const PyTypeObject_INIT: PyTypeObject = PyTypeObject {
     tp_iter: None,
     tp_iternext: None,
     tp_methods: 0 as *mut PyMethodDef,
-    tp_members: 0 as *mut ::structmember::PyMemberDef,
-    tp_getset: 0 as *mut ::descrobject::PyGetSetDef,
+    tp_members: 0 as *mut crate::structmember::PyMemberDef,
+    tp_getset: 0 as *mut crate::descrobject::PyGetSetDef,
     tp_base: 0 as *mut PyTypeObject,
     tp_dict: 0 as *mut PyObject,
     tp_descr_get: None,
@@ -527,8 +528,8 @@ pub const PyTypeObject_INIT: PyTypeObject = PyTypeObject {
     tp_iter: None,
     tp_iternext: None,
     tp_methods: 0 as *mut PyMethodDef,
-    tp_members: 0 as *mut ::structmember::PyMemberDef,
-    tp_getset: 0 as *mut ::descrobject::PyGetSetDef,
+    tp_members: 0 as *mut crate::structmember::PyMemberDef,
+    tp_getset: 0 as *mut crate::descrobject::PyGetSetDef,
     tp_base: 0 as *mut PyTypeObject,
     tp_dict: 0 as *mut PyObject,
     tp_descr_get: None,
@@ -578,9 +579,9 @@ impl Clone for PyHeapTypeObject {
 #[inline]
 pub unsafe fn PyHeapType_GET_MEMBERS(
     etype: *mut PyHeapTypeObject,
-) -> *mut ::structmember::PyMemberDef {
+) -> *mut crate::structmember::PyMemberDef {
     let basicsize = (*Py_TYPE(etype as *mut PyObject)).tp_basicsize;
-    (etype as *mut u8).offset(basicsize as isize) as *mut ::structmember::PyMemberDef
+    (etype as *mut u8).offset(basicsize as isize) as *mut crate::structmember::PyMemberDef
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -871,7 +872,7 @@ pub const PyTrash_UNWIND_LEVEL: c_int = 50;
 
 #[inline(always)]
 pub unsafe fn Py_TRASHCAN<F: FnOnce() -> ()>(op: *mut PyObject, body: F) {
-    let tstate = ::pystate::PyThreadState_GET();
+    let tstate = crate::pystate::PyThreadState_GET();
     if tstate.is_null() || (*tstate).trash_delete_nesting < PyTrash_UNWIND_LEVEL {
         if !tstate.is_null() {
             (*tstate).trash_delete_nesting += 1;

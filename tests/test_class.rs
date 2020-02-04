@@ -1,7 +1,5 @@
 #![allow(dead_code, unused_variables)]
 
-extern crate cpython;
-
 use cpython::_detail::ffi;
 use cpython::*;
 use std::cell::{Cell, RefCell};

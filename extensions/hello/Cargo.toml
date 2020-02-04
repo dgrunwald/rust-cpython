@@ -2,6 +2,7 @@
 name = "hello"
 version = "0.4.1"
 authors = ["Daniel Grunwald <daniel@danielgrunwald.de>"]
+edition = "2018"
 
 [lib]
 ## Python extension modules should be compiled as 'cdylib'

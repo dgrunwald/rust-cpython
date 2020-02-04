@@ -1,5 +1,6 @@
 use libc::{c_char, c_int};
-use object::PyObject;
+
+use crate::object::PyObject;
 
 pub const PY_STDIOTEXTMODE: &'static str = "b";
 

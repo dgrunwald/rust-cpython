@@ -16,16 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-extern crate num_traits;
+use libc::{c_double, c_long};
+use num_traits::cast::cast;
 
-use self::num_traits::cast::cast;
 use super::exc;
 use super::object::PyObject;
-use conversion::{FromPyObject, ToPyObject};
-use err::{self, PyErr, PyResult};
-use ffi;
-use libc::{c_double, c_long};
-use python::{PyClone, Python, PythonObject};
+use crate::conversion::{FromPyObject, ToPyObject};
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::python::{PyClone, Python, PythonObject};
 
 /// Represents a Python `int` object.
 ///
@@ -125,20 +124,23 @@ macro_rules! int_fits_c_long(
             }
         }
 
-        /// Converts Python integers to Rust integers.
-        ///
-        /// Returns OverflowError if the input integer does not fit the Rust type;
-        /// or TypeError if the input is not an integer.
-        extract!(obj to $rust_type; py => {
-            let val = unsafe { ffi::PyLong_AsLong(obj.as_ptr()) };
-            if val == -1 && PyErr::occurred(py) {
-                return Err(PyErr::fetch(py));
+        extract!(
+            obj to $rust_type;
+            /// Converts Python integers to Rust integers.
+            ///
+            /// Returns OverflowError if the input integer does not fit the Rust type;
+            /// or TypeError if the input is not an integer.
+            py => {
+                let val = unsafe { ffi::PyLong_AsLong(obj.as_ptr()) };
+                if val == -1 && PyErr::occurred(py) {
+                    return Err(PyErr::fetch(py));
+                }
+                match cast::<c_long, $rust_type>(val) {
+                    Some(v) => Ok(v),
+                    None => Err(overflow_error(py))
+                }
             }
-            match cast::<c_long, $rust_type>(val) {
-                Some(v) => Ok(v),
-                None => Err(overflow_error(py))
-            }
-        });
+        );
     )
 );
 
@@ -155,17 +157,20 @@ macro_rules! int_fits_larger_int(
             }
         }
 
-        /// Converts Python integers to Rust integers.
-        ///
-        /// Returns OverflowError if the input integer does not fit the Rust type;
-        /// or TypeError if the input is not an integer.
-        extract!(obj to $rust_type; py => {
-            let val = obj.extract::<$larger_type>(py)?;
-            match cast::<$larger_type, $rust_type>(val) {
-                Some(v) => Ok(v),
-                None => Err(overflow_error(py))
+        extract!(
+            obj to $rust_type;
+            /// Converts Python integers to Rust integers.
+            ///
+            /// Returns OverflowError if the input integer does not fit the Rust type;
+            /// or TypeError if the input is not an integer.
+            py => {
+                let val = obj.extract::<$larger_type>(py)?;
+                match cast::<$larger_type, $rust_type>(val) {
+                    Some(v) => Ok(v),
+                    None => Err(overflow_error(py))
+                }
             }
-        });
+        );
     )
 );
 
@@ -293,15 +298,18 @@ impl ToPyObject for f64 {
     }
 }
 
-/// Converts Python `float` to Rust `f64`.
-extract!(obj to f64; py => {
-    let v = unsafe { ffi::PyFloat_AsDouble(obj.as_ptr()) };
-    if v == -1.0 && PyErr::occurred(py) {
-        Err(PyErr::fetch(py))
-    } else {
-        Ok(v)
+extract!(
+    obj to f64;
+    /// Converts Python `float` to Rust `f64`.
+    py => {
+        let v = unsafe { ffi::PyFloat_AsDouble(obj.as_ptr()) };
+        if v == -1.0 && PyErr::occurred(py) {
+            Err(PyErr::fetch(py))
+        } else {
+            Ok(v)
+        }
     }
-});
+);
 
 fn overflow_error(py: Python) -> PyErr {
     PyErr::new_lazy_init(py.get_type::<exc::OverflowError>(), None)
@@ -316,19 +324,21 @@ impl ToPyObject for f32 {
     }
 }
 
-/// Converts Python `float` to Rust `f32`.
-///
-/// This conversion loses precision as the 64-bit float from Python gets
-/// converted to a 32-bit float. Out-of-range numbers may also overflow to infinity.
-extract!(obj to f32; py => {
-    Ok(obj.extract::<f64>(py)? as f32)
-});
+extract!(
+    obj to f32;
+    /// Converts Python `float` to Rust `f32`.
+    ///
+    /// This conversion loses precision as the 64-bit float from Python gets
+    /// converted to a 32-bit float. Out-of-range numbers may also overflow to infinity.
+    py => {
+        Ok(obj.extract::<f64>(py)? as f32)
+    }
+);
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use python::{Python, PythonObject};
-    use std;
+    use crate::conversion::ToPyObject;
+    use crate::python::{Python, PythonObject};
 
     macro_rules! num_to_py_object_and_back (
         ($func_name:ident, $t1:ty, $t2:ty) => (

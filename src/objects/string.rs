@@ -16,15 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use super::{exc, PyObject};
-use conversion::{FromPyObject, RefFromPyObject, ToPyObject};
-use err::{self, PyErr, PyResult};
-use ffi;
 use libc::c_char;
-use python::{PyClone, Python, PythonObject, PythonObjectDowncastError, ToPythonPointer};
-use std;
 use std::borrow::Cow;
 use std::{char, mem, str};
+
+use super::{exc, PyObject};
+use crate::conversion::{FromPyObject, RefFromPyObject, ToPyObject};
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::python::{PyClone, Python, PythonObject, PythonObjectDowncastError, ToPythonPointer};
 
 /// Represents a Python string.
 /// Corresponds to `basestring` in Python 2, and `str` in Python 3.
@@ -55,7 +55,7 @@ pyobject_newtype!(PyUnicode, PyUnicode_Check, PyUnicode_Type);
 pub use PyString as PyUnicode;
 
 #[cfg(feature = "python27-sys")]
-impl ::python::PythonObjectWithCheckedDowncast for PyString {
+impl crate::python::PythonObjectWithCheckedDowncast for PyString {
     #[inline]
     fn downcast_from<'p>(
         py: Python<'p>,
@@ -79,9 +79,9 @@ impl ::python::PythonObjectWithCheckedDowncast for PyString {
     ) -> Result<&'a PyString, PythonObjectDowncastError<'p>> {
         unsafe {
             if is_base_string(obj) {
-                Ok(::std::mem::transmute(obj))
+                Ok(std::mem::transmute(obj))
             } else {
-                Err(::python::PythonObjectDowncastError::new(
+                Err(crate::python::PythonObjectDowncastError::new(
                     py,
                     "PyString",
                     obj.get_type(py),
@@ -103,10 +103,12 @@ fn is_base_string(obj: &PyObject) -> bool {
 }
 
 #[cfg(feature = "python27-sys")]
-impl ::python::PythonObjectWithTypeObject for PyString {
+impl crate::python::PythonObjectWithTypeObject for PyString {
     #[inline]
     fn type_object(py: Python) -> super::PyType {
-        unsafe { ::objects::typeobject::PyType::from_type_ptr(py, &mut ::ffi::PyBaseString_Type) }
+        unsafe {
+            crate::objects::typeobject::PyType::from_type_ptr(py, &mut ffi::PyBaseString_Type)
+        }
     }
 }
 
@@ -282,6 +284,8 @@ impl PyString {
     fn data_impl(&self, py: Python) -> PyStringData {
         // TODO: return the original representation instead
         // of forcing the UTF-8 representation to be created.
+        // TODO: Switch to std::mem::MaybeUninit once available.
+        #[allow(deprecated)]
         unsafe {
             let mut size: ffi::Py_ssize_t = mem::uninitialized();
             let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size) as *const u8;
@@ -529,8 +533,8 @@ impl RefFromPyObject for [u8] {
 
 #[cfg(test)]
 mod test {
-    use conversion::{RefFromPyObject, ToPyObject};
-    use python::{Python, PythonObject};
+    use crate::conversion::{RefFromPyObject, ToPyObject};
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_non_bmp() {

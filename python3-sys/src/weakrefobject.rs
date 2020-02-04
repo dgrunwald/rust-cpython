@@ -1,5 +1,6 @@
 use libc::c_int;
-use object::*;
+
+use crate::object::*;
 
 pub enum PyWeakReference {}
 

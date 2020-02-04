@@ -16,12 +16,13 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use ffi;
-use function::AbortOnDrop;
 use libc;
-use objects::PyObject;
-use python::{PyDrop, Python, PythonObject, ToPythonPointer};
 use std::mem;
+
+use crate::ffi;
+use crate::function::AbortOnDrop;
+use crate::objects::PyObject;
+use crate::python::{PyDrop, Python, PythonObject, ToPythonPointer};
 
 // TODO: what's the semantics of the traverse return code?
 // If it's just a normal python exception, we might want to use PyErr instead.

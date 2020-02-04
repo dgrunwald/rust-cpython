@@ -1,7 +1,8 @@
 use core::ptr;
 use libc::{c_char, c_int, c_void};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[inline]
 pub unsafe fn PyObject_DelAttrString(o: *mut PyObject, attr_name: *const c_char) -> c_int {
@@ -135,7 +136,8 @@ extern "C" {
 pub unsafe fn PyIter_Check(o: *mut PyObject) -> c_int {
     (match (*(*o).ob_type).tp_iternext {
         Some(tp_iternext) => {
-            tp_iternext as *const c_void != ::object::_PyObject_NextNotImplemented as *const c_void
+            tp_iternext as *const c_void
+                != crate::object::_PyObject_NextNotImplemented as *const c_void
         }
         None => false,
     }) as c_int

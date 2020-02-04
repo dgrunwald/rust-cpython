@@ -1,6 +1,7 @@
 use core::{mem, ptr};
 use libc::{c_char, c_int};
-use object::{PyObject, PyTypeObject, Py_TYPE};
+
+use crate::object::{PyObject, PyTypeObject, Py_TYPE};
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -19,7 +20,7 @@ pub type PyCFunction =
 pub type _PyCFunctionFast = unsafe extern "C" fn(
     slf: *mut PyObject,
     args: *mut *mut PyObject,
-    nargs: ::pyport::Py_ssize_t,
+    nargs: crate::pyport::Py_ssize_t,
     kwnames: *mut PyObject,
 ) -> *mut PyObject;
 
@@ -27,7 +28,7 @@ pub type _PyCFunctionFast = unsafe extern "C" fn(
 pub type _PyCFunctionFast = unsafe extern "C" fn(
     slf: *mut PyObject,
     args: *const *mut PyObject,
-    nargs: ::pyport::Py_ssize_t,
+    nargs: crate::pyport::Py_ssize_t,
 ) -> *mut PyObject;
 
 pub type PyCFunctionWithKeywords = unsafe extern "C" fn(
@@ -40,7 +41,7 @@ pub type PyCFunctionWithKeywords = unsafe extern "C" fn(
 pub type _PyCFunctionFastWithKeywords = unsafe extern "C" fn(
     slf: *mut PyObject,
     args: *const *mut PyObject,
-    nargs: ::pyport::Py_ssize_t,
+    nargs: crate::pyport::Py_ssize_t,
     kwnames: *mut PyObject,
 ) -> *mut PyObject;
 

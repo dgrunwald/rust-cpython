@@ -1,6 +1,7 @@
 use libc::{c_int, c_long};
-use longobject::PyLongObject;
-use object::*;
+
+use crate::longobject::PyLongObject;
+use crate::object::*;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

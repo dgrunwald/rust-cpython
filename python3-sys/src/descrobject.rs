@@ -1,7 +1,8 @@
 use libc::{c_char, c_int, c_void};
-use methodobject::PyMethodDef;
-use object::{PyObject, PyTypeObject};
-use structmember::PyMemberDef;
+
+use crate::methodobject::PyMethodDef;
+use crate::object::{PyObject, PyTypeObject};
+use crate::structmember::PyMemberDef;
 
 pub type getter = unsafe extern "C" fn(slf: *mut PyObject, closure: *mut c_void) -> *mut PyObject;
 

@@ -16,14 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use err::{self, PyResult};
-use exc;
-use ffi;
 use libc;
-use objects::PyObject;
-use python::{PyDrop, Python};
 use std::ffi::CStr;
 use std::{cell, mem, slice};
+
+use crate::err::{self, PyResult};
+use crate::exc;
+use crate::ffi;
+use crate::objects::PyObject;
+use crate::python::{PyDrop, Python};
 
 /// Allows access to the underlying buffer used by a python object such as `bytes`, `bytearray` or `array.array`.
 pub struct PyBuffer(Box<ffi::Py_buffer>); // use Box<> because Python expects that the Py_buffer struct has a stable memory address
@@ -194,7 +195,7 @@ impl PyBuffer {
         unsafe {
             ffi::PyBuffer_GetPointer(
                 &*self.0 as *const ffi::Py_buffer as *mut ffi::Py_buffer,
-                indices.as_ptr() as *mut usize as *mut ::Py_ssize_t,
+                indices.as_ptr() as *mut usize as *mut crate::Py_ssize_t,
             )
         }
     }
@@ -663,17 +664,16 @@ impl_element!(f64, Float);
 #[cfg(test)]
 mod test {
     use super::PyBuffer;
-    use conversion::ToPyObject;
-    use objectprotocol::ObjectProtocol;
-    use objects::{PyIterator, PyList, PySequence, PyTuple};
-    use python::{PyDrop, Python, PythonObject};
-    use std;
+    use crate::conversion::ToPyObject;
+    use crate::objectprotocol::ObjectProtocol;
+    use crate::objects::{PyIterator, PyList, PySequence, PyTuple};
+    use crate::python::{PyDrop, Python, PythonObject};
 
     #[test]
     fn test_compatible_size() {
         // for the cast in PyBuffer::shape()
         assert_eq!(
-            std::mem::size_of::<::Py_ssize_t>(),
+            std::mem::size_of::<crate::Py_ssize_t>(),
             std::mem::size_of::<usize>()
         );
     }

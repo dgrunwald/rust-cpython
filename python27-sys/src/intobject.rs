@@ -1,6 +1,7 @@
 use libc::{c_char, c_int, c_long, c_ulong, c_ulonglong, size_t};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -36,7 +37,7 @@ extern "C" {
         -> *mut PyObject;
     #[cfg(py_sys_config = "Py_USING_UNICODE")]
     pub fn PyInt_FromUnicode(
-        u: *mut ::unicodeobject::Py_UNICODE,
+        u: *mut crate::unicodeobject::Py_UNICODE,
         length: Py_ssize_t,
         base: c_int,
     ) -> *mut PyObject;

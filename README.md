@@ -16,7 +16,7 @@ Supported Python versions:
 * Python 2.7
 * Python 3.3 to 3.8
 
-Requires Rust 1.30.0 or later.
+Requires Rust 1.32.0 or later.
 
 # Usage
 
@@ -30,8 +30,6 @@ cpython = "0.4"
 #### Example program displaying the value of `sys.version`:
 
 ```rust
-extern crate cpython;
-
 use cpython::{Python, PyDict, PyResult};
 
 fn main() {
@@ -78,13 +76,11 @@ features = ["extension-module"]
 
 **`src/lib.rs`**
 ```rust
-#[macro_use] extern crate cpython;
-
-use cpython::{PyResult, Python};
+use cpython::{PyResult, Python, py_module_initializer, py_fn};
 
 // add bindings to the generated python module
 // N.B: names: "rust2py" must be the name of the `.so` or `.pyd` file
-py_module_initializer!(rust2py, initrust2py, PyInit_rust2py, |py, m| {
+py_module_initializer!(rust2py, |py, m| {
     m.add(py, "__doc__", "This module is implemented in Rust.")?;
     m.add(py, "sum_as_string", py_fn!(py, sum_as_string_py(a: i64, b:i64)))?;
     Ok(())

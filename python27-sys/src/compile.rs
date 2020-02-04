@@ -1,7 +1,8 @@
-use code::*;
 use libc::{c_char, c_int};
-use pyarena::PyArena;
-use pythonrun::*;
+
+use crate::code::*;
+use crate::pyarena::PyArena;
+use crate::pythonrun::*;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

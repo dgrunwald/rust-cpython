@@ -1,7 +1,8 @@
 #[allow(unused_imports)]
 use libc::{c_char, c_int, c_uchar, c_void};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[cfg(Py_3_8)]
 pub enum _PyOpcache {}
@@ -56,7 +57,7 @@ impl Clone for PyCodeObject {
 impl Default for PyCodeObject {
     #[inline]
     fn default() -> Self {
-        unsafe { ::core::mem::zeroed() }
+        unsafe { core::mem::zeroed() }
     }
 }
 
@@ -163,5 +164,5 @@ pub unsafe fn PyCode_Check(op: *mut PyObject) -> c_int {
 
 #[inline]
 pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
-    ::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
+    crate::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
 }

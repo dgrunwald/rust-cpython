@@ -64,8 +64,6 @@
 //!
 //! # Example
 //! ```
-//! extern crate cpython;
-//!
 //! use cpython::{Python, PyDict, PyResult};
 //!
 //! fn main() {
@@ -86,26 +84,29 @@
 //! }
 //! ```
 
-extern crate libc;
+use std::{mem, ptr};
 
 #[cfg(feature = "python27-sys")]
-extern crate python27_sys as ffi;
+pub(crate) use python27_sys as ffi;
 
 #[cfg(feature = "python3-sys")]
-extern crate python3_sys as ffi;
+pub(crate) use python3_sys as ffi;
 
-pub use conversion::{FromPyObject, RefFromPyObject, ToPyObject};
-pub use err::{PyErr, PyResult};
 pub use ffi::Py_ssize_t;
-pub use objectprotocol::ObjectProtocol;
-pub use objects::*;
-pub use py_class::CompareOp;
-pub use python::{
+
+pub use crate::conversion::{FromPyObject, RefFromPyObject, ToPyObject};
+pub use crate::err::{PyErr, PyResult};
+pub use crate::objectprotocol::ObjectProtocol;
+pub use crate::objects::*;
+pub use crate::py_class::CompareOp;
+pub use crate::python::{
     PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError,
     PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject,
 };
-pub use pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
-pub use sharedref::{PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked};
+pub use crate::pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
+pub use crate::sharedref::{
+    PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked,
+};
 
 #[cfg(feature = "python27-sys")]
 #[allow(non_camel_case_types)]
@@ -115,14 +116,12 @@ pub type Py_hash_t = libc::c_long;
 #[allow(non_camel_case_types)]
 pub type Py_hash_t = ffi::Py_hash_t;
 
-use std::{mem, ptr};
-
 /// Constructs a `&'static CStr` literal.
 macro_rules! cstr(
     ($s: tt) => (
         // TODO: verify that $s is a string literal without nuls
         unsafe {
-            ::std::ffi::CStr::from_ptr(concat!($s, "\0").as_ptr() as *const _)
+            std::ffi::CStr::from_ptr(concat!($s, "\0").as_ptr() as *const _)
         }
     );
 );
@@ -219,36 +218,38 @@ mod sharedref;
 #[doc(hidden)]
 pub mod _detail {
     pub mod ffi {
-        pub use ffi::*;
+        pub use crate::ffi::*;
     }
     pub mod libc {
         pub use libc::{c_char, c_int, c_void};
     }
-    pub use err::{from_owned_ptr_or_panic, result_from_owned_ptr};
-    pub use function::{
+    pub use crate::err::{from_owned_ptr_or_panic, result_from_owned_ptr};
+    pub use crate::function::{
         handle_callback, py_fn_impl, AbortOnDrop, PyObjectCallbackConverter,
         PythonObjectCallbackConverter,
     };
+    pub use paste;
 }
 
 /// Expands to an `extern "C"` function that allows Python to load
 /// the rust code as a Python extension module.
 ///
-/// Macro syntax: `py_module_initializer!($name, $py2_init, $py3_init, |$py, $m| $body)`
+/// Macro syntax: `py_module_initializer!($name, |$py, $m| $body)`
 ///
 /// 1. `name`: The module name as a Rust identifier.
-/// 2. `py2_init`: "init" + $name. Necessary because macros can't use concat_idents!().
-/// 3. `py3_init`: "PyInit_" + $name. Necessary because macros can't use concat_idents!().
-/// 4. A lambda of type `Fn(Python, &PyModule) -> PyResult<()>`.
+/// 2. A lambda of type `Fn(Python, &PyModule) -> PyResult<()>`.
 ///    This function will be called when the module is imported, and is responsible
 ///    for adding the module's members.
 ///
+/// For backwards compatibilty with older versions of rust-cpython,
+/// two additional name identifiers (for py2 and py3 initializer names)
+/// can be provided, but they will be ignored.
+///
 /// # Example
 /// ```
-/// #[macro_use] extern crate cpython;
-/// use cpython::{Python, PyResult, PyObject};
+/// use cpython::{Python, PyResult, PyObject, py_module_initializer, py_fn};
 ///
-/// py_module_initializer!(hello, inithello, PyInit_hello, |py, m| {
+/// py_module_initializer!(hello, |py, m| {
 ///     m.add(py, "__doc__", "Module documentation string")?;
 ///     m.add(py, "run", py_fn!(py, run()))?;
 ///     Ok(())
@@ -289,16 +290,18 @@ pub mod _detail {
 #[macro_export]
 #[cfg(feature = "python27-sys")]
 macro_rules! py_module_initializer {
-    ($name: ident, $py2: ident, $py3: ident, |$py_id: ident, $m_id: ident| $body: expr) => {
-        #[no_mangle]
-        #[allow(non_snake_case)]
-        pub unsafe extern "C" fn $py2() {
-            // Nest init function so that $body isn't in unsafe context
-            fn init($py_id: $crate::Python, $m_id: &$crate::PyModule) -> $crate::PyResult<()> {
-                $body
+    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: tt) => {
+        $crate::_detail::paste::item! {
+            #[no_mangle]
+            #[allow(non_snake_case)]
+            pub unsafe extern "C" fn [< init $name >]() {
+                // Nest init function so that $body isn't in unsafe context
+                fn init($py_id: $crate::Python, $m_id: &$crate::PyModule) -> $crate::PyResult<()> {
+                    $body
+                }
+                let name = concat!(stringify!($name), "\0").as_ptr() as *const _;
+                $crate::py_module_initializer_impl(name, init)
             }
-            let name = concat!(stringify!($name), "\0").as_ptr() as *const _;
-            $crate::py_module_initializer_impl(name, init)
         }
     };
 }
@@ -337,20 +340,22 @@ pub unsafe fn py_module_initializer_impl(
 #[macro_export]
 #[cfg(feature = "python3-sys")]
 macro_rules! py_module_initializer {
-    ($name: ident, $py2: ident, $py3: ident, |$py_id: ident, $m_id: ident| $body: expr) => {
-        #[no_mangle]
-        #[allow(non_snake_case)]
-        pub unsafe extern "C" fn $py3() -> *mut $crate::_detail::ffi::PyObject {
-            // Nest init function so that $body isn't in unsafe context
-            fn init($py_id: $crate::Python, $m_id: &$crate::PyModule) -> $crate::PyResult<()> {
-                $body
+    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: tt) => {
+        $crate::_detail::paste::item! {
+            #[no_mangle]
+            #[allow(non_snake_case)]
+            pub unsafe extern "C" fn [< PyInit_ $name >]() -> *mut $crate::_detail::ffi::PyObject {
+                // Nest init function so that $body isn't in unsafe context
+                fn init($py_id: $crate::Python, $m_id: &$crate::PyModule) -> $crate::PyResult<()> {
+                    $body
+                }
+                static mut MODULE_DEF: $crate::_detail::ffi::PyModuleDef =
+                    $crate::_detail::ffi::PyModuleDef_INIT;
+                // We can't convert &'static str to *const c_char within a static initializer,
+                // so we'll do it here in the module initialization:
+                MODULE_DEF.m_name = concat!(stringify!($name), "\0").as_ptr() as *const _;
+                $crate::py_module_initializer_impl(&mut MODULE_DEF, init)
             }
-            static mut MODULE_DEF: $crate::_detail::ffi::PyModuleDef =
-                $crate::_detail::ffi::PyModuleDef_INIT;
-            // We can't convert &'static str to *const c_char within a static initializer,
-            // so we'll do it here in the module initialization:
-            MODULE_DEF.m_name = concat!(stringify!($name), "\0").as_ptr() as *const _;
-            $crate::py_module_initializer_impl(&mut MODULE_DEF, init)
         }
     };
 }

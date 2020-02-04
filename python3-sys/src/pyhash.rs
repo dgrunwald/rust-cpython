@@ -1,5 +1,6 @@
 use libc::{c_char, c_int, c_void};
-use pyport::{Py_hash_t, Py_ssize_t};
+
+use crate::pyport::{Py_hash_t, Py_ssize_t};
 
 #[repr(C)]
 #[derive(Copy)]

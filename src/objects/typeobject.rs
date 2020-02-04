@@ -16,13 +16,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{result_from_owned_ptr, PyResult};
-use ffi;
-use objects::{PyDict, PyObject, PyTuple};
-use python::{Python, PythonObject, ToPythonPointer};
 use std::borrow::Cow;
 use std::ffi::CStr;
+
+use crate::conversion::ToPyObject;
+use crate::err::{result_from_owned_ptr, PyResult};
+use crate::ffi;
+use crate::objects::{PyDict, PyObject, PyTuple};
+use crate::python::{Python, PythonObject, ToPythonPointer};
 
 /// Represents a reference to a Python type object.
 pub struct PyType(PyObject);

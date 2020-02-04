@@ -1,6 +1,7 @@
 use libc;
-use moduleobject::PyModuleDef;
-use object::PyObject;
+
+use crate::moduleobject::PyModuleDef;
+use crate::object::PyObject;
 
 #[cfg(Py_3_6)]
 pub const MAX_CO_EXTRA_USERS: libc::c_int = 255;

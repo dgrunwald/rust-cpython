@@ -16,16 +16,16 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
 use libc::c_char;
-use objectprotocol::ObjectProtocol;
-use objects::{exc, PyDict, PyObject, PyTuple};
-use py_class::PythonObjectFromPyClassMacro;
-use python::{PyDrop, Python, PythonObject};
-use std;
 use std::ffi::{CStr, CString};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objectprotocol::ObjectProtocol;
+use crate::objects::{exc, PyDict, PyObject, PyTuple};
+use crate::py_class::PythonObjectFromPyClassMacro;
+use crate::python::{PyDrop, Python, PythonObject};
 
 /// Represents a Python module object.
 pub struct PyModule(PyObject);
@@ -79,8 +79,22 @@ impl PyModule {
     /// Gets the module filename.
     ///
     /// May fail if the module does not have a `__file__` attribute.
+    #[allow(deprecated)]
     pub fn filename<'a>(&'a self, py: Python) -> PyResult<&'a str> {
         unsafe { self.str_from_ptr(py, ffi::PyModule_GetFilename(self.0.as_ptr())) }
+    }
+
+    /// Gets the module filename object.
+    ///
+    /// May fail if the module does not have a `__file__` attribute.
+    #[cfg(feature = "python3-sys")]
+    pub fn filename_object<'a>(&'a self, py: Python) -> PyResult<PyObject> {
+        let ptr = unsafe { ffi::PyModule_GetFilenameObject(self.0.as_ptr()) };
+        if ptr.is_null() {
+            Err(PyErr::fetch(py))
+        } else {
+            Ok(unsafe { PyObject::from_borrowed_ptr(py, ptr) })
+        }
     }
 
     /// Gets a member from the module.

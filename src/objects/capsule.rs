@@ -1,12 +1,13 @@
 //! Work wih Python capsules
 //!
-use super::object::PyObject;
-use err::{self, PyErr, PyResult};
-use ffi::{PyCapsule_GetPointer, PyCapsule_Import, PyCapsule_New};
 use libc::c_void;
-use python::{Python, ToPythonPointer};
 use std::ffi::{CStr, CString, NulError};
 use std::mem;
+
+use super::object::PyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi::{PyCapsule_GetPointer, PyCapsule_Import, PyCapsule_New};
+use crate::python::{Python, ToPythonPointer};
 
 /// Capsules are the preferred way to export/import C APIs between extension modules,
 /// see [Providing a C API for an Extension Module](https://docs.python.org/3/extending/extending.html#using-capsules).
@@ -31,9 +32,6 @@ use std::mem;
 /// Note: this example is a lower-level version of the [`py_capsule!`] example. Only the
 /// capsule retrieval actually differs.
 /// ```
-/// #[macro_use] extern crate cpython;
-/// extern crate libc;
-///
 /// use cpython::{Python, PyCapsule};
 /// use libc::{c_void, c_char, c_int};
 /// use std::ffi::{CStr, CString};
@@ -133,9 +131,6 @@ use std::mem;
 ///
 ///
 /// ```
-/// extern crate cpython;
-/// extern crate libc;
-///
 /// use libc::{c_void, c_int};
 /// use cpython::{PyCapsule, Python};
 /// use std::ffi::{CStr, CString};
@@ -168,10 +163,8 @@ use std::mem;
 /// Note that in that case, the capsule `name` must be full dotted name of the capsule object,
 /// as we're doing here.
 /// ```
-/// # #[macro_use] extern crate cpython;
-/// # extern crate libc;
 /// # use libc::c_int;
-/// # use cpython::PyCapsule;
+/// # use cpython::{PyCapsule, py_module_initializer};
 /// # #[repr(C)]
 /// # struct CapsData {
 /// #     value: c_int,
@@ -181,11 +174,12 @@ use std::mem;
 /// #     a + b
 /// # }
 /// # static DATA: CapsData = CapsData{value: 1, fun: add};
-/// py_module_initializer!(somemod, initsomemod, PyInit_somemod, |py, m| {
+/// py_module_initializer!(somemod, |py, m| {
 ///   m.add(py, "__doc__", "A module holding a capsule")?;
 ///   m.add(py, "capsdata", PyCapsule::new_data(py, &DATA, "somemod.capsdata").unwrap())?;
 ///   Ok(())
 /// });
+/// # fn main() {}
 /// ```
 /// Another Rust extension could then declare `CapsData` and use `PyCapsule::import_data` to
 /// fetch it back.
@@ -236,10 +230,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// In this case, as with all capsules from the Python standard library, the capsule data
 /// is an array (`static struct`) with constants and function pointers.
 /// ```
-/// #[macro_use] extern crate cpython;
-/// extern crate libc;
-///
-/// use cpython::{Python, PyCapsule};
+/// use cpython::{Python, PyCapsule, py_capsule};
 /// use libc::{c_char, c_int};
 /// use std::ffi::{c_void, CStr, CString};
 /// use std::mem;
@@ -324,10 +315,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 /// In this example, we lend a Python object and receive a new one of which we take ownership.
 ///
 /// ```
-/// #[macro_use] extern crate cpython;
-/// extern crate libc;
-///
-/// use cpython::{PyCapsule, PyObject, PyResult, Python};
+/// use cpython::{PyCapsule, PyObject, PyResult, Python, py_capsule};
 /// use libc::c_void;
 ///
 /// // In the struct, we still have to use c_void for C-level Python objects.
@@ -428,9 +416,7 @@ macro_rules! py_capsule {
 ///
 ///
 /// ```
-/// #[macro_use] extern crate cpython;
-/// extern crate libc;
-/// use cpython::{PyCapsule, Python, FromPyObject};
+/// use cpython::{PyCapsule, Python, FromPyObject, py_capsule_fn};
 /// use libc::{c_int, c_void};
 ///
 /// extern "C" fn inc(a: c_int) -> c_int {
@@ -474,8 +460,7 @@ macro_rules! py_capsule {
 /// In this example, we lend a Python object and receive a new one of which we take ownership.
 ///
 /// ```
-/// #[macro_use] extern crate cpython;
-/// use cpython::{PyCapsule, PyObject, PyResult, Python};
+/// use cpython::{PyCapsule, PyObject, PyResult, Python, py_capsule_fn};
 ///
 /// py_capsule_fn!(from some.mod import capsfn as capsmod
 ///     signature (raw: *mut RawPyObject) -> *mut RawPyObject);
@@ -582,7 +567,6 @@ impl PyCapsule {
     /// can be obtained simply by a simple cast:
     ///
     /// ```
-    /// extern crate libc;
     /// use libc::c_void;
     ///
     /// extern "C" fn inc(a: i32) -> i32 {

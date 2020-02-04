@@ -1,6 +1,7 @@
 use libc::{c_char, c_int, c_void, wchar_t};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[cfg(not(Py_LIMITED_API))]
 #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3 / PEP 393")]

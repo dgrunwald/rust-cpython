@@ -16,11 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use ffi;
-use python::Python;
 use std::{marker, rc, sync};
 
-static START: sync::Once = sync::ONCE_INIT;
+use crate::ffi;
+use crate::python::Python;
+
+static START: sync::Once = sync::Once::new();
 
 /// Prepares the use of Python in a free-threaded context.
 ///
@@ -113,7 +114,7 @@ impl GILGuard {
     /// See [prepare_freethreaded_python()](fn.prepare_freethreaded_python.html) for details.
     pub fn acquire() -> GILGuard {
         if !cfg!(feature = "no-auto-initialize") {
-            ::pythonrun::prepare_freethreaded_python();
+            crate::pythonrun::prepare_freethreaded_python();
         }
         let gstate = unsafe { ffi::PyGILState_Ensure() }; // acquire GIL
         GILGuard {

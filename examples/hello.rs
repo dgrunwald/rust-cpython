@@ -1,5 +1,3 @@
-extern crate cpython;
-
 use cpython::{PyDict, PyResult, Python};
 
 fn main() {

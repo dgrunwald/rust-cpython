@@ -1,6 +1,7 @@
 use libc::{c_char, c_double, c_int, c_long, wchar_t};
-use object::*;
-use pyport::Py_ssize_t;
+
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
 
 #[cfg(py_sys_config = "Py_UNICODE_SIZE_4")]
 pub const Py_UNICODE_SIZE: Py_ssize_t = 4;

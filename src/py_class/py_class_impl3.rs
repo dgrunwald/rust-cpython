@@ -23,7 +23,7 @@
 //       DO NOT MODIFY      !!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#[macro_export(local_inner_macros)]
+#[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_impl {
     // TT muncher macro. Results are accumulated in $info $slots $impls and $members.
@@ -41,12 +41,12 @@ macro_rules! py_class_impl {
         }
         $slots:tt { $( $imp:item )* } $members:tt
     } => {
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             $($class_visibility)* struct $class { _unsafe_inner: $crate::PyObject }
         }
 
-        py_impl_to_py_object_for_python_object!($class);
-        py_impl_from_py_object_for_python_object!($class);
+        $crate::py_impl_to_py_object_for_python_object!($class);
+        $crate::py_impl_from_py_object_for_python_object!($class);
 
         impl $crate::PythonObject for $class {
             #[inline]
@@ -70,7 +70,7 @@ macro_rules! py_class_impl {
             /// Undefined behavior if the input object does not have the expected type.
             #[inline]
             unsafe fn unchecked_downcast_borrow_from<'a>(obj: &'a $crate::PyObject) -> &'a Self {
-                ::std::mem::transmute(obj)
+                std::mem::transmute(obj)
             }
         }
 
@@ -82,7 +82,7 @@ macro_rules! py_class_impl {
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__py_class__py_class_impl__stringify!($class),
+                        stringify!($class),
                         obj.get_type(py),
                     ))
                 }
@@ -91,18 +91,18 @@ macro_rules! py_class_impl {
             #[inline]
             fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, obj) {
-                    unsafe { Ok(::std::mem::transmute(obj)) }
+                    unsafe { Ok(std::mem::transmute(obj)) }
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__py_class__py_class_impl__stringify!($class),
+                        stringify!($class),
                         obj.get_type(py),
                     ))
                 }
             }
         }
 
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             impl $crate::py_class::BaseObject for $class {
                 type InitType = ( $( $init_ty, )* );
 
@@ -129,7 +129,7 @@ macro_rules! py_class_impl {
             }
         }
         $($imp)*
-        py_coerce_item! {
+        $crate::py_coerce_item! {
             impl $class {
                 fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
                     let obj = unsafe {
@@ -141,7 +141,7 @@ macro_rules! py_class_impl {
 
                     // hide statics in create_instance to avoid name conflicts
                     static mut TYPE_OBJECT : $crate::_detail::ffi::PyTypeObject
-                        = py_class_type_object_static_init!($class, $gc, $slots);
+                        = $crate::py_class_type_object_static_init!($class, $gc, $slots);
                     static mut INIT_ACTIVE: bool = false;
 
                     // trait implementations that need direct access to TYPE_OBJECT
@@ -153,7 +153,7 @@ macro_rules! py_class_impl {
                                 } else {
                                     // automatically initialize the class on-demand
                                     <$class as $crate::py_class::PythonObjectFromPyClassMacro>::initialize(py, None)
-                                        .expect(_cpython__py_class__py_class_impl__concat!("An error occurred while initializing class ", _cpython__py_class__py_class_impl__stringify!($class)))
+                                        .expect(concat!("An error occurred while initializing class ", stringify!($class)))
                                 }
                             }
                         }
@@ -165,9 +165,9 @@ macro_rules! py_class_impl {
                                 if $crate::py_class::is_ready(py, &TYPE_OBJECT) {
                                     return Ok($crate::PyType::from_type_ptr(py, &mut TYPE_OBJECT));
                                 }
-                                _cpython__py_class__py_class_impl__assert!(!INIT_ACTIVE,
-                                    _cpython__py_class__py_class_impl__concat!("Reentrancy detected: already initializing class ",
-                                    _cpython__py_class__py_class_impl__stringify!($class)));
+                                assert!(!INIT_ACTIVE,
+                                    concat!("Reentrancy detected: already initializing class ",
+                                    stringify!($class)));
                                 INIT_ACTIVE = true;
                                 let res = init(py, module_name);
                                 INIT_ACTIVE = false;
@@ -177,13 +177,13 @@ macro_rules! py_class_impl {
 
                         fn add_to_module(py: $crate::Python, module: &$crate::PyModule) -> $crate::PyResult<()> {
                             let ty = <$class as $crate::py_class::PythonObjectFromPyClassMacro>::initialize(py, module.name(py).ok())?;
-                            module.add(py, _cpython__py_class__py_class_impl__stringify!($class), ty)
+                            module.add(py, stringify!($class), ty)
                         }
                     }
 
                     fn init($py: $crate::Python, module_name: Option<&str>) -> $crate::PyResult<$crate::PyType> {
-                        py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots);
-                        py_class_init_members!($class, $py, TYPE_OBJECT, $members);
+                        $crate::py_class_type_object_dynamic_init!($class, $py, TYPE_OBJECT, module_name, $slots);
+                        $crate::py_class_init_members!($class, $py, TYPE_OBJECT, $members);
                         unsafe {
                             if $crate::_detail::ffi::PyType_Ready(&mut TYPE_OBJECT) == 0 {
                                 Ok($crate::PyType::from_type_ptr($py, &mut TYPE_OBJECT))
@@ -209,7 +209,7 @@ macro_rules! py_class_impl {
         $slots:tt
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py
         /* info: */ {
@@ -257,7 +257,7 @@ macro_rules! py_class_impl {
         $slots:tt
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py
         /* info: */ {
@@ -309,7 +309,7 @@ macro_rules! py_class_impl {
         $slots:tt
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py
         /* info: */ {
@@ -325,7 +325,7 @@ macro_rules! py_class_impl {
         $slots
         /* impl: */ {
             $($imp)*
-            py_coerce_item!{
+            $crate::py_coerce_item!{
                 impl $class {
                     fn __traverse__(&$slf,
                     $py: $crate::Python,
@@ -345,19 +345,19 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_clear: py_class_tp_clear!($class),
+                tp_clear: $crate::py_class_tp_clear!($class),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_coerce_item!{
+            $crate::py_coerce_item!{
                 impl $class {
                     fn __clear__(&$slf, $py: $crate::Python) $body
                 }
@@ -374,26 +374,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_absolute: py_class_unary_slot!($class::__abs__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_absolute: $crate::py_class_unary_slot!($class::__abs__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __abs__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __abs__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __abs__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __abs__" }
+        $crate::py_error! { "Invalid signature for operator __abs__" }
     };
     { { def __add__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -404,38 +404,38 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_add: py_class_binary_numeric_slot!($class::__add__),
+                nb_add: $crate::py_class_binary_numeric_slot!($class::__add__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __add__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __add__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __add__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __add__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __add__" }
     };
 
     { { def __aenter__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__aenter__ is not supported by py_class! yet." }
+        $crate::py_error! { "__aenter__ is not supported by py_class! yet." }
     };
 
     { { def __aexit__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__aexit__ is not supported by py_class! yet." }
+        $crate::py_error! { "__aexit__ is not supported by py_class! yet." }
     };
 
     { { def __aiter__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__aiter__ is not supported by py_class! yet." }
+        $crate::py_error! { "__aiter__ is not supported by py_class! yet." }
     };
     { { def __and__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -446,30 +446,30 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_and: py_class_binary_numeric_slot!($class::__and__),
+                nb_and: $crate::py_class_binary_numeric_slot!($class::__and__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __and__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __and__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __and__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __and__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __and__" }
     };
 
     { { def __await__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__await__ is not supported by py_class! yet." }
+        $crate::py_error! { "__await__ is not supported by py_class! yet." }
     };
     { { def __bool__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -480,26 +480,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_bool: py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
+                nb_bool: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __bool__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __bool__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __bool__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __bool__" }
+        $crate::py_error! { "Invalid signature for operator __bool__" }
     };
     { {  def __call__ (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -509,19 +509,19 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_call: py_class_call_slot!{$class::__call__ []},
+                tp_call: $crate::py_class_call_slot!{$class::__call__ []},
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __call__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __call__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
@@ -533,19 +533,19 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_call: py_argparse_parse_plist_impl!{py_class_call_slot {$class::__call__} [] ($($p)+,)},
+                tp_call: $crate::py_argparse_parse_plist_impl!{py_class_call_slot {$class::__call__} [] ($($p)+,)},
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_argparse_parse_plist_impl!{
+            $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, __call__(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
@@ -554,15 +554,15 @@ macro_rules! py_class_impl {
     }};
 
     { { def __cmp__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__cmp__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__cmp__ is not supported by py_class! use __richcmp__ instead." }
     };
 
     { { def __coerce__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__coerce__ is not supported by py_class! yet." }
+        $crate::py_error! { "__coerce__ is not supported by py_class! yet." }
     };
 
     { { def __complex__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__complex__ is not supported by py_class! yet." }
+        $crate::py_error! { "__complex__ is not supported by py_class! yet." }
     };
     { { def __contains__(&$slf:ident, $item:ident : $item_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -573,38 +573,38 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots $as_number
             /* as_sequence */ [
                 $( $sq_slot_name : $sq_slot_value, )*
-                sq_contains: py_class_contains_slot!($class::__contains__, $item_type),
+                sq_contains: $crate::py_class_contains_slot!($class::__contains__, $item_type),
             ]
             $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_type = {} }] }
         }
         $members
     }};
 
     { { def __contains__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __contains__" }
+        $crate::py_error! { "Invalid signature for operator __contains__" }
     };
 
     { { def __del__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__del__ is not supported by py_class!; Use a data member with a Drop impl instead." }
+        $crate::py_error! { "__del__ is not supported by py_class!; Use a data member with a Drop impl instead." }
     };
 
     { { def __delattr__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__delattr__ is not supported by py_class! yet." }
+        $crate::py_error! { "__delattr__ is not supported by py_class! yet." }
     };
 
     { { def __delete__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__delete__ is not supported by py_class! yet." }
+        $crate::py_error! { "__delete__ is not supported by py_class! yet." }
     };
     { { def __delitem__(&$slf:ident, $key:ident : $key_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -617,65 +617,65 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots $as_number $as_sequence $as_mapping
             /* setdelitem */ [
                 sdi_setitem: $sdi_setitem_slot_value,
-                sdi_delitem: { py_class_binary_slot!($class::__delitem__, $key_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_delitem: { $crate::py_class_binary_slot!($class::__delitem__, $key_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
             ]
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
         }
         $members
     }};
 
     { { def __delitem__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __delitem__" }
+        $crate::py_error! { "Invalid signature for operator __delitem__" }
     };
 
     { { def __dir__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__dir__ is not supported by py_class! yet." }
+        $crate::py_error! { "__dir__ is not supported by py_class! yet." }
     };
 
     { { def __div__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__div__ is not supported by py_class! yet." }
+        $crate::py_error! { "__div__ is not supported by py_class! yet." }
     };
 
     { { def __divmod__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__divmod__ is not supported by py_class! yet." }
+        $crate::py_error! { "__divmod__ is not supported by py_class! yet." }
     };
 
     { { def __eq__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__eq__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__eq__ is not supported by py_class! use __richcmp__ instead." }
     };
 
     { { def __float__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__float__ is not supported by py_class! yet." }
+        $crate::py_error! { "__float__ is not supported by py_class! yet." }
     };
 
     { { def __floordiv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__floordiv__ is not supported by py_class! yet." }
+        $crate::py_error! { "__floordiv__ is not supported by py_class! yet." }
     };
 
     { { def __ge__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__ge__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__ge__ is not supported by py_class! use __richcmp__ instead." }
     };
 
     { { def __get__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__get__ is not supported by py_class! yet." }
+        $crate::py_error! { "__get__ is not supported by py_class! yet." }
     };
 
     { { def __getattr__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__getattr__ is not supported by py_class! yet." }
+        $crate::py_error! { "__getattr__ is not supported by py_class! yet." }
     };
 
     { { def __getattribute__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__getattribute__ is not supported by py_class! yet." }
+        $crate::py_error! { "__getattribute__ is not supported by py_class! yet." }
     };
     { { def __getitem__(&$slf:ident, $key:ident : $key_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -687,7 +687,7 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
@@ -698,23 +698,23 @@ macro_rules! py_class_impl {
             ]
             /* as_mapping */ [
                 $( $mp_slot_name : $mp_slot_value, )*
-                mp_subscript: py_class_binary_slot!($class::__getitem__, $key_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                mp_subscript: $crate::py_class_binary_slot!($class::__getitem__, $key_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
         }
         $members
     }};
 
     { { def __getitem__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __getitem__" }
+        $crate::py_error! { "Invalid signature for operator __getitem__" }
     };
 
     { { def __gt__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__gt__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__gt__ is not supported by py_class! use __richcmp__ instead." }
     };
     { { def __hash__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -724,25 +724,25 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_hash: py_class_unary_slot!($class::__hash__, $crate::Py_hash_t, $crate::py_class::slots::HashConverter),
+                tp_hash: $crate::py_class_unary_slot!($class::__hash__, $crate::Py_hash_t, $crate::py_class::slots::HashConverter),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __hash__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __hash__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __hash__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __hash__" }
+        $crate::py_error! { "Invalid signature for operator __hash__" }
     };
     { { def __iadd__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -753,26 +753,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_add: py_class_binary_slot!($class::__iadd__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_add: $crate::py_class_binary_slot!($class::__iadd__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __iadd__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __iadd__" }
+        $crate::py_error! { "Invalid signature for operator __iadd__" }
     };
     { { def __iand__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -783,30 +783,30 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_and: py_class_binary_slot!($class::__iand__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_and: $crate::py_class_binary_slot!($class::__iand__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __iand__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __iand__" }
+        $crate::py_error! { "Invalid signature for operator __iand__" }
     };
 
     { { def __idiv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__idiv__ is not supported by py_class! yet." }
+        $crate::py_error! { "__idiv__ is not supported by py_class! yet." }
     };
     { { def __ifloordiv__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -817,26 +817,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_floor_divide: py_class_binary_slot!($class::__ifloordiv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_floor_divide: $crate::py_class_binary_slot!($class::__ifloordiv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __ifloordiv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __ifloordiv__" }
+        $crate::py_error! { "Invalid signature for operator __ifloordiv__" }
     };
     { { def __ilshift__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -847,26 +847,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_lshift: py_class_binary_slot!($class::__ilshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_lshift: $crate::py_class_binary_slot!($class::__ilshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __ilshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __ilshift__" }
+        $crate::py_error! { "Invalid signature for operator __ilshift__" }
     };
     { { def __imatmul__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -877,26 +877,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_matrix_multiply: py_class_binary_slot!($class::__imatmul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_matrix_multiply: $crate::py_class_binary_slot!($class::__imatmul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __imatmul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __imatmul__" }
+        $crate::py_error! { "Invalid signature for operator __imatmul__" }
     };
     { { def __imod__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -907,26 +907,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_remainder: py_class_binary_slot!($class::__imod__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_remainder: $crate::py_class_binary_slot!($class::__imod__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __imod__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __imod__" }
+        $crate::py_error! { "Invalid signature for operator __imod__" }
     };
     { { def __imul__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -937,42 +937,42 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_multiply: py_class_binary_slot!($class::__imul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_multiply: $crate::py_class_binary_slot!($class::__imul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __imul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __imul__" }
+        $crate::py_error! { "Invalid signature for operator __imul__" }
     };
 
     { { def __index__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__index__ is not supported by py_class! yet." }
+        $crate::py_error! { "__index__ is not supported by py_class! yet." }
     };
 
     { { def __init__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__init__ is not supported by py_class!; use __new__ instead." }
+        $crate::py_error! { "__init__ is not supported by py_class!; use __new__ instead." }
     };
 
     { { def __instancecheck__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__instancecheck__ is not supported by py_class! yet." }
+        $crate::py_error! { "__instancecheck__ is not supported by py_class! yet." }
     };
 
     { { def __int__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__int__ is not supported by py_class! yet." }
+        $crate::py_error! { "__int__ is not supported by py_class! yet." }
     };
     { { def __invert__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -983,26 +983,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_invert: py_class_unary_slot!($class::__invert__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_invert: $crate::py_class_unary_slot!($class::__invert__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __invert__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __invert__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __invert__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __invert__" }
+        $crate::py_error! { "Invalid signature for operator __invert__" }
     };
     { { def __ior__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1013,30 +1013,30 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_or: py_class_binary_slot!($class::__ior__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_or: $crate::py_class_binary_slot!($class::__ior__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __ior__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __ior__" }
+        $crate::py_error! { "Invalid signature for operator __ior__" }
     };
 
     { { def __ipow__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__ipow__ is not supported by py_class! yet." }
+        $crate::py_error! { "__ipow__ is not supported by py_class! yet." }
     };
     { { def __irshift__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1047,26 +1047,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_rshift: py_class_binary_slot!($class::__irshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_rshift: $crate::py_class_binary_slot!($class::__irshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __irshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __irshift__" }
+        $crate::py_error! { "Invalid signature for operator __irshift__" }
     };
     { { def __isub__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1077,26 +1077,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_subtract: py_class_binary_slot!($class::__isub__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_subtract: $crate::py_class_binary_slot!($class::__isub__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __isub__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __isub__" }
+        $crate::py_error! { "Invalid signature for operator __isub__" }
     };
     { { def __iter__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1106,25 +1106,25 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_iter: py_class_unary_slot!($class::__iter__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                tp_iter: $crate::py_class_unary_slot!($class::__iter__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __iter__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __iter__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __iter__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __iter__" }
+        $crate::py_error! { "Invalid signature for operator __iter__" }
     };
     { { def __itruediv__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1135,26 +1135,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_true_divide: py_class_binary_slot!($class::__itruediv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_true_divide: $crate::py_class_binary_slot!($class::__itruediv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __itruediv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __itruediv__" }
+        $crate::py_error! { "Invalid signature for operator __itruediv__" }
     };
     { { def __ixor__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1165,30 +1165,30 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_xor: py_class_binary_slot!($class::__ixor__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_xor: $crate::py_class_binary_slot!($class::__ixor__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
         }
         $members
     }};
 
     { { def __ixor__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __ixor__" }
+        $crate::py_error! { "Invalid signature for operator __ixor__" }
     };
 
     { { def __le__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__le__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__le__ is not supported by py_class! use __richcmp__ instead." }
     };
     { { def __len__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1200,14 +1200,14 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots $as_number
             /* as_sequence */ [
                 $( $sq_slot_name : $sq_slot_value, )*
-                sq_length: py_class_unary_slot!($class::__len__, $crate::_detail::ffi::Py_ssize_t, $crate::py_class::slots::LenResultConverter),
+                sq_length: $crate::py_class_unary_slot!($class::__len__, $crate::_detail::ffi::Py_ssize_t, $crate::py_class::slots::LenResultConverter),
             ]
             /* as_mapping */ [
                 $( $mp_slot_name : $mp_slot_value, )*
@@ -1217,17 +1217,17 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __len__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __len__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __len__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __len__" }
+        $crate::py_error! { "Invalid signature for operator __len__" }
     };
 
     { { def __long__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__long__ is not supported by py_class! yet." }
+        $crate::py_error! { "__long__ is not supported by py_class! yet." }
     };
     { { def __lshift__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1238,38 +1238,38 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_lshift: py_class_binary_numeric_slot!($class::__lshift__),
+                nb_lshift: $crate::py_class_binary_numeric_slot!($class::__lshift__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __lshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __lshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __lshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __lshift__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __lshift__" }
     };
 
     { { def __lt__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__lt__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__lt__ is not supported by py_class! use __richcmp__ instead." }
     };
 
     { { def __matmul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__matmul__ is not supported by py_class! yet." }
+        $crate::py_error! { "__matmul__ is not supported by py_class! yet." }
     };
 
     { { def __mod__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__mod__ is not supported by py_class! yet." }
+        $crate::py_error! { "__mod__ is not supported by py_class! yet." }
     };
     { { def __mul__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1280,30 +1280,30 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_multiply: py_class_binary_numeric_slot!($class::__mul__),
+                nb_multiply: $crate::py_class_binary_numeric_slot!($class::__mul__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __mul__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __mul__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __mul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __mul__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __mul__" }
     };
 
     { { def __ne__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__ne__ is not supported by py_class! use __richcmp__ instead." }
+        $crate::py_error! { "__ne__ is not supported by py_class! use __richcmp__ instead." }
     };
     { { def __neg__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1314,26 +1314,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_negative: py_class_unary_slot!($class::__neg__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_negative: $crate::py_class_unary_slot!($class::__neg__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __neg__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __neg__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __neg__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __neg__" }
+        $crate::py_error! { "Invalid signature for operator __neg__" }
     };
     { {  def __new__ ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1343,19 +1343,19 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_new: py_class_wrap_newfunc!{$class::__new__ []},
+                tp_new: $crate::py_class_wrap_newfunc!{$class::__new__ []},
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py,__new__($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py,__new__($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
         }
         $members
     }};
@@ -1367,19 +1367,19 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_new: py_argparse_parse_plist_impl!{py_class_wrap_newfunc {$class::__new__} [] ($($p)+,)},
+                tp_new: $crate::py_argparse_parse_plist_impl!{py_class_wrap_newfunc {$class::__new__} [] ($($p)+,)},
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_argparse_parse_plist_impl!{
+            $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
@@ -1394,29 +1394,29 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_iternext: py_class_unary_slot!($class::__next__, *mut $crate::_detail::ffi::PyObject, $crate::py_class::slots::IterNextResultConverter),
+                tp_iternext: $crate::py_class_unary_slot!($class::__next__, *mut $crate::_detail::ffi::PyObject, $crate::py_class::slots::IterNextResultConverter),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __next__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __next__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __next__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __next__" }
+        $crate::py_error! { "Invalid signature for operator __next__" }
     };
 
     { { def __nonzero__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__nonzero__ is not supported by py_class!; use the Python 3 spelling __bool__ instead." }
+        $crate::py_error! { "__nonzero__ is not supported by py_class!; use the Python 3 spelling __bool__ instead." }
     };
     { { def __or__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1427,26 +1427,26 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_or: py_class_binary_numeric_slot!($class::__or__),
+                nb_or: $crate::py_class_binary_numeric_slot!($class::__or__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __or__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __or__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __or__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __or__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __or__" }
     };
     { { def __pos__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1457,46 +1457,46 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_positive: py_class_unary_slot!($class::__pos__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_positive: $crate::py_class_unary_slot!($class::__pos__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __pos__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __pos__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __pos__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __pos__" }
+        $crate::py_error! { "Invalid signature for operator __pos__" }
     };
 
     { { def __pow__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__pow__ is not supported by py_class! yet." }
+        $crate::py_error! { "__pow__ is not supported by py_class! yet." }
     };
 
     { { def __radd__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __radd__ is not supported by py_class! Use __add__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __radd__ is not supported by py_class! Use __add__ instead!" }
     };
 
     { { def __rand__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rand__ is not supported by py_class! Use __and__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rand__ is not supported by py_class! Use __and__ instead!" }
     };
 
     { { def __rdiv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rdiv__ is not supported by py_class! Use __div__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rdiv__ is not supported by py_class! Use __div__ instead!" }
     };
 
     { { def __rdivmod__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rdivmod__ is not supported by py_class! Use __divmod__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rdivmod__ is not supported by py_class! Use __divmod__ instead!" }
     };
     { { def __repr__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1506,29 +1506,29 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_repr: py_class_unary_slot!($class::__repr__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(::std::marker::PhantomData)),
+                tp_repr: $crate::py_class_unary_slot!($class::__repr__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(std::marker::PhantomData)),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __repr__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __repr__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __repr__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __repr__" }
+        $crate::py_error! { "Invalid signature for operator __repr__" }
     };
 
     { { def __rfloordiv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rfloordiv__ is not supported by py_class! Use __floordiv__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rfloordiv__ is not supported by py_class! Use __floordiv__ instead!" }
     };
     { { def __richcmp__(&$slf:ident, $other:ident : $other_type:ty, $op:ident : $op_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1538,57 +1538,57 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_richcompare: py_class_richcompare_slot!($class::__richcmp__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                tp_richcompare: $crate::py_class_richcompare_slot!($class::__richcmp__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} } { $op : $op_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} } { $op : $op_type = {} }] }
         }
         $members
     }};
 
     { { def __richcmp__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __richcmp__" }
+        $crate::py_error! { "Invalid signature for operator __richcmp__" }
     };
 
     { { def __rlshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rlshift__ is not supported by py_class! Use __lshift__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rlshift__ is not supported by py_class! Use __lshift__ instead!" }
     };
 
     { { def __rmatmul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rmatmul__ is not supported by py_class! Use __matmul__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rmatmul__ is not supported by py_class! Use __matmul__ instead!" }
     };
 
     { { def __rmod__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rmod__ is not supported by py_class! Use __mod__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rmod__ is not supported by py_class! Use __mod__ instead!" }
     };
 
     { { def __rmul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rmul__ is not supported by py_class! Use __mul__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rmul__ is not supported by py_class! Use __mul__ instead!" }
     };
 
     { { def __ror__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __ror__ is not supported by py_class! Use __or__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __ror__ is not supported by py_class! Use __or__ instead!" }
     };
 
     { { def __round__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__round__ is not supported by py_class! yet." }
+        $crate::py_error! { "__round__ is not supported by py_class! yet." }
     };
 
     { { def __rpow__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rpow__ is not supported by py_class! Use __pow__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rpow__ is not supported by py_class! Use __pow__ instead!" }
     };
 
     { { def __rrshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rrshift__ is not supported by py_class! Use __rshift__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rrshift__ is not supported by py_class! Use __rshift__ instead!" }
     };
     { { def __rshift__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1599,46 +1599,46 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_rshift: py_class_binary_numeric_slot!($class::__rshift__),
+                nb_rshift: $crate::py_class_binary_numeric_slot!($class::__rshift__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __rshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __rshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __rshift__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __rshift__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __rshift__" }
     };
 
     { { def __rsub__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rsub__ is not supported by py_class! Use __sub__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rsub__ is not supported by py_class! Use __sub__ instead!" }
     };
 
     { { def __rtruediv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rtruediv__ is not supported by py_class! Use __truediv__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rtruediv__ is not supported by py_class! Use __truediv__ instead!" }
     };
 
     { { def __rxor__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Reflected numeric operator __rxor__ is not supported by py_class! Use __xor__ instead!" }
+        $crate::py_error! { "Reflected numeric operator __rxor__ is not supported by py_class! Use __xor__ instead!" }
     };
 
     { { def __set__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__set__ is not supported by py_class! yet." }
+        $crate::py_error! { "__set__ is not supported by py_class! yet." }
     };
 
     { { def __setattr__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__setattr__ is not supported by py_class! yet." }
+        $crate::py_error! { "__setattr__ is not supported by py_class! yet." }
     };
     { { def __setitem__(&$slf:ident, $key:ident : $key_type:ty, $value:ident : $value_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1651,25 +1651,25 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots $as_number $as_sequence $as_mapping
             /* setdelitem */ [
-                sdi_setitem: { py_class_ternary_slot!($class::__setitem__, $key_type, $value_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_setitem: { $crate::py_class_ternary_slot!($class::__setitem__, $key_type, $value_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
                 sdi_delitem: $sdi_delitem_slot_value,
             ]
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} } { $value : $value_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} } { $value : $value_type = {} }] }
         }
         $members
     }};
 
     { { def __setitem__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __setitem__" }
+        $crate::py_error! { "Invalid signature for operator __setitem__" }
     };
     { { def __str__(&$slf:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1679,25 +1679,25 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_str: py_class_unary_slot!($class::__str__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(::std::marker::PhantomData)),
+                tp_str: $crate::py_class_unary_slot!($class::__str__, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PythonObjectCallbackConverter::<$crate::PyString>(std::marker::PhantomData)),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __str__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, __str__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
     }};
 
     { { def __str__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for operator __str__" }
+        $crate::py_error! { "Invalid signature for operator __str__" }
     };
     { { def __sub__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1708,34 +1708,34 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_subtract: py_class_binary_numeric_slot!($class::__sub__),
+                nb_subtract: $crate::py_class_binary_numeric_slot!($class::__sub__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __sub__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __sub__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __sub__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __sub__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __sub__" }
     };
 
     { { def __subclasscheck__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__subclasscheck__ is not supported by py_class! yet." }
+        $crate::py_error! { "__subclasscheck__ is not supported by py_class! yet." }
     };
 
     { { def __truediv__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "__truediv__ is not supported by py_class! yet." }
+        $crate::py_error! { "__truediv__ is not supported by py_class! yet." }
     };
     { { def __xor__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
@@ -1746,107 +1746,107 @@ macro_rules! py_class_impl {
         }
         { $( $imp:item )* }
         $members:tt
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info
         /* slots: */ {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_xor: py_class_binary_numeric_slot!($class::__xor__),
+                nb_xor: $crate::py_class_binary_numeric_slot!($class::__xor__),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, __xor__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, __xor__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members
     }};
 
     { { def __xor__ $($tail:tt)* } $( $stuff:tt )* } => {
-        py_error! { "Invalid signature for binary numeric operator __xor__" }
+        $crate::py_error! { "Invalid signature for binary numeric operator __xor__" }
     };
     { { $(#[doc=$doc:expr])* def $name:ident (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
-            $name = py_class_instance_method!{$py, $class::$name, { _cpython__py_class__py_class_impl__concat!($($doc, "\n"),*) } []};
+            $name = $crate::py_class_instance_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
         }
     }};
     { { $(#[doc=$doc:expr])* def $name:ident (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            py_argparse_parse_plist_impl!{
+            $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, $name(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
-            $name = py_argparse_parse_plist_impl!{py_class_instance_method {$py, $class::$name, { _cpython__py_class__py_class_impl__concat!($($doc, "\n"),*) }} [] ($($p)+,)};
+            $name = $crate::py_argparse_parse_plist_impl!{py_class_instance_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
         }
     }};
     { { $(#[doc=$doc:expr])*@classmethod def $name:ident ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            py_class_impl_item! { $class, $py,$name($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py,$name($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
-            $name = py_class_class_method!{$py, $class::$name, { _cpython__py_class__py_class_impl__concat!($($doc, "\n"),*) } []};
+            $name = $crate::py_class_class_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
         }
     }};
     { { $(#[doc=$doc:expr])*@classmethod def $name:ident ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            py_argparse_parse_plist_impl!{
+            $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, $name($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
-            $name = py_argparse_parse_plist_impl!{py_class_class_method {$py, $class::$name, { _cpython__py_class__py_class_impl__concat!($($doc, "\n"),*) }} [] ($($p)+,)};
+            $name = $crate::py_argparse_parse_plist_impl!{py_class_class_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
         }
     }};
     { { $(#[doc=$doc:expr])* @staticmethod def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            py_argparse_parse_plist!{
+            $crate::py_argparse_parse_plist!{
                 py_class_impl_item { $class, $py, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
@@ -1854,9 +1854,9 @@ macro_rules! py_class_impl {
         /* members: */ {
             $( $member_name = $member_expr; )*
             $name = 
-            py_argparse_parse_plist!{
+            $crate::py_argparse_parse_plist!{
                 py_class_static_method {$py, $class::$name, {
-                    _cpython__py_class__py_class_impl__concat!($($doc, "\n"),*)
+                    concat!($($doc, "\n"),*)
                     } }
                 ($($p)*)
             }
@@ -1866,7 +1866,7 @@ macro_rules! py_class_impl {
     { { static $name:ident = $init:expr; $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt $impls:tt
         { $( $member_name:ident = $member_expr:expr; )* }
-    } => { py_class_impl! {
+    } => { $crate::py_class_impl! {
         { $($tail)* }
         $class $py $info $slots $impls
         /* members: */ {
@@ -1875,29 +1875,5 @@ macro_rules! py_class_impl {
         }
     }};
 
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__concat {
-    ($($inner:tt)*) => {
-        concat! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__py_class__py_class_impl__assert {
-    ($($inner:tt)*) => {
-        assert! { $($inner)* }
-    }
 }
 

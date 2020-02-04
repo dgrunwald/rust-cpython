@@ -16,12 +16,13 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
-use objects::{PyList, PyObject};
-use python::{Python, PythonObject};
 use std::{cmp, collections, hash, mem};
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objects::{PyList, PyObject};
+use crate::python::{Python, PythonObject};
 
 /// Represents a Python `dict`.
 pub struct PyDict(PyObject);
@@ -118,6 +119,8 @@ impl PyDict {
         // PyDict_Next() is unsafe to use when the dictionary might be changed
         // by other python code.
         let mut vec = Vec::with_capacity(self.len(py));
+        // TODO: Switch to std::mem::MaybeUninit once available.
+        #[allow(deprecated)]
         unsafe {
             let mut pos = 0;
             let mut key: *mut ffi::PyObject = mem::uninitialized();
@@ -170,9 +173,9 @@ where
 
 #[cfg(test)]
 mod test {
-    use conversion::ToPyObject;
-    use objects::{PyDict, PyTuple};
-    use python::{Python, PythonObject};
+    use crate::conversion::ToPyObject;
+    use crate::objects::{PyDict, PyTuple};
+    use crate::python::{Python, PythonObject};
     use std::collections::HashMap;
 
     #[test]

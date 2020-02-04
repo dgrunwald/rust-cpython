@@ -1,6 +1,7 @@
 use libc::{c_char, c_int};
-use object::PyObject;
-use pyport::Py_ssize_t;
+
+use crate::object::PyObject;
+use crate::pyport::Py_ssize_t;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

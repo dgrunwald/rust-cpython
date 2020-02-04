@@ -16,20 +16,20 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use ffi;
 use libc;
 use libc::c_char;
+use std::ffi::CString;
+use std::ptr;
+
+use crate::conversion::ToPyObject;
+use crate::ffi;
 #[cfg(feature = "python27-sys")]
-use objects::oldstyle::PyClass;
-use objects::{exc, PyObject, PyType};
-use python::{
+use crate::objects::oldstyle::PyClass;
+use crate::objects::{exc, PyObject, PyType};
+use crate::python::{
     PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError, PythonObjectWithTypeObject,
     ToPythonPointer,
 };
-use std;
-use std::ffi::CString;
-use std::ptr;
 
 /**
 Defines a new exception type.
@@ -42,10 +42,7 @@ Defines a new exception type.
 
 # Example
 ```
-#[macro_use]
-extern crate cpython;
-
-use cpython::{Python, PyDict};
+use cpython::{Python, PyDict, py_exception};
 
 py_exception!(mymodule, CustomError);
 
@@ -61,12 +58,12 @@ fn main() {
 }
 ```
 */
-#[macro_export(local_inner_macros)]
+#[macro_export]
 macro_rules! py_exception {
     ($module: ident, $name: ident, $base: ty) => {
         pub struct $name($crate::PyObject);
 
-        pyobject_newtype!($name);
+        $crate::pyobject_newtype!($name);
 
         impl $name {
             pub fn new<'p, T: $crate::ToPyObject>(
@@ -90,7 +87,7 @@ macro_rules! py_exception {
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__err__stringify!($name),
+                        stringify!($name),
                         <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
                     ))
                 }
@@ -108,7 +105,7 @@ macro_rules! py_exception {
                 } else {
                     Err($crate::PythonObjectDowncastError::new(
                         py,
-                        _cpython__err__stringify!($name),
+                        stringify!($name),
                         <$name as $crate::PythonObjectWithTypeObject>::type_object(py),
                     ))
                 }
@@ -125,11 +122,7 @@ macro_rules! py_exception {
                     if type_object.is_null() {
                         type_object = $crate::PyErr::new_type(
                             py,
-                            _cpython__err__concat!(
-                                _cpython__err__stringify!($module),
-                                ".",
-                                _cpython__err__stringify!($name)
-                            ),
+                            concat!(stringify!($module), ".", stringify!($name)),
                             Some($crate::PythonObject::into_object(py.get_type::<$base>())),
                             None,
                         )
@@ -142,7 +135,7 @@ macro_rules! py_exception {
         }
     };
     ($module: ident, $name: ident) => {
-        py_exception!($module, $name, $crate::exc::Exception);
+        $crate::py_exception!($module, $name, $crate::exc::Exception);
     };
 }
 
@@ -224,6 +217,8 @@ impl PyErr {
     /// The error is cleared from the Python interpreter.
     /// If no error is set, returns a `SystemError`.
     pub fn fetch(py: Python) -> PyErr {
+        // TODO: Switch to std::mem::MaybeUninit once available.
+        #[allow(deprecated)]
         unsafe {
             let mut ptype: *mut ffi::PyObject = std::mem::uninitialized();
             let mut pvalue: *mut ffi::PyObject = std::mem::uninitialized();
@@ -495,7 +490,7 @@ pub unsafe fn from_owned_ptr_or_panic(py: Python, p: *mut ffi::PyObject) -> PyOb
 
 pub unsafe fn result_cast_from_owned_ptr<T>(py: Python, p: *mut ffi::PyObject) -> PyResult<T>
 where
-    T: ::python::PythonObjectWithCheckedDowncast,
+    T: crate::python::PythonObjectWithCheckedDowncast,
 {
     if p.is_null() {
         Err(PyErr::fetch(py))
@@ -506,7 +501,7 @@ where
 
 pub unsafe fn cast_from_owned_ptr_or_panic<T>(py: Python, p: *mut ffi::PyObject) -> T
 where
-    T: ::python::PythonObjectWithCheckedDowncast,
+    T: crate::python::PythonObjectWithCheckedDowncast,
 {
     if p.is_null() {
         panic_after_error(py);
@@ -525,28 +520,10 @@ pub fn error_on_minusone(py: Python, result: libc::c_int) -> PyResult<()> {
     }
 }
 
-// 2018 macros support
-//
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__err__concat {
-    ($($inner:tt)*) => {
-        concat! { $($inner)* }
-    }
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! _cpython__err__stringify {
-    ($($inner:tt)*) => {
-        stringify! { $($inner)* }
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use objects::exc;
-    use {PyErr, Python};
+    use crate::objects::exc;
+    use crate::{PyErr, Python};
 
     #[test]
     fn set_typeerror() {

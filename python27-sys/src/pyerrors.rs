@@ -1,10 +1,11 @@
-use classobject::*;
 use libc::{c_char, c_int};
-use object::*;
-use pyport::Py_ssize_t;
-use stringobject::PyString_AS_STRING;
+
+use crate::classobject::*;
+use crate::object::*;
+use crate::pyport::Py_ssize_t;
+use crate::stringobject::PyString_AS_STRING;
 #[cfg(py_sys_config = "Py_USING_UNICODE")]
-use unicodeobject::Py_UNICODE;
+use crate::unicodeobject::Py_UNICODE;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

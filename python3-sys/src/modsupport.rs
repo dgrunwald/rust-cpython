@@ -1,9 +1,10 @@
 use libc::{c_char, c_int, c_long};
+
 #[cfg(Py_3_5)]
-use methodobject::PyMethodDef;
-use moduleobject::PyModuleDef;
-use object::PyObject;
-use pyport::Py_ssize_t;
+use crate::methodobject::PyMethodDef;
+use crate::moduleobject::PyModuleDef;
+use crate::object::PyObject;
+use crate::pyport::Py_ssize_t;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

@@ -16,14 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use conversion::ToPyObject;
-use err::{self, PyErr, PyResult};
-use ffi;
 use libc;
-use objects::{PyDict, PyObject, PyString, PyTuple};
-use python::{Python, PythonObject, ToPythonPointer};
 use std::cmp::Ordering;
 use std::fmt;
+
+use crate::conversion::ToPyObject;
+use crate::err::{self, PyErr, PyResult};
+use crate::ffi;
+use crate::objects::{PyDict, PyObject, PyString, PyTuple};
+use crate::python::{Python, PythonObject, ToPythonPointer};
 
 /// Trait that contains methods
 pub trait ObjectProtocol: PythonObject {
@@ -138,7 +139,7 @@ pub trait ObjectProtocol: PythonObject {
             } else if result < 0 {
                 return Err(PyErr::fetch(py));
             }
-            return Err(PyErr::new::<::exc::TypeError, _>(
+            return Err(PyErr::new::<crate::exc::TypeError, _>(
                 py,
                 "ObjectProtocol::compare(): All comparisons returned false",
             ));
@@ -156,7 +157,12 @@ pub trait ObjectProtocol: PythonObject {
     ///   * CompareOp::Le: `self <= other`
     ///   * CompareOp::Gt: `self > other`
     ///   * CompareOp::Ge: `self >= other`
-    fn rich_compare<O>(&self, py: Python, other: O, compare_op: ::CompareOp) -> PyResult<PyObject>
+    fn rich_compare<O>(
+        &self,
+        py: Python,
+        other: O,
+        compare_op: crate::CompareOp,
+    ) -> PyResult<PyObject>
     where
         O: ToPyObject,
     {
@@ -186,7 +192,7 @@ pub trait ObjectProtocol: PythonObject {
     /// This is equivalent to the Python expression 'unistr(self)'.
     #[inline]
     #[cfg(feature = "python27-sys")]
-    fn unistr(&self, py: Python) -> PyResult<::objects::PyUnicode> {
+    fn unistr(&self, py: Python) -> PyResult<crate::objects::PyUnicode> {
         unsafe { err::result_cast_from_owned_ptr(py, ffi::PyObject_Unicode(self.as_ptr())) }
     }
 
@@ -250,7 +256,7 @@ pub trait ObjectProtocol: PythonObject {
     /// Retrieves the hash code of the object.
     /// This is equivalent to the Python expression: 'hash(self)'
     #[inline]
-    fn hash(&self, py: Python) -> PyResult<::Py_hash_t> {
+    fn hash(&self, py: Python) -> PyResult<crate::Py_hash_t> {
         let v = unsafe { ffi::PyObject_Hash(self.as_ptr()) };
         if v == -1 {
             Err(PyErr::fetch(py))
@@ -325,9 +331,9 @@ pub trait ObjectProtocol: PythonObject {
     /// This is typically a new iterator but if the argument
     /// is an iterator, this returns itself.
     #[inline]
-    fn iter<'p>(&self, py: Python<'p>) -> PyResult<::objects::PyIterator<'p>> {
+    fn iter<'p>(&self, py: Python<'p>) -> PyResult<crate::objects::PyIterator<'p>> {
         let obj = unsafe { err::result_from_owned_ptr(py, ffi::PyObject_GetIter(self.as_ptr())) }?;
-        Ok(::objects::PyIterator::from_object(py, obj)?)
+        Ok(crate::objects::PyIterator::from_object(py, obj)?)
     }
 }
 
@@ -356,10 +362,9 @@ impl fmt::Display for PyObject {
 #[cfg(test)]
 mod test {
     use super::ObjectProtocol;
-    use conversion::ToPyObject;
-    use objects::{PyList, PyTuple};
-    use python::{Python, PythonObject};
-    use std;
+    use crate::conversion::ToPyObject;
+    use crate::objects::{PyList, PyTuple};
+    use crate::python::{Python, PythonObject};
 
     #[test]
     fn test_debug_string() {

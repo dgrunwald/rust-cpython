@@ -18,17 +18,18 @@
 
 //! This module contains the python exception types.
 
+use libc::c_char;
+use std::ffi::CStr;
+use std::{mem, ops};
+
 use super::object::PyObject;
 use super::typeobject::PyType;
-use err::{self, PyResult};
-use ffi;
-use libc::c_char;
-use python::{
+use crate::err::{self, PyResult};
+use crate::ffi;
+use crate::python::{
     Python, PythonObject, PythonObjectDowncastError, PythonObjectWithCheckedDowncast,
     PythonObjectWithTypeObject,
 };
-use std::ffi::CStr;
-use std::{self, mem, ops};
 
 macro_rules! exc_type(
     ($name:ident, $exc_name:ident) => (

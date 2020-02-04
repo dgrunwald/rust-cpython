@@ -1,8 +1,6 @@
 // THIS FILE IS GENERATED FROM python3-sys/build.rs
 // DO NOT MODIFY
 
-extern crate regex;
-
 use regex::Regex;
 use std::collections::HashMap;
 use std::env;

@@ -25,6 +25,7 @@ exclude = [
     "/extensions/**"
 ]
 build = "build.rs"
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "dgrunwald/rust-cpython" }
@@ -33,6 +34,7 @@ appveyor = { repository = "dgrunwald/rust-cpython" }
 [dependencies]
 libc = "0.2"
 num-traits = "0.2"
+paste = "0.1"
 
 # These features are both optional, but you must pick one to 
 # indicate which python ffi you are trying to bind to.
