@@ -122,3 +122,9 @@ pub unsafe fn PyModule_FromDefAndSpec(def: *mut PyModuleDef, spec: *mut PyObject
         },
     )
 }
+
+#[cfg(not(Py_LIMITED_API))]
+#[cfg_attr(windows, link(name = "pythonXY"))]
+extern "C" {
+    pub static mut _Py_PackageContext: *const c_char;
+}
