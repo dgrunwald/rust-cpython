@@ -1188,3 +1188,87 @@ fn context_manager() {
     );
     assert!(c.exit_called(py).get());
 }
+
+py_class!(class Properties |py| {
+    data value: Cell<i32>;
+    data value_by_ref: RefCell<String>;
+    data value_by_opt_ref: RefCell<String>;
+
+    def __repr__(&self) -> PyResult<String> {
+        Ok(format!("P({:?} {:?} {:?})",
+            self.value(py).get(),
+            self.value_by_ref(py).borrow(),
+            self.value_by_opt_ref(py).borrow()))
+    }
+
+    @property def prop(&self) -> PyResult<i32> {
+        Ok(self.value(py).get())
+    }
+
+    @prop.setter def set_prop(&self, value: Option<i32>) -> PyResult<()> {
+        self.value(py).set(value.unwrap_or(0));
+        Ok(())
+    }
+
+    @property def prop_by_ref(&self) -> PyResult<String> {
+        Ok(self.value_by_ref(py).borrow().to_string())
+    }
+
+    @prop_by_ref.setter def set_prop_by_ref(&self, value: Option<&str>) -> PyResult<()> {
+        *self.value_by_ref(py).borrow_mut() = value.unwrap_or("DELETED").to_string();
+        Ok(())
+    }
+
+    @property def prop_by_opt_ref(&self) -> PyResult<String> {
+        Ok(self.value_by_opt_ref(py).borrow().to_string())
+    }
+
+    @prop_by_opt_ref.setter def set_prop_by_opt_ref(&self, value: Option<Option<&str>>) -> PyResult<()> {
+        let value = value.unwrap_or(Some("DELETED")).unwrap_or("NO VALUE");
+        *self.value_by_opt_ref(py).borrow_mut() = value.to_string();
+        Ok(())
+    }
+
+    /// docs for match
+    @property def r#match(&self) -> PyResult<bool> {
+        Ok(self.value(py).get() != 0)
+    }
+});
+
+#[test]
+fn properties() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = Properties::create_instance(
+        py,
+        Cell::new(0),
+        RefCell::new(String::new()),
+        RefCell::new(String::new()),
+    )
+    .unwrap();
+
+    py_run!(
+        py,
+        c,
+        "assert 'docs for match' in c.__class__.match.__doc__"
+    );
+
+    py_run!(py, c, "assert c.prop == 0");
+    py_run!(py, c, "assert not c.match");
+    py_run!(py, c, "c.prop = 42");
+    assert_eq!(c.value(py).get(), 42);
+    py_run!(py, c, "assert c.match");
+    assert!(c.r#match(py).unwrap());
+
+    py_run!(py, c, "c.prop_by_ref = 'testing'");
+    py_run!(py, c, "assert c.prop_by_ref == 'testing'");
+
+    py_run!(py, c, "c.prop_by_opt_ref = 'something'");
+    assert_eq!(*c.value_by_opt_ref(py).borrow(), "something");
+    py_run!(py, c, "c.prop_by_opt_ref = None");
+    py_run!(py, c, "repr(c) == 'P(42, \"testing\" \"NO VALUE\")'");
+
+    py_run!(py, c, "del c.prop_by_opt_ref");
+    py_run!(py, c, "repr(c) == 'P(42, \"testing\" \"DELETED\")'");
+}

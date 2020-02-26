@@ -166,6 +166,24 @@ Declares a static method callable from Python.
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
 
+## Properties
+`@property def property_name(&self) -> PyResult<...> { ... }`
+
+`@property_name.setter def set_method_name(&self, value: Option<impl FromPyObject>) -> PyResult<()> { ... }`
+
+Declares a property (attribute with code for getting and optionally setting) accessible from Python.
+
+* The setter is optional.  If omitted, the attribute will be read-only.
+* Unlike Python, the setter method name must be different from the property name.
+  The setter method name is used to call the setter from Rust.
+* If value is `None` then the property is being deleted.
+* The value type can be any type that implements `FromPyObject`, or a reference or
+  optional reference to any type that implements `RefFromPyObject`.  In the latter
+  case, the type of the value is `Option<Option<&impl RefFromPyObject>>`, where
+  `None` means the property is being deleted, `Some(None)` means the property is
+  being set to Python `None`, and `Some(Some(value))` means the property is being
+  set to the given value.
+
 ## __new__
 `def __new__(cls, parameter-list) -> PyResult<...> { ... }`
 
@@ -448,6 +466,7 @@ macro_rules! py_class {
             }
             /* impls: */ { /* impl body */ }
             /* members: */ { /* ident = expr; */ }
+            /* props: */ { [ /* getters */ ] [ /* setters */ ] }
         }
     );
     (pub class $class:ident |$py: ident| { $( $body:tt )* }) => (
@@ -477,6 +496,7 @@ macro_rules! py_class {
             }
             /* impls: */ { /* impl body */ }
             /* members: */ { /* ident = expr; */ }
+            /* props: */ { [ /* getters */ ] [ /* setters */ ] }
         }
     );
 }

@@ -45,10 +45,7 @@ macro_rules! py_method_def {
                     | $flags,
                 ml_doc: 0 as *const $crate::_detail::libc::c_char,
             };
-        METHOD_DEF.ml_name = concat!($name, "\0").as_ptr() as *const _;
-        if $name.starts_with("r#") {
-            METHOD_DEF.ml_name = METHOD_DEF.ml_name.add(2);
-        }
+        METHOD_DEF.ml_name = $crate::strip_raw!(concat!($name, "\0")).as_ptr() as *const _;
         if !$doc.is_empty() {
             METHOD_DEF.ml_doc = concat!($doc, "\0").as_ptr() as *const _;
         }

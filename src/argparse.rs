@@ -38,11 +38,7 @@ pub struct ParamDescription<'a> {
 impl<'a> ParamDescription<'a> {
     /// Name, with leading `r#` stripped.
     pub fn name(&self) -> &str {
-        if self.name.starts_with("r#") {
-            &self.name[2..]
-        } else {
-            self.name
-        }
+        crate::strip_raw!(self.name)
     }
 }
 
