@@ -564,7 +564,7 @@ macro_rules! py_class_impl {
     { { def __complex__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__complex__ is not supported by py_class! yet." }
     };
-    { { def __contains__(&$slf:ident, $item:ident : $item_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __contains__(&$slf:ident, $item:ident : Option<&$item_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt $as_number:tt
@@ -580,13 +580,65 @@ macro_rules! py_class_impl {
             $type_slots $as_number
             /* as_sequence */ [
                 $( $sq_slot_name : $sq_slot_value, )*
-                sq_contains: $crate::py_class_contains_slot!($class::__contains__, $item_type),
+                sq_contains: $crate::py_class_contains_slot!($class::__contains__, [Option<&$item_name>]),
             ]
             $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : Option<&$item_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __contains__(&$slf:ident, $item:ident : &$item_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt
+            /* as_sequence */ [ $( $sq_slot_name:ident : $sq_slot_value:expr, )* ]
+            $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number
+            /* as_sequence */ [
+                $( $sq_slot_name : $sq_slot_value, )*
+                sq_contains: $crate::py_class_contains_slot!($class::__contains__, [&$item_name]),
+            ]
+            $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : &$item_name = {} }] }
+        }
+        $members
+    }};
+    { { def __contains__(&$slf:ident, $item:ident : $item_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt
+            /* as_sequence */ [ $( $sq_slot_name:ident : $sq_slot_value:expr, )* ]
+            $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number
+            /* as_sequence */ [
+                $( $sq_slot_name : $sq_slot_value, )*
+                sq_contains: $crate::py_class_contains_slot!($class::__contains__, [$item_name]),
+            ]
+            $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_name = {} }] }
         }
         $members
     }};
@@ -606,7 +658,7 @@ macro_rules! py_class_impl {
     { { def __delete__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__delete__ is not supported by py_class! yet." }
     };
-    { { def __delitem__(&$slf:ident, $key:ident : $key_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __delitem__(&$slf:ident, $key:ident : Option<&$key_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
@@ -624,12 +676,66 @@ macro_rules! py_class_impl {
             $type_slots $as_number $as_sequence $as_mapping
             /* setdelitem */ [
                 sdi_setitem: $sdi_setitem_slot_value,
-                sdi_delitem: { $crate::py_class_binary_slot!($class::__delitem__, $key_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_delitem: { $crate::py_class_binary_slot!($class::__delitem__, [Option<&$key_name>], $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
             ]
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __delitem__(&$slf:ident, $key:ident : &$key_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
+            /* setdelitem */ [
+                sdi_setitem: $sdi_setitem_slot_value:tt,
+                sdi_delitem: {},
+            ]
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number $as_sequence $as_mapping
+            /* setdelitem */ [
+                sdi_setitem: $sdi_setitem_slot_value,
+                sdi_delitem: { $crate::py_class_binary_slot!($class::__delitem__, [&$key_name], $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+            ]
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
+        }
+        $members
+    }};
+    { { def __delitem__(&$slf:ident, $key:ident : $key_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
+            /* setdelitem */ [
+                sdi_setitem: $sdi_setitem_slot_value:tt,
+                sdi_delitem: {},
+            ]
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number $as_sequence $as_mapping
+            /* setdelitem */ [
+                sdi_setitem: $sdi_setitem_slot_value,
+                sdi_delitem: { $crate::py_class_binary_slot!($class::__delitem__, [$key_name], $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+            ]
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
         }
         $members
     }};
@@ -677,7 +783,7 @@ macro_rules! py_class_impl {
     { { def __getattribute__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__getattribute__ is not supported by py_class! yet." }
     };
-    { { def __getitem__(&$slf:ident, $key:ident : $key_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __getitem__(&$slf:ident, $key:ident : Option<&$key_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt $as_number:tt
@@ -698,13 +804,75 @@ macro_rules! py_class_impl {
             ]
             /* as_mapping */ [
                 $( $mp_slot_name : $mp_slot_value, )*
-                mp_subscript: $crate::py_class_binary_slot!($class::__getitem__, $key_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                mp_subscript: $crate::py_class_binary_slot!($class::__getitem__, [Option<&$key_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __getitem__(&$slf:ident, $key:ident : &$key_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt
+            /* as_sequence */ [ $( $sq_slot_name:ident : $sq_slot_value:expr, )* ]
+            /* as_mapping */ [ $( $mp_slot_name:ident : $mp_slot_value:expr, )* ]
+            $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number
+            /* as_sequence */ [
+                $( $sq_slot_name : $sq_slot_value, )*
+                sq_item: Some($crate::py_class::slots::sq_item),
+            ]
+            /* as_mapping */ [
+                $( $mp_slot_name : $mp_slot_value, )*
+                mp_subscript: $crate::py_class_binary_slot!($class::__getitem__, [&$key_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
+        }
+        $members
+    }};
+    { { def __getitem__(&$slf:ident, $key:ident : $key_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt
+            /* as_sequence */ [ $( $sq_slot_name:ident : $sq_slot_value:expr, )* ]
+            /* as_mapping */ [ $( $mp_slot_name:ident : $mp_slot_value:expr, )* ]
+            $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number
+            /* as_sequence */ [
+                $( $sq_slot_name : $sq_slot_value, )*
+                sq_item: Some($crate::py_class::slots::sq_item),
+            ]
+            /* as_mapping */ [
+                $( $mp_slot_name : $mp_slot_value, )*
+                mp_subscript: $crate::py_class_binary_slot!($class::__getitem__, [$key_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
         }
         $members
     }};
@@ -744,7 +912,7 @@ macro_rules! py_class_impl {
     { { def __hash__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __hash__" }
     };
-    { { def __iadd__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __iadd__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -760,13 +928,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_add: $crate::py_class_binary_slot!($class::__iadd__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_add: $crate::py_class_binary_slot!($class::__iadd__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __iadd__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_add: $crate::py_class_binary_slot!($class::__iadd__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __iadd__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_add: $crate::py_class_binary_slot!($class::__iadd__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -774,7 +994,7 @@ macro_rules! py_class_impl {
     { { def __iadd__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __iadd__" }
     };
-    { { def __iand__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __iand__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -790,13 +1010,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_and: $crate::py_class_binary_slot!($class::__iand__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_and: $crate::py_class_binary_slot!($class::__iand__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __iand__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_and: $crate::py_class_binary_slot!($class::__iand__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __iand__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_and: $crate::py_class_binary_slot!($class::__iand__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -808,7 +1080,7 @@ macro_rules! py_class_impl {
     { { def __idiv__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__idiv__ is not supported by py_class! yet." }
     };
-    { { def __ifloordiv__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __ifloordiv__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -824,13 +1096,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_floor_divide: $crate::py_class_binary_slot!($class::__ifloordiv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_floor_divide: $crate::py_class_binary_slot!($class::__ifloordiv__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __ifloordiv__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_floor_divide: $crate::py_class_binary_slot!($class::__ifloordiv__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __ifloordiv__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_floor_divide: $crate::py_class_binary_slot!($class::__ifloordiv__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -838,7 +1162,7 @@ macro_rules! py_class_impl {
     { { def __ifloordiv__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __ifloordiv__" }
     };
-    { { def __ilshift__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __ilshift__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -854,13 +1178,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_lshift: $crate::py_class_binary_slot!($class::__ilshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_lshift: $crate::py_class_binary_slot!($class::__ilshift__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __ilshift__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_lshift: $crate::py_class_binary_slot!($class::__ilshift__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __ilshift__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_lshift: $crate::py_class_binary_slot!($class::__ilshift__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -868,7 +1244,7 @@ macro_rules! py_class_impl {
     { { def __ilshift__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __ilshift__" }
     };
-    { { def __imatmul__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __imatmul__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -884,13 +1260,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_matrix_multiply: $crate::py_class_binary_slot!($class::__imatmul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_matrix_multiply: $crate::py_class_binary_slot!($class::__imatmul__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __imatmul__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_matrix_multiply: $crate::py_class_binary_slot!($class::__imatmul__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __imatmul__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_matrix_multiply: $crate::py_class_binary_slot!($class::__imatmul__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -898,7 +1326,7 @@ macro_rules! py_class_impl {
     { { def __imatmul__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __imatmul__" }
     };
-    { { def __imod__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __imod__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -914,13 +1342,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_remainder: $crate::py_class_binary_slot!($class::__imod__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_remainder: $crate::py_class_binary_slot!($class::__imod__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __imod__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_remainder: $crate::py_class_binary_slot!($class::__imod__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __imod__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_remainder: $crate::py_class_binary_slot!($class::__imod__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -928,7 +1408,7 @@ macro_rules! py_class_impl {
     { { def __imod__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __imod__" }
     };
-    { { def __imul__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __imul__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -944,13 +1424,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_multiply: $crate::py_class_binary_slot!($class::__imul__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_multiply: $crate::py_class_binary_slot!($class::__imul__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __imul__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_multiply: $crate::py_class_binary_slot!($class::__imul__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __imul__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_multiply: $crate::py_class_binary_slot!($class::__imul__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1004,7 +1536,7 @@ macro_rules! py_class_impl {
     { { def __invert__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __invert__" }
     };
-    { { def __ior__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __ior__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -1020,13 +1552,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_or: $crate::py_class_binary_slot!($class::__ior__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_or: $crate::py_class_binary_slot!($class::__ior__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __ior__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_or: $crate::py_class_binary_slot!($class::__ior__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __ior__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_or: $crate::py_class_binary_slot!($class::__ior__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1038,7 +1622,7 @@ macro_rules! py_class_impl {
     { { def __ipow__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__ipow__ is not supported by py_class! yet." }
     };
-    { { def __irshift__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __irshift__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -1054,13 +1638,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_rshift: $crate::py_class_binary_slot!($class::__irshift__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_rshift: $crate::py_class_binary_slot!($class::__irshift__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __irshift__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_rshift: $crate::py_class_binary_slot!($class::__irshift__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __irshift__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_rshift: $crate::py_class_binary_slot!($class::__irshift__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1068,7 +1704,7 @@ macro_rules! py_class_impl {
     { { def __irshift__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __irshift__" }
     };
-    { { def __isub__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __isub__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -1084,13 +1720,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_subtract: $crate::py_class_binary_slot!($class::__isub__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_subtract: $crate::py_class_binary_slot!($class::__isub__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __isub__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_subtract: $crate::py_class_binary_slot!($class::__isub__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __isub__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_subtract: $crate::py_class_binary_slot!($class::__isub__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1126,7 +1814,7 @@ macro_rules! py_class_impl {
     { { def __iter__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __iter__" }
     };
-    { { def __itruediv__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __itruediv__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -1142,13 +1830,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_true_divide: $crate::py_class_binary_slot!($class::__itruediv__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_true_divide: $crate::py_class_binary_slot!($class::__itruediv__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __itruediv__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_true_divide: $crate::py_class_binary_slot!($class::__itruediv__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __itruediv__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_true_divide: $crate::py_class_binary_slot!($class::__itruediv__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1156,7 +1896,7 @@ macro_rules! py_class_impl {
     { { def __itruediv__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __itruediv__" }
     };
-    { { def __ixor__(&$slf:ident, $other:ident : $other_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __ixor__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt
@@ -1172,13 +1912,65 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_xor: $crate::py_class_binary_slot!($class::__ixor__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                nb_inplace_xor: $crate::py_class_binary_slot!($class::__ixor__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+        }
+        $members
+    }};
+    { { def __ixor__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_xor: $crate::py_class_binary_slot!($class::__ixor__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+        }
+        $members
+    }};
+    { { def __ixor__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_inplace_xor: $crate::py_class_binary_slot!($class::__ixor__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members
     }};
@@ -1530,7 +2322,7 @@ macro_rules! py_class_impl {
     { { def __rfloordiv__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Reflected numeric operator __rfloordiv__ is not supported by py_class! Use __floordiv__ instead!" }
     };
-    { { def __richcmp__(&$slf:ident, $other:ident : $other_type:ty, $op:ident : $op_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __richcmp__(&$slf:ident, $other:ident : Option<&$other_name:ty>, $op:ident : $op_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -1544,13 +2336,61 @@ macro_rules! py_class_impl {
         /* slots: */ {
             /* type_slots */ [
                 $( $tp_slot_name : $tp_slot_value, )*
-                tp_richcompare: $crate::py_class_richcompare_slot!($class::__richcmp__, $other_type, *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+                tp_richcompare: $crate::py_class_richcompare_slot!($class::__richcmp__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
             ]
             $as_number $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_type = {} } { $op : $op_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} } { $op : $op_name = {} }] }
+        }
+        $members
+    }};
+    { { def __richcmp__(&$slf:ident, $other:ident : &$other_name:ty, $op:ident : $op_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_richcompare: $crate::py_class_richcompare_slot!($class::__richcmp__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} } { $op : $op_name = {} }] }
+        }
+        $members
+    }};
+    { { def __richcmp__(&$slf:ident, $other:ident : $other_name:ty, $op:ident : $op_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_richcompare: $crate::py_class_richcompare_slot!($class::__richcmp__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} } { $op : $op_name = {} }] }
         }
         $members
     }};
@@ -1640,7 +2480,7 @@ macro_rules! py_class_impl {
     { { def __setattr__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__setattr__ is not supported by py_class! yet." }
     };
-    { { def __setitem__(&$slf:ident, $key:ident : $key_type:ty, $value:ident : $value_type:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+    { { def __setitem__(&$slf:ident, $key:ident : Option<&$key_name:ty>, $value:ident : $value_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
@@ -1657,13 +2497,67 @@ macro_rules! py_class_impl {
         /* slots: */ {
             $type_slots $as_number $as_sequence $as_mapping
             /* setdelitem */ [
-                sdi_setitem: { $crate::py_class_ternary_slot!($class::__setitem__, $key_type, $value_type, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_setitem: { $crate::py_class_ternary_slot!($class::__setitem__, [Option<&$key_name>], $value_name, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
                 sdi_delitem: $sdi_delitem_slot_value,
             ]
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_type = {} } { $value : $value_type = {} }] }
+            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} } { $value : $value_name = {} }] }
+        }
+        $members
+    }};
+    { { def __setitem__(&$slf:ident, $key:ident : &$key_name:ty, $value:ident : $value_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
+            /* setdelitem */ [
+                sdi_setitem: {},
+                sdi_delitem: $sdi_delitem_slot_value:tt,
+            ]
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number $as_sequence $as_mapping
+            /* setdelitem */ [
+                sdi_setitem: { $crate::py_class_ternary_slot!($class::__setitem__, [&$key_name], $value_name, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_delitem: $sdi_delitem_slot_value,
+            ]
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} } { $value : $value_name = {} }] }
+        }
+        $members
+    }};
+    { { def __setitem__(&$slf:ident, $key:ident : $key_name:ty, $value:ident : $value_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
+            /* setdelitem */ [
+                sdi_setitem: {},
+                sdi_delitem: $sdi_delitem_slot_value:tt,
+            ]
+        }
+        { $( $imp:item )* }
+        $members:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number $as_sequence $as_mapping
+            /* setdelitem */ [
+                sdi_setitem: { $crate::py_class_ternary_slot!($class::__setitem__, [$key_name], $value_name, $crate::_detail::libc::c_int, $crate::py_class::slots::UnitCallbackConverter) },
+                sdi_delitem: $sdi_delitem_slot_value,
+            ]
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} } { $value : $value_name = {} }] }
         }
         $members
     }};

@@ -584,8 +584,9 @@ def special_class_method(special_name, *args, **kwargs):
     generate_class_method(special_name=special_name, *args, **kwargs)
 
 class Argument(object):
-    def __init__(self, name):
+    def __init__(self, name, allow_ref=True):
         self.name = name
+        self.allow_ref = allow_ref
 
 @special_method
 def operator(special_name, slot,
@@ -595,6 +596,30 @@ def operator(special_name, slot,
     res_ffi_type='*mut $crate::_detail::ffi::PyObject',
     additional_slots=()
 ):
+    def optref(arg, suffix = ""):
+        if arg.allow_ref:
+            return "Option<&$%s_name%s>" % (arg.name, suffix)
+        else:
+            return "$%s_name%s" % (arg.name, suffix)
+
+    def ref(arg, suffix = ""):
+        if arg.allow_ref:
+            return "&$%s_name%s" % (arg.name, suffix)
+        else:
+            return "$%s_name%s" % (arg.name, suffix)
+
+    def normal(arg, suffix = ""):
+        return "$%s_name%s" % (arg.name, suffix)
+
+    if args:
+        operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, additional_slots, optref)
+        operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, additional_slots, ref)
+    operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, additional_slots, normal)
+    # Generate fall-back matcher that produces an error
+    # when using the wrong method signature
+    error('Invalid signature for operator %s' % special_name)(special_name)
+
+def operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, additional_slots, typefunc):
     if res_conv is None:
         if res_type == '()':
             res_conv = '$crate::py_class::slots::UnitCallbackConverter'
@@ -609,22 +634,22 @@ def operator(special_name, slot,
     arg_pattern = ''
     param_list = []
     for arg in args:
-        arg_pattern += ', ${0}:ident : ${0}_type:ty'.format(arg.name)
-        param_list.append('{{ ${0} : ${0}_type = {{}} }}'.format(arg.name))
+        arg_pattern += ', ${0}:ident : {1}'.format(arg.name, typefunc(arg, ":ty"))
+        param_list.append('{{ ${0} : {1} = {{}} }}'.format(arg.name, typefunc(arg)))
     if slot == 'sq_contains':
-        new_slots = [(slot, '$crate::py_class_contains_slot!($class::%s, $%s_type)' % (special_name, args[0].name))]
+        new_slots = [(slot, '$crate::py_class_contains_slot!($class::%s, [%s])' % (special_name, typefunc(args[0])))]
     elif slot == 'tp_richcompare':
-        new_slots = [(slot, '$crate::py_class_richcompare_slot!($class::%s, $%s_type, %s, %s)'
-                            % (special_name, args[0].name, res_ffi_type, res_conv))]
+        new_slots = [(slot, '$crate::py_class_richcompare_slot!($class::%s, [%s], %s, %s)'
+                            % (special_name, typefunc(args[0]), res_ffi_type, res_conv))]
     elif len(args) == 0:
         new_slots = [(slot, '$crate::py_class_unary_slot!($class::%s, %s, %s)'
                              % (special_name, res_ffi_type, res_conv))]
     elif len(args) == 1:
-        new_slots = [(slot, '$crate::py_class_binary_slot!($class::%s, $%s_type, %s, %s)'
-                             % (special_name, args[0].name, res_ffi_type, res_conv))]
+        new_slots = [(slot, '$crate::py_class_binary_slot!($class::%s, [%s], %s, %s)'
+                             % (special_name, typefunc(args[0]), res_ffi_type, res_conv))]
     elif len(args) == 2:
-        new_slots = [(slot, '$crate::py_class_ternary_slot!($class::%s, $%s_type, $%s_type, %s, %s)'
-                             % (special_name, args[0].name, args[1].name, res_ffi_type, res_conv))]
+        new_slots = [(slot, '$crate::py_class_ternary_slot!($class::%s, [%s], %s, %s, %s)'
+                             % (special_name, typefunc(args[0]), typefunc(args[1]), res_ffi_type, res_conv))]
     else:
         raise ValueError('Unsupported argument count')
     generate_case(
@@ -633,9 +658,6 @@ def operator(special_name, slot,
                  % (special_name, ' '.join(param_list)),
         new_slots=new_slots + list(additional_slots)
     )
-    # Generate fall-back matcher that produces an error
-    # when using the wrong method signature
-    error('Invalid signature for operator %s' % special_name)(special_name)
 
 @special_method
 def call_operator(special_name, slot):
@@ -688,7 +710,7 @@ special_names = {
     '__cmp__': error('__cmp__ is not supported by py_class! use __richcmp__ instead.'),
     '__richcmp__': operator('tp_richcompare',
         res_type='PyObject',
-        args=[Argument('other'), Argument('op')]),
+        args=[Argument('other'), Argument('op', allow_ref = False)]),
     '__hash__': operator('tp_hash',
         res_conv='$crate::py_class::slots::HashConverter',
         res_ffi_type='$crate::Py_hash_t'),
@@ -730,7 +752,7 @@ special_names = {
                 ]),
     '__missing__': normal_method(),
     '__setitem__': operator('sdi_setitem',
-                args=[Argument('key'), Argument('value')],
+                args=[Argument('key'), Argument('value', allow_ref=False)],
                 res_type='()'),
     '__delitem__': operator('sdi_delitem',
                 args=[Argument('key')],

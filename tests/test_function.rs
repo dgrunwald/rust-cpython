@@ -99,6 +99,38 @@ fn inline_two_args() {
     );
 }
 
+#[test]
+fn opt_args() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let obj = py_fn!(py, f(a: Option<&str>, b: &str, c: Option<&str> = None) -> PyResult<String> {
+        drop(py);
+        Ok(format!("a: {:?}  b: {:?}  c: {:?}", a, b, c))
+    });
+
+    assert_eq!(
+        obj.call(py, (py.None(), "string"), None)
+            .unwrap()
+            .extract::<String>(py)
+            .unwrap(),
+        r#"a: None  b: "string"  c: None"#,
+    );
+    assert_eq!(
+        obj.call(py, ("double", "string", py.None()), None)
+            .unwrap()
+            .extract::<String>(py)
+            .unwrap(),
+        r#"a: Some("double")  b: "string"  c: None"#,
+    );
+    assert_eq!(
+        obj.call(py, ("triple", "string", "args"), None)
+            .unwrap()
+            .extract::<String>(py)
+            .unwrap(),
+        r#"a: Some("triple")  b: "string"  c: Some("args")"#,
+    );
+}
+
 /* TODO: reimplement flexible sig support
 #[test]
 fn flexible_sig() {

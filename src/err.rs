@@ -217,12 +217,10 @@ impl PyErr {
     /// The error is cleared from the Python interpreter.
     /// If no error is set, returns a `SystemError`.
     pub fn fetch(py: Python) -> PyErr {
-        // TODO: Switch to std::mem::MaybeUninit once available.
-        #[allow(deprecated)]
+        let mut ptype: *mut ffi::PyObject = ptr::null_mut();
+        let mut pvalue: *mut ffi::PyObject = ptr::null_mut();
+        let mut ptraceback: *mut ffi::PyObject = ptr::null_mut();
         unsafe {
-            let mut ptype: *mut ffi::PyObject = std::mem::uninitialized();
-            let mut pvalue: *mut ffi::PyObject = std::mem::uninitialized();
-            let mut ptraceback: *mut ffi::PyObject = std::mem::uninitialized();
             ffi::PyErr_Fetch(&mut ptype, &mut pvalue, &mut ptraceback);
             PyErr::new_from_ffi_tuple(py, ptype, pvalue, ptraceback)
         }

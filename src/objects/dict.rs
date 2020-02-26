@@ -16,7 +16,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use std::{cmp, collections, hash, mem};
+use std::{cmp, collections, hash, ptr};
 
 use crate::conversion::ToPyObject;
 use crate::err::{self, PyErr, PyResult};
@@ -119,12 +119,10 @@ impl PyDict {
         // PyDict_Next() is unsafe to use when the dictionary might be changed
         // by other python code.
         let mut vec = Vec::with_capacity(self.len(py));
-        // TODO: Switch to std::mem::MaybeUninit once available.
-        #[allow(deprecated)]
+        let mut pos = 0;
+        let mut key: *mut ffi::PyObject = ptr::null_mut();
+        let mut value: *mut ffi::PyObject = ptr::null_mut();
         unsafe {
-            let mut pos = 0;
-            let mut key: *mut ffi::PyObject = mem::uninitialized();
-            let mut value: *mut ffi::PyObject = mem::uninitialized();
             while ffi::PyDict_Next(self.0.as_ptr(), &mut pos, &mut key, &mut value) != 0 {
                 vec.push((
                     PyObject::from_borrowed_ptr(py, key),

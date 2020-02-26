@@ -253,6 +253,53 @@ pub unsafe fn mp_ass_subscript_error(o: *mut ffi::PyObject, err: &[u8]) -> c_int
 
 #[macro_export]
 #[doc(hidden)]
+macro_rules! py_class_call_slot_impl_with_ref {
+    (
+        $py:ident,
+        $slf:ident,
+        $f:ident,
+        $arg:ident: [ Option<&$arg_type:ty> ]
+        $(, $extra_arg:ident)*
+    ) => {{
+        if $arg.as_ptr() == unsafe { $crate::_detail::ffi::Py_None() } {
+            Ok($slf.$f($py, None $(, $extra_arg)*))
+        } else {
+            <$arg_type as $crate::RefFromPyObject>::with_extracted(
+                $py,
+                &$arg,
+                |arg: &$arg_type| $slf.$f($py, Some(arg) $(, $extra_arg)*)
+            )
+        }
+    }};
+
+    (
+        $py:ident,
+        $slf:ident,
+        $f:ident,
+        $arg:ident: [ &$arg_type:ty ]
+        $(, $extra_arg:ident)*
+    ) => {{
+        <$arg_type as $crate::RefFromPyObject>::with_extracted(
+            $py,
+            &$arg,
+            |arg: &$arg_type| $slf.$f($py, arg $(, $extra_arg)*)
+        )
+    }};
+
+    (
+        $py:ident,
+        $slf:ident,
+        $f:ident,
+        $arg:ident: [ $arg_type:ty ]
+        $(, $extra_arg:ident)*
+    ) => {{
+        <$arg_type as $crate::FromPyObject>::extract($py, &$arg)
+            .map(|arg| $slf.$f($py, arg $(, $extra_arg)*))
+    }};
+}
+
+#[macro_export]
+#[doc(hidden)]
 macro_rules! py_class_unary_slot {
     ($class:ident :: $f:ident, $res_type:ty, $conv:expr) => {{
         unsafe extern "C" fn wrap_unary(slf: *mut $crate::_detail::ffi::PyObject) -> $res_type {
@@ -272,7 +319,7 @@ macro_rules! py_class_unary_slot {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_binary_slot {
-    ($class:ident :: $f:ident, $arg_type:ty, $res_type:ty, $conv:expr) => {{
+    ($class:ident :: $f:ident, $arg_type:tt, $res_type:ty, $conv:expr) => {{
         unsafe extern "C" fn wrap_binary(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg: *mut $crate::_detail::ffi::PyObject,
@@ -282,8 +329,8 @@ macro_rules! py_class_binary_slot {
                 let slf =
                     $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
                 let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                let ret = match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
-                    Ok(arg) => slf.$f(py, arg),
+                let ret = match py_class_call_slot_impl_with_ref!(py, slf, $f, arg: $arg_type) {
+                    Ok(r) => r,
                     Err(e) => Err(e),
                 };
                 $crate::PyDrop::release_ref(arg, py);
@@ -298,7 +345,7 @@ macro_rules! py_class_binary_slot {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_ternary_slot {
-    ($class:ident :: $f:ident, $arg1_type:ty, $arg2_type:ty, $res_type:ty, $conv:expr) => {{
+    ($class:ident :: $f:ident, $arg1_type:tt, $arg2_type:ty, $res_type:ty, $conv:expr) => {{
         unsafe extern "C" fn wrap_binary(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg1: *mut $crate::_detail::ffi::PyObject,
@@ -310,11 +357,14 @@ macro_rules! py_class_ternary_slot {
                     $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
                 let arg1 = $crate::PyObject::from_borrowed_ptr(py, arg1);
                 let arg2 = $crate::PyObject::from_borrowed_ptr(py, arg2);
-                let ret = match <$arg1_type as $crate::FromPyObject>::extract(py, &arg1) {
-                    Ok(arg1) => match <$arg2_type as $crate::FromPyObject>::extract(py, &arg2) {
-                        Ok(arg2) => slf.$f(py, arg1, arg2),
-                        Err(e) => Err(e),
-                    },
+                let ret = match <$arg2_type as $crate::FromPyObject>::extract(py, &arg2) {
+                    Ok(arg2) => {
+                        match py_class_call_slot_impl_with_ref!(py, slf, $f, arg1: $arg1_type, arg2)
+                        {
+                            Ok(r) => r,
+                            Err(e) => Err(e),
+                        }
+                    }
                     Err(e) => Err(e),
                 };
                 $crate::PyDrop::release_ref(arg1, py);
@@ -350,7 +400,7 @@ pub fn extract_op(py: Python, op: c_int) -> PyResult<CompareOp> {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_richcompare_slot {
-    ($class:ident :: $f:ident, $arg_type:ty, $res_type:ty, $conv:expr) => {{
+    ($class:ident :: $f:ident, $arg_type:tt, $res_type:ty, $conv:expr) => {{
         unsafe extern "C" fn tp_richcompare(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg: *mut $crate::_detail::ffi::PyObject,
@@ -362,12 +412,12 @@ macro_rules! py_class_richcompare_slot {
                     $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
                 let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
                 let ret = match $crate::py_class::slots::extract_op(py, op) {
-                    Ok(op) => match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
-                        Ok(arg) => slf
-                            .$f(py, arg, op)
-                            .map(|res| res.into_py_object(py).into_object()),
-                        Err(_) => Ok(py.NotImplemented()),
-                    },
+                    Ok(op) => {
+                        match py_class_call_slot_impl_with_ref!(py, slf, $f, arg: $arg_type, op) {
+                            Ok(r) => r.map(|r| r.into_py_object(py).into_object()),
+                            Err(e) => Ok(py.NotImplemented()),
+                        }
+                    }
                     Err(_) => Ok(py.NotImplemented()),
                 };
                 $crate::PyDrop::release_ref(arg, py);
@@ -383,7 +433,7 @@ macro_rules! py_class_richcompare_slot {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_contains_slot {
-    ($class:ident :: $f:ident, $arg_type:ty) => {{
+    ($class:ident :: $f:ident, $arg_type:tt) => {{
         unsafe extern "C" fn sq_contains(
             slf: *mut $crate::_detail::ffi::PyObject,
             arg: *mut $crate::_detail::ffi::PyObject,
@@ -396,8 +446,8 @@ macro_rules! py_class_contains_slot {
                     let slf = $crate::PyObject::from_borrowed_ptr(py, slf)
                         .unchecked_cast_into::<$class>();
                     let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                    let ret = match <$arg_type as $crate::FromPyObject>::extract(py, &arg) {
-                        Ok(arg) => slf.$f(py, arg),
+                    let ret = match py_class_call_slot_impl_with_ref!(py, slf, $f, arg: $arg_type) {
+                        Ok(r) => r,
                         Err(e) => $crate::py_class::slots::type_error_to_false(py, e),
                     };
                     $crate::PyDrop::release_ref(arg, py);

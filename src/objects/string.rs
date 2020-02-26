@@ -284,10 +284,8 @@ impl PyString {
     fn data_impl(&self, py: Python) -> PyStringData {
         // TODO: return the original representation instead
         // of forcing the UTF-8 representation to be created.
-        // TODO: Switch to std::mem::MaybeUninit once available.
-        #[allow(deprecated)]
+        let mut size: ffi::Py_ssize_t = 0;
         unsafe {
-            let mut size: ffi::Py_ssize_t = mem::uninitialized();
             let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size) as *const u8;
             if data.is_null() {
                 PyErr::fetch(py).print(py);
