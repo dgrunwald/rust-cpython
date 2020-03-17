@@ -28,6 +28,8 @@ pub use crate::fileutils::*;
 pub use crate::floatobject::*;
 pub use crate::frameobject::PyFrameObject;
 pub use crate::import::*;
+#[cfg(all(Py_3_8, not(Py_LIMITED_API)))]
+pub use crate::initconfig::*;
 pub use crate::intrcheck::*;
 pub use crate::iterobject::*;
 pub use crate::listobject::*;
@@ -48,6 +50,7 @@ pub use crate::pydebug::*;
 pub use crate::pyerrors::*;
 #[cfg(Py_3_4)]
 pub use crate::pyhash::*;
+pub use crate::pylifecycle::*;
 pub use crate::pymem::*;
 pub use crate::pyport::*;
 pub use crate::pystate::*;
@@ -214,8 +217,7 @@ mod modsupport;
 // TODO some functions need to be moved to pylifecycle
 mod pythonrun;
 
-// TODO new in 3.5
-// mod pylifecycle;
+mod pylifecycle;
 
 // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 mod ceval;
@@ -284,3 +286,6 @@ pub mod frameobject {
 }
 
 mod marshal;
+
+#[cfg(all(Py_3_8, not(Py_LIMITED_API)))]
+mod initconfig;
