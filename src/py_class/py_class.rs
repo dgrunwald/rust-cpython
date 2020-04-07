@@ -171,7 +171,10 @@ Declares a static method callable from Python.
 
 `@property_name.setter def set_method_name(&self, value: Option<impl FromPyObject>) -> PyResult<()> { ... }`
 
-Declares a property (attribute with code for getting and optionally setting) accessible from Python.
+Declares a Python data attribute backed by Rust methods to
+get its value and, optionally, to set or delete it.
+
+### Setter details
 
 * The setter is optional.  If omitted, the attribute will be read-only.
 * Unlike Python, the setter method name must be different from the property name.
