@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.4.1...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.0...HEAD
+
+## 0.5.0 - 2020-04-08
+
+- [properties (attributes with getter/setters defined in Rust][208] (PR by [@markbt])
+- [adoption of 2018 edition and general code modernization][204] (PR by [@markbt])
+- [reference extraction for slot functions and optional reference extraction][207] (PR by [@markbt])
+- [PEP-587 initialization APIs (python3-sys for Python≥3.8)][211] (PR by [@indygreg])
+- [more import APIs (python3-sys)][210] (PR by [@indygreg])
 
 ## 0.4.1 - 2020-02-03
 - [link-time inconsistency with build config][135] (original PR by [@svevang] adapted as [202])
