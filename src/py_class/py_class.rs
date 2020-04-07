@@ -176,10 +176,13 @@ get its value and, optionally, to set or delete it.
 
 ### Setter details
 
-* The setter is optional.  If omitted, the attribute will be read-only.
+* The setter is optional.  If omitted, the attribute will be read-only
+  and any setting or deleting attempt will raise `AttributeError`.
 * Unlike Python, the setter method name must be different from the property name.
   The setter method name is used to call the setter from Rust.
-* If value is `None` then the property is being deleted.
+* A `None` value represents that the property is being deleted, for instance
+  with Python `del`.
+  As with Python properties, what should happen is entirely up to the implementation.
 * The value type can be any type that implements `FromPyObject`, or a reference or
   optional reference to any type that implements `RefFromPyObject`.  In the latter
   case, the type of the value is `Option<Option<&impl RefFromPyObject>>`, where

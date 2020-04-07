@@ -1261,6 +1261,10 @@ fn properties() {
     py_run!(py, c, "assert c.match");
     assert!(c.r#match(py).unwrap());
 
+    // Instead of really deleting, our setter sets back to 0
+    py_run!(py, c, "delattr(c, 'prop')");
+    py_run!(py, c, "assert c.prop == 0");
+
     py_run!(py, c, "c.prop_by_ref = 'testing'");
     py_run!(py, c, "assert c.prop_by_ref == 'testing'");
 
