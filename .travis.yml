@@ -8,12 +8,16 @@ python:
   - "3.8"
 env:
   - RUST_VERSION=1.32.0
+  - RUST_VERSION=stable
   - RUST_VERSION=nightly
 matrix:
   include:
     - os: osx
       language: generic
       env: RUST_VERSION=1.32.0
+    - os: osx
+      language: generic
+      env: RUST_VERSION=stable
     - os: osx
       language: generic
       env: RUST_VERSION=nightly
