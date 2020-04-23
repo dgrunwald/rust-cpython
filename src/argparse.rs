@@ -197,7 +197,7 @@ macro_rules! py_argparse_parse_plist_impl {
     // TT muncher macro that does the main work for py_argparse_parse_plist!.
 
     // Base case: all parameters handled
-    { $callback:ident { $($initial_arg:tt)* } $output:tt ( ) } => {
+    { $callback:ident { $($initial_arg:tt)* } $output:tt ( $(,)? ) } => {
         $crate::$callback! { $($initial_arg)* $output }
     };
     // Kwargs parameter with reference extraction

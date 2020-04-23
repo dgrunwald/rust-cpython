@@ -81,6 +81,32 @@ fn one_arg() {
 }
 
 #[test]
+fn trailing_comma() {
+    fn f(_py: Python, i: usize, j: usize) -> PyResult<usize> {
+        Ok(i + j)
+    }
+
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    // Define a function where the parameters are on separate
+    // lines with trailing commas.
+    let obj = py_fn!(
+        py,
+        f(
+            first_parameter_with_long_name: usize,
+            second_parameter_with_long_name: usize,
+        )
+    );
+    assert_eq!(
+        obj.call(py, (1, 1), None)
+            .unwrap()
+            .extract::<i32>(py)
+            .unwrap(),
+        2
+    );
+}
+
+#[test]
 fn inline_two_args() {
     let gil = Python::acquire_gil();
     let py = gil.python();
