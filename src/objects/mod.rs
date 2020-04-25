@@ -39,6 +39,7 @@ pub use self::num::{PyFloat, PyLong};
 pub use self::sequence::PySequence;
 pub use self::set::PySet;
 pub use self::tuple::{NoArgs, PyTuple};
+pub use self::descrobject::PyDictProxy;
 
 #[macro_export]
 macro_rules! pyobject_newtype(
@@ -146,6 +147,7 @@ mod set;
 mod string;
 mod tuple;
 mod typeobject;
+mod descrobject;
 
 #[cfg(feature = "python27-sys")]
 pub mod oldstyle;
