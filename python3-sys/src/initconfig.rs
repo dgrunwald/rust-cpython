@@ -14,10 +14,23 @@ pub enum PyStatusType {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct PyStatus {
-    _type: PyStatusType,
-    func: *const c_char,
-    err_msg: *const c_char,
-    exitcode: c_int,
+    pub _type: PyStatusType,
+    pub func: *const c_char,
+    pub err_msg: *const c_char,
+    pub exitcode: c_int,
+}
+
+impl Default for PyStatus {
+    fn default() -> Self {
+        // zeroed() is UB for enums. So we are explicit about
+        // what value it is set to. This probably isn't necessary
+        // as we are dealing with a C-compat struct and 0 is a valid
+        // enum value. But explicit is better than UB.
+        let mut status: Self = unsafe { core::mem::zeroed() };
+        status._type = PyStatusType::_PyStatus_TYPE_OK;
+
+        status
+    }
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -35,8 +48,8 @@ extern "C" {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct PyWideStringList {
-    length: Py_ssize_t,
-    items: *mut *mut wchar_t,
+    pub length: Py_ssize_t,
+    pub items: *mut *mut wchar_t,
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -52,18 +65,24 @@ extern "C" {
 #[repr(C)]
 #[derive(Clone)]
 pub struct PyPreConfig {
-    _config_init: c_int,
-    parse_argv: c_int,
-    isolated: c_int,
-    use_environment: c_int,
-    configure_locale: c_int,
-    coerce_c_locale: c_int,
-    coerce_c_locale_warn: c_int,
+    pub _config_init: c_int,
+    pub parse_argv: c_int,
+    pub isolated: c_int,
+    pub use_environment: c_int,
+    pub configure_locale: c_int,
+    pub coerce_c_locale: c_int,
+    pub coerce_c_locale_warn: c_int,
     #[cfg(windows)]
-    legacy_windows_fs_encoding: c_int,
-    utf8_mode: c_int,
-    dev_mode: c_int,
-    allocator: c_int,
+    pub legacy_windows_fs_encoding: c_int,
+    pub utf8_mode: c_int,
+    pub dev_mode: c_int,
+    pub allocator: c_int,
+}
+
+impl Default for PyPreConfig {
+    fn default() -> Self {
+        unsafe { core::mem::zeroed() }
+    }
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -75,62 +94,68 @@ extern "C" {
 #[repr(C)]
 #[derive(Clone)]
 pub struct PyConfig {
-    _config_init: c_int,
-    isolated: c_int,
-    use_environment: c_int,
-    dev_mode: c_int,
-    install_signal_handlers: c_int,
-    use_hash_seed: c_int,
-    hash_seed: c_ulong,
-    faulthandler: c_int,
-    tracemalloc: c_int,
-    import_time: c_int,
-    show_ref_count: c_int,
-    show_alloc_count: c_int,
-    dump_refs: c_int,
-    malloc_stats: c_int,
-    filesystem_encoding: *mut wchar_t,
-    filesystem_errors: *mut wchar_t,
-    pycache_prefix: *mut wchar_t,
-    parse_argv: c_int,
-    argv: PyWideStringList,
-    program_name: *mut wchar_t,
-    xoptions: PyWideStringList,
-    warnoptions: PyWideStringList,
-    site_import: c_int,
-    bytes_warning: c_int,
-    inspect: c_int,
-    interactive: c_int,
-    optimization_level: c_int,
-    parser_debug: c_int,
-    write_bytecode: c_int,
-    verbose: c_int,
-    quiet: c_int,
-    user_site_directory: c_int,
-    configure_c_stdio: c_int,
-    buffered_stdio: c_int,
-    stdio_encoding: *mut wchar_t,
-    stdio_errors: *mut wchar_t,
+    pub _config_init: c_int,
+    pub isolated: c_int,
+    pub use_environment: c_int,
+    pub dev_mode: c_int,
+    pub install_signal_handlers: c_int,
+    pub use_hash_seed: c_int,
+    pub hash_seed: c_ulong,
+    pub faulthandler: c_int,
+    pub tracemalloc: c_int,
+    pub import_time: c_int,
+    pub show_ref_count: c_int,
+    pub show_alloc_count: c_int,
+    pub dump_refs: c_int,
+    pub malloc_stats: c_int,
+    pub filesystem_encoding: *mut wchar_t,
+    pub filesystem_errors: *mut wchar_t,
+    pub pycache_prefix: *mut wchar_t,
+    pub parse_argv: c_int,
+    pub argv: PyWideStringList,
+    pub program_name: *mut wchar_t,
+    pub xoptions: PyWideStringList,
+    pub warnoptions: PyWideStringList,
+    pub site_import: c_int,
+    pub bytes_warning: c_int,
+    pub inspect: c_int,
+    pub interactive: c_int,
+    pub optimization_level: c_int,
+    pub parser_debug: c_int,
+    pub write_bytecode: c_int,
+    pub verbose: c_int,
+    pub quiet: c_int,
+    pub user_site_directory: c_int,
+    pub configure_c_stdio: c_int,
+    pub buffered_stdio: c_int,
+    pub stdio_encoding: *mut wchar_t,
+    pub stdio_errors: *mut wchar_t,
     #[cfg(windows)]
-    legacy_windows_stdio: c_int,
-    check_hash_pycs_mode: *mut wchar_t,
-    pathconfig_warnings: c_int,
-    pythonpath_env: *mut wchar_t,
-    home: *mut wchar_t,
-    module_search_paths_set: c_int,
-    module_search_paths: PyWideStringList,
-    executable: *mut wchar_t,
-    base_executable: *mut wchar_t,
-    prefix: *mut wchar_t,
-    base_prefix: *mut wchar_t,
-    exec_prefix: *mut wchar_t,
-    base_exec_prefix: *mut wchar_t,
-    skip_source_first_line: c_int,
-    run_command: *mut wchar_t,
-    run_module: *mut wchar_t,
-    run_filename: *mut wchar_t,
-    _install_importlib: c_int,
-    _init_main: c_int,
+    pub legacy_windows_stdio: c_int,
+    pub check_hash_pycs_mode: *mut wchar_t,
+    pub pathconfig_warnings: c_int,
+    pub pythonpath_env: *mut wchar_t,
+    pub home: *mut wchar_t,
+    pub module_search_paths_set: c_int,
+    pub module_search_paths: PyWideStringList,
+    pub executable: *mut wchar_t,
+    pub base_executable: *mut wchar_t,
+    pub prefix: *mut wchar_t,
+    pub base_prefix: *mut wchar_t,
+    pub exec_prefix: *mut wchar_t,
+    pub base_exec_prefix: *mut wchar_t,
+    pub skip_source_first_line: c_int,
+    pub run_command: *mut wchar_t,
+    pub run_module: *mut wchar_t,
+    pub run_filename: *mut wchar_t,
+    pub _install_importlib: c_int,
+    pub _init_main: c_int,
+}
+
+impl Default for PyConfig {
+    fn default() -> Self {
+        unsafe { core::mem::zeroed() }
+    }
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
