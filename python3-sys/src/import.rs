@@ -104,18 +104,38 @@ extern "C" {
     #[cfg(Py_3_7)]
     pub fn _PyImport_FindBuiltin(name: *const c_char, modules: *mut PyObject) -> *mut PyObject;
 
-    pub fn _PyImport_FindExtensionObject(name: *mut PyObject, filename: *mut PyObject) -> *mut PyObject;
+    pub fn _PyImport_FindExtensionObject(
+        name: *mut PyObject,
+        filename: *mut PyObject,
+    ) -> *mut PyObject;
 
     #[cfg(Py_3_7)]
-    pub fn _PyImport_FindExtensionObjectEx(name: *mut PyObject, filename: *mut PyObject, modules: *mut PyObject) -> *mut PyObject;
+    pub fn _PyImport_FindExtensionObjectEx(
+        name: *mut PyObject,
+        filename: *mut PyObject,
+        modules: *mut PyObject,
+    ) -> *mut PyObject;
 
     #[cfg(not(Py_3_7))]
     pub fn _PyImport_FixupBuiltin(module: *mut PyObject, name: *const c_char) -> c_int;
     #[cfg(Py_3_7)]
-    pub fn _PyImport_FixupBuiltin(module: *mut PyObject, name: *const c_char, modules: *mut PyObject) -> c_int;
+    pub fn _PyImport_FixupBuiltin(
+        module: *mut PyObject,
+        name: *const c_char,
+        modules: *mut PyObject,
+    ) -> c_int;
 
     #[cfg(not(Py_3_7))]
-    pub fn _PyImport_FixupExtensionObject(module: *mut PyObject, name: *mut PyObject, filename: *mut PyObject) -> c_int;
+    pub fn _PyImport_FixupExtensionObject(
+        module: *mut PyObject,
+        name: *mut PyObject,
+        filename: *mut PyObject,
+    ) -> c_int;
     #[cfg(Py_3_7)]
-    pub fn _PyImport_FixupExtensionObject(module: *mut PyObject, name: *mut PyObject, filename: *mut PyObject, modules: *mut PyObject) -> c_int;
+    pub fn _PyImport_FixupExtensionObject(
+        module: *mut PyObject,
+        name: *mut PyObject,
+        filename: *mut PyObject,
+        modules: *mut PyObject,
+    ) -> c_int;
 }
