@@ -21,6 +21,7 @@ extern "C" {
         size: Py_ssize_t,
         flags: c_int,
     ) -> *mut PyObject;
+    pub fn PyMemoryView_FromBuffer(view: *mut Py_buffer) -> *mut PyObject;
     pub fn PyMemoryView_GetContiguous(
         base: *mut PyObject,
         buffertype: c_int,

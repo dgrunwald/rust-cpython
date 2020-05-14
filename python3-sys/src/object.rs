@@ -430,6 +430,10 @@ mod typeobject {
             unsafe { core::mem::zeroed() }
         }
     }
+    pub const PyBufferProcs_INIT: PyBufferProcs = PyBufferProcs {
+        bf_getbuffer: None,
+        bf_releasebuffer: None,
+    };
 
     #[repr(C)]
     #[derive(Copy)]
