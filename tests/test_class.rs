@@ -1276,3 +1276,150 @@ fn properties() {
     py_run!(py, c, "del c.prop_by_opt_ref");
     py_run!(py, c, "repr(c) == 'P(42, \"testing\" \"DELETED\")'");
 }
+
+#[cfg(feature = "python3-sys")]
+mod py3_only {
+    use self::RefCountLog::*;
+    use super::*;
+    use std::sync::Mutex;
+
+    #[derive(PartialEq, Debug)]
+    enum RefCountLog {
+        Plus,
+        Minus,
+    }
+
+    struct SharedBuffer {
+        buf: Vec<u8>,
+        log: Mutex<Vec<RefCountLog>>,
+    }
+
+    impl SharedBuffer {
+        fn new(buf: Vec<u8>) -> Arc<Self> {
+            Arc::new(SharedBuffer {
+                buf,
+                log: Mutex::new(vec![]),
+            })
+        }
+    }
+
+    struct TestBuffer {
+        ptr: Arc<SharedBuffer>,
+        count_drop: bool,
+    }
+
+    impl TestBuffer {
+        fn new(ptr: &Arc<SharedBuffer>) -> Self {
+            ptr.log.lock().unwrap().push(RefCountLog::Plus);
+            Self::from_arc(ptr.clone())
+        }
+        fn into_arc(mut self) -> Arc<SharedBuffer> {
+            self.count_drop = false;
+            self.ptr.clone()
+        }
+        fn from_arc(ptr: Arc<SharedBuffer>) -> Self {
+            Self {
+                ptr: ptr.clone(),
+                count_drop: true,
+            }
+        }
+    }
+    impl Drop for TestBuffer {
+        fn drop(&mut self) {
+            if self.count_drop {
+                self.ptr.log.lock().unwrap().push(RefCountLog::Minus);
+            }
+        }
+    }
+
+    unsafe impl buffer::BufferHandle for TestBuffer {
+        fn as_bytes(&self) -> &[u8] {
+            &self.ptr.buf
+        }
+        fn to_owned_void_pointer(self) -> *mut libc::c_void {
+            let raw = Arc::into_raw(self.into_arc());
+            assert_eq!(
+                std::mem::size_of::<*mut libc::c_void>(),
+                std::mem::size_of_val(&raw)
+            );
+            raw as *const libc::c_void as *mut libc::c_void
+        }
+        unsafe fn from_owned_void_pointer(ptr: *mut libc::c_void) -> Self {
+            TestBuffer::from_arc(Arc::from_raw(ptr as *const libc::c_void as *const _))
+        }
+    }
+
+    py_class!(class BufferProtocol |py| {
+        data ptr: Arc<SharedBuffer>;
+
+        def __buffer__(&self) -> PyResult<TestBuffer> {
+            Ok(TestBuffer::new(self.ptr(py)))
+        }
+    });
+
+    #[test]
+    fn buffer_protocol() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+
+        let buf = SharedBuffer::new(vec![1, 2, 42]);
+        let log_access = buf.clone();
+
+        let c = BufferProtocol::create_instance(py, buf).unwrap();
+
+        macro_rules! check_log {
+            ($($e:expr),+; $($r:expr),+) => {
+                py_run!(py, c, &[$($e),+].join("\n")[..]);
+                {
+                    let should_log = &[$($r),+];
+                    let mut log = log_access.log.lock().unwrap();
+                    assert_eq!(&**log, should_log);
+                    log.clear();
+                }
+            }
+        }
+
+        check_log!("memoryview(c)"; Plus, Minus);
+        check_log!("assert memoryview(c).readonly"; Plus, Minus);
+        check_log!("assert len(memoryview(c)) == 3"; Plus, Minus);
+        check_log!("assert memoryview(c)[0] == 1"; Plus, Minus);
+        check_log!("assert memoryview(c)[2] == 42"; Plus, Minus);
+        check_log!("assert list(memoryview(c)) == [1, 2, 42]"; Plus, Minus);
+        check_log!(
+            "a = memoryview(c)",
+            "b = memoryview(c)",
+            "assert a == b";
+            Plus, Plus, Minus, Minus);
+        check_log!(
+            "a = memoryview(c)",
+            "b = memoryview(a)",
+            "assert a == b";
+            Plus, Minus);
+        check_log!(
+            "def foo(x):",
+            "  a = memoryview(x)",
+            "  assert a[1] == 2",
+            "foo(c)",
+            "foo(c)";
+            Plus, Minus, Plus, Minus);
+        check_log!(
+            "def foo(x):",
+            "  a = memoryview(x)",
+            "  assert a[1] == 2",
+            "foo(c)",
+            "e = memoryview(c)",
+            "f = memoryview(c)",
+            "assert e[2] == f[2] == 42";
+            Plus, Minus, Plus, Plus, Minus, Minus);
+
+        check_log!(
+            "with memoryview(c):",
+            "  pass",
+            "with memoryview(c):",
+            "  pass";
+            Plus, Minus, Plus, Minus);
+
+        py_expect_exception!(py, c, "memoryview(c)[3]", IndexError);
+        py_expect_exception!(py, c, "memoryview(c)[2] = 413", TypeError);
+    }
+}

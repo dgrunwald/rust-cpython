@@ -661,6 +661,60 @@ impl_element!(isize, SignedInteger);
 impl_element!(f32, Float);
 impl_element!(f64, Float);
 
+/// Trait for the backing storage of a PyBuffer provided from a Rust binding.
+///
+/// It is unsafe because its implementation needs to uphold certain invariants.
+/// See the method docs for more details.
+// TODO:
+// - Buffer request can not fail yet
+// - Buffer can not actually store data inside the object itself, only in a
+//   standalone owned object, which usually means a heap allocated reference counted
+//   container.
+pub unsafe trait BufferHandle: 'static + Send {
+    /// Returns the data of `Self` as a continous array of bytes.
+    ///
+    /// # Safety
+    ///
+    /// This needs to return an address that remains valid
+    /// and stable if `self` gets moved or transformed to or from a void pointer.
+    fn as_bytes(&self) -> &[u8];
+
+    /// Convert `self` into an owned void pointer.
+    ///
+    /// # Safety
+    ///
+    /// The returned pointer has to be a valid pointer that
+    /// can be converted back to `Self`.
+    fn to_owned_void_pointer(self) -> *mut libc::c_void;
+
+    /// Convert an owned void pointer back to `Self`. This takes owenrship of the pointer.
+    ///
+    /// # Safety
+    ///
+    /// The passed `ptr` has been created by this trait, and is only
+    /// used at most once to convert back to `Self`.
+    unsafe fn from_owned_void_pointer(ptr: *mut libc::c_void) -> Self;
+}
+
+#[doc(hidden)]
+pub struct BufferHandleRaw {
+    pub buf: *mut libc::c_void,
+    pub len: crate::Py_ssize_t,
+    pub owner: *mut libc::c_void,
+}
+
+impl BufferHandleRaw {
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new<T: BufferHandle>(handle: T) -> Self {
+        let slice = handle.as_bytes();
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = handle.to_owned_void_pointer();
+        Self { buf, len, owner }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::PyBuffer;

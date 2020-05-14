@@ -109,13 +109,13 @@ mod bufferinfo {
         }
     }
 
-    pub type getbufferproc = extern "C" fn(
+    pub type getbufferproc = unsafe extern "C" fn(
         arg1: *mut crate::object::PyObject,
         arg2: *mut Py_buffer,
         arg3: c_int,
     ) -> c_int;
     pub type releasebufferproc =
-        extern "C" fn(arg1: *mut crate::object::PyObject, arg2: *mut Py_buffer) -> ();
+        unsafe extern "C" fn(arg1: *mut crate::object::PyObject, arg2: *mut Py_buffer) -> ();
 
     /// Maximum number of dimensions
     pub const PyBUF_MAX_NDIM: c_int = 64;

@@ -247,7 +247,8 @@ slot_groups = (
     ('nb', 'as_number', None),
     ('sq', 'as_sequence', None),
     ('mp', 'as_mapping', None),
-    ('sdi', 'setdelitem', ['sdi_setitem', 'sdi_delitem'])
+    ('bf', 'as_buffer', ['bf_getbuffer', 'bf_releasebuffer']),
+    ('sdi', 'setdelitem', ['sdi_setitem', 'sdi_delitem']),
 )
 
 def generate_case(pattern, old_info=None, new_info=None, new_impl=None, new_slots=None, new_members=None, new_props=None):
@@ -723,6 +724,19 @@ def inplace_numeric_operator(special_name, slot):
     operator(slot=slot,
              args=[Argument('other')])(special_name)
 
+@special_method
+def buffer_protocol(special_name, enabled):
+    if enabled:
+        pattern = 'def %s (&$slf:ident) -> $res_type:ty $body:block' % special_name
+        new_slots = []
+        for slot in ['bf_getbuffer', 'bf_releasebuffer']:
+            new_slots.append((slot, '$crate::py_class_buffer_slot!(%s, $class::%s)' % (slot, special_name)))
+        generate_case(pattern, new_slots=new_slots, new_impl='''
+            impl $class {
+                fn %s(&$slf, $py: $crate::Python<'_>) -> $res_type $body
+            }
+        ''' % special_name)
+
 special_names = {
     '__init__': error('__init__ is not supported by py_class!; use __new__ instead.'),
     '__new__': special_class_method(
@@ -870,6 +884,9 @@ special_names = {
     '__aiter__': unimplemented(),
     '__aenter__': unimplemented(),
     '__aexit__': unimplemented(),
+
+    # Buffer protocol
+    '__buffer__': buffer_protocol(not PY2),
 }
 
 def main():
@@ -907,4 +924,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

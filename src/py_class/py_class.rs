@@ -465,6 +465,10 @@ macro_rules! py_class {
                 /* as_number */   [ /* slot: expr, */ ]
                 /* as_sequence */ [ /* slot: expr, */ ]
                 /* as_mapping */  [ /* slot: expr, */ ]
+                /* as_buffer */ [
+                    bf_getbuffer: {},
+                    bf_releasebuffer: {},
+                ]
                 /* setitem_delitem */ [
                     sdi_setitem: {},
                     sdi_delitem: {},
@@ -495,6 +499,10 @@ macro_rules! py_class {
                 /* as_number */   [ /* slot: expr, */ ]
                 /* as_sequence */ [ /* slot: expr, */ ]
                 /* as_mapping */  [ /* slot: expr, */ ]
+                /* as_buffer */ [
+                    bf_getbuffer: {},
+                    bf_releasebuffer: {},
+                ]
                 /* setitem_delitem */ [
                     sdi_setitem: {},
                     sdi_delitem: {},
