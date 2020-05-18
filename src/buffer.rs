@@ -665,11 +665,6 @@ impl_element!(f64, Float);
 ///
 /// It is unsafe because its implementation needs to uphold certain invariants.
 /// See the method docs for more details.
-// TODO:
-// - Buffer request can not fail yet
-// - Buffer can not actually store data inside the object itself, only in a
-//   standalone owned object, which usually means a heap allocated reference counted
-//   container.
 pub unsafe trait BufferHandle: 'static + Send {
     /// Returns the data of `Self` as a continous array of bytes.
     ///
