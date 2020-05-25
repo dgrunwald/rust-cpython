@@ -1358,7 +1358,7 @@ mod py3_only {
     });
 
     #[test]
-    fn buffer_protocol() {
+    fn test_buffer() {
         let gil = Python::acquire_gil();
         let py = gil.python();
 
@@ -1418,6 +1418,65 @@ mod py3_only {
             "with memoryview(c):",
             "  pass";
             Plus, Minus, Plus, Minus);
+
+        py_expect_exception!(py, c, "memoryview(c)[3]", IndexError);
+        py_expect_exception!(py, c, "memoryview(c)[2] = 413", TypeError);
+    }
+
+    py_class!(class DirectBufferProtocol |py| {
+        data ptr: Arc<Vec<u8>>;
+
+        def __direct_buffer__<'a>(&'a self) -> PyResult<&'a [u8]> {
+            Ok(self.ptr(py))
+        }
+    });
+
+    #[test]
+    fn test_direct_buffer() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+
+        let buf = Arc::new(vec![1, 2, 42]);
+
+        let c = DirectBufferProtocol::create_instance(py, buf).unwrap();
+
+        macro_rules! check_log {
+            ($($e:expr),+) => {
+                py_run!(py, c, &[$($e),+].join("\n")[..]);
+            }
+        }
+
+        check_log!("memoryview(c)");
+        check_log!("assert memoryview(c).readonly");
+        check_log!("assert len(memoryview(c)) == 3");
+        check_log!("assert memoryview(c)[0] == 1");
+        check_log!("assert memoryview(c)[2] == 42");
+        check_log!("assert list(memoryview(c)) == [1, 2, 42]");
+        check_log!("a = memoryview(c)", "b = memoryview(c)", "assert a == b");
+        check_log!("a = memoryview(c)", "b = memoryview(a)", "assert a == b");
+        check_log!(
+            "def foo(x):",
+            "  a = memoryview(x)",
+            "  assert a[1] == 2",
+            "foo(c)",
+            "foo(c)"
+        );
+        check_log!(
+            "def foo(x):",
+            "  a = memoryview(x)",
+            "  assert a[1] == 2",
+            "foo(c)",
+            "e = memoryview(c)",
+            "f = memoryview(c)",
+            "assert e[2] == f[2] == 42"
+        );
+
+        check_log!(
+            "with memoryview(c):",
+            "  pass",
+            "with memoryview(c):",
+            "  pass"
+        );
 
         py_expect_exception!(py, c, "memoryview(c)[3]", IndexError);
         py_expect_exception!(py, c, "memoryview(c)[2] = 413", TypeError);

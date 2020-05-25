@@ -725,17 +725,28 @@ def inplace_numeric_operator(special_name, slot):
              args=[Argument('other')])(special_name)
 
 @special_method
-def buffer_protocol(special_name, enabled):
+def buffer_protocol(special_name, enabled, mode):
     if enabled:
-        pattern = 'def %s (&$slf:ident) -> $res_type:ty $body:block' % special_name
+        if mode == "direct":
+            pattern = 'def %s <$gil_lt:lifetime>(&$slf_lt:lifetime $slf:ident) -> $res_type:ty $body:block' % special_name
+            new_impl='''
+                impl $class {
+                    fn %s<$gil_lt>(&$slf_lt $slf, $py: $crate::Python<$gil_lt>) -> $res_type $body
+                }
+            ''' % special_name
+
+        if mode == "handle":
+            pattern = 'def %s (&$slf:ident) -> $res_type:ty $body:block' % special_name
+            new_impl='''
+                impl $class {
+                    fn %s(&$slf, $py: $crate::Python<'_>) -> $res_type $body
+                }
+            ''' % special_name
+
         new_slots = []
         for slot in ['bf_getbuffer', 'bf_releasebuffer']:
-            new_slots.append((slot, '$crate::py_class_buffer_slot!(%s, $class::%s)' % (slot, special_name)))
-        generate_case(pattern, new_slots=new_slots, new_impl='''
-            impl $class {
-                fn %s(&$slf, $py: $crate::Python<'_>) -> $res_type $body
-            }
-        ''' % special_name)
+            new_slots.append((slot, '$crate::py_class_buffer_slot!(%s, %s, $class::%s)' % (mode, slot, special_name)))
+        generate_case(pattern, new_slots=new_slots, new_impl=new_impl)
 
 special_names = {
     '__init__': error('__init__ is not supported by py_class!; use __new__ instead.'),
@@ -886,7 +897,8 @@ special_names = {
     '__aexit__': unimplemented(),
 
     # Buffer protocol
-    '__buffer__': buffer_protocol(not PY2),
+    '__buffer__': buffer_protocol(not PY2, "handle"),
+    '__direct_buffer__': buffer_protocol(not PY2, "direct"),
 }
 
 def main():

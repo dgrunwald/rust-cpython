@@ -501,37 +501,6 @@ macro_rules! py_class_impl {
     { { def __bool__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __bool__" }
     };
-    { { def __buffer__ (&$slf:ident) -> $res_type:ty $body:block $($tail:tt)* }
-        $class:ident $py:ident $info:tt
-        /* slots: */ {
-            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
-            /* as_buffer */ [
-                bf_getbuffer: {},
-                bf_releasebuffer: {},
-            ]
-            $setdelitem:tt
-        }
-        { $( $imp:item )* }
-        $members:tt $props:tt
-    } => { $crate::py_class_impl! {
-        { $($tail)* }
-        $class $py $info
-        /* slots: */ {
-            $type_slots $as_number $as_sequence $as_mapping
-            /* as_buffer */ [
-                bf_getbuffer: { $crate::py_class_buffer_slot!(bf_getbuffer, $class::__buffer__) },
-                bf_releasebuffer: { $crate::py_class_buffer_slot!(bf_releasebuffer, $class::__buffer__) },
-            ]
-            $setdelitem
-        }
-        /* impl: */ {
-            $($imp)*
-            impl $class {
-                fn __buffer__(&$slf, $py: $crate::Python<'_>) -> $res_type $body
-            }
-        }
-        $members $props
-    }};
     { {  def __call__ (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {

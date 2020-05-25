@@ -30,6 +30,7 @@ use crate::function::CallbackConverter;
 use crate::objects::PyObject;
 use crate::py_class::CompareOp;
 use crate::python::{Python, PythonObject};
+use crate::PySharedRef;
 use crate::Py_hash_t;
 
 #[macro_export]
@@ -603,10 +604,14 @@ impl<T: crate::buffer::BufferHandle> BufferType<T> {
     }
 }
 
+#[doc(hidden)]
+#[inline]
+pub fn assert_buffer_type_direct<C>(_: for<'a> fn(&'a C, Python<'a>) -> PyResult<&'a [u8]>) {}
+
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_buffer_slot {
-    (bf_getbuffer, $class:ident :: $f:ident) => {{
+    (handle, bf_getbuffer, $class:ident :: $f:ident) => {{
         unsafe extern "C" fn getbufferproc(
             exporter: *mut $crate::_detail::ffi::PyObject,
             view: *mut $crate::_detail::ffi::Py_buffer,
@@ -644,7 +649,7 @@ macro_rules! py_class_buffer_slot {
                     $crate::py_class::slots::BufferType::of($class::$f)
                         .assert_same_type(&buf_handle);
 
-                    let buf_handle_raw = $crate::buffer::BufferHandleRaw::new(buf_handle);
+                    let buf_handle_raw = $crate::buffer::BufferHandleRaw::new_owned(buf_handle);
                     Ok(buf_handle_raw)
                 },
             );
@@ -664,7 +669,7 @@ macro_rules! py_class_buffer_slot {
         }
         Some(getbufferproc)
     }};
-    (bf_releasebuffer, $class:ident :: $f:ident) => {{
+    (handle, bf_releasebuffer, $class:ident :: $f:ident) => {{
         unsafe extern "C" fn releasebufferproc(
             exporter: *mut $crate::_detail::ffi::PyObject,
             view: *mut $crate::_detail::ffi::Py_buffer,
@@ -701,6 +706,60 @@ macro_rules! py_class_buffer_slot {
             );
         }
         Some(releasebufferproc)
+    }};
+    (direct, bf_getbuffer, $class:ident :: $f:ident) => {{
+        unsafe extern "C" fn getbufferproc(
+            exporter: *mut $crate::_detail::ffi::PyObject,
+            view: *mut $crate::_detail::ffi::Py_buffer,
+            flags: $crate::_detail::libc::c_int,
+        ) -> $crate::_detail::libc::c_int {
+            /*
+                According to https://docs.python.org/3/c-api/typeobj.html#c.PyBufferProcs,
+                the implementation of this function needs to behave like this:
+
+                1. Check if the request can be met. If not, raise PyExc_BufferError,
+                   set view->obj to NULL and return -1.
+                2. Fill in the requested fields.
+                3. Increment an internal counter for the number of exports.
+                4. Set view->obj to exporter and increment view->obj.
+                5. Return 0.
+
+                We handle 1) by trying to get a buffer via the Rust API, and 2) and 4)
+                via `PyBuffer_FillInfo`. Instead of doing 3) by tracking the number of
+                exported buffers in `exporter`, we just do nothing.
+            */
+
+            const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
+            let res = $crate::_detail::handle_callback(
+                LOCATION,
+                $crate::py_class::slots::BufferHandleConverter,
+                |py| {
+                    let slf = $crate::PyObject::from_borrowed_ptr(py, exporter)
+                        .unchecked_cast_into::<$class>();
+
+                    // assert that we are borrowing bytes from the refcounted $class object
+                    $crate::py_class::slots::assert_buffer_type_direct($class::$f);
+
+                    let buf_slice = slf.$f(py)?;
+
+                    let buf_handle_raw = $crate::buffer::BufferHandleRaw::new_borrowed(buf_slice);
+                    Ok(buf_handle_raw)
+                },
+            );
+            match res {
+                None => -1,
+                Some($crate::buffer::BufferHandleRaw { buf, len, owner }) => {
+                    let readonly = 0x1;
+                    $crate::_detail::ffi::PyBuffer_FillInfo(
+                        view, exporter, buf, len, readonly, flags,
+                    )
+                }
+            }
+        }
+        Some(getbufferproc)
+    }};
+    (direct, bf_releasebuffer, $class:ident :: $f:ident) => {{
+        None
     }};
 }
 

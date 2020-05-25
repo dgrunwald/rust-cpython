@@ -519,8 +519,8 @@ macro_rules! py_class_impl {
         /* slots: */ {
             $type_slots $as_number $as_sequence $as_mapping
             /* as_buffer */ [
-                bf_getbuffer: { $crate::py_class_buffer_slot!(bf_getbuffer, $class::__buffer__) },
-                bf_releasebuffer: { $crate::py_class_buffer_slot!(bf_releasebuffer, $class::__buffer__) },
+                bf_getbuffer: { $crate::py_class_buffer_slot!(handle, bf_getbuffer, $class::__buffer__) },
+                bf_releasebuffer: { $crate::py_class_buffer_slot!(handle, bf_releasebuffer, $class::__buffer__) },
             ]
             $setdelitem
         }
@@ -778,6 +778,37 @@ macro_rules! py_class_impl {
     { { def __dir__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__dir__ is not supported by py_class! yet." }
     };
+    { { def __direct_buffer__ <$gil_lt:lifetime>(&$slf_lt:lifetime $slf:ident) -> $res_type:ty $body:block $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt $as_number:tt $as_sequence:tt $as_mapping:tt
+            /* as_buffer */ [
+                bf_getbuffer: {},
+                bf_releasebuffer: {},
+            ]
+            $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots $as_number $as_sequence $as_mapping
+            /* as_buffer */ [
+                bf_getbuffer: { $crate::py_class_buffer_slot!(direct, bf_getbuffer, $class::__direct_buffer__) },
+                bf_releasebuffer: { $crate::py_class_buffer_slot!(direct, bf_releasebuffer, $class::__direct_buffer__) },
+            ]
+            $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            impl $class {
+                fn __direct_buffer__<$gil_lt>(&$slf_lt $slf, $py: $crate::Python<$gil_lt>) -> $res_type $body
+            }
+        }
+        $members $props
+    }};
 
     { { def __div__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__div__ is not supported by py_class! yet." }

@@ -18,7 +18,7 @@
 
 use libc;
 use std::ffi::CStr;
-use std::{cell, mem, slice};
+use std::{cell, mem, ptr, slice};
 
 use crate::err::{self, PyResult};
 use crate::exc;
@@ -701,11 +701,20 @@ pub struct BufferHandleRaw {
 impl BufferHandleRaw {
     #[doc(hidden)]
     #[inline]
-    pub unsafe fn new<T: BufferHandle>(handle: T) -> Self {
+    pub unsafe fn new_owned<T: BufferHandle>(handle: T) -> Self {
         let slice = handle.as_bytes();
         let buf = slice.as_ptr() as *mut libc::c_void;
         let len = slice.len() as crate::Py_ssize_t;
         let owner = handle.to_owned_void_pointer();
+        Self { buf, len, owner }
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new_borrowed(slice: &[u8]) -> Self {
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = ptr::null_mut();
         Self { buf, len, owner }
     }
 }
