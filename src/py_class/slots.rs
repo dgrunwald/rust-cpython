@@ -637,11 +637,11 @@ macro_rules! py_class_buffer_slot {
                     let slf = $crate::PyObject::from_borrowed_ptr(py, exporter)
                         .unchecked_cast_into::<$class>();
 
-                    let buf_handle = slf.__buffer__(py)?;
+                    let buf_handle = slf.$f(py)?;
 
                     // assert that we are working with the same type as in
                     // `releasebufferproc`
-                    $crate::py_class::slots::BufferType::of($class::__buffer__)
+                    $crate::py_class::slots::BufferType::of($class::$f)
                         .assert_same_type(&buf_handle);
 
                     let buf_handle_raw = $crate::buffer::BufferHandleRaw::new(buf_handle);
@@ -694,7 +694,7 @@ macro_rules! py_class_buffer_slot {
                     (*view).buf = 0 as *mut _;
                     (*view).len = 0;
 
-                    $crate::py_class::slots::BufferType::of($class::__buffer__).drop_buffer(owner);
+                    $crate::py_class::slots::BufferType::of($class::$f).drop_buffer(owner);
 
                     Ok(())
                 },
