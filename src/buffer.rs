@@ -680,7 +680,7 @@ pub unsafe trait BufferHandle: 'static + Send {
     ///
     /// The returned pointer has to be a valid pointer that
     /// can be converted back to `Self`.
-    fn to_owned_void_pointer(self) -> *mut libc::c_void;
+    fn into_owned_void_pointer(self) -> *mut libc::c_void;
 
     /// Convert an owned void pointer back to `Self`. This takes owenrship of the pointer.
     ///
@@ -689,34 +689,6 @@ pub unsafe trait BufferHandle: 'static + Send {
     /// The passed `ptr` has been created by this trait, and is only
     /// used at most once to convert back to `Self`.
     unsafe fn from_owned_void_pointer(ptr: *mut libc::c_void) -> Self;
-}
-
-#[doc(hidden)]
-pub struct BufferHandleRaw {
-    pub buf: *mut libc::c_void,
-    pub len: crate::Py_ssize_t,
-    pub owner: *mut libc::c_void,
-}
-
-impl BufferHandleRaw {
-    #[doc(hidden)]
-    #[inline]
-    pub unsafe fn new_owned<T: BufferHandle>(handle: T) -> Self {
-        let slice = handle.as_bytes();
-        let buf = slice.as_ptr() as *mut libc::c_void;
-        let len = slice.len() as crate::Py_ssize_t;
-        let owner = handle.to_owned_void_pointer();
-        Self { buf, len, owner }
-    }
-
-    #[doc(hidden)]
-    #[inline]
-    pub unsafe fn new_borrowed(slice: &[u8]) -> Self {
-        let buf = slice.as_ptr() as *mut libc::c_void;
-        let len = slice.len() as crate::Py_ssize_t;
-        let owner = ptr::null_mut();
-        Self { buf, len, owner }
-    }
 }
 
 #[cfg(test)]

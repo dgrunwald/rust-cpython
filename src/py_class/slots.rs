@@ -21,7 +21,7 @@ use std::ffi::CString;
 use std::marker::PhantomData;
 use std::{isize, mem, ptr};
 
-use crate::buffer::BufferHandleRaw;
+use crate::buffer::BufferHandle;
 use crate::conversion::ToPyObject;
 use crate::err::{PyErr, PyResult};
 use crate::exc;
@@ -567,6 +567,34 @@ macro_rules! py_class_binary_numeric_slot {
     }};
 }
 
+#[doc(hidden)]
+pub struct BufferHandleRaw {
+    pub buf: *mut libc::c_void,
+    pub len: crate::Py_ssize_t,
+    pub owner: *mut libc::c_void,
+}
+
+impl BufferHandleRaw {
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new_owned<T: BufferHandle>(handle: T) -> Self {
+        let slice = handle.as_bytes();
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = handle.into_owned_void_pointer();
+        Self { buf, len, owner }
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new_borrowed(slice: &[u8]) -> Self {
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = ptr::null_mut();
+        Self { buf, len, owner }
+    }
+}
+
 pub struct BufferHandleConverter;
 
 impl CallbackConverter<BufferHandleRaw> for BufferHandleConverter {
@@ -649,13 +677,14 @@ macro_rules! py_class_buffer_slot {
                     $crate::py_class::slots::BufferType::of($class::$f)
                         .assert_same_type(&buf_handle);
 
-                    let buf_handle_raw = $crate::buffer::BufferHandleRaw::new_owned(buf_handle);
+                    let buf_handle_raw =
+                        $crate::py_class::slots::BufferHandleRaw::new_owned(buf_handle);
                     Ok(buf_handle_raw)
                 },
             );
             match res {
                 None => -1,
-                Some($crate::buffer::BufferHandleRaw { buf, len, owner }) => {
+                Some($crate::py_class::slots::BufferHandleRaw { buf, len, owner }) => {
                     let readonly = 0x1;
                     let ret = $crate::_detail::ffi::PyBuffer_FillInfo(
                         view, exporter, buf, len, readonly, flags,
@@ -742,13 +771,14 @@ macro_rules! py_class_buffer_slot {
 
                     let buf_slice = slf.$f(py)?;
 
-                    let buf_handle_raw = $crate::buffer::BufferHandleRaw::new_borrowed(buf_slice);
+                    let buf_handle_raw =
+                        $crate::py_class::slots::BufferHandleRaw::new_borrowed(buf_slice);
                     Ok(buf_handle_raw)
                 },
             );
             match res {
                 None => -1,
-                Some($crate::buffer::BufferHandleRaw { buf, len, owner }) => {
+                Some($crate::py_class::slots::BufferHandleRaw { buf, len, owner }) => {
                     let readonly = 0x1;
                     $crate::_detail::ffi::PyBuffer_FillInfo(
                         view, exporter, buf, len, readonly, flags,

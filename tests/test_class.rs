@@ -1336,7 +1336,7 @@ mod py3_only {
         fn as_bytes(&self) -> &[u8] {
             &self.ptr.buf
         }
-        fn to_owned_void_pointer(self) -> *mut libc::c_void {
+        fn into_owned_void_pointer(self) -> *mut libc::c_void {
             let raw = Arc::into_raw(self.into_arc());
             assert_eq!(
                 std::mem::size_of::<*mut libc::c_void>(),
