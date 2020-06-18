@@ -340,7 +340,7 @@ macro_rules! py_class_binary_slot {
                 let slf =
                     $crate::PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<$class>();
                 let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                let ret = match py_class_call_slot_impl_with_ref!(
+                let ret = match $crate::py_class_call_slot_impl_with_ref!(
                     py,
                     slf,
                     $f,
@@ -378,7 +378,7 @@ macro_rules! py_class_ternary_slot {
                 let arg2 = $crate::PyObject::from_borrowed_ptr(py, arg2);
                 let ret = match <$arg2_type as $crate::FromPyObject>::extract(py, &arg2) {
                     Ok(arg2) => {
-                        match py_class_call_slot_impl_with_ref!(
+                        match $crate::py_class_call_slot_impl_with_ref!(
                             py,
                             slf,
                             $f,
@@ -440,7 +440,7 @@ macro_rules! py_class_richcompare_slot {
                 let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
                 let ret = match $crate::py_class::slots::extract_op(py, op) {
                     Ok(op) => {
-                        match py_class_call_slot_impl_with_ref!(
+                        match $crate::py_class_call_slot_impl_with_ref!(
                             py,
                             slf,
                             $f,
@@ -482,7 +482,7 @@ macro_rules! py_class_contains_slot {
                     let slf = $crate::PyObject::from_borrowed_ptr(py, slf)
                         .unchecked_cast_into::<$class>();
                     let arg = $crate::PyObject::from_borrowed_ptr(py, arg);
-                    let ret = match py_class_call_slot_impl_with_ref!(
+                    let ret = match $crate::py_class_call_slot_impl_with_ref!(
                         py,
                         slf,
                         $f,
@@ -750,7 +750,7 @@ macro_rules! py_class_prop_setter {
                         slf.$f(py, None)
                     } else {
                         let obj = $crate::PyObject::from_borrowed_ptr(py, obj);
-                        let ret = match py_class_call_slot_impl_with_ref!(
+                        let ret = match $crate::py_class_call_slot_impl_with_ref!(
                             py,
                             slf,
                             $f,
@@ -791,7 +791,7 @@ macro_rules! py_class_tp_getset {
             static mut GETSET: &mut [$crate::_detail::ffi::PyGetSetDef] = &mut [
                 $($crate::_detail::ffi::PyGetSetDef {
                     name: 0 as *mut _,
-                    get: py_class_prop_getter!($class::$getter_name),
+                    get: $crate::py_class_prop_getter!($class::$getter_name),
                     set: None,
                     doc: 0 as *mut _,
                     closure: 0 as *mut _,
@@ -813,7 +813,7 @@ macro_rules! py_class_tp_getset {
                 }
             )*
             $(
-                GETSET[$setter_name].set = py_class_prop_setter!($class::$setter_setter, $value_type);
+                GETSET[$setter_name].set = $crate::py_class_prop_setter!($class::$setter_setter, $value_type);
             )*
             GETSET.as_ptr() as *mut _
         }
