@@ -131,7 +131,7 @@ where
 #[doc(hidden)]
 macro_rules! py_class_class_method {
     ($py:ident, $class:ident :: $f:ident [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
-        py_class_class_method!($py, $class::$f, { "" } [ $( { $pname : $ptype = $detail } )* ])
+        $crate::py_class_class_method!($py, $class::$f, { "" } [ $( { $pname : $ptype = $detail } )* ])
     }};
 
     ($py:ident, $class:ident :: $f:ident, { $doc:expr } [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]) => {{
