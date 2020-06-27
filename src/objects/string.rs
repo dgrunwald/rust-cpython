@@ -330,12 +330,53 @@ impl PyBytes {
         unsafe { err::cast_from_owned_ptr_or_panic(py, ffi::PyBytes_FromStringAndSize(ptr, len)) }
     }
 
+    /// Creates a new Python byte string object of a given size with its content uninitialized.
+    ///
+    /// This can be used instead of `new()` when you want to populate the
+    /// content of the `PyBytes` after creation without having to incur an
+    /// extra memory copy to initialize the `PyBytes` (which `new()` would
+    /// require).
+    pub fn new_uninitialized(py: Python, size: usize) -> PyResult<PyBytes> {
+        unsafe {
+            err::result_cast_from_owned_ptr(
+                py,
+                ffi::PyBytes_FromStringAndSize(std::ptr::null(), size as _),
+            )
+        }
+    }
+
     /// Gets the Python string data as byte slice.
     pub fn data(&self, _py: Python) -> &[u8] {
         unsafe {
             let buffer = ffi::PyBytes_AsString(self.as_ptr()) as *const u8;
             let length = ffi::PyBytes_Size(self.as_ptr()) as usize;
             std::slice::from_raw_parts(buffer, length)
+        }
+    }
+
+    /// Gets the raw bytes data as a mutable slice.
+    ///
+    /// The slice points to data owned by the Python interpreter.
+    ///
+    /// `PyBytes` instances are generally immutable and mutating an instance
+    /// can result in undefined behavior! It is safe to mutate the data if
+    /// this instance was constructed via `new_unitialized()` and the object
+    /// hasn't been used yet. See
+    /// https://docs.python.org/3.8/c-api/bytes.html#c.PyBytes_AsStringAndSize
+    /// for more.
+    pub fn data_mut(&self, _py: Python) -> &mut [u8] {
+        unsafe {
+            let mut buffer: *mut c_char = std::ptr::null_mut();
+            let mut length: ffi::Py_ssize_t = 0;
+            // Since we're sure we're calling a PyBytes and we're passing in the
+            // length, this should never fail.
+            ffi::PyBytes_AsStringAndSize(
+                self.as_ptr(),
+                &mut buffer as *mut _,
+                &mut length as *mut _,
+            );
+
+            std::slice::from_raw_parts_mut(buffer as _, length as usize)
         }
     }
 

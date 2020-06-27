@@ -45,3 +45,9 @@ extern "C" {
         len: *mut Py_ssize_t,
     ) -> c_int;
 }
+
+#[cfg_attr(windows, link(name = "pythonXY"))]
+#[cfg(not(Py_LIMITED_API))]
+extern "C" {
+    pub fn _PyBytes_Resize(arg1: *mut *mut PyObject, arg2: Py_ssize_t) -> c_int;
+}
