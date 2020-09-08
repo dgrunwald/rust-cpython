@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/py_class/py_class.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>py_class.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/py_class/py_class.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>py_class.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -496,6 +496,29 @@
 <span id="496">496</span>
 <span id="497">497</span>
 <span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
 <span class="comment">//</span>
@@ -532,8 +555,7 @@ in all function bodies.
 
 # Example
 ```
-#[macro_use] extern crate cpython;
-use cpython::{Python, PyResult, PyDict};
+use cpython::{Python, PyResult, PyDict, py_class};
 
 py_class!(class MyType |py| {
     data number: i32;
@@ -666,6 +688,30 @@ Declares a static method callable from Python.
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult&lt;T&gt;` for some `T` that implements `ToPyObject`.
 
+## Properties
+`@property def property_name(&amp;self) -&gt; PyResult&lt;...&gt; { ... }`
+
+`@property_name.setter def set_method_name(&amp;self, value: Option&lt;impl FromPyObject&gt;) -&gt; PyResult&lt;()&gt; { ... }`
+
+Declares a Python data attribute backed by Rust methods to
+get its value and, optionally, to set or delete it.
+
+### Setter details
+
+* The setter is optional.  If omitted, the attribute will be read-only
+  and any setting or deleting attempt will raise `AttributeError`.
+* Unlike Python, the setter method name must be different from the property name.
+  The setter method name is used to call the setter from Rust.
+* A `None` value represents that the property is being deleted, for instance
+  with Python `del`.
+  As with Python properties, what should happen is entirely up to the implementation.
+* The value type can be any type that implements `FromPyObject`, or a reference or
+  optional reference to any type that implements `RefFromPyObject`.  In the latter
+  case, the type of the value is `Option&lt;Option&lt;&amp;impl RefFromPyObject&gt;&gt;`, where
+  `None` means the property is being deleted, `Some(None)` means the property is
+  being set to Python `None`, and `Some(Some(value))` means the property is being
+  set to the given value.
+
 ## __new__
 `def __new__(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }`
 
@@ -697,9 +743,8 @@ as every cycle must contain at least one mutable reference.
 Example:
 
 ```
-#[macro_use] extern crate cpython;
 use std::{mem, cell};
-use cpython::{PyObject, PyDrop};
+use cpython::{PyObject, PyDrop, py_class};
 
 py_class!(class ClassWithGCSupport |py| {
     data obj: cell::RefCell&lt;Option&lt;PyObject&gt;&gt;;
@@ -750,9 +795,8 @@ Iterators can be defined using the Python special methods `__iter__` and `__next
 Example:
 
 ```
-#[macro_use] extern crate cpython;
 use std::cell::RefCell;
-use cpython::{PyObject, PyClone, PyResult};
+use cpython::{PyObject, PyClone, PyResult, py_class};
 
 py_class!(class MyIterator |py| {
     data iter: RefCell&lt;Box&lt;Iterator&lt;Item=PyObject&gt; + Send&gt;&gt;;
@@ -924,7 +968,7 @@ py_class!(class MyIterator |py| {
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class</span> {
     (<span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> (
-        <span class="macro">py_class_impl</span><span class="macro">!</span> {
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_impl</span><span class="op">!</span> {
             { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span> )<span class="op">*</span> }
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>
             <span class="comment">/* info: */</span> {
@@ -950,10 +994,11 @@ py_class!(class MyIterator |py| {
             }
             <span class="comment">/* impls: */</span> { <span class="comment">/* impl body */</span> }
             <span class="comment">/* members: */</span> { <span class="comment">/* ident = expr; */</span> }
+            <span class="comment">/* props: */</span> { [ <span class="comment">/* getters */</span> ] [ <span class="comment">/* setters */</span> ] }
         }
     );
     (<span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> (
-        <span class="macro">py_class_impl</span><span class="macro">!</span> {
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_impl</span><span class="op">!</span> {
             { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span> )<span class="op">*</span> }
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>
             <span class="comment">/* info: */</span> {
@@ -979,6 +1024,7 @@ py_class!(class MyIterator |py| {
             }
             <span class="comment">/* impls: */</span> { <span class="comment">/* impl body */</span> }
             <span class="comment">/* members: */</span> { <span class="comment">/* ident = expr; */</span> }
+            <span class="comment">/* props: */</span> { [ <span class="comment">/* getters */</span> ] [ <span class="comment">/* setters */</span> ] }
         }
     );
 }
@@ -988,7 +1034,7 @@ py_class!(class MyIterator |py| {
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_impl_item</span> {
     { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">selfarg</span>:<span class="ident">tt</span> )<span class="op">*</span> )
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span>:<span class="ident">tt</span> } )<span class="op">*</span> ]
-    } <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">py_coerce_item</span><span class="macro">!</span> {
+    } <span class="op">=</span><span class="op">&gt;</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_coerce_item</span><span class="op">!</span> {
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> {
             <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>($( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">selfarg</span> )<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span> $( , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> )<span class="op">*</span> )
             <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
@@ -996,4 +1042,4 @@ py_class!(class MyIterator |py| {
     }}
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

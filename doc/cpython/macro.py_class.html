@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_class"><title>cpython::py_class - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_class', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cpython/py_class/py_class.rs.html#426-485' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_class</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_class"><title>cpython::py_class - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_class', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cpython/py_class/py_class.rs.html#447-508' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_class</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class</span> {
     (<span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> { ... };
     (<span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> { ... };
@@ -18,8 +18,7 @@ in all function bodies.</li>
 </ul>
 <h1 id="example" class="section-header"><a href="#example">Example</a></h1>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
-<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">Python</span>, <span class="ident">PyResult</span>, <span class="ident">PyDict</span>};
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">Python</span>, <span class="ident">PyResult</span>, <span class="ident">PyDict</span>, <span class="ident">py_class</span>};
 
 <span class="macro">py_class</span><span class="macro">!</span>(<span class="ident">class</span> <span class="ident">MyType</span> <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
     <span class="ident">data</span> <span class="ident">number</span>: <span class="ident">i32</span>;
@@ -133,6 +132,27 @@ This may be the type object of a derived class.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
 </ul>
+<h2 id="properties" class="section-header"><a href="#properties">Properties</a></h2>
+<p><code>@property def property_name(&amp;self) -&gt; PyResult&lt;...&gt; { ... }</code></p>
+<p><code>@property_name.setter def set_method_name(&amp;self, value: Option&lt;impl FromPyObject&gt;) -&gt; PyResult&lt;()&gt; { ... }</code></p>
+<p>Declares a Python data attribute backed by Rust methods to
+get its value and, optionally, to set or delete it.</p>
+<h3 id="setter-details" class="section-header"><a href="#setter-details">Setter details</a></h3>
+<ul>
+<li>The setter is optional.  If omitted, the attribute will be read-only
+and any setting or deleting attempt will raise <code>AttributeError</code>.</li>
+<li>Unlike Python, the setter method name must be different from the property name.
+The setter method name is used to call the setter from Rust.</li>
+<li>A <code>None</code> value represents that the property is being deleted, for instance
+with Python <code>del</code>.
+As with Python properties, what should happen is entirely up to the implementation.</li>
+<li>The value type can be any type that implements <code>FromPyObject</code>, or a reference or
+optional reference to any type that implements <code>RefFromPyObject</code>.  In the latter
+case, the type of the value is <code>Option&lt;Option&lt;&amp;impl RefFromPyObject&gt;&gt;</code>, where
+<code>None</code> means the property is being deleted, <code>Some(None)</code> means the property is
+being set to Python <code>None</code>, and <code>Some(Some(value))</code> means the property is being
+set to the given value.</li>
+</ul>
 <h2 id="new" class="section-header"><a href="#new"><strong>new</strong></a></h2>
 <p><code>def __new__(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 <p>Declares a constructor method callable from Python.</p>
@@ -159,9 +179,8 @@ as every cycle must contain at least one mutable reference.</p>
 <p>Example:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">cell</span>};
-<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyDrop</span>};
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyDrop</span>, <span class="ident">py_class</span>};
 
 <span class="macro">py_class</span><span class="macro">!</span>(<span class="ident">class</span> <span class="ident">ClassWithGCSupport</span> <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
     <span class="ident">data</span> <span class="ident">obj</span>: <span class="ident">cell</span>::<span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span><span class="op">&gt;</span>;
@@ -208,9 +227,8 @@ that use <code>RefCell::borrow_mut</code>.</p>
 <p>Example:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cpython</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
-<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyClone</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyObject</span>, <span class="ident">PyClone</span>, <span class="ident">PyResult</span>, <span class="ident">py_class</span>};
 
 <span class="macro">py_class</span><span class="macro">!</span>(<span class="ident">class</span> <span class="ident">MyIterator</span> <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
     <span class="ident">data</span> <span class="ident">iter</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">=</span><span class="ident">PyObject</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span>;
@@ -409,4 +427,4 @@ the implementation of <code>FromPyObject</code> for your type may document addit
 errors).</li>
 <li>If a method panics in Rust, a Python <code>SystemError</code> will be raised.</li>
 </ul>
-</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "cpython";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "cpython";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

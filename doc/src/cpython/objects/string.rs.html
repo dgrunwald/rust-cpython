@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/objects/string.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>string.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/objects/string.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>string.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -580,6 +580,8 @@
 <span id="580">580</span>
 <span id="581">581</span>
 <span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2015 Daniel Grunwald</span>
 <span class="comment">//</span>
@@ -599,15 +601,15 @@
 <span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">exc</span>, <span class="ident">PyObject</span>};
-<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_char</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">PyClone</span>, <span class="ident">Python</span>, <span class="ident">PythonObject</span>, <span class="ident">PythonObjectDowncastError</span>, <span class="ident">ToPythonPointer</span>};
-<span class="kw">use</span> <span class="ident">std</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">char</span>, <span class="ident">mem</span>, <span class="ident">str</span>};
+
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">exc</span>, <span class="ident">PyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">PyClone</span>, <span class="ident">Python</span>, <span class="ident">PythonObject</span>, <span class="ident">PythonObjectDowncastError</span>, <span class="ident">ToPythonPointer</span>};
 
 <span class="doccomment">/// Represents a Python string.</span>
 <span class="doccomment">/// Corresponds to `basestring` in Python 2, and `str` in Python 3.</span>
@@ -638,7 +640,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">PyString</span> <span class="kw">as</span> <span class="ident">PyUnicode</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">impl</span> ::<span class="ident">python</span>::<span class="ident">PythonObjectWithCheckedDowncast</span> <span class="kw">for</span> <span class="ident">PyString</span> {
+<span class="kw">impl</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">PythonObjectWithCheckedDowncast</span> <span class="kw">for</span> <span class="ident">PyString</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">downcast_from</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(
         <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
@@ -662,9 +664,9 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyString</span>, <span class="ident">PythonObjectDowncastError</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> <span class="ident">is_base_string</span>(<span class="ident">obj</span>) {
-                <span class="prelude-val">Ok</span>(::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">obj</span>))
+                <span class="prelude-val">Ok</span>(<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">obj</span>))
             } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>::<span class="ident">new</span>(
+                <span class="prelude-val">Err</span>(<span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">PythonObjectDowncastError</span>::<span class="ident">new</span>(
                     <span class="ident">py</span>,
                     <span class="string">&quot;PyString&quot;</span>,
                     <span class="ident">obj</span>.<span class="ident">get_type</span>(<span class="ident">py</span>),
@@ -686,10 +688,12 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">impl</span> ::<span class="ident">python</span>::<span class="ident">PythonObjectWithTypeObject</span> <span class="kw">for</span> <span class="ident">PyString</span> {
+<span class="kw">impl</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">PythonObjectWithTypeObject</span> <span class="kw">for</span> <span class="ident">PyString</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">type_object</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">super</span>::<span class="ident">PyType</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">objects</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>::<span class="ident">from_type_ptr</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">ffi</span>::<span class="ident">PyBaseString_Type</span>) }
+        <span class="kw">unsafe</span> {
+            <span class="kw">crate</span>::<span class="ident">objects</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>::<span class="ident">from_type_ptr</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyBaseString_Type</span>)
+        }
     }
 }
 
@@ -865,8 +869,8 @@
     <span class="kw">fn</span> <span class="ident">data_impl</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyStringData</span> {
         <span class="comment">// TODO: return the original representation instead</span>
         <span class="comment">// of forcing the UTF-8 representation to be created.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span>: <span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span>: <span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">uninitialized</span>();
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyUnicode_AsUTF8AndSize</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>;
             <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">is_null</span>() {
                 <span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">py</span>).<span class="ident">print</span>(<span class="ident">py</span>);
@@ -1112,8 +1116,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
-    <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_non_bmp</span>() {
@@ -1164,4 +1168,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

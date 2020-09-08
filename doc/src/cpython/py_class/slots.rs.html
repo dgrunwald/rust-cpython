@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/py_class/slots.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>slots.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/py_class/slots.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>slots.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -626,6 +626,199 @@
 <span id="626">626</span>
 <span id="627">627</span>
 <span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
+<span id="717">717</span>
+<span id="718">718</span>
+<span id="719">719</span>
+<span id="720">720</span>
+<span id="721">721</span>
+<span id="722">722</span>
+<span id="723">723</span>
+<span id="724">724</span>
+<span id="725">725</span>
+<span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
 <span class="comment">//</span>
@@ -645,20 +838,21 @@
 <span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
 <span class="comment">// DEALINGS IN THE SOFTWARE.</span>
 
-<span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">exc</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">function</span>::<span class="ident">CallbackConverter</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>};
-<span class="kw">use</span> <span class="ident">objects</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">py_class</span>::<span class="ident">CompareOp</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">isize</span>, <span class="ident">mem</span>, <span class="ident">ptr</span>};
-<span class="kw">use</span> <span class="ident">Py_hash_t</span>;
 
-<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exc</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">function</span>::<span class="ident">CallbackConverter</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objects</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">py_class</span>::<span class="ident">CompareOp</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">PythonObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Py_hash_t</span>;
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_type_object_static_init</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class_name</span>:<span class="ident">ident</span>,
@@ -673,8 +867,8 @@
         <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyTypeObject</span> {
             $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slot_name</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slot_value</span>, )<span class="op">*</span>
             <span class="ident">tp_dealloc</span>: <span class="prelude-val">Some</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">tp_dealloc_callback</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class_name</span><span class="op">&gt;</span>),
-            <span class="ident">tp_flags</span>: <span class="macro">py_class_type_object_flags</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">gc</span>),
-            <span class="ident">tp_traverse</span>: <span class="macro">py_class_tp_traverse</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class_name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">gc</span>),
+            <span class="ident">tp_flags</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_type_object_flags</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">gc</span>),
+            <span class="ident">tp_traverse</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_tp_traverse</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class_name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">gc</span>),
             ..
             <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyTypeObject_INIT</span>
         }
@@ -704,7 +898,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">TPFLAGS_DEFAULT</span>: ::<span class="ident">libc</span>::<span class="ident">c_ulong</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_TPFLAGS_DEFAULT</span>;
 
-<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_type_object_dynamic_init</span> {
     <span class="comment">// initialize those fields of PyTypeObject that we couldn&#39;t initialize statically</span>
@@ -716,20 +910,21 @@
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_mapping</span>:<span class="ident">tt</span>
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setdelitem</span>:<span class="ident">tt</span>
         }
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">props</span>:<span class="ident">tt</span>
     ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">init_ob_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyType_Type</span>);
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_name</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">build_tp_name</span>(
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module_name</span>,
-                <span class="macro">_cpython__py_class__slots__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>),
-            );
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_name</span> <span class="op">=</span>
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">build_tp_name</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module_name</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>));
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_basicsize</span> <span class="op">=</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">BaseObject</span><span class="op">&gt;</span>::<span class="ident">size</span>()
                 <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span>;
         }
         <span class="comment">// call slot macros outside of unsafe block</span>
-        <span class="kw-2">*</span>(<span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_as_sequence</span> }) <span class="op">=</span> <span class="macro">py_class_as_sequence</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_sequence</span>);
-        <span class="kw-2">*</span>(<span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_as_number</span> }) <span class="op">=</span> <span class="macro">py_class_as_number</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_number</span>);
-        <span class="macro">py_class_as_mapping</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_mapping</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setdelitem</span>);
+        <span class="kw-2">*</span>(<span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_as_sequence</span> }) <span class="op">=</span>
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_as_sequence</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_sequence</span>);
+        <span class="kw-2">*</span>(<span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_as_number</span> }) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_as_number</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_number</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_as_mapping</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">as_mapping</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setdelitem</span>);
+        <span class="kw-2">*</span>(<span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>.<span class="ident">tp_getset</span> }) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_tp_getset</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">props</span>);
     };
 }
 
@@ -746,14 +941,14 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">super</span>::<span class="ident">BaseObject</span>,
 {
-    <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> ::<span class="ident">function</span>::<span class="ident">AbortOnDrop</span>(<span class="string">&quot;Cannot unwind out of tp_dealloc&quot;</span>);
+    <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">function</span>::<span class="ident">AbortOnDrop</span>(<span class="string">&quot;Cannot unwind out of tp_dealloc&quot;</span>);
     <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>();
     <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">T</span>::<span class="ident">dealloc</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
     <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
     <span class="ident">r</span>
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_wrap_newfunc</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span> [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span>:<span class="ident">tt</span> } )<span class="op">*</span> ]) <span class="op">=</span><span class="op">&gt;</span> {{
@@ -763,11 +958,11 @@
             <span class="ident">kwargs</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>)
         <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>
         {
-            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">_cpython__py_class__slots__concat</span><span class="macro">!</span>(<span class="macro">_cpython__py_class__slots__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">_cpython__py_class__slots__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;()&quot;</span>);
+            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;()&quot;</span>);
             <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">handle_callback</span>(
                 <span class="ident">LOCATION</span>, <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">PyObjectCallbackConverter</span>,
                 <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
-                    <span class="macro">py_argparse_raw</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">Some</span>(<span class="ident">LOCATION</span>), <span class="ident">args</span>, <span class="ident">kwargs</span>,
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_argparse_raw</span><span class="op">!</span>(<span class="ident">py</span>, <span class="prelude-val">Some</span>(<span class="ident">LOCATION</span>), <span class="ident">args</span>, <span class="ident">kwargs</span>,
                         [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span> } )<span class="op">*</span> ]
                         {
                             <span class="kw">let</span> <span class="ident">cls</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyType</span>::<span class="ident">from_type_ptr</span>(<span class="ident">py</span>, <span class="ident">cls</span>);
@@ -811,7 +1006,7 @@
     }}
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_as_mapping</span> {
     ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_object</span>:<span class="ident">ident</span>, [], [
@@ -840,11 +1035,11 @@
             <span class="ident">val</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>
         ) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">libc</span>::<span class="ident">c_int</span> {
             <span class="kw">if</span> <span class="ident">val</span>.<span class="ident">is_null</span>() {
-                <span class="macro">py_class_mp_ass_subscript</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">delitem</span>, <span class="ident">slf</span>,
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_mp_ass_subscript</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">delitem</span>, <span class="ident">slf</span>,
                     <span class="string">b&quot;Subscript assignment not supported by %.200s\0&quot;</span>,
                     <span class="ident">key</span>)
             } <span class="kw">else</span> {
-                <span class="macro">py_class_mp_ass_subscript</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setitem</span>, <span class="ident">slf</span>,
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_mp_ass_subscript</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setitem</span>, <span class="ident">slf</span>,
                     <span class="string">b&quot;Subscript deletion not supported by %.200s\0&quot;</span>,
                     <span class="ident">key</span>, <span class="ident">val</span>)
             }
@@ -882,6 +1077,62 @@
 
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_call_slot_impl_with_ref</span> {
+    (
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>: [ <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span><span class="op">&gt;</span> ],
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_normal</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_none</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_some</span>:<span class="ident">expr</span>
+        $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>:<span class="ident">ident</span>)<span class="op">*</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>.<span class="ident">as_ptr</span>() <span class="op">=</span><span class="op">=</span> <span class="kw">unsafe</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">Py_None</span>() } {
+            <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_none</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>)<span class="kw-2">*</span>))
+        } <span class="kw">else</span> {
+            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">RefFromPyObject</span><span class="op">&gt;</span>::<span class="ident">with_extracted</span>(
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>,
+                <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>,
+                <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_some</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>)<span class="kw-2">*</span>)
+            )
+        }
+    }};
+
+    (
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>: [ <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span> ],
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_normal</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_none</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_some</span>:<span class="ident">expr</span>
+        $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>:<span class="ident">ident</span>)<span class="op">*</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">RefFromPyObject</span><span class="op">&gt;</span>::<span class="ident">with_extracted</span>(
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>,
+            <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>,
+            <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_normal</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>)<span class="kw-2">*</span>)
+        )
+    }};
+
+    (
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>: [ <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span> ],
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_normal</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_none</span>:<span class="ident">expr</span>,
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_if_some</span>:<span class="ident">expr</span>
+        $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>:<span class="ident">ident</span>)<span class="op">*</span>
+    ) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_normal</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">extra_arg</span>)<span class="kw-2">*</span>))
+    }};
+}
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_unary_slot</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap_unary</span>(<span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span> {
@@ -901,7 +1152,7 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_binary_slot</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap_binary</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
@@ -911,8 +1162,16 @@
                 <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span>
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>).<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
                 <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">arg</span>);
-                <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>, <span class="ident">arg</span>),
+                <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_call_slot_impl_with_ref</span><span class="op">!</span>(
+                    <span class="ident">py</span>,
+                    <span class="ident">slf</span>,
+                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>,
+                    <span class="ident">arg</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>,
+                    <span class="ident">arg</span>,
+                    <span class="prelude-val">None</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">arg</span>)
+                ) {
+                    <span class="prelude-val">Ok</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>,
                     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
                 };
                 <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">arg</span>, <span class="ident">py</span>);
@@ -927,7 +1186,7 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_ternary_slot</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg1_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg2_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg1_type</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg2_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap_binary</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
@@ -939,11 +1198,22 @@
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>).<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
                 <span class="kw">let</span> <span class="ident">arg1</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">arg1</span>);
                 <span class="kw">let</span> <span class="ident">arg2</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">arg2</span>);
-                <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg1_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg1</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">arg1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg2_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg2</span>) {
-                        <span class="prelude-val">Ok</span>(<span class="ident">arg2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>, <span class="ident">arg1</span>, <span class="ident">arg2</span>),
-                        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-                    },
+                <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg2_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg2</span>) {
+                    <span class="prelude-val">Ok</span>(<span class="ident">arg2</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_call_slot_impl_with_ref</span><span class="op">!</span>(
+                            <span class="ident">py</span>,
+                            <span class="ident">slf</span>,
+                            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>,
+                            <span class="ident">arg1</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg1_type</span>,
+                            <span class="ident">arg1</span>,
+                            <span class="prelude-val">None</span>,
+                            <span class="prelude-val">Some</span>(<span class="ident">arg1</span>),
+                            <span class="ident">arg2</span>
+                        ) {
+                            <span class="prelude-val">Ok</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>,
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                        }
+                    }
                     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
                 };
                 <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">arg1</span>, <span class="ident">py</span>);
@@ -979,7 +1249,7 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_richcompare_slot</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">res_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">conv</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">tp_richcompare</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
@@ -991,12 +1261,21 @@
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>).<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
                 <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">arg</span>);
                 <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">extract_op</span>(<span class="ident">py</span>, <span class="ident">op</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">op</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg</span>) {
-                        <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>
-                            .<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>, <span class="ident">arg</span>, <span class="ident">op</span>)
-                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">into_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>()),
-                        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="ident">NotImplemented</span>()),
-                    },
+                    <span class="prelude-val">Ok</span>(<span class="ident">op</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_call_slot_impl_with_ref</span><span class="op">!</span>(
+                            <span class="ident">py</span>,
+                            <span class="ident">slf</span>,
+                            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>,
+                            <span class="ident">arg</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>,
+                            <span class="ident">arg</span>,
+                            <span class="prelude-val">None</span>,
+                            <span class="prelude-val">Some</span>(<span class="ident">arg</span>),
+                            <span class="ident">op</span>
+                        ) {
+                            <span class="prelude-val">Ok</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">r</span>.<span class="ident">into_py_object</span>(<span class="ident">py</span>).<span class="ident">into_object</span>()),
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="ident">NotImplemented</span>()),
+                        }
+                    }
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="ident">NotImplemented</span>()),
                 };
                 <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">arg</span>, <span class="ident">py</span>);
@@ -1012,7 +1291,7 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_contains_slot</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>:<span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sq_contains</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
@@ -1025,8 +1304,16 @@
                     <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>)
                         .<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
                     <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">arg</span>);
-                    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&gt;</span>::<span class="ident">extract</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">arg</span>) {
-                        <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>, <span class="ident">arg</span>),
+                    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_call_slot_impl_with_ref</span><span class="op">!</span>(
+                        <span class="ident">py</span>,
+                        <span class="ident">slf</span>,
+                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>,
+                        <span class="ident">arg</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_type</span>,
+                        <span class="ident">arg</span>,
+                        <span class="prelude-val">None</span>,
+                        <span class="prelude-val">Some</span>(<span class="ident">arg</span>)
+                    ) {
+                        <span class="prelude-val">Ok</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>,
                         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">type_error_to_false</span>(<span class="ident">py</span>, <span class="ident">e</span>),
                     };
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">arg</span>, <span class="ident">py</span>);
@@ -1198,7 +1485,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_call_slot</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span> [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span>:<span class="ident">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span>:<span class="ident">tt</span> } )<span class="op">*</span> ]) <span class="op">=</span><span class="op">&gt;</span> {{
@@ -1208,11 +1495,11 @@
             <span class="ident">kwargs</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>)
         <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>
         {
-            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">_cpython__py_class__slots__concat</span><span class="macro">!</span>(<span class="macro">_cpython__py_class__slots__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">_cpython__py_class__slots__stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;()&quot;</span>);
+            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;()&quot;</span>);
             <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">handle_callback</span>(
                 <span class="ident">LOCATION</span>, <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">PyObjectCallbackConverter</span>,
                 <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
-                    <span class="macro">py_argparse_raw</span><span class="macro">!</span>(<span class="ident">py</span>, <span class="prelude-val">Some</span>(<span class="ident">LOCATION</span>), <span class="ident">args</span>, <span class="ident">kwargs</span>,
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_argparse_raw</span><span class="op">!</span>(<span class="ident">py</span>, <span class="prelude-val">Some</span>(<span class="ident">LOCATION</span>), <span class="ident">args</span>, <span class="ident">kwargs</span>,
                         [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pname</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ptype</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">detail</span> } )<span class="op">*</span> ]
                         {
                             <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>).<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
@@ -1240,20 +1527,119 @@
     <span class="ident">ret</span>
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">_cpython__py_class__slots__concat</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro">concat</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>)<span class="op">*</span> }
-    }
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_prop_getter</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap_getter</span>(
+            <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
+            <span class="ident">_closure</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">libc</span>::<span class="ident">c_void</span>,
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span> {
+            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;{}&quot;</span>);
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">handle_callback</span>(
+                <span class="ident">LOCATION</span>,
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">PyObjectCallbackConverter</span>,
+                <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>)
+                        .<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
+                    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>);
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">slf</span>, <span class="ident">py</span>);
+                    <span class="ident">ret</span>
+                },
+            )
+        }
+        <span class="prelude-val">Some</span>(<span class="ident">wrap_getter</span>)
+    }};
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">_cpython__py_class__slots__stringify</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro">stringify</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>)<span class="op">*</span> }
-    }
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_prop_setter</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> :: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value_type</span>:<span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap_setter</span>(
+            <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
+            <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>,
+            <span class="ident">_closure</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">libc</span>::<span class="ident">c_void</span>,
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">libc</span>::<span class="ident">c_int</span> {
+            <span class="kw">const</span> <span class="ident">LOCATION</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>), <span class="string">&quot;.&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>), <span class="string">&quot;{}&quot;</span>);
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">handle_callback</span>(
+                <span class="ident">LOCATION</span>,
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class</span>::<span class="ident">slots</span>::<span class="ident">UnitCallbackConverter</span>,
+                <span class="op">|</span><span class="ident">py</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">slf</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">slf</span>)
+                        .<span class="ident">unchecked_cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span><span class="op">&gt;</span>();
+                    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">is_null</span>() {
+                        <span class="ident">slf</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>(<span class="ident">py</span>, <span class="prelude-val">None</span>)
+                    } <span class="kw">else</span> {
+                        <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
+                        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_call_slot_impl_with_ref</span><span class="op">!</span>(
+                            <span class="ident">py</span>,
+                            <span class="ident">slf</span>,
+                            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>,
+                            <span class="ident">obj</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value_type</span>,
+                            <span class="prelude-val">Some</span>(<span class="ident">obj</span>),
+                            <span class="prelude-val">Some</span>(<span class="prelude-val">None</span>),
+                            <span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="ident">obj</span>))
+                        ) {
+                            <span class="prelude-val">Ok</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>,
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                        };
+                        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">obj</span>, <span class="ident">py</span>);
+                        <span class="ident">ret</span>
+                    };
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDrop</span>::<span class="ident">release_ref</span>(<span class="ident">slf</span>, <span class="ident">py</span>);
+                    <span class="ident">ret</span>
+                },
+            )
+        }
+        <span class="prelude-val">Some</span>(<span class="ident">wrap_setter</span>)
+    }};
+}
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class_tp_getset</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span>, { [] [] } ) <span class="op">=</span><span class="op">&gt;</span> { <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyGetSetDef</span> };
+    (
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span>,
+        {
+            [ $( { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>:<span class="ident">expr</span> } <span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">prop_type</span>:<span class="ident">ty</span>, )<span class="op">*</span> ]
+            [ $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value_type</span>:<span class="ident">tt</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_setter</span>:<span class="ident">ident</span>, )<span class="op">*</span> ]
+        }
+    ) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="number">0usize</span>;
+        $( <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span> <span class="op">=</span> <span class="ident">index</span>; <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>; )<span class="op">*</span>
+        <span class="kw">unsafe</span> {
+            <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">GETSET</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyGetSetDef</span>] <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [
+                $(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyGetSetDef</span> {
+                    <span class="ident">name</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                    <span class="ident">get</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_prop_getter</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>),
+                    <span class="ident">set</span>: <span class="prelude-val">None</span>,
+                    <span class="ident">doc</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                    <span class="ident">closure</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                },)<span class="op">*</span>
+                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyGetSetDef</span> {
+                    <span class="ident">name</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                    <span class="ident">get</span>: <span class="prelude-val">None</span>,
+                    <span class="ident">set</span>: <span class="prelude-val">None</span>,
+                    <span class="ident">doc</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                    <span class="ident">closure</span>: <span class="number">0</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                }
+            ];
+            $(
+                <span class="ident">GETSET</span>[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>].<span class="ident">name</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">strip_raw</span><span class="op">!</span>(
+                    <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>), <span class="string">&quot;\0&quot;</span>)
+                ).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>;
+                <span class="kw">if</span> <span class="op">!</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>.<span class="ident">is_empty</span>() {
+                    <span class="ident">GETSET</span>[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>].<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>, <span class="string">&quot;\0&quot;</span>).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>;
+                }
+            )<span class="op">*</span>
+            $(
+                <span class="ident">GETSET</span>[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>].<span class="ident">set</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_class_prop_setter</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_setter</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value_type</span>);
+            )<span class="op">*</span>
+            <span class="ident">GETSET</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>
+        }
+    }};
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

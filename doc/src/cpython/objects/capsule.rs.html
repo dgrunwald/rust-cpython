@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/objects/capsule.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>capsule.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/objects/capsule.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>capsule.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../cpython/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -627,32 +627,17 @@
 <span id="627">627</span>
 <span id="628">628</span>
 <span id="629">629</span>
-<span id="630">630</span>
-<span id="631">631</span>
-<span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
-<span id="638">638</span>
-<span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
-<span id="643">643</span>
-<span id="644">644</span>
-<span id="645">645</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Work wih Python capsules</span>
 <span class="doccomment">//!</span>
-<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">PyCapsule_GetPointer</span>, <span class="ident">PyCapsule_Import</span>, <span class="ident">PyCapsule_New</span>};
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_void</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPythonPointer</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>, <span class="ident">NulError</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{<span class="ident">PyCapsule_GetPointer</span>, <span class="ident">PyCapsule_Import</span>, <span class="ident">PyCapsule_New</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPythonPointer</span>};
 
 <span class="doccomment">/// Capsules are the preferred way to export/import C APIs between extension modules,</span>
 <span class="doccomment">/// see [Providing a C API for an Extension Module](https://docs.python.org/3/extending/extending.html#using-capsules).</span>
@@ -677,9 +662,6 @@
 <span class="doccomment">/// Note: this example is a lower-level version of the [`py_capsule!`] example. Only the</span>
 <span class="doccomment">/// capsule retrieval actually differs.</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// extern crate libc;</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// use cpython::{Python, PyCapsule};</span>
 <span class="doccomment">/// use libc::{c_void, c_char, c_int};</span>
 <span class="doccomment">/// use std::ffi::{CStr, CString};</span>
@@ -779,9 +761,6 @@
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// extern crate cpython;</span>
-<span class="doccomment">/// extern crate libc;</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// use libc::{c_void, c_int};</span>
 <span class="doccomment">/// use cpython::{PyCapsule, Python};</span>
 <span class="doccomment">/// use std::ffi::{CStr, CString};</span>
@@ -814,10 +793,8 @@
 <span class="doccomment">/// Note that in that case, the capsule `name` must be full dotted name of the capsule object,</span>
 <span class="doccomment">/// as we&#39;re doing here.</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// # extern crate libc;</span>
 <span class="doccomment">/// # use libc::c_int;</span>
-<span class="doccomment">/// # use cpython::PyCapsule;</span>
+<span class="doccomment">/// # use cpython::{PyCapsule, py_module_initializer};</span>
 <span class="doccomment">/// # #[repr(C)]</span>
 <span class="doccomment">/// # struct CapsData {</span>
 <span class="doccomment">/// #     value: c_int,</span>
@@ -827,11 +804,12 @@
 <span class="doccomment">/// #     a + b</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// # static DATA: CapsData = CapsData{value: 1, fun: add};</span>
-<span class="doccomment">/// py_module_initializer!(somemod, initsomemod, PyInit_somemod, |py, m| {</span>
+<span class="doccomment">/// py_module_initializer!(somemod, |py, m| {</span>
 <span class="doccomment">///   m.add(py, &quot;__doc__&quot;, &quot;A module holding a capsule&quot;)?;</span>
 <span class="doccomment">///   m.add(py, &quot;capsdata&quot;, PyCapsule::new_data(py, &amp;DATA, &quot;somemod.capsdata&quot;).unwrap())?;</span>
 <span class="doccomment">///   Ok(())</span>
 <span class="doccomment">/// });</span>
+<span class="doccomment">/// # fn main() {}</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// Another Rust extension could then declare `CapsData` and use `PyCapsule::import_data` to</span>
 <span class="doccomment">/// fetch it back.</span>
@@ -882,10 +860,7 @@
 <span class="doccomment">/// In this case, as with all capsules from the Python standard library, the capsule data</span>
 <span class="doccomment">/// is an array (`static struct`) with constants and function pointers.</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// extern crate libc;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use cpython::{Python, PyCapsule};</span>
+<span class="doccomment">/// use cpython::{Python, PyCapsule, py_capsule};</span>
 <span class="doccomment">/// use libc::{c_char, c_int};</span>
 <span class="doccomment">/// use std::ffi::{c_void, CStr, CString};</span>
 <span class="doccomment">/// use std::mem;</span>
@@ -970,10 +945,7 @@
 <span class="doccomment">/// In this example, we lend a Python object and receive a new one of which we take ownership.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// extern crate libc;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use cpython::{PyCapsule, PyObject, PyResult, Python};</span>
+<span class="doccomment">/// use cpython::{PyCapsule, PyObject, PyResult, Python, py_capsule};</span>
 <span class="doccomment">/// use libc::c_void;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// // In the struct, we still have to use c_void for C-level Python objects.</span>
@@ -1074,9 +1046,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// extern crate libc;</span>
-<span class="doccomment">/// use cpython::{PyCapsule, Python, FromPyObject};</span>
+<span class="doccomment">/// use cpython::{PyCapsule, Python, FromPyObject, py_capsule_fn};</span>
 <span class="doccomment">/// use libc::{c_int, c_void};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// extern &quot;C&quot; fn inc(a: c_int) -&gt; c_int {</span>
@@ -1120,8 +1090,7 @@
 <span class="doccomment">/// In this example, we lend a Python object and receive a new one of which we take ownership.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate cpython;</span>
-<span class="doccomment">/// use cpython::{PyCapsule, PyObject, PyResult, Python};</span>
+<span class="doccomment">/// use cpython::{PyCapsule, PyObject, PyResult, Python, py_capsule_fn};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// py_capsule_fn!(from some.mod import capsfn as capsmod</span>
 <span class="doccomment">///     signature (raw: *mut RawPyObject) -&gt; *mut RawPyObject);</span>
@@ -1228,7 +1197,6 @@
     <span class="doccomment">/// can be obtained simply by a simple cast:</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// extern crate libc;</span>
     <span class="doccomment">/// use libc::c_void;</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// extern &quot;C&quot; fn inc(a: i32) -&gt; i32 {</span>
@@ -1290,4 +1258,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "cpython";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
