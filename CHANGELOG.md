@@ -2,15 +2,30 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.1...HEAD
+
+## 0.5.1 - 2020-09-08
+- [ignore trailing comma in plist parsing][220] (PR by [@lausek])
+- [make fields of initialization config public and implement Default][219] (PR by [@indygreg])
+- [fix macros without $crate:: access][234] (PR by [@markbt])
+
+[@lausek]: https://github.com/lausek
+[220]: https://github.com/dgrunwald/rust-cpython/pull/220
+[219]: https://github.com/dgrunwald/rust-cpython/pull/219
+[234]: https://github.com/dgrunwald/rust-cpython/pull/234
 
 ## 0.5.0 - 2020-04-08
-
 - [properties (attributes with getter/setters defined in Rust][208] (PR by [@markbt])
 - [adoption of 2018 edition and general code modernization][204] (PR by [@markbt])
 - [reference extraction for slot functions and optional reference extraction][207] (PR by [@markbt])
 - [PEP-587 initialization APIs (python3-sys for Python≥3.8)][211] (PR by [@indygreg])
 - [more import APIs (python3-sys)][210] (PR by [@indygreg])
+
+[208]: https://github.com/dgrunwald/rust-cpython/pull/208
+[204]: https://github.com/dgrunwald/rust-cpython/pull/204
+[207]: https://github.com/dgrunwald/rust-cpython/pull/207
+[211]: https://github.com/dgrunwald/rust-cpython/pull/211
+[210]: https://github.com/dgrunwald/rust-cpython/pull/210
 
 ## 0.4.1 - 2020-02-03
 - [link-time inconsistency with build config][135] (original PR by [@svevang] adapted as [202])
