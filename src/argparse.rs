@@ -372,8 +372,9 @@ macro_rules! py_argparse_impl {
                 // We'll have to generate a bunch of nested `match` statements
                 // (at least until we can use ? + catch, assuming that will be hygienic wrt. macros),
                 // so use a recursive helper macro for that:
-                $crate::py_argparse_extract!( py, _iter, $body,
-                    [ $( { $pname : $ptype = $detail } )* ])
+                let val = $crate::py_argparse_extract!( py, _iter, $body,
+                    [ $( { $pname : $ptype = $detail } )* ]);
+                val
             },
             Err(e) => Err(e)
         }
@@ -494,13 +495,13 @@ macro_rules! py_argparse_extract {
     // maybe none optional parameter with reference extraction
     ( $py:expr, $iter:expr, $body:block,
         [ { $pname:ident : $ptype:ty = [ {opt} {$default:expr} {$rtype:ty} ] } $($tail:tt)* ]
-    ) => {{
+    ) => {
         //unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         $crate::argparse::with_extracted_optional_or_default($py,
             $iter.next().unwrap().as_ref(),
             |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
             $default)
-    }};
+    };
 }
 
 #[doc(hidden)] // used in py_argparse_extract!() macro
