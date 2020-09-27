@@ -214,6 +214,9 @@ mod pythonrun;
 pub mod py_class;
 mod sharedref;
 
+#[cfg(feature = "serde-convert")]
+pub mod serde;
+
 /// Private re-exports for macros. Do not use.
 #[doc(hidden)]
 pub mod _detail {

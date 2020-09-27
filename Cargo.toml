@@ -35,6 +35,11 @@ appveyor = { repository = "dgrunwald/rust-cpython" }
 libc = "0.2"
 num-traits = "0.2"
 paste = "0.1"
+serde = { version = "1", features = ["derive"], optional = true }
+
+[dev-dependencies]
+serde_bytes = { version = "0.11" }
+serde_cbor = { version = "0.11" }
 
 # These features are both optional, but you must pick one to 
 # indicate which python ffi you are trying to bind to.
@@ -50,6 +55,9 @@ version = "0.5.1"
 
 [features]
 default = ["python3-sys"]
+
+# Enable serde support that converts between a serde type and PyObject.
+serde-convert = ["serde"]
 
 # Deprecated: nonnull feature no longer has any effect;
 # std::ptr::NonNull is now used unconditionally.
