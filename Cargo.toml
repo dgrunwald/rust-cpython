@@ -97,6 +97,11 @@ python-3-4 = ["python3-sys/python-3-4"]
 # This scenario should be rare.
 no-auto-initialize = []
 
+# Only affect Python 2.
+# Once set, `PyString` and `String` converts to only `bytes` (aka. `str` on
+# Python 2). Non-ascii string will no longer be converted to `unicode`.
+py2-no-auto-unicode-promotion = []
+
 [workspace]
 members = ["python27-sys", "python3-sys", "extensions/hello"]
 

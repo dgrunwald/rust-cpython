@@ -234,7 +234,9 @@ impl PyString {
     /// Creates a new Python string object.
     ///
     /// On Python 2.7, this function will create a byte string if the
-    /// input string is ASCII-only; and a unicode string otherwise.
+    /// feature `py2-no-auto-unicode-promotion` is set, or the input
+    /// input string is ASCII-only; otherwise, the input string will be
+    /// converted to a unicode string.
     /// Use `PyUnicode::new()` to always create a unicode string.
     ///
     /// On Python 3.x, this function always creates unicode `str` objects.
@@ -243,7 +245,7 @@ impl PyString {
     pub fn new(py: Python, s: &str) -> PyString {
         #[cfg(feature = "python27-sys")]
         fn new_impl(py: Python, s: &str) -> PyString {
-            if s.is_ascii() {
+            if cfg!(feature = "py2-no-auto-unicode-promotion") || s.is_ascii() {
                 PyBytes::new(py, s.as_bytes()).into_basestring()
             } else {
                 PyUnicode::new(py, s).into_basestring()
