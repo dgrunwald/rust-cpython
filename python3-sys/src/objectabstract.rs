@@ -16,6 +16,9 @@ pub unsafe fn PyObject_DelAttr(o: *mut PyObject, attr_name: *mut PyObject) -> c_
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(Py_3_9)]
+    pub fn PyObject_CallNoArgs(func: *mut PyObject) -> *mut PyObject;
+
     pub fn PyObject_Call(
         callable: *mut PyObject,
         args: *mut PyObject,
@@ -80,7 +83,7 @@ extern "C" {
     ) -> c_int;
 }
 
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_9)))]
 #[inline]
 pub unsafe fn PyObject_CheckBuffer(o: *mut PyObject) -> c_int {
     let tp_as_buffer = (*(*o).ob_type).tp_as_buffer;
@@ -91,6 +94,8 @@ pub unsafe fn PyObject_CheckBuffer(o: *mut PyObject) -> c_int {
 #[cfg(not(Py_LIMITED_API))]
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(Py_3_9)]
+    pub fn PyObject_CheckBuffer(o: *mut PyObject) -> c_int;
     pub fn PyObject_GetBuffer(obj: *mut PyObject, view: *mut Py_buffer, flags: c_int) -> c_int;
     pub fn PyBuffer_GetPointer(view: *mut Py_buffer, indices: *mut Py_ssize_t) -> *mut c_void;
     pub fn PyBuffer_ToContiguous(
@@ -173,7 +178,8 @@ extern "C" {
     pub fn PyNumber_Or(o1: *mut PyObject, o2: *mut PyObject) -> *mut PyObject;
 }
 
-#[cfg(not(Py_LIMITED_API))]
+// Note: Py 3.8 has PyIndex_Check as a function, prior to that it was only availabe as a macro
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_8)))]
 #[inline]
 pub unsafe fn PyIndex_Check(o: *mut PyObject) -> c_int {
     let tp_as_number = (*(*o).ob_type).tp_as_number;
@@ -182,8 +188,7 @@ pub unsafe fn PyIndex_Check(o: *mut PyObject) -> c_int {
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
-    // Note: without Py_LIMITED_API, PyIndex_Check is a macro instead
-    #[cfg(all(Py_3_8, Py_LIMITED_API))]
+    #[cfg(Py_3_8)]
     pub fn PyIndex_Check(o: *mut PyObject) -> c_int;
 
     pub fn PyNumber_Index(o: *mut PyObject) -> *mut PyObject;
