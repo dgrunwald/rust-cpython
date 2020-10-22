@@ -45,14 +45,14 @@ build: src/py_class/py_class_impl2.rs src/py_class/py_class_impl3.rs python27-sy
 	cargo build $(CARGO_FLAGS)
 
 test: build
-	cargo test $(CARGO_FLAGS)
+	cargo test --features serde-convert $(CARGO_FLAGS)
 ifeq ($(NIGHTLY),1)
 # ast-json output is only supported on nightly
 	python$(PY) tests/check_symbols.py
 endif
 
 doc: build
-	cargo doc --no-deps $(CARGO_FLAGS)
+	cargo doc --no-deps --features serde-convert $(CARGO_FLAGS)
 
 extensions: build
 	make -C extensions/tests PY=$(PY)
