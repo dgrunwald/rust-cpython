@@ -11,11 +11,13 @@ NIGHTLY := 0
 endif
 endif
 
+FEATURES := serde-convert
+
 ifeq ($(PY),2)
-FEATURES := python27-sys
+FEATURES := $(FEATURES) python27-sys
 endif
 ifeq ($(PY),3)
-FEATURES := python3-sys
+FEATURES := $(FEATURES) python3-sys
 ifdef PEP384
 export PEP384=1
 FEATURES := $(FEATURES) pep-384
@@ -45,14 +47,14 @@ build: src/py_class/py_class_impl2.rs src/py_class/py_class_impl3.rs python27-sy
 	cargo build $(CARGO_FLAGS)
 
 test: build
-	cargo test --features serde-convert $(CARGO_FLAGS)
+	cargo test $(CARGO_FLAGS)
 ifeq ($(NIGHTLY),1)
 # ast-json output is only supported on nightly
 	python$(PY) tests/check_symbols.py
 endif
 
 doc: build
-	cargo doc --no-deps --features serde-convert $(CARGO_FLAGS)
+	cargo doc --no-deps $(CARGO_FLAGS)
 
 extensions: build
 	make -C extensions/tests PY=$(PY)
