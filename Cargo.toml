@@ -38,6 +38,7 @@ paste = "0.1"
 serde = { version = "1", features = ["derive"], optional = true }
 
 [dev-dependencies]
+rustversion = "1.0"
 serde_bytes = { version = "0.11" }
 serde_cbor = { version = "0.11" }
 

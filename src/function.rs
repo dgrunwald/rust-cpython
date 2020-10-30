@@ -207,13 +207,12 @@ where
     }
 }
 
-pub unsafe fn handle_callback<F, T, C>(location: &str, _c: C, f: F) -> C::R
+pub unsafe fn handle_callback<F, T, C>(_location: &str, _c: C, f: F) -> C::R
 where
     F: FnOnce(Python) -> PyResult<T>,
     F: panic::UnwindSafe,
     C: CallbackConverter<T>,
 {
-    let guard = AbortOnDrop(location);
     let ret = panic::catch_unwind(|| {
         let py = Python::assume_gil_acquired();
         match f(py) {
@@ -231,7 +230,6 @@ where
             C::error_value()
         }
     };
-    mem::forget(guard);
     ret
 }
 
