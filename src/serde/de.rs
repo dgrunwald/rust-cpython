@@ -68,7 +68,10 @@ impl<'gil> Deserializer<'gil> {
                 self.obj_iter = Some(iter);
                 self.next()
             }
-            Some(ref mut iter) => iter.next().transpose().map_err(Into::into),
+            Some(ref mut iter) => match iter.next() {
+                Some(value) => Ok(Some(value?)),
+                None => Ok(None),
+            },
         }
     }
 
