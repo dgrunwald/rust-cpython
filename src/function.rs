@@ -223,14 +223,17 @@ where
             }
         }
     });
-    let ret = match ret {
+    match ret {
         Ok(r) => r,
         Err(ref err) => {
+            // Protect against panics in C::error_value() causing UB
+            let guard = AbortOnDrop("handle_panic() / C::error_value()");
             handle_panic(Python::assume_gil_acquired(), err);
-            C::error_value()
+            let errval = C::error_value();
+            mem::forget(guard);
+            errval
         }
-    };
-    ret
+    }
 }
 
 fn handle_panic(_py: Python, _panic: &dyn any::Any) {
