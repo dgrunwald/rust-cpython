@@ -1,6 +1,6 @@
-use crate::Python;
 use crate::PyClone;
-use ::serde::{Deserialize, Serialize};
+use crate::Python;
+use serde::{Deserialize, Serialize};
 use serde_bytes::ByteBuf;
 use serde_cbor::Value;
 use std::collections::HashMap;
@@ -40,11 +40,11 @@ fn test_serde_basic_structs() {
     }
 
     let a = A {
-        i: i64::MIN,
+        i: 0x8000000000000000u64 as i64,
         s: "foo".to_string(),
         u: S,
         e: (),
-        t: (true, (u64::MAX, -2.0)),
+        t: (true, (0xffffffffffffffffu64, -2.0)),
         v: vec![Some(true), None, Some(false)],
         m: example_hashmap(),
         b: b"abcdef".to_vec(),
