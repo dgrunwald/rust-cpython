@@ -277,13 +277,7 @@ mod fileutils;
 // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 pub mod structmember;
 
-#[cfg(not(Py_LIMITED_API))]
 pub mod frameobject;
-
-#[cfg(Py_LIMITED_API)]
-pub mod frameobject {
-    pub enum PyFrameObject {}
-}
 
 mod marshal;
 

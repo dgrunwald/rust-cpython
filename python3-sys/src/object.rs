@@ -491,17 +491,17 @@ mod typeobject {
         pub tp_finalize: Option<crate::object::destructor>,
         #[cfg(Py_3_8)]
         pub tp_vectorcall: Option<crate::object::vectorcallfunc>,
-        #[cfg(Py_3_8)]
+        #[cfg(all(Py_3_8, not(Py_3_9)))]
         pub tp_print: Option<crate::object::printfunc>,
-        #[cfg(py_sys_config = "COUNT_ALLOCS")]
+        #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
         pub tp_allocs: Py_ssize_t,
-        #[cfg(py_sys_config = "COUNT_ALLOCS")]
+        #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
         pub tp_frees: Py_ssize_t,
-        #[cfg(py_sys_config = "COUNT_ALLOCS")]
+        #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
         pub tp_maxalloc: Py_ssize_t,
-        #[cfg(py_sys_config = "COUNT_ALLOCS")]
+        #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
         pub tp_prev: *mut PyTypeObject,
-        #[cfg(py_sys_config = "COUNT_ALLOCS")]
+        #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
         pub tp_next: *mut PyTypeObject,
     }
     impl Clone for PyTypeObject {
@@ -523,7 +523,6 @@ mod typeobject {
                     tp_basicsize: 0,
                     tp_itemsize: 0,
                     tp_dealloc: None,
-                    tp_print: None,
                     tp_getattr: None,
                     tp_setattr: None,
                     tp_repr: None,
@@ -591,8 +590,17 @@ mod typeobject {
         }
     }
 
-    #[cfg(Py_3_8)]
+    #[cfg(Py_3_9)]
     pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_as_async: 0 as *mut PyAsyncMethods,
+        tp_vectorcall_offset: 0,
+        tp_vectorcall: None,
+        tp_finalize: None,
+    );
+
+    #[cfg(all(Py_3_8, not(Py_3_9)))]
+    pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_print: None,
         tp_as_async: 0 as *mut PyAsyncMethods,
         tp_vectorcall_offset: 0,
         tp_vectorcall: None,
@@ -601,18 +609,21 @@ mod typeobject {
 
     #[cfg(all(Py_3_5, not(Py_3_8)))]
     pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_print: None,
         tp_as_async: 0 as *mut PyAsyncMethods,
         tp_finalize: None,
     );
 
     #[cfg(all(Py_3_4, not(Py_3_5)))]
     pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_print: None,
         tp_reserved: 0 as *mut c_void,
         tp_finalize: None,
     );
 
     #[cfg(not(Py_3_4))]
     pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_print: None,
         tp_reserved: 0 as *mut c_void,
     );
 
@@ -637,6 +648,8 @@ mod typeobject {
         pub ht_slots: *mut crate::object::PyObject,
         pub ht_qualname: *mut crate::object::PyObject,
         pub ht_cached_keys: *mut c_void,
+        #[cfg(Py_3_9)]
+        pub ht_module: *mut crate::object::PyObject,
     }
     impl Clone for PyHeapTypeObject {
         #[inline]
@@ -709,6 +722,16 @@ extern "C" {
 
     #[cfg(Py_3_4)]
     pub fn PyType_GetSlot(arg1: *mut PyTypeObject, arg2: c_int) -> *mut c_void;
+
+
+    #[cfg(Py_3_9)]
+    pub fn PyType_FromModuleAndSpec(arg1: *mut PyObject, arg2: *mut PyType_Spec, arg3: *mut PyObject) -> *mut PyObject;
+
+    #[cfg(Py_3_9)]
+    pub fn PyType_GetModule(arg1: *mut PyTypeObject) -> *mut PyObject;
+
+    #[cfg(Py_3_9)]
+    pub fn PyType_GetModuleState(arg1: *mut PyTypeObject) -> *mut c_void;
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -821,6 +844,9 @@ pub const Py_TPFLAGS_HEAPTYPE: c_ulong = (1 << 9);
 
 /// Set if the type allows subclassing
 pub const Py_TPFLAGS_BASETYPE: c_ulong = (1 << 10);
+
+#[cfg(all(Py_3_8, not(Py_LIMITED_API)))]
+pub const Py_TPFLAGS_HAVE_VECTORCALL: c_ulong = (1 << 11);
 
 /// Set if the type is 'ready' -- fully initialized
 pub const Py_TPFLAGS_READY: c_ulong = (1 << 12);

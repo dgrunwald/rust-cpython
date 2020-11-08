@@ -1,6 +1,8 @@
 use libc;
 
 use crate::moduleobject::PyModuleDef;
+#[cfg(Py_3_9)]
+use crate::frameobject::PyFrameObject;
 use crate::object::PyObject;
 
 #[cfg(Py_3_6)]
@@ -14,6 +16,8 @@ extern "C" {
     pub fn PyInterpreterState_New() -> *mut PyInterpreterState;
     pub fn PyInterpreterState_Clear(arg1: *mut PyInterpreterState) -> ();
     pub fn PyInterpreterState_Delete(arg1: *mut PyInterpreterState) -> ();
+    #[cfg(Py_3_9)]
+    pub fn PyInterpreterState_Get() -> *mut PyInterpreterState;
     #[cfg(Py_3_8)]
     pub fn PyInterpreterState_GetDict(arg1: *mut PyInterpreterState) -> *mut PyObject;
     #[cfg(Py_3_7)]
@@ -34,6 +38,12 @@ extern "C" {
     pub fn PyThreadState_SetAsyncExc(arg1: libc::c_long, arg2: *mut PyObject) -> libc::c_int;
     #[cfg(Py_3_7)]
     pub fn PyThreadState_SetAsyncExc(arg1: libc::c_ulong, arg2: *mut PyObject) -> libc::c_int;
+    #[cfg(Py_3_9)]
+    pub fn PyThreadState_GetInterpreter(tstate: *mut PyThreadState) -> *mut PyInterpreterState;
+    #[cfg(Py_3_9)]
+    pub fn PyThreadState_GetFrame(tstate: *mut PyThreadState) -> *mut PyFrameObject;
+    #[cfg(Py_3_9)]
+    pub fn PyThreadState_GetID(tstate: *mut PyThreadState) -> u64;
 }
 
 #[repr(C)]

@@ -45,6 +45,7 @@ pub type _PyCFunctionFastWithKeywords = unsafe extern "C" fn(
     kwnames: *mut PyObject,
 ) -> *mut PyObject;
 
+#[cfg(not(Py_3_9))]
 pub type PyNoArgsFunction = unsafe extern "C" fn(slf: *mut PyObject) -> *mut PyObject;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -52,6 +53,7 @@ extern "C" {
     pub fn PyCFunction_GetFunction(f: *mut PyObject) -> Option<PyCFunction>;
     pub fn PyCFunction_GetSelf(f: *mut PyObject) -> *mut PyObject;
     pub fn PyCFunction_GetFlags(f: *mut PyObject) -> c_int;
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyCFunction_Call(
         f: *mut PyObject,
         args: *mut PyObject,
@@ -92,6 +94,14 @@ extern "C" {
         arg2: *mut PyObject,
         arg3: *mut PyObject,
     ) -> *mut PyObject;
+    
+    #[cfg(Py_3_9)]
+    pub fn PyCMethod_New(
+        arg1: *mut PyMethodDef,
+        arg2: *mut PyObject,
+        arg3: *mut PyObject,
+        arg4: *mut PyTypeObject,
+    ) -> *mut PyObject;
 }
 
 /* Flag passed to newmethodobject */
@@ -115,8 +125,14 @@ slot like sq_contains. */
 pub const METH_COEXIST: c_int = 0x0040;
 
 #[cfg(all(Py_3_6, not(Py_LIMITED_API)))]
-pub const METHOD_FASTCALL: c_int = 0x0080;
+pub const METH_FASTCALL: c_int = 0x0080;
 
+// METH_STACKLESS: This bit is preserved for Stackless Python
+
+#[cfg(all(Py_3_9))]
+pub const METH_METHOD: c_int = 0x0200;
+
+#[cfg(not(Py_3_9))]
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
     pub fn PyCFunction_ClearFreeList() -> c_int;

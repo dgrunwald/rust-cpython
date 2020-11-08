@@ -2,6 +2,8 @@
 
 use crate::pyport::Py_ssize_t;
 use libc::{c_char, c_int, c_ulong, wchar_t};
+#[cfg(Py_3_9)]
+use libc::c_void;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -102,9 +104,12 @@ pub struct PyConfig {
     pub use_hash_seed: c_int,
     pub hash_seed: c_ulong,
     pub faulthandler: c_int,
+    #[cfg(Py_3_9)]
+    pub _use_peg_parser: c_int,
     pub tracemalloc: c_int,
     pub import_time: c_int,
     pub show_ref_count: c_int,
+    #[cfg(not(Py_3_9))]
     pub show_alloc_count: c_int,
     pub dump_refs: c_int,
     pub malloc_stats: c_int,
@@ -144,12 +149,18 @@ pub struct PyConfig {
     pub base_prefix: *mut wchar_t,
     pub exec_prefix: *mut wchar_t,
     pub base_exec_prefix: *mut wchar_t,
+    #[cfg(Py_3_9)]
+    pub platlibdir: *mut wchar_t,
     pub skip_source_first_line: c_int,
     pub run_command: *mut wchar_t,
     pub run_module: *mut wchar_t,
     pub run_filename: *mut wchar_t,
     pub _install_importlib: c_int,
     pub _init_main: c_int,
+    #[cfg(Py_3_9)]
+    pub _isolated_interpreter: c_int,
+    #[cfg(Py_3_9)]
+    pub _orig_argv: PyWideStringList,
 }
 
 impl Default for PyConfig {
@@ -190,4 +201,7 @@ extern "C" {
         length: Py_ssize_t,
         items: *mut *mut wchar_t,
     ) -> PyStatus;
+
+    #[cfg(Py_3_9)]
+    pub fn Py_GetArgcArgv(argc: *mut c_int, argv: *mut *mut *mut wchar_t) -> c_void;
 }

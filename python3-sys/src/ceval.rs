@@ -5,6 +5,7 @@ use crate::pystate::PyThreadState;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyEval_CallObjectWithKeywords(
         callable: *mut PyObject,
         obj: *mut PyObject,
@@ -13,17 +14,21 @@ extern "C" {
 }
 
 #[inline]
+#[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
 pub unsafe fn PyEval_CallObject(callable: *mut PyObject, arg: *mut PyObject) -> *mut PyObject {
+    #[allow(deprecated)]
     PyEval_CallObjectWithKeywords(callable, arg, core::ptr::null_mut())
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyEval_CallFunction(
         callable: *mut PyObject,
         format: *const c_char,
         ...
     ) -> *mut PyObject;
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyEval_CallMethod(
         obj: *mut PyObject,
         name: *const c_char,
@@ -42,11 +47,16 @@ extern "C" {
     pub fn Py_SetRecursionLimit(arg1: c_int) -> ();
     pub fn Py_GetRecursionLimit() -> c_int;
 
-    fn _Py_CheckRecursiveCall(_where: *mut c_char) -> c_int;
-    static mut _Py_CheckRecursionLimit: c_int;
+    //fn _Py_CheckRecursiveCall(_where: *mut c_char) -> c_int;
+    //static mut _Py_CheckRecursionLimit: c_int;
+
+    #[cfg(Py_3_9)]
+    pub fn Py_EnterRecursiveCall(_where: *const c_char) -> c_int;
+    #[cfg(Py_3_9)]
+    pub fn Py_LeaveRecursiveCall() -> c_void;
 }
 
-// TODO: Py_EnterRecursiveCall etc.
+// TODO: Py_EnterRecursiveCall for Python <3.9
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
