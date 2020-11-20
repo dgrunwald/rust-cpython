@@ -121,6 +121,7 @@ extern "C" {
         size: *mut Py_ssize_t,
     ) -> *mut wchar_t;
     pub fn PyUnicode_FromOrdinal(ordinal: c_int) -> *mut PyObject;
+    #[cfg(not(Py_3_9))]
     pub fn PyUnicode_ClearFreeList() -> c_int;
     #[cfg(not(Py_LIMITED_API))]
     pub fn PyUnicode_AsUTF8AndSize(unicode: *mut PyObject, size: *mut Py_ssize_t) -> *const c_char;

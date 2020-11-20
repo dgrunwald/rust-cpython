@@ -79,7 +79,7 @@ pub unsafe fn PyType_IS_GC(t: *mut PyTypeObject) -> c_int {
 
 /// Test if an object has a GC head
 #[inline(always)]
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_9)))]
 pub unsafe fn PyObject_IS_GC(o: *mut PyObject) -> c_int {
     (PyType_IS_GC(Py_TYPE(o)) != 0
         && match (*Py_TYPE(o)).tp_is_gc {
@@ -90,6 +90,9 @@ pub unsafe fn PyObject_IS_GC(o: *mut PyObject) -> c_int {
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(all(not(Py_LIMITED_API), Py_3_9))]
+    pub fn PyObject_IS_GC(o: *mut PyObject) -> c_int;
+
     pub fn _PyObject_GC_Resize(arg1: *mut PyVarObject, arg2: Py_ssize_t) -> *mut PyVarObject;
 
     #[cfg(not(Py_LIMITED_API))]
@@ -101,6 +104,11 @@ extern "C" {
     pub fn PyObject_GC_Track(arg1: *mut c_void) -> ();
     pub fn PyObject_GC_UnTrack(arg1: *mut c_void) -> ();
     pub fn PyObject_GC_Del(arg1: *mut c_void) -> ();
+
+    #[cfg(Py_3_9)]
+    pub fn PyObject_GC_IsTracked(o: *mut PyObject) -> c_int;
+    #[cfg(Py_3_9)]
+    pub fn PyObject_GC_IsFinalized(o: *mut PyObject) -> c_int;
 }
 
 /// Test if a type supports weak references
@@ -111,8 +119,14 @@ pub unsafe fn PyType_SUPPORTS_WEAKREFS(t: *mut PyTypeObject) -> c_int {
 }
 
 #[inline(always)]
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_9)))]
 pub unsafe fn PyObject_GET_WEAKREFS_LISTPTR(o: *mut PyObject) -> *mut *mut PyObject {
     let weaklistoffset = (*Py_TYPE(o)).tp_weaklistoffset as isize;
     (o as *mut u8).offset(weaklistoffset) as *mut *mut PyObject
+}
+
+#[cfg_attr(windows, link(name = "pythonXY"))]
+extern "C" {
+    #[cfg(all(not(Py_LIMITED_API), Py_3_9))]
+    pub fn PyObject_GET_WEAKREFS_LISTPTR(o: *mut PyObject) -> *mut *mut PyObject;
 }

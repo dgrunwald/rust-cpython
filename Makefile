@@ -11,11 +11,13 @@ NIGHTLY := 0
 endif
 endif
 
+FEATURES := serde-convert
+
 ifeq ($(PY),2)
-FEATURES := python27-sys
+FEATURES := $(FEATURES) python27-sys
 endif
 ifeq ($(PY),3)
-FEATURES := python3-sys
+FEATURES := $(FEATURES) python3-sys
 ifdef PEP384
 export PEP384=1
 FEATURES := $(FEATURES) pep-384

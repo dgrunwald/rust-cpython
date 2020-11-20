@@ -120,23 +120,29 @@ pub enum symtable {}
 pub enum _node {}
 
 #[inline]
+#[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
 pub unsafe fn PyParser_SimpleParseString(s: *const c_char, b: c_int) -> *mut _node {
+    #[allow(deprecated)]
     PyParser_SimpleParseStringFlags(s, b, 0)
 }
 
 #[cfg(not(Py_LIMITED_API))]
 #[inline]
+#[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
 pub unsafe fn PyParser_SimpleParseFile(fp: *mut FILE, s: *const c_char, b: c_int) -> *mut _node {
+    #[allow(deprecated)]
     PyParser_SimpleParseFileFlags(fp, s, b, 0)
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyParser_SimpleParseStringFlags(
         arg1: *const c_char,
         arg2: c_int,
         arg3: c_int,
     ) -> *mut _node;
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyParser_SimpleParseStringFlagsFilename(
         arg1: *const c_char,
         arg2: *const c_char,
@@ -144,6 +150,7 @@ extern "C" {
         arg4: c_int,
     ) -> *mut _node;
     #[cfg(not(Py_LIMITED_API))]
+    #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
     pub fn PyParser_SimpleParseFileFlags(
         arg1: *mut FILE,
         arg2: *const c_char,

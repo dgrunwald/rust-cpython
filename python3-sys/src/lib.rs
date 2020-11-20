@@ -1,5 +1,5 @@
 #![no_std]
-#![allow(non_camel_case_types, non_snake_case, non_upper_case_globals)]
+#![allow(non_camel_case_types, non_snake_case, non_upper_case_globals, unused_parens)]
 #![cfg_attr(Py_LIMITED_API, allow(unused_imports))]
 
 // old: marked with TODO
@@ -277,13 +277,7 @@ mod fileutils;
 // TODO supports PEP-384 only; needs adjustment for Python 3.3 and 3.5
 pub mod structmember;
 
-#[cfg(not(Py_LIMITED_API))]
 pub mod frameobject;
-
-#[cfg(Py_LIMITED_API)]
-pub mod frameobject {
-    pub enum PyFrameObject {}
-}
 
 mod marshal;
 
