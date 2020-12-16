@@ -2,7 +2,18 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.1...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.2...HEAD
+
+## 0.5.2 - 2020-12-16
+- [add a way to disable converting `PyString` to unicode on Python 2][240] (PR by [@quark-zju])
+- [initial serde support][241] (PR by [@quark-zju])
+- [avoid abort if the Python function never returns due to thread exit][244] (PR by [@quark-zju])
+- Added [Python 3.9][243] support.
+
+[240]: https://github.com/dgrunwald/rust-cpython/pull/240
+[241]: https://github.com/dgrunwald/rust-cpython/pull/241
+[243]: https://github.com/dgrunwald/rust-cpython/pull/243
+[244]: https://github.com/dgrunwald/rust-cpython/pull/244
 
 ## 0.5.1 - 2020-09-08
 - [ignore trailing comma in plist parsing][220] (PR by [@lausek])
