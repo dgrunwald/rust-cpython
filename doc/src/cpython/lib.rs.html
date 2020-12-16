@@ -407,6 +407,9 @@
 <span id="407">407</span>
 <span id="408">408</span>
 <span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
 <span class="comment">//</span>
@@ -623,6 +626,9 @@
 <span class="comment">//pub mod rustobject;</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">py_class</span>;
 <span class="kw">mod</span> <span class="ident">sharedref</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-convert&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">serde</span>;
 
 <span class="doccomment">/// Private re-exports for macros. Do not use.</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
