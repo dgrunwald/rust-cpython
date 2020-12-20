@@ -283,17 +283,24 @@ impl PyString {
     }
 
     #[cfg(feature = "python3-sys")]
-    fn data_impl(&self, py: Python) -> PyStringData {
-        // TODO: return the original representation instead
-        // of forcing the UTF-8 representation to be created.
-        let mut size: ffi::Py_ssize_t = 0;
+    fn data_impl(&self, _py: Python) -> PyStringData {
+        let ptr = self.as_ptr();
         unsafe {
-            let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size) as *const u8;
-            if data.is_null() {
-                PyErr::fetch(py).print(py);
-                panic!("PyUnicode_AsUTF8AndSize failed");
+            let ready = ffi::PyUnicode_READY(ptr);
+            if ready < 0 {
+                // should fail only on OOM
+                ffi::PyErr_Print();
+                panic!("PyUnicode_READY failed");
             }
-            PyStringData::Utf8(std::slice::from_raw_parts(data, size as usize))
+            let size = ffi::PyUnicode_GET_LENGTH(ptr) as usize;
+            let data = ffi::PyUnicode_DATA(ptr);
+            let kind = ffi::PyUnicode_KIND(ptr);
+            match kind {
+                ffi::PyUnicode_1BYTE_KIND => PyStringData::Latin1(std::slice::from_raw_parts(data as *const u8, size)),
+                ffi::PyUnicode_2BYTE_KIND => PyStringData::Utf16(std::slice::from_raw_parts(data as *const u16, size)),
+                ffi::PyUnicode_4BYTE_KIND => PyStringData::Utf32(std::slice::from_raw_parts(data as *const u32, size)),
+                _ => panic!("Unknown PyUnicode_KIND")
+            }
         }
     }
 
@@ -535,6 +542,7 @@ impl RefFromPyObject for [u8] {
 mod test {
     use crate::conversion::{RefFromPyObject, ToPyObject};
     use crate::python::{Python, PythonObject};
+    use super::{PyString, PyStringData};
 
     #[test]
     fn test_non_bmp() {
@@ -582,5 +590,42 @@ mod test {
         let py_bytes = py.eval("b'Hello'", None, None).unwrap();
         let v = py_bytes.extract::<Vec<u8>>(py).unwrap();
         assert_eq!(b"Hello", &v[..]);
+    }
+
+    #[test]
+    fn test_extract_umlaut() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let py_string = py.eval("u'x=\\u00e4'", None, None).unwrap();
+        let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
+        if let PyStringData::Latin1(s) = data {
+            assert_eq!([b'x', b'=', 0xe4], *s);
+        } else {
+            panic!("Expected PyStringData::Latin1");
+        }
+        assert_eq!("x=ä", py_string.extract::<String>(py).unwrap());
+    }
+
+    #[test]
+    fn test_extract_lone_surrogate() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let py_string = py.eval("u'x=\\ud800'", None, None).unwrap();
+        let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
+        if let PyStringData::Utf16(s) = data {
+            assert_eq!(['x' as u16, '=' as u16, 0xd800], *s);
+        } else {
+            panic!("Expected PyStringData::Utf16");
+        }
+        assert!(py_string.extract::<String>(py).is_err());
+    }
+
+    #[test]
+    fn test_extract_lone_surrogate_lossy() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let py_string = py.eval("u'x=\\ud800'", None, None).unwrap();
+        let result = py_string.cast_as::<PyString>(py).unwrap().to_string_lossy(py);
+        assert_eq!("x=\u{fffd}", result);
     }
 }
