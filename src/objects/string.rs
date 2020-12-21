@@ -313,7 +313,26 @@ impl PyString {
     /// (containing unpaired surrogates, or a Python 2.7 byte string that is
     /// not valid UTF-8).
     pub fn to_string(&self, py: Python) -> PyResult<Cow<str>> {
-        self.data(py).to_string(py)
+        #[cfg(feature = "python3-sys")]
+        unsafe {
+            // On Python 3, we can use the UTF-8 representation stored
+            // inside the Python string.
+            // This should produce identical results to
+            // `self.data(py).to_string(py)` but avoids
+            // re-encoding the string on every to_string call.
+            let mut size: ffi::Py_ssize_t = 0;
+            let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size);
+            if data.is_null() {
+                return Err(PyErr::fetch(py));
+            } else {
+                let slice = std::slice::from_raw_parts(data as *const u8, size as usize);
+                return Ok(Cow::Borrowed(std::str::from_utf8_unchecked(slice)));
+            }
+        }
+        #[cfg(feature = "python27-sys")]
+        {
+            return self.data(py).to_string(py);
+        }
     }
 
     /// Convert the `PyString` into a Rust string.
