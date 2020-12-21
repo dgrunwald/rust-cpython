@@ -159,7 +159,7 @@ impl<'a> PyStringData<'a> {
                 )),
             },
             PyStringData::Latin1(data) => {
-                if data.iter().all(|&b| b.is_ascii()) {
+                if data.is_ascii() {
                     Ok(Cow::Borrowed(unsafe { str::from_utf8_unchecked(data) }))
                 } else {
                     Ok(Cow::Owned(data.iter().map(|&b| b as char).collect()))
@@ -214,7 +214,7 @@ impl<'a> PyStringData<'a> {
         match self {
             PyStringData::Utf8(data) => String::from_utf8_lossy(data),
             PyStringData::Latin1(data) => {
-                if data.iter().all(|&b| b.is_ascii()) {
+                if data.is_ascii() {
                     Cow::Borrowed(unsafe { str::from_utf8_unchecked(data) })
                 } else {
                     Cow::Owned(data.iter().map(|&b| b as char).collect())
@@ -598,6 +598,7 @@ mod test {
         let py = gil.python();
         let py_string = py.eval("u'x=\\u00e4'", None, None).unwrap();
         let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
+        #[cfg(feature = "python3-sys")]
         if let PyStringData::Latin1(s) = data {
             assert_eq!([b'x', b'=', 0xe4], *s);
         } else {
@@ -612,6 +613,7 @@ mod test {
         let py = gil.python();
         let py_string = py.eval("u'x=\\ud800'", None, None).unwrap();
         let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
+        #[cfg(feature = "python3-sys")]
         if let PyStringData::Utf16(s) = data {
             assert_eq!(['x' as u16, '=' as u16, 0xd800], *s);
         } else {
