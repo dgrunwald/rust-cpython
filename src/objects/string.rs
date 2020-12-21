@@ -618,10 +618,12 @@ mod test {
         let py_string = py.eval("u'x=\\u00e4'", None, None).unwrap();
         let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
         #[cfg(feature = "python3-sys")]
-        if let PyStringData::Latin1(s) = data {
-            assert_eq!([b'x', b'=', 0xe4], *s);
-        } else {
-            panic!("Expected PyStringData::Latin1");
+        {
+            if let PyStringData::Latin1(s) = data {
+                assert_eq!([b'x', b'=', 0xe4], *s);
+            } else {
+                panic!("Expected PyStringData::Latin1");
+            }
         }
         assert_eq!("x=ä", py_string.extract::<String>(py).unwrap());
     }
@@ -633,10 +635,12 @@ mod test {
         let py_string = py.eval("u'x=\\ud800'", None, None).unwrap();
         let data = py_string.cast_as::<PyString>(py).unwrap().data(py);
         #[cfg(feature = "python3-sys")]
-        if let PyStringData::Utf16(s) = data {
-            assert_eq!(['x' as u16, '=' as u16, 0xd800], *s);
-        } else {
-            panic!("Expected PyStringData::Utf16");
+        {
+            if let PyStringData::Utf16(s) = data {
+                assert_eq!(['x' as u16, '=' as u16, 0xd800], *s);
+            } else {
+                panic!("Expected PyStringData::Utf16");
+            }
         }
         assert!(py_string.extract::<String>(py).is_err());
     }
