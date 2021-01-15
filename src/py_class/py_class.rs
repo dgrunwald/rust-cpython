@@ -91,6 +91,7 @@ impl MyType {
 * The generated type implements a number of traits from the `cpython` crate.
 * The inherent `create_instance` method can create new Python objects
   given the values for the data fields.
+    - Note: Any visibility keyword on the class will also be used for this method.
 * Private accessors functions are created for the data fields.
 * All functions callable from Python are also exposed as public Rust functions.
 * To convert from `MyType` to `PyObject`, use `as_object()` or `into_object()` (from the `PythonObject` trait).
@@ -141,6 +142,7 @@ impl MyType {
 
 ## Instance methods
 `def method_name(&self, parameter-list) -> PyResult<...> { ... }`
+`pub(crate) def method_name(&self, parameter-list) -> PyResult<...> { ... }`
 
 Declares an instance method callable from Python.
 
@@ -148,9 +150,13 @@ Declares an instance method callable from Python.
   be a shared reference (`&self`).
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Class methods
 `@classmethod def method_name(cls, parameter-list) -> PyResult<...> { ... }`
+`@classmethod pub(crate) def method_name(cls, parameter-list) -> PyResult<...> { ... }`
 
 Declares a class method callable from Python.
 
@@ -159,14 +165,21 @@ Declares a class method callable from Python.
 * The first parameter implicitly has type `&PyType`. This type must not be explicitly specified.
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Static methods
 `@staticmethod def method_name(parameter-list) -> PyResult<...> { ... }`
+`@staticmethod pub(crate) def method_name(parameter-list) -> PyResult<...> { ... }`
 
 Declares a static method callable from Python.
 
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Properties
 `@property def property_name(&self) -> PyResult<...> { ... }`
