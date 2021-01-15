@@ -12,7 +12,9 @@ threading.Thread(target=sys.exit_thread).start()
         None,
         None,
     )?;
-    std::thread::sleep(std::time::Duration::from_millis(100));
+    py.allow_threads(|| {
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    });
     Ok(())
 }
 
