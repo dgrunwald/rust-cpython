@@ -22,6 +22,8 @@
 // THIS IS A GENERATED FILE !!
 //       DO NOT MODIFY      !!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// REGENERATE USING THE MAKEFILE IN ROOT OF REPOSITORY: make build
 
 #[macro_export]
 #[doc(hidden)]

@@ -921,6 +921,8 @@ def main():
     print('// THIS IS A GENERATED FILE !!')
     print('//       DO NOT MODIFY      !!')
     print('// !!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    print('//')
+    print('// REGENERATE USING THE MAKEFILE IN ROOT OF REPOSITORY: make build')
     print(macro_start)
     print(base_case)
     data_decl()
