@@ -1,4 +1,4 @@
-use cpython::{py_fn, NoArgs, ObjectProtocol, PyDict, PyResult, Python};
+use cpython::{py_fn, NoArgs, ObjectProtocol, PyDict, PyNone, PyResult, Python};
 use std::sync::atomic;
 use std::sync::atomic::Ordering::Relaxed;
 
@@ -155,6 +155,30 @@ fn opt_args() {
             .unwrap(),
         r#"a: Some("triple")  b: "string"  c: Some("args")"#,
     );
+}
+
+#[test]
+fn none_return() {
+    static CALL_COUNT: atomic::AtomicUsize = atomic::AtomicUsize::new(0);
+
+    fn f(_py: Python) -> PyResult<PyNone> {
+        CALL_COUNT.fetch_add(1, Relaxed);
+        Ok(PyNone)
+    }
+
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let obj = py_fn!(py, f());
+
+    assert_eq!(CALL_COUNT.load(Relaxed), 0);
+    assert_eq!(
+        obj.call(py, NoArgs, None)
+            .unwrap()
+            .extract::<PyNone>(py)
+            .unwrap(),
+        PyNone,
+    );
+    assert_eq!(CALL_COUNT.load(Relaxed), 1);
 }
 
 /* TODO: reimplement flexible sig support

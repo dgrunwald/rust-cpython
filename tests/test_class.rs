@@ -3,7 +3,7 @@
 use cpython::_detail::ffi;
 use cpython::*;
 use std::cell::{Cell, RefCell};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Arc;
 use std::{isize, iter, mem};
 
@@ -187,6 +187,34 @@ fn instance_method() {
     let d = PyDict::new(py);
     d.set_item(py, "obj", obj).unwrap();
     py.run("assert obj.method() == 42", None, Some(&d)).unwrap();
+}
+
+py_class!(class InstanceMethodReturnsNone |py| {
+    data member: AtomicUsize;
+
+    def value(&self) -> PyResult<usize> {
+        Ok(self.member(py).load(Ordering::Relaxed))
+    }
+
+    def incr(&self) -> PyResult<PyNone> {
+        self.member(py).fetch_add(1, Ordering::Relaxed);
+        Ok(PyNone)
+    }
+});
+
+#[test]
+fn instance_method_returns_none() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let obj = InstanceMethodReturnsNone::create_instance(py, AtomicUsize::new(0)).unwrap();
+    assert!(obj.incr(py).unwrap() == PyNone);
+    assert!(obj.value(py).unwrap() == 1);
+    let d = PyDict::new(py);
+    d.set_item(py, "obj", obj).unwrap();
+    py.run("assert obj.value() == 1", None, Some(&d)).unwrap();
+    py.run("assert obj.incr() is None", None, Some(&d)).unwrap();
+    py.run("assert obj.value() == 2", None, Some(&d)).unwrap();
 }
 
 py_class!(class InstanceMethodWithArgs |py| {
