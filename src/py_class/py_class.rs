@@ -25,7 +25,9 @@ instances of that Python class from Rust.
 # Syntax
 `py_class!(pub class MyType |py| { ... })`
 
-* `pub` makes the generated Rust struct visible outside the current module. It has no effect on the visibility from Python.
+* `pub` makes the generated Rust struct visible outside the current module. It has no effect on
+the visibility from Python. You may use any Rust visibility keyword. For example, `pub(crate)`
+would also be valid.
 * `MyType` is the name of the Python class.
 * `py` is an identifier that will be made available as a variable of type `Python`
 in all function bodies.
@@ -475,14 +477,14 @@ macro_rules! py_class {
             /* props: */ { [ /* getters */ ] [ /* setters */ ] }
         }
     );
-    (pub class $class:ident |$py: ident| { $( $body:tt )* }) => (
+    ($visibility:vis class $class:ident |$py: ident| { $( $body:tt )* }) => (
         $crate::py_class_impl! {
             { $( $body )* }
             $class $py
             /* info: */ {
                 /* base_type: */ $crate::PyObject,
                 /* size: */ <$crate::PyObject as $crate::py_class::BaseObject>::size(),
-                /* class_visibility: */ {pub},
+                /* class_visibility: */ {$visibility},
                 /* gc: */ {
                     /* traverse_proc: */ None,
                     /* traverse_data: */ [ /*name*/ ]
