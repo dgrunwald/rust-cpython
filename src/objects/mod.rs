@@ -146,6 +146,7 @@ mod set;
 mod string;
 mod tuple;
 mod typeobject;
+mod unit;
 
 #[cfg(feature = "python27-sys")]
 pub mod oldstyle;
