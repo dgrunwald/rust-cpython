@@ -111,4 +111,4 @@ rustflags = [
 ]
 ```
 
-For `setup.py` integration, see https://github.com/fafhrd91/setuptools-rust
+For `setup.py` integration, see https://github.com/PyO3/setuptools-rust
