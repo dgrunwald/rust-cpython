@@ -1,9 +1,9 @@
 // This entire module is Python 3.8+ and !Py_LIMITED_API only.
 
 use crate::pyport::Py_ssize_t;
-use libc::{c_char, c_int, c_ulong, wchar_t};
 #[cfg(Py_3_9)]
 use libc::c_void;
+use libc::{c_char, c_int, c_ulong, wchar_t};
 
 #[repr(C)]
 #[derive(Copy, Clone)]

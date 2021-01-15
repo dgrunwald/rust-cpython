@@ -1,8 +1,8 @@
 use libc;
 
-use crate::moduleobject::PyModuleDef;
 #[cfg(Py_3_9)]
 use crate::frameobject::PyFrameObject;
+use crate::moduleobject::PyModuleDef;
 use crate::object::PyObject;
 
 #[cfg(Py_3_6)]

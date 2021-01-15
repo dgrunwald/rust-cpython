@@ -2,10 +2,10 @@ use libc::{c_char, c_int, c_long};
 
 #[cfg(Py_3_5)]
 use crate::methodobject::PyMethodDef;
-#[cfg(Py_3_9)]
-use crate::object::PyTypeObject;
 use crate::moduleobject::PyModuleDef;
 use crate::object::PyObject;
+#[cfg(Py_3_9)]
+use crate::object::PyTypeObject;
 use crate::pyport::Py_ssize_t;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]

@@ -501,7 +501,7 @@ macro_rules! py_class_impl {
     { { def __bool__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __bool__" }
     };
-    { {  def __call__ (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { {   def __call__ (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -525,7 +525,31 @@ macro_rules! py_class_impl {
         }
         $members $props
     }};
-    { {  def __call__ (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { {  $visibility:vis def __call__ (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_call: $crate::py_class_call_slot!{$class::__call__ []},
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, __call__(&$slf,) $res_type; { $($body)* } [] }
+        }
+        $members $props
+    }};
+    { {   def __call__ (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -547,6 +571,33 @@ macro_rules! py_class_impl {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, pub, __call__(&$slf,) $res_type; { $($body)* } }
+                [] ($($p)+,)
+            }
+        }
+        $members $props
+    }};
+    { {  $visibility:vis def __call__ (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_call: $crate::py_argparse_parse_plist_impl!{py_class_call_slot {$class::__call__} [] ($($p)+,)},
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_argparse_parse_plist_impl!{
+                py_class_impl_item { $class, $py, $visibility, __call__(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -2127,7 +2178,7 @@ macro_rules! py_class_impl {
     { { def __neg__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __neg__" }
     };
-    { {  def __new__ ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { {   def __new__ ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -2151,7 +2202,31 @@ macro_rules! py_class_impl {
         }
         $members $props
     }};
-    { {  def __new__ ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { {  $visibility:vis def __new__ ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_new: $crate::py_class_wrap_newfunc!{$class::__new__ []},
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+        }
+        $members $props
+    }};
+    { {   def __new__ ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -2173,6 +2248,33 @@ macro_rules! py_class_impl {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
                 py_class_impl_item { $class, $py, pub, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                [] ($($p)+,)
+            }
+        }
+        $members $props
+    }};
+    { {  $visibility:vis def __new__ ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
+            $as_number:tt $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            /* type_slots */ [
+                $( $tp_slot_name : $tp_slot_value, )*
+                tp_new: $crate::py_argparse_parse_plist_impl!{py_class_wrap_newfunc {$class::__new__} [] ($($p)+,)},
+            ]
+            $as_number $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_argparse_parse_plist_impl!{
+                py_class_impl_item { $class, $py, $visibility, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -2661,7 +2763,7 @@ macro_rules! py_class_impl {
     { { def __xor__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for binary numeric operator __xor__" }
     };
-    { { $(#[doc=$doc:expr])* def $name:ident (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])*  def $name:ident (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* } $props:tt
@@ -2677,7 +2779,23 @@ macro_rules! py_class_impl {
             $name = $crate::py_class_instance_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
         } $props
     }};
-    { { $(#[doc=$doc:expr])* def $name:ident (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])* $visibility:vis def $name:ident (&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        { $( $member_name:ident = $member_expr:expr; )* } $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $name(&$slf,) $res_type; { $($body)* } [] }
+        }
+        /* members: */ {
+            $( $member_name = $member_expr; )*
+            $name = $crate::py_class_instance_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
+        } $props
+    }};
+    { { $(#[doc=$doc:expr])*  def $name:ident (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* } $props:tt
@@ -2696,7 +2814,26 @@ macro_rules! py_class_impl {
             $name = $crate::py_argparse_parse_plist_impl!{py_class_instance_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
         } $props
     }};
-    { { $(#[doc=$doc:expr])*@classmethod def $name:ident ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])* $visibility:vis def $name:ident (&$slf:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        { $( $member_name:ident = $member_expr:expr; )* } $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_argparse_parse_plist_impl!{
+                py_class_impl_item { $class, $py, $visibility, $name(&$slf,) $res_type; { $($body)* } }
+                [] ($($p)+,)
+            }
+        }
+        /* members: */ {
+            $( $member_name = $member_expr; )*
+            $name = $crate::py_argparse_parse_plist_impl!{py_class_instance_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
+        } $props
+    }};
+    { { $(#[doc=$doc:expr])*@classmethod  def $name:ident ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* } $props:tt
@@ -2712,7 +2849,23 @@ macro_rules! py_class_impl {
             $name = $crate::py_class_class_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
         } $props
     }};
-    { { $(#[doc=$doc:expr])*@classmethod def $name:ident ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])*@classmethod $visibility:vis def $name:ident ($cls:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        { $( $member_name:ident = $member_expr:expr; )* } $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $name($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+        }
+        /* members: */ {
+            $( $member_name = $member_expr; )*
+            $name = $crate::py_class_class_method!{$py, $class::$name, { concat!($($doc, "\n"),*) } []};
+        } $props
+    }};
+    { { $(#[doc=$doc:expr])*@classmethod  def $name:ident ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* } $props:tt
@@ -2731,7 +2884,26 @@ macro_rules! py_class_impl {
             $name = $crate::py_argparse_parse_plist_impl!{py_class_class_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
         } $props
     }};
-    { { $(#[doc=$doc:expr])* @staticmethod def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])*@classmethod $visibility:vis def $name:ident ($cls:ident, $($p:tt)+) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        { $( $member_name:ident = $member_expr:expr; )* } $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_argparse_parse_plist_impl!{
+                py_class_impl_item { $class, $py, $visibility, $name($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                [] ($($p)+,)
+            }
+        }
+        /* members: */ {
+            $( $member_name = $member_expr; )*
+            $name = $crate::py_argparse_parse_plist_impl!{py_class_class_method {$py, $class::$name, { concat!($($doc, "\n"),*) }} [] ($($p)+,)};
+        } $props
+    }};
+    { { $(#[doc=$doc:expr])* @staticmethod  def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         { $( $member_name:ident = $member_expr:expr; )* } $props:tt
@@ -2742,6 +2914,32 @@ macro_rules! py_class_impl {
             $($imp)*
             $crate::py_argparse_parse_plist!{
                 py_class_impl_item { $class, $py, pub, $name() $res_type; { $($body)* } }
+                ($($p)*)
+            }
+        }
+        /* members: */ {
+            $( $member_name = $member_expr; )*
+            $name = 
+            $crate::py_argparse_parse_plist!{
+                py_class_static_method {$py, $class::$name, {
+                    concat!($($doc, "\n"),*)
+                    } }
+                ($($p)*)
+            }
+            ;
+        } $props
+    }};
+    { { $(#[doc=$doc:expr])* @staticmethod $visibility:vis def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        { $( $member_name:ident = $member_expr:expr; )* } $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_argparse_parse_plist!{
+                py_class_impl_item { $class, $py, $visibility, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
         }
@@ -2768,7 +2966,7 @@ macro_rules! py_class_impl {
             $name = $init;
         } $props
     }};
-    { { $(#[doc=$doc:expr])* @property def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { $(#[doc=$doc:expr])* @property  def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         $members:tt
@@ -2790,7 +2988,7 @@ macro_rules! py_class_impl {
             ]
         }
     }};
-    { { @$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { @$name:ident.setter  def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         $members:tt
@@ -2812,7 +3010,7 @@ macro_rules! py_class_impl {
             ]
         }
     }};
-    { { @$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { @$name:ident.setter  def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         $members:tt
@@ -2834,7 +3032,7 @@ macro_rules! py_class_impl {
             ]
         }
     }};
-    { { @$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+    { { @$name:ident.setter  def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
         $class:ident $py:ident $info:tt $slots:tt
         { $( $imp:item )* }
         $members:tt
@@ -2846,6 +3044,94 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }
+        }
+        $members
+        /* props: */ {
+            [ $( $prop_doc $prop_getter_name: $prop_type, )*
+            ]
+            [ $( $prop_setter_name : $prop_setter_value_type => $prop_setter_setter, )*
+                $name : [ $value_type ] => $setter_name,
+            ]
+        }
+    }};
+    { { $(#[doc=$doc:expr])* @property $visibility:vis def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+        { [ $( $prop_doc:tt $prop_getter_name:ident: $prop_type:ty, )* ]
+            [ $( $prop_setter_name:ident : $prop_setter_value_type:tt => $prop_setter_setter:ident, )* ] }
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $name(&$slf,) $res_type; { $($body)* } [] }
+        }
+        $members
+        /* props: */ {
+            [ $( $prop_doc $prop_getter_name: $prop_type, )*
+                { concat!($($doc, "\n"),*) } $name: $res_type,
+            ]
+            [ $( $prop_setter_name : $prop_setter_value_type => $prop_setter_setter, )*
+            ]
+        }
+    }};
+    { { @$name:ident.setter $visibility:vis def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+        { [ $( $prop_doc:tt $prop_getter_name:ident: $prop_type:ty, )* ]
+            [ $( $prop_setter_name:ident : $prop_setter_value_type:tt => $prop_setter_setter:ident, )* ] }
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }
+        }
+        $members
+        /* props: */ {
+            [ $( $prop_doc $prop_getter_name: $prop_type, )*
+            ]
+            [ $( $prop_setter_name : $prop_setter_value_type => $prop_setter_setter, )*
+                $name : [ Option<&$value_type> ] => $setter_name,
+            ]
+        }
+    }};
+    { { @$name:ident.setter $visibility:vis def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+        { [ $( $prop_doc:tt $prop_getter_name:ident: $prop_type:ty, )* ]
+            [ $( $prop_setter_name:ident : $prop_setter_value_type:tt => $prop_setter_setter:ident, )* ] }
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }
+        }
+        $members
+        /* props: */ {
+            [ $( $prop_doc $prop_getter_name: $prop_type, )*
+            ]
+            [ $( $prop_setter_name : $prop_setter_value_type => $prop_setter_setter, )*
+                $name : [ &$value_type ] => $setter_name,
+            ]
+        }
+    }};
+    { { @$name:ident.setter $visibility:vis def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt $slots:tt
+        { $( $imp:item )* }
+        $members:tt
+        { [ $( $prop_doc:tt $prop_getter_name:ident: $prop_type:ty, )* ]
+            [ $( $prop_setter_name:ident : $prop_setter_value_type:tt => $prop_setter_setter:ident, )* ] }
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info $slots
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, $visibility, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }
         }
         $members
         /* props: */ {

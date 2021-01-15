@@ -723,9 +723,12 @@ extern "C" {
     #[cfg(Py_3_4)]
     pub fn PyType_GetSlot(arg1: *mut PyTypeObject, arg2: c_int) -> *mut c_void;
 
-
     #[cfg(Py_3_9)]
-    pub fn PyType_FromModuleAndSpec(arg1: *mut PyObject, arg2: *mut PyType_Spec, arg3: *mut PyObject) -> *mut PyObject;
+    pub fn PyType_FromModuleAndSpec(
+        arg1: *mut PyObject,
+        arg2: *mut PyType_Spec,
+        arg3: *mut PyObject,
+    ) -> *mut PyObject;
 
     #[cfg(Py_3_9)]
     pub fn PyType_GetModule(arg1: *mut PyTypeObject) -> *mut PyObject;

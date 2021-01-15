@@ -1276,3 +1276,74 @@ fn properties() {
     py_run!(py, c, "del c.prop_by_opt_ref");
     py_run!(py, c, "repr(c) == 'P(42, \"testing\" \"DELETED\")'");
 }
+
+py_class!(pub(crate) class ClassWithVisibility |py| {
+  pub(crate) def __new__(_cls) -> PyResult<Self> {
+    Self::create_instance(py)
+  }
+
+  @classmethod
+  pub(crate) def class_method(cls) -> PyResult<String> {
+    Ok(format!("{}.class_method()!", cls.name(py)))
+  }
+
+  @staticmethod
+  pub(crate) def static_method() -> PyResult<&'static str> {
+    Ok("ClassWithVisibility.static_method()!")
+  }
+
+  pub(crate) def instance_method(&self) -> PyResult<i32> {
+    Ok(12345)
+  }
+});
+
+#[test]
+fn class_with_visibility() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let typeobj = py.get_type::<ClassWithVisibility>();
+    assert!(typeobj
+        .call(py, NoArgs, None)
+        .unwrap()
+        .cast_into::<ClassWithVisibility>(py)
+        .is_ok());
+
+    let d = PyDict::new(py);
+    d.set_item(py, "C", py.get_type::<ClassWithVisibility>())
+        .unwrap();
+    py.run(
+        "assert C.class_method() == 'ClassWithVisibility.class_method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
+    py.run(
+        "assert C().class_method() == 'ClassWithVisibility.class_method()!'",
+        None,
+        Some(&d),
+    )
+    .unwrap();
+
+    assert_eq!(ClassWithVisibility::static_method(py).unwrap(), "ClassWithVisibility.static_method()!");
+    let d = PyDict::new(py);
+    d.set_item(py, "C", py.get_type::<ClassWithVisibility>()).unwrap();
+    py.run(
+        "assert C.static_method() == 'ClassWithVisibility.static_method()!'",
+        None,
+        Some(&d),
+    )
+        .unwrap();
+    py.run(
+        "assert C().static_method() == 'ClassWithVisibility.static_method()!'",
+        None,
+        Some(&d),
+    )
+        .unwrap();
+
+    let obj = ClassWithVisibility::create_instance(py).unwrap();
+    assert!(obj.instance_method(py).unwrap() == 12345);
+    let d = PyDict::new(py);
+    d.set_item(py, "obj", obj).unwrap();
+    py.run("assert obj.instance_method() == 12345", None, Some(&d)).unwrap();
+}
+
