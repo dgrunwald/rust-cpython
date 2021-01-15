@@ -512,11 +512,11 @@ macro_rules! py_class {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_impl_item {
-    { $class:ident, $py:ident, $name:ident( $( $selfarg:tt )* )
+    { $class:ident, $py:ident, $visibility:vis, $name:ident( $( $selfarg:tt )* )
         $res_type:ty; $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
     } => { $crate::py_coerce_item! {
         impl $class {
-            pub fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
+            $visibility fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
             -> $res_type $body
         }
     }}

@@ -438,14 +438,14 @@ def generate_class_method(special_name=None, decoration='',
         if with_params:
             param_pattern = ', $($p:tt)+'
             impl = '''$crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, %s($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, %s($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }''' % name_use
             value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = '$crate::py_class_impl_item! { $class, $py,%s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
+            impl = '$crate::py_class_impl_item! { $class, $py, pub, %s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
                 % name_use
             value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
         pattern = '%s def %s ($cls:ident%s) -> $res_type:ty { $( $body:tt )* }' \
@@ -523,14 +523,14 @@ def generate_instance_method(special_name=None, decoration='',
         if with_params:
             param_pattern = ', $($p:tt)+'
             impl = '''$crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, %s(&$slf,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, %s(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }''' % name_use
             value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = '$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [] }' \
+            impl = '$crate::py_class_impl_item! { $class, $py, pub, %s(&$slf,) $res_type; { $($body)* } [] }' \
                 % name_use
             value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
         pattern = '%s def %s (&$slf:ident%s) -> $res_type:ty { $( $body:tt )* }' \
@@ -553,7 +553,7 @@ def static_method():
         '$(#[doc=$doc:expr])* @staticmethod def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* }',
         new_impl='''
             $crate::py_argparse_parse_plist!{
-                py_class_impl_item { $class, $py, $name() $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
         ''',
@@ -572,19 +572,19 @@ def static_data():
 
 def property_method():
     generate_case('$(#[doc=$doc:expr])* @property def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, $name(&$slf,) $res_type; { $($body)* } [] }',
         new_props=([('concat!($($doc, "\\n"),*)', '$name', '$res_type')], [])
     )
     generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }',
         new_props=([], [('$name', 'Option<&$value_type>', '$setter_name')])
     )
     generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }',
         new_props=([], [('$name', '&$value_type', '$setter_name')])
     )
     generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }',
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }',
         new_props=([], [('$name', '$value_type', '$setter_name')])
     )
 
@@ -689,7 +689,7 @@ def operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, ad
         raise ValueError('Unsupported argument count')
     generate_case(
         pattern='def %s(&$slf:ident%s) -> $res_type:ty { $($body:tt)* }' % (special_name, arg_pattern),
-        new_impl='$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [%s] }'
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s(&$slf,) $res_type; { $($body)* } [%s] }'
                  % (special_name, ' '.join(param_list)),
         new_slots=new_slots + list(additional_slots)
     )
@@ -707,7 +707,7 @@ def binary_numeric_operator(special_name, slot):
     generate_case(
         pattern='def %s($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* }'
             % special_name,
-        new_impl='$crate::py_class_impl_item! { $class, $py, %s() $res_type; { $($body)* } ' % special_name
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s() $res_type; { $($body)* } ' % special_name
                 +'[ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }',
         new_slots=[(slot, '$crate::py_class_binary_numeric_slot!($class::%s)' % special_name)]
     )

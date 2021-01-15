@@ -387,7 +387,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __abs__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __abs__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -417,7 +417,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __add__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __add__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -459,7 +459,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __and__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __and__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -487,13 +487,13 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_nonzero: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
+                nb_bool: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __bool__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __bool__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -521,7 +521,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __call__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __call__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -546,7 +546,7 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, __call__(&$slf,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, __call__(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -586,7 +586,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : Option<&$item_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : Option<&$item_name> = {} }] }
         }
         $members $props
     }};
@@ -612,7 +612,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : &$item_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : &$item_name = {} }] }
         }
         $members $props
     }};
@@ -638,7 +638,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __contains__(&$slf,) $res_type; { $($body)* } [{ $item : $item_name = {} }] }
         }
         $members $props
     }};
@@ -681,7 +681,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
         }
         $members $props
     }};
@@ -708,7 +708,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
         }
         $members $props
     }};
@@ -735,7 +735,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __delitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
         }
         $members $props
     }};
@@ -810,7 +810,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} }] }
         }
         $members $props
     }};
@@ -841,7 +841,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} }] }
         }
         $members $props
     }};
@@ -872,7 +872,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __getitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} }] }
         }
         $members $props
     }};
@@ -904,7 +904,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __hash__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __hash__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -934,7 +934,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -960,7 +960,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -986,7 +986,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iadd__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1016,7 +1016,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1042,7 +1042,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1068,7 +1068,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iand__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1102,7 +1102,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1128,7 +1128,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1154,7 +1154,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ifloordiv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1184,7 +1184,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1210,7 +1210,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1236,7 +1236,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ilshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1266,7 +1266,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1292,7 +1292,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1318,7 +1318,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imatmul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1348,7 +1348,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1374,7 +1374,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1400,7 +1400,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imod__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1430,7 +1430,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1456,7 +1456,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1482,7 +1482,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __imul__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1528,7 +1528,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __invert__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __invert__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -1558,7 +1558,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1584,7 +1584,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1610,7 +1610,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ior__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1644,7 +1644,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1670,7 +1670,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1696,7 +1696,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __irshift__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1726,7 +1726,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1752,7 +1752,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1778,7 +1778,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __isub__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1806,7 +1806,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __iter__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __iter__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -1836,7 +1836,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1862,7 +1862,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1888,7 +1888,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __itruediv__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -1918,7 +1918,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
         }
         $members $props
     }};
@@ -1944,7 +1944,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
         }
         $members $props
     }};
@@ -1970,7 +1970,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __ixor__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
         }
         $members $props
     }};
@@ -2009,7 +2009,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __len__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __len__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2043,7 +2043,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __lshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __lshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2085,7 +2085,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __mul__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __mul__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2119,7 +2119,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __neg__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __neg__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2147,7 +2147,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py,__new__($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2172,7 +2172,7 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, __new__($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -2198,7 +2198,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __next__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __next__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2232,7 +2232,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __or__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __or__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2262,7 +2262,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __pos__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __pos__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2310,7 +2310,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __repr__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __repr__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2342,7 +2342,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} } { $op : $op_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} } { $op : $op_name = {} }] }
         }
         $members $props
     }};
@@ -2366,7 +2366,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} } { $op : $op_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} } { $op : $op_name = {} }] }
         }
         $members $props
     }};
@@ -2390,7 +2390,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} } { $op : $op_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __richcmp__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} } { $op : $op_name = {} }] }
         }
         $members $props
     }};
@@ -2452,7 +2452,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __rshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __rshift__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2503,7 +2503,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} } { $value : $value_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : Option<&$key_name> = {} } { $value : $value_name = {} }] }
         }
         $members $props
     }};
@@ -2530,7 +2530,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} } { $value : $value_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : &$key_name = {} } { $value : $value_name = {} }] }
         }
         $members $props
     }};
@@ -2557,7 +2557,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} } { $value : $value_name = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, __setitem__(&$slf,) $res_type; { $($body)* } [{ $key : $key_name = {} } { $value : $value_name = {} }] }
         }
         $members $props
     }};
@@ -2585,7 +2585,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __str__(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, __str__(&$slf,) $res_type; { $($body)* } [] }
         }
         $members $props
     }};
@@ -2615,7 +2615,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __sub__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __sub__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2653,7 +2653,7 @@ macro_rules! py_class_impl {
         }
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, __xor__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+            $crate::py_class_impl_item! { $class, $py, pub, __xor__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
         }
         $members $props
     }};
@@ -2670,7 +2670,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, $name(&$slf,) $res_type; { $($body)* } [] }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
@@ -2687,7 +2687,7 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, $name(&$slf,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, $name(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -2705,7 +2705,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py,$name($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, $name($cls: &$crate::PyType,) $res_type; { $($body)* } [] }
         }
         /* members: */ {
             $( $member_name = $member_expr; )*
@@ -2722,7 +2722,7 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, $name($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, $name($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
             }
         }
@@ -2741,7 +2741,7 @@ macro_rules! py_class_impl {
         /* impl: */ {
             $($imp)*
             $crate::py_argparse_parse_plist!{
-                py_class_impl_item { $class, $py, $name() $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, pub, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
         }
@@ -2779,7 +2779,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }
+            $crate::py_class_impl_item! { $class, $py, pub, $name(&$slf,) $res_type; { $($body)* } [] }
         }
         $members
         /* props: */ {
@@ -2801,7 +2801,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }
         }
         $members
         /* props: */ {
@@ -2823,7 +2823,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }
         }
         $members
         /* props: */ {
@@ -2845,7 +2845,7 @@ macro_rules! py_class_impl {
         $class $py $info $slots
         /* impl: */ {
             $($imp)*
-            $crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }
+            $crate::py_class_impl_item! { $class, $py, pub, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }
         }
         $members
         /* props: */ {
