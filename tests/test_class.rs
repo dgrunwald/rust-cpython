@@ -1324,26 +1324,30 @@ fn class_with_visibility() {
     )
     .unwrap();
 
-    assert_eq!(ClassWithVisibility::static_method(py).unwrap(), "ClassWithVisibility.static_method()!");
+    assert_eq!(
+        ClassWithVisibility::static_method(py).unwrap(),
+        "ClassWithVisibility.static_method()!"
+    );
     let d = PyDict::new(py);
-    d.set_item(py, "C", py.get_type::<ClassWithVisibility>()).unwrap();
+    d.set_item(py, "C", py.get_type::<ClassWithVisibility>())
+        .unwrap();
     py.run(
         "assert C.static_method() == 'ClassWithVisibility.static_method()!'",
         None,
         Some(&d),
     )
-        .unwrap();
+    .unwrap();
     py.run(
         "assert C().static_method() == 'ClassWithVisibility.static_method()!'",
         None,
         Some(&d),
     )
-        .unwrap();
+    .unwrap();
 
     let obj = ClassWithVisibility::create_instance(py).unwrap();
     assert!(obj.instance_method(py).unwrap() == 12345);
     let d = PyDict::new(py);
     d.set_item(py, "obj", obj).unwrap();
-    py.run("assert obj.instance_method() == 12345", None, Some(&d)).unwrap();
+    py.run("assert obj.instance_method() == 12345", None, Some(&d))
+        .unwrap();
 }
-
