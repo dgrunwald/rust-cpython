@@ -487,7 +487,7 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_bool: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
+                nb_nonzero: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
