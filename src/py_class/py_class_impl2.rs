@@ -131,7 +131,7 @@ macro_rules! py_class_impl {
         $($imp)*
         $crate::py_coerce_item! {
             impl $class {
-                fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
+                $($class_visibility)* fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
                     let obj = unsafe {
                         <$class as $crate::py_class::BaseObject>::alloc(
                             py, &py.get_type::<$class>(), ( $($data_name,)* )
