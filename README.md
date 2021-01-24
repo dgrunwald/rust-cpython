@@ -16,7 +16,7 @@ Supported Python versions:
 * Python 2.7
 * Python 3.3 to 3.9
 
-Requires Rust 1.32.0 or later.
+Requires Rust 1.41.1 or later.
 
 # Usage
 
