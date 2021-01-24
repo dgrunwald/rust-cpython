@@ -1,0 +1,76 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master, github-actions ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  unix:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        py: [ "2.7", "3.5", "3.7", "3.8", "3.9" ]
+        rust: [ "1.41.1", "stable", "nightly" ]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup Python ${{ matrix.py }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.py }}
+    - name: Setup Rust ${{ matrix.rust }}
+      uses: ATiltedTree/setup-rust@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - name: Check versions and paths
+      run: |
+        python -V ; rustc -V
+        echo "PATH=$PATH"
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+        echo "LIBRARY_PATH=$LIBRARY_PATH"
+        PYTHON_LIB=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+        echo "PYTHON_LIB=$PYTHON_LIB"
+        echo "LIBRARY_PATH=$LIBRARY_PATH:$PYTHON_LIB" >> "$GITHUB_ENV"
+    - name: Check versions and paths (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      run: |
+        python -V
+        rustc -V
+        echo PATH=$env:path
+    - name: Build and test
+      run: |
+        make test extensions
+
+  windows:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+        py: [ "2.7", "3.5", "3.7", "3.8", "3.9" ]
+        rust: [ "1.41.1", "stable" ]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup Python ${{ matrix.py }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.py }}
+    - name: Setup Rust ${{ matrix.rust }}
+      uses: ATiltedTree/setup-rust@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - name: Check versions and paths
+      run: |
+        python -V
+        rustc -V
+        echo PATH=$env:path
+    - name: Build and test
+      run: |
+        make test
