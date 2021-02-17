@@ -3,7 +3,8 @@ use libc::{c_char, c_double, c_int, c_long, c_longlong, c_ulong, c_ulonglong, c_
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
-pub enum PyLongObject {}
+#[repr(C)]
+pub struct PyLongObject { _private: [u8; 0] }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

@@ -3,7 +3,7 @@ use libc::{c_int, c_long};
 use crate::frameobject::PyFrameObject;
 use crate::object::PyObject;
 
-pub enum PyInterpreterState {}
+#[repr(C)] pub struct PyInterpreterState { _private: [u8; 0] }
 
 pub type Py_tracefunc = unsafe extern "C" fn(
     arg1: *mut PyObject,

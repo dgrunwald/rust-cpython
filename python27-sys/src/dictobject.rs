@@ -3,7 +3,7 @@ use libc::{c_char, c_int};
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
-//pub enum PyDictObject { /* representation hidden */ }
+//#[repr(C)] pub struct PyDictObject { /* representation hidden */ }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

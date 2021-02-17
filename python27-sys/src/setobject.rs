@@ -3,7 +3,7 @@ use libc::c_int;
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
-//enum PySetObject { /* representation hidden */ }
+//#[repr(C)] pub struct PySetObject { _private: [u8; 0] }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

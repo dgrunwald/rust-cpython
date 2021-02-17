@@ -8,8 +8,11 @@ use crate::object::PyObject;
 #[cfg(Py_3_6)]
 pub const MAX_CO_EXTRA_USERS: libc::c_int = 255;
 
-pub enum PyInterpreterState {}
-pub enum PyThreadState {}
+#[repr(C)]
+pub struct PyInterpreterState { _private: [u8; 0] }
+
+#[repr(C)]
+pub struct PyThreadState { _private: [u8; 0] }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

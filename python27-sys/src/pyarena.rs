@@ -3,7 +3,7 @@ use libc::{c_int, c_void, size_t};
 use crate::object::PyObject;
 
 #[allow(missing_copy_implementations)]
-pub enum PyArena {}
+#[repr(C)] pub struct PyArena { _private: [u8; 0] }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

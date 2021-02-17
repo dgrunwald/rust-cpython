@@ -37,7 +37,9 @@ pub struct PyCompilerFlags {
 }
 
 #[cfg(not(Py_LIMITED_API))]
-pub enum _mod {}
+#[repr(C)]
+pub struct _mod { _private: [u8; 0] }
+
 
 #[cfg(not(Py_LIMITED_API))]
 #[cfg_attr(windows, link(name = "pythonXY"))]
@@ -116,8 +118,11 @@ extern "C" {
     ) -> *mut _mod;
 }
 
-pub enum symtable {}
-pub enum _node {}
+#[repr(C)]
+pub struct symtable { _private: [u8; 0] }
+
+#[repr(C)]
+pub struct _node { _private: [u8; 0] }
 
 #[inline]
 #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]

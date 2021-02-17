@@ -201,7 +201,8 @@ pub type vectorcallfunc = unsafe extern "C" fn(
 ) -> *mut crate::object::PyObject;
 
 #[cfg(Py_LIMITED_API)]
-pub enum PyTypeObject {}
+#[repr(C)]
+pub struct PyTypeObject { _private: [u8; 0] }
 
 #[cfg(not(Py_LIMITED_API))]
 mod typeobject {
