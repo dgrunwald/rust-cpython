@@ -611,6 +611,7 @@ mod test {
         assert_eq!(b"Hello", &v[..]);
     }
 
+    #[allow(unused_variables)] // when compiling for py2.7
     #[test]
     fn test_extract_umlaut() {
         let gil = Python::acquire_gil();
@@ -628,6 +629,7 @@ mod test {
         assert_eq!("x=ä", py_string.extract::<String>(py).unwrap());
     }
 
+    #[allow(unused_variables)] // when compiling for py2.7
     #[test]
     fn test_extract_lone_surrogate() {
         let gil = Python::acquire_gil();
