@@ -18,8 +18,10 @@
 
 use libc::{c_char, c_int};
 use std::ffi::CString;
+use std::marker::PhantomData;
 use std::{isize, mem, ptr};
 
+use crate::buffer::BufferHandle;
 use crate::conversion::ToPyObject;
 use crate::err::{PyErr, PyResult};
 use crate::exc;
@@ -28,6 +30,7 @@ use crate::function::CallbackConverter;
 use crate::objects::PyObject;
 use crate::py_class::CompareOp;
 use crate::python::{Python, PythonObject};
+use crate::PySharedRef;
 use crate::Py_hash_t;
 
 #[macro_export]
@@ -40,6 +43,7 @@ macro_rules! py_class_type_object_static_init {
         $as_number:tt
         $as_sequence:tt
         $as_mapping:tt
+        $as_buffer:tt
         $setdelitem:tt
     }) => (
         $crate::_detail::ffi::PyTypeObject {
@@ -86,6 +90,7 @@ macro_rules! py_class_type_object_dynamic_init {
             $as_number:tt
             $as_sequence:tt
             $as_mapping:tt
+            $as_buffer:tt
             $setdelitem:tt
         }
         $props:tt
@@ -101,6 +106,7 @@ macro_rules! py_class_type_object_dynamic_init {
         *(unsafe { &mut $type_object.tp_as_sequence }) =
             $crate::py_class_as_sequence!($as_sequence);
         *(unsafe { &mut $type_object.tp_as_number }) = $crate::py_class_as_number!($as_number);
+        *(unsafe { &mut $type_object.tp_as_buffer }) = $crate::py_class_as_buffer!($as_buffer);
         $crate::py_class_as_mapping!($type_object, $as_mapping, $setdelitem);
         *(unsafe { &mut $type_object.tp_getset }) = $crate::py_class_tp_getset!($class, $props);
     };
@@ -182,6 +188,29 @@ macro_rules! py_class_as_number {
             };
         unsafe { &mut NUMBER_METHODS }
     }}
+}
+
+#[macro_export]
+#[doc(hidden)]
+macro_rules! py_class_as_buffer {
+    ([
+        bf_getbuffer: {},
+        bf_releasebuffer: {},
+    ]) => {
+        0 as *mut $crate::_detail::ffi::PyBufferProcs
+    };
+    ([
+        bf_getbuffer: $bf_getbuffer:expr,
+        bf_releasebuffer: $bf_releasebuffer:expr,
+    ]) => {{
+        static mut BUFFER_PROCS: $crate::_detail::ffi::PyBufferProcs =
+            $crate::_detail::ffi::PyBufferProcs {
+                bf_getbuffer: $bf_getbuffer,
+                bf_releasebuffer: $bf_releasebuffer,
+                ..$crate::_detail::ffi::PyBufferProcs_INIT
+            };
+        unsafe { &mut BUFFER_PROCS }
+    }};
 }
 
 #[macro_export]
@@ -535,6 +564,232 @@ macro_rules! py_class_binary_numeric_slot {
             )
         }
         Some(binary_numeric)
+    }};
+}
+
+#[doc(hidden)]
+pub struct BufferHandleRaw {
+    pub buf: *mut libc::c_void,
+    pub len: crate::Py_ssize_t,
+    pub owner: *mut libc::c_void,
+}
+
+impl BufferHandleRaw {
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new_owned<T: BufferHandle>(handle: T) -> Self {
+        let slice = handle.as_bytes();
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = handle.into_owned_void_pointer();
+        Self { buf, len, owner }
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn new_borrowed(slice: &[u8]) -> Self {
+        let buf = slice.as_ptr() as *mut libc::c_void;
+        let len = slice.len() as crate::Py_ssize_t;
+        let owner = ptr::null_mut();
+        Self { buf, len, owner }
+    }
+}
+
+pub struct BufferHandleConverter;
+
+impl CallbackConverter<BufferHandleRaw> for BufferHandleConverter {
+    type R = Option<BufferHandleRaw>;
+
+    #[inline]
+    fn convert(val: BufferHandleRaw, _: Python) -> Option<BufferHandleRaw> {
+        Some(val)
+    }
+
+    #[inline]
+    fn error_value() -> Option<BufferHandleRaw> {
+        None
+    }
+}
+/// This is a bit of a hack to get the actual type of the Rust Buffer from
+/// the py_class's method return type.
+#[doc(hidden)]
+pub struct BufferType<T>(PhantomData<T>);
+impl<T: crate::buffer::BufferHandle> BufferType<T> {
+    #[doc(hidden)]
+    #[inline]
+    pub fn of<C>(_: fn(&C, Python) -> PyResult<T>) -> Self {
+        Self(PhantomData)
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub fn assert_same_type(self, _: &T) {}
+
+    #[doc(hidden)]
+    #[inline]
+    pub unsafe fn drop_buffer(self, ptr: *mut libc::c_void) {
+        T::from_owned_void_pointer(ptr);
+    }
+}
+
+#[doc(hidden)]
+#[inline]
+pub fn assert_buffer_type_direct<C>(_: for<'a> fn(&'a C, Python<'a>) -> PyResult<&'a [u8]>) {}
+
+#[macro_export]
+#[doc(hidden)]
+macro_rules! py_class_buffer_slot {
+    (handle, bf_getbuffer, $class:ident :: $f:ident) => {{
+        unsafe extern "C" fn getbufferproc(
+            exporter: *mut $crate::_detail::ffi::PyObject,
+            view: *mut $crate::_detail::ffi::Py_buffer,
+            flags: $crate::_detail::libc::c_int,
+        ) -> $crate::_detail::libc::c_int {
+            /*
+                According to https://docs.python.org/3/c-api/typeobj.html#c.PyBufferProcs,
+                the implementation of this function needs to behave like this:
+
+                1. Check if the request can be met. If not, raise PyExc_BufferError,
+                   set view->obj to NULL and return -1.
+                2. Fill in the requested fields.
+                3. Increment an internal counter for the number of exports.
+                4. Set view->obj to exporter and increment view->obj.
+                5. Return 0.
+
+                We handle 1) by trying to get a buffer via the Rust API, and 2) and 4)
+                via `PyBuffer_FillInfo`. Instead of doing 3) by tracking the number of
+                exported buffers in `exporter`, we take ownership of a handle for the
+                buffer and store it in `view.internal`.
+            */
+
+            const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
+            let res = $crate::_detail::handle_callback(
+                LOCATION,
+                $crate::py_class::slots::BufferHandleConverter,
+                |py| {
+                    let slf = $crate::PyObject::from_borrowed_ptr(py, exporter)
+                        .unchecked_cast_into::<$class>();
+
+                    let buf_handle = slf.$f(py)?;
+
+                    // assert that we are working with the same type as in
+                    // `releasebufferproc`
+                    $crate::py_class::slots::BufferType::of($class::$f)
+                        .assert_same_type(&buf_handle);
+
+                    let buf_handle_raw =
+                        $crate::py_class::slots::BufferHandleRaw::new_owned(buf_handle);
+                    Ok(buf_handle_raw)
+                },
+            );
+            match res {
+                None => -1,
+                Some($crate::py_class::slots::BufferHandleRaw { buf, len, owner }) => {
+                    let readonly = 0x1;
+                    let ret = $crate::_detail::ffi::PyBuffer_FillInfo(
+                        view, exporter, buf, len, readonly, flags,
+                    );
+                    if ret == 0 {
+                        (*view).internal = owner;
+                    }
+                    ret
+                }
+            }
+        }
+        Some(getbufferproc)
+    }};
+    (handle, bf_releasebuffer, $class:ident :: $f:ident) => {{
+        unsafe extern "C" fn releasebufferproc(
+            exporter: *mut $crate::_detail::ffi::PyObject,
+            view: *mut $crate::_detail::ffi::Py_buffer,
+        ) {
+            /*
+                According to https://docs.python.org/3/c-api/typeobj.html#c.PyBufferProcs,
+                the implementation of this function needs to (optionally) behave like this:
+
+                1. Decrement an internal counter for the number of exports.
+                2. If the counter is 0, free all memory associated with view.
+
+                However, we are not reference counting the buffer inside the export object,
+                but rather handle this by carrying around a owned handle in `view.internal`,
+                which we drop here again.
+            */
+
+            const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
+            $crate::_detail::handle_callback(
+                LOCATION,
+                $crate::py_class::slots::UnitCallbackConverter,
+                |py| {
+                    let owner = (*view).internal;
+
+                    // zeroing out the buffer fields should not be needed here,
+                    // but we do so defensivly to catch bugs.
+                    (*view).internal = 0 as *mut _;
+                    (*view).buf = 0 as *mut _;
+                    (*view).len = 0;
+
+                    $crate::py_class::slots::BufferType::of($class::$f).drop_buffer(owner);
+
+                    Ok(())
+                },
+            );
+        }
+        Some(releasebufferproc)
+    }};
+    (direct, bf_getbuffer, $class:ident :: $f:ident) => {{
+        unsafe extern "C" fn getbufferproc(
+            exporter: *mut $crate::_detail::ffi::PyObject,
+            view: *mut $crate::_detail::ffi::Py_buffer,
+            flags: $crate::_detail::libc::c_int,
+        ) -> $crate::_detail::libc::c_int {
+            /*
+                According to https://docs.python.org/3/c-api/typeobj.html#c.PyBufferProcs,
+                the implementation of this function needs to behave like this:
+
+                1. Check if the request can be met. If not, raise PyExc_BufferError,
+                   set view->obj to NULL and return -1.
+                2. Fill in the requested fields.
+                3. Increment an internal counter for the number of exports.
+                4. Set view->obj to exporter and increment view->obj.
+                5. Return 0.
+
+                We handle 1) by trying to get a buffer via the Rust API, and 2) and 4)
+                via `PyBuffer_FillInfo`. Instead of doing 3) by tracking the number of
+                exported buffers in `exporter`, we just do nothing.
+            */
+
+            const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
+            let res = $crate::_detail::handle_callback(
+                LOCATION,
+                $crate::py_class::slots::BufferHandleConverter,
+                |py| {
+                    let slf = $crate::PyObject::from_borrowed_ptr(py, exporter)
+                        .unchecked_cast_into::<$class>();
+
+                    // assert that we are borrowing bytes from the refcounted $class object
+                    $crate::py_class::slots::assert_buffer_type_direct($class::$f);
+
+                    let buf_slice = slf.$f(py)?;
+
+                    let buf_handle_raw =
+                        $crate::py_class::slots::BufferHandleRaw::new_borrowed(buf_slice);
+                    Ok(buf_handle_raw)
+                },
+            );
+            match res {
+                None => -1,
+                Some($crate::py_class::slots::BufferHandleRaw { buf, len, owner }) => {
+                    let readonly = 0x1;
+                    $crate::_detail::ffi::PyBuffer_FillInfo(
+                        view, exporter, buf, len, readonly, flags,
+                    )
+                }
+            }
+        }
+        Some(getbufferproc)
+    }};
+    (direct, bf_releasebuffer, $class:ident :: $f:ident) => {{
+        None
     }};
 }
 

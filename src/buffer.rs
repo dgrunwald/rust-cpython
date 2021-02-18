@@ -18,7 +18,7 @@
 
 use libc;
 use std::ffi::CStr;
-use std::{cell, mem, slice};
+use std::{cell, mem, ptr, slice};
 
 use crate::err::{self, PyResult};
 use crate::exc;
@@ -660,6 +660,36 @@ impl_element!(i64, SignedInteger);
 impl_element!(isize, SignedInteger);
 impl_element!(f32, Float);
 impl_element!(f64, Float);
+
+/// Trait for the backing storage of a PyBuffer provided from a Rust binding.
+///
+/// It is unsafe because its implementation needs to uphold certain invariants.
+/// See the method docs for more details.
+pub unsafe trait BufferHandle: 'static + Send {
+    /// Returns the data of `Self` as a continous array of bytes.
+    ///
+    /// # Safety
+    ///
+    /// This needs to return an address that remains valid
+    /// and stable if `self` gets moved or transformed to or from a void pointer.
+    fn as_bytes(&self) -> &[u8];
+
+    /// Convert `self` into an owned void pointer.
+    ///
+    /// # Safety
+    ///
+    /// The returned pointer has to be a valid pointer that
+    /// can be converted back to `Self`.
+    fn into_owned_void_pointer(self) -> *mut libc::c_void;
+
+    /// Convert an owned void pointer back to `Self`. This takes owenrship of the pointer.
+    ///
+    /// # Safety
+    ///
+    /// The passed `ptr` has been created by this trait, and is only
+    /// used at most once to convert back to `Self`.
+    unsafe fn from_owned_void_pointer(ptr: *mut libc::c_void) -> Self;
+}
 
 #[cfg(test)]
 mod test {
