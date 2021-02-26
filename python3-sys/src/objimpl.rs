@@ -48,7 +48,7 @@ pub use self::_PyObject_DebugRealloc as PyObject_Realloc;
 pub struct PyObjectArenaAllocator {
     pub ctx: *mut c_void,
     pub alloc: Option<extern "C" fn(ctx: *mut c_void, size: size_t) -> *mut c_void>,
-    pub free: Option<extern "C" fn(ctx: *mut c_void, ptr: *mut c_void, size: size_t) -> ()>,
+    pub free: Option<extern "C" fn(ctx: *mut c_void, size: size_t, ptr: *mut c_void) -> ()>,
 }
 #[cfg(all(not(Py_LIMITED_API), Py_3_4))]
 impl Clone for PyObjectArenaAllocator {
