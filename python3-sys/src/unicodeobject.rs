@@ -1,9 +1,9 @@
 use libc::{c_char, c_int, c_void, wchar_t};
 
 use crate::object::*;
-use crate::pyport::Py_ssize_t;
 #[cfg(not(Py_LIMITED_API))]
 use crate::pyport::Py_hash_t;
+use crate::pyport::Py_ssize_t;
 
 #[cfg(not(Py_LIMITED_API))]
 #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3 / PEP 393")]
@@ -106,8 +106,9 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
     pub fn PyUnicode_FromObject(obj: *mut PyObject) -> *mut PyObject;
-    //pub fn PyUnicode_FromFormatV(format: *const c_char,
-    //                             vargs: va_list) -> *mut PyObject;
+    ignore! {
+        pub fn PyUnicode_FromFormatV(format: *const c_char, vargs: va_list) -> *mut PyObject;
+    }
     pub fn PyUnicode_FromFormat(format: *const c_char, ...) -> *mut PyObject;
     pub fn PyUnicode_InternInPlace(arg1: *mut *mut PyObject) -> ();
     pub fn PyUnicode_InternImmortal(arg1: *mut *mut PyObject) -> ();
@@ -443,7 +444,7 @@ pub struct PyASCIIObject {
     pub length: Py_ssize_t,
     pub hash: Py_hash_t,
     pub state: u32,
-    pub wstr: *mut c_void
+    pub wstr: *mut c_void,
 }
 
 #[repr(C)]
@@ -452,14 +453,14 @@ pub struct PyCompactUnicodeObject {
     _base: PyASCIIObject,
     utf8_length: Py_ssize_t,
     utf8: *mut u8,
-    wstr_length: Py_ssize_t
+    wstr_length: Py_ssize_t,
 }
 
 #[repr(C)]
 #[cfg(not(Py_LIMITED_API))]
 pub struct PyUnicodeObject {
     _base: PyASCIIObject,
-    data: *mut c_void
+    data: *mut c_void,
 }
 
 #[cfg(not(Py_LIMITED_API))]
@@ -502,7 +503,7 @@ pub unsafe fn PyUnicode_DATA(o: *mut PyObject) -> *mut c_void {
     debug_assert!(PyUnicode_IS_READY(o));
     if PyUnicode_IS_COMPACT(o) {
         // fn _PyUnicode_COMPACT_DATA
-         if PyUnicode_IS_ASCII(o) {
+        if PyUnicode_IS_ASCII(o) {
             (o as *mut PyASCIIObject).offset(1) as *mut c_void
         } else {
             (o as *mut PyCompactUnicodeObject).offset(1) as *mut c_void

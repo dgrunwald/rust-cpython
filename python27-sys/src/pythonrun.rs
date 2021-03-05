@@ -22,13 +22,22 @@ pub struct PyCompilerFlags {
 }
 
 #[allow(missing_copy_implementations)]
-#[repr(C)] pub struct Struct__mod { _private: [u8; 0] }
+#[repr(C)]
+pub struct Struct__mod {
+    _private: [u8; 0],
+}
 
 #[allow(missing_copy_implementations)]
-#[repr(C)] pub struct Struct__node { _private: [u8; 0] }
+#[repr(C)]
+pub struct Struct__node {
+    _private: [u8; 0],
+}
 
 #[allow(missing_copy_implementations)]
-#[repr(C)] pub struct Struct_symtable { _private: [u8; 0] }
+#[repr(C)]
+pub struct Struct_symtable {
+    _private: [u8; 0],
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

@@ -50,19 +50,19 @@ extern "C" {
     pub fn PyInt_AsUnsignedLongMask(io: *mut PyObject) -> c_ulong;
     pub fn PyInt_AsUnsignedLongLongMask(io: *mut PyObject) -> c_ulonglong;
     pub fn PyInt_GetMax() -> c_long;
-    //fn PyOS_strtoul(arg1: *mut c_char,
-    //                   arg2: *mut *mut c_char, arg3: c_int)
-    // -> c_ulong;
-    //fn PyOS_strtol(arg1: *mut c_char,
-    //                  arg2: *mut *mut c_char, arg3: c_int)
-    // -> c_long;
+    ignore! {
+        fn PyOS_strtoul(arg1: *mut c_char, arg2: *mut *mut c_char, arg3: c_int) -> c_ulong;
+        fn PyOS_strtol(arg1: *mut c_char, arg2: *mut *mut c_char, arg3: c_int) -> c_long;
+    }
     pub fn PyInt_ClearFreeList() -> c_int;
-//fn _PyInt_Format(v: *mut PyIntObject, base: c_int,
-//                     newstyle: c_int) -> *mut PyObject;
-//fn _PyInt_FormatAdvanced(obj: *mut PyObject,
-//                             format_spec: *mut c_char,
-//                             format_spec_len: Py_ssize_t)
-// -> *mut PyObject;
+    ignore! {
+        fn _PyInt_Format(v: *mut PyIntObject, base: c_int, newstyle: c_int) -> *mut PyObject;
+        fn _PyInt_FormatAdvanced(
+            obj: *mut PyObject,
+            format_spec: *mut c_char,
+            format_spec_len: Py_ssize_t,
+        ) -> *mut PyObject;
+    }
 }
 
 pub unsafe fn PyInt_AS_LONG(io: *mut PyObject) -> c_long {

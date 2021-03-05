@@ -296,9 +296,7 @@ fn find_interpreter_and_get_config(
     }
 
     for name in possible_names.iter() {
-        if let Ok((executable, interpreter_version, lines)) =
-            get_config_from_interpreter(name)
-        {
+        if let Ok((executable, interpreter_version, lines)) = get_config_from_interpreter(name) {
             if matching_version(expected_version, &interpreter_version) {
                 return Ok((interpreter_version, executable, lines));
             }

@@ -7,8 +7,13 @@
     clippy::missing_safety_doc,
     clippy::transmute_ptr_to_ptr,
     clippy::unused_unit,
-    clippy::identity_op,
+    clippy::identity_op
 )]
+
+// Macro for marking parts of the Python headers as ignored.
+macro_rules! ignore {
+    ( $( $_tokens:tt )* ) => {};
+}
 
 pub use crate::boolobject::*;
 pub use crate::bufferobject::*;

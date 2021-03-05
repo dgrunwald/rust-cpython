@@ -24,8 +24,9 @@ extern "C" {
     pub fn PyBytes_FromStringAndSize(arg1: *const c_char, arg2: Py_ssize_t) -> *mut PyObject;
     pub fn PyBytes_FromString(arg1: *const c_char) -> *mut PyObject;
     pub fn PyBytes_FromObject(arg1: *mut PyObject) -> *mut PyObject;
-    //pub fn PyBytes_FromFormatV(arg1: *const c_char, arg2: va_list)
-    // -> *mut PyObject;
+    ignore! {
+        pub fn PyBytes_FromFormatV(arg1: *const c_char, arg2: va_list) -> *mut PyObject;
+    }
     pub fn PyBytes_FromFormat(arg1: *const c_char, ...) -> *mut PyObject;
     pub fn PyBytes_Size(arg1: *mut PyObject) -> Py_ssize_t;
     pub fn PyBytes_AsString(arg1: *mut PyObject) -> *mut c_char;

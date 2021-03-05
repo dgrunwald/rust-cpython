@@ -78,9 +78,15 @@ extern "C" {
         firstlineno: c_int,
     ) -> *mut PyCodeObject;
     pub fn PyCode_Addr2Line(arg1: *mut PyCodeObject, arg2: c_int) -> c_int;
-    //fn _PyCode_CheckLineNumber(co: *mut PyCodeObject,
-    //                               lasti: c_int,
-    //                               bounds: *mut PyAddrPair) -> c_int;
+
+    ignore! {
+        fn _PyCode_CheckLineNumber(
+            co: *mut PyCodeObject,
+            lasti: c_int,
+            bounds: *mut PyAddrPair,
+        ) -> c_int;
+    }
+
     pub fn PyCode_Optimize(
         code: *mut PyObject,
         consts: *mut PyObject,

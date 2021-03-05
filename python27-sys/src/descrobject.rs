@@ -87,7 +87,9 @@ pub unsafe fn PyDescr_IsData(d: *mut PyObject) -> c_int {
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
-    //pub fn PyDictProxy_New(arg1: *mut PyObject) -> *mut PyObject;
-    // PyDictProxy_New is also defined in dictobject.h
+    ignore! {
+        // PyDictProxy_New is also defined in dictobject.h
+        pub fn PyDictProxy_New(arg1: *mut PyObject) -> *mut PyObject;
+    }
     pub fn PyWrapper_New(arg1: *mut PyObject, arg2: *mut PyObject) -> *mut PyObject;
 }

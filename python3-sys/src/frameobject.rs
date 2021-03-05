@@ -15,7 +15,9 @@ pub struct PyTryBlock {
 
 #[cfg(Py_LIMITED_API)]
 #[repr(C)]
-pub struct PyFrameObject { _private: [u8; 0] }
+pub struct PyFrameObject {
+    _private: [u8; 0],
+}
 
 #[cfg(not(Py_LIMITED_API))]
 #[repr(C)]

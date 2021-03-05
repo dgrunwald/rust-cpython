@@ -57,8 +57,11 @@ extern "C" {
     pub fn PyComplex_ImagAsDouble(op: *mut PyObject) -> c_double;
     pub fn PyComplex_AsCComplex(op: *mut PyObject) -> Py_complex;
 
-//fn _PyComplex_FormatAdvanced(obj: *mut PyObject,
-//                                 format_spec: *mut c_char,
-//                                 format_spec_len: Py_ssize_t)
-// -> *mut PyObject;
+    ignore! {
+        fn _PyComplex_FormatAdvanced(
+            obj: *mut PyObject,
+            format_spec: *mut c_char,
+            format_spec_len: Py_ssize_t,
+        ) -> *mut PyObject;
+    }
 }

@@ -7,7 +7,7 @@
     clippy::missing_safety_doc,
     clippy::transmute_ptr_to_ptr,
     clippy::unused_unit,
-    clippy::identity_op,
+    clippy::identity_op
 )]
 #![cfg_attr(Py_LIMITED_API, allow(unused_imports))]
 
@@ -17,6 +17,11 @@
 
 // new:
 // Based on the headers of Python 3.3.0, 3.4.0 and 3.5.0.
+
+// Macro for marking parts of the Python headers as ignored.
+macro_rules! ignore {
+    ( $( $_tokens:tt )* ) => {};
+}
 
 pub use crate::bltinmodule::*;
 pub use crate::boolobject::*;

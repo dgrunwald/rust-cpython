@@ -6,7 +6,9 @@ use crate::pyport::Py_ssize_t;
 
 #[cfg(Py_3_8)]
 #[repr(C)]
-pub struct _PyOpcache { _private: [u8; 0] }
+pub struct _PyOpcache {
+    _private: [u8; 0],
+}
 
 #[repr(C)]
 #[derive(Copy)]

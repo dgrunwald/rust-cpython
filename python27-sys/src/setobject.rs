@@ -3,7 +3,9 @@ use libc::c_int;
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
-//#[repr(C)] pub struct PySetObject { _private: [u8; 0] }
+ignore! {
+    #[repr(C)] pub struct PySetObject { _private: [u8; 0] }
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -52,12 +54,20 @@ extern "C" {
     pub fn PySet_Contains(anyset: *mut PyObject, key: *mut PyObject) -> c_int;
     pub fn PySet_Discard(set: *mut PyObject, key: *mut PyObject) -> c_int;
     pub fn PySet_Add(set: *mut PyObject, key: *mut PyObject) -> c_int;
-    //pub fn _PySet_Next(set: *mut PyObject, pos: *mut Py_ssize_t,
-    //                   key: *mut *mut PyObject) -> c_int;
-    //pub fn _PySet_NextEntry(set: *mut PyObject, pos: *mut Py_ssize_t,
-    //                        key: *mut *mut PyObject,
-    //                        hash: *mut c_long) -> c_int;
+
+    ignore! {
+        pub fn _PySet_Next(set: *mut PyObject, pos: *mut Py_ssize_t, key: *mut *mut PyObject) -> c_int;
+        pub fn _PySet_NextEntry(
+            set: *mut PyObject,
+            pos: *mut Py_ssize_t,
+            key: *mut *mut PyObject,
+            hash: *mut c_long,
+        ) -> c_int;
+    }
+
     pub fn PySet_Pop(set: *mut PyObject) -> *mut PyObject;
-//pub fn _PySet_Update(set: *mut PyObject, iterable: *mut PyObject)
-// -> c_int;
+
+    ignore! {
+        pub fn _PySet_Update(set: *mut PyObject, iterable: *mut PyObject) -> c_int;
+    }
 }

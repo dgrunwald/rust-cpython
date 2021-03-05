@@ -28,10 +28,10 @@ extern "C" {
         ...
     ) -> c_int;
     pub fn Py_BuildValue(arg1: *const c_char, ...) -> *mut PyObject;
-    //pub fn _Py_BuildValue_SizeT(arg1: *const c_char, ...)
-    // -> *mut PyObject;
-    //pub fn Py_VaBuildValue(arg1: *const c_char, arg2: va_list)
-    // -> *mut PyObject;
+    ignore! {
+        pub fn _Py_BuildValue_SizeT(arg1: *const c_char, ...) -> *mut PyObject;
+        pub fn Py_VaBuildValue(arg1: *const c_char, arg2: va_list) -> *mut PyObject;
+    }
     pub fn PyModule_AddObject(
         arg1: *mut PyObject,
         arg2: *const c_char,

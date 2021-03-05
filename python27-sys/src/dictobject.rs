@@ -3,7 +3,10 @@ use libc::{c_char, c_int};
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
-//#[repr(C)] pub struct PyDictObject { /* representation hidden */ }
+ignore! {
+    #[repr(C)]
+    pub struct PyDictObject { /* representation hidden */ }
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -56,13 +59,18 @@ extern "C" {
         key: *mut *mut PyObject,
         value: *mut *mut PyObject,
     ) -> c_int;
-    /*pub fn _PyDict_Next(mp: *mut PyObject, pos: *mut Py_ssize_t,
-                        key: *mut *mut PyObject, value: *mut *mut PyObject,
-                        hash: *mut c_long) -> c_int;
-    pub fn _PyDict_Contains(mp: *mut PyObject, key: *mut PyObject,
-                            hash: c_long) -> c_int;
-    pub fn _PyDict_NewPresized(minused: Py_ssize_t) -> *mut PyObject;
-    pub fn _PyDict_MaybeUntrack(mp: *mut PyObject);*/
+    ignore! {
+        pub fn _PyDict_Next(
+            mp: *mut PyObject,
+            pos: *mut Py_ssize_t,
+            key: *mut *mut PyObject,
+            value: *mut *mut PyObject,
+            hash: *mut c_long,
+        ) -> c_int;
+        pub fn _PyDict_Contains(mp: *mut PyObject, key: *mut PyObject, hash: c_long) -> c_int;
+        pub fn _PyDict_NewPresized(minused: Py_ssize_t) -> *mut PyObject;
+        pub fn _PyDict_MaybeUntrack(mp: *mut PyObject);
+    }
     pub fn PyDict_Update(mp: *mut PyObject, other: *mut PyObject) -> c_int;
     pub fn PyDict_Merge(mp: *mut PyObject, other: *mut PyObject, _override: c_int) -> c_int;
     pub fn PyDict_MergeFromSeq2(d: *mut PyObject, seq2: *mut PyObject, _override: c_int) -> c_int;

@@ -47,8 +47,10 @@ extern "C" {
     pub fn Py_SetRecursionLimit(arg1: c_int) -> ();
     pub fn Py_GetRecursionLimit() -> c_int;
 
-    //fn _Py_CheckRecursiveCall(_where: *mut c_char) -> c_int;
-    //static mut _Py_CheckRecursionLimit: c_int;
+    ignore! {
+        fn _Py_CheckRecursiveCall(_where: *mut c_char) -> c_int;
+        static mut _Py_CheckRecursionLimit: c_int;
+    }
 
     #[cfg(Py_3_9)]
     pub fn Py_EnterRecursiveCall(_where: *const c_char) -> c_int;
