@@ -463,7 +463,7 @@ macro_rules! py_argparse_extract {
         // second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).
         let v = $iter.next().unwrap().as_ref().unwrap();
         let mut c = |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]);
-        let r = if v.as_ptr() == unsafe { $crate::_detail::ffi::Py_None() } {
+        let r = if v.is_none($py) {
             Ok(c(None))
         } else {
             <$rtype as $crate::RefFromPyObject>::with_extracted($py, v, |r: &$rtype| c(Some(r)))
@@ -537,7 +537,7 @@ where
 {
     match obj {
         Some(obj) => {
-            if obj.as_ptr() == unsafe { crate::ffi::Py_None() } {
+            if obj.is_none(py) {
                 f(None)
             } else {
                 match P::with_extracted(py, obj, |p| f(Some(p))) {

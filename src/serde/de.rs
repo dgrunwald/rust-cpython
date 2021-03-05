@@ -85,7 +85,7 @@ impl<'gil> Deserializer<'gil> {
 
     /// Test whether `self.obj` is `None` in Python.
     fn is_none(&self) -> bool {
-        self.obj == self.py.None()
+        self.obj.is_none(self.py)
     }
 }
 

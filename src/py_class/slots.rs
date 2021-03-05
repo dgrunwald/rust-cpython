@@ -266,7 +266,7 @@ macro_rules! py_class_call_slot_impl_with_ref {
         $arg_if_some:expr
         $(, $extra_arg:ident)*
     ) => {{
-        if $arg.as_ptr() == unsafe { $crate::_detail::ffi::Py_None() } {
+        if $arg.is_none($py) {
             Ok($slf.$f($py, $arg_if_none $(, $extra_arg)*))
         } else {
             <$arg_type as $crate::RefFromPyObject>::with_extracted(
