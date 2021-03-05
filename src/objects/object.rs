@@ -259,6 +259,12 @@ impl PyObject {
     {
         crate::conversion::FromPyObject::extract(py, self)
     }
+
+    /// True if this is None in Python.
+    #[inline]
+    pub fn is_none(&self, _py: Python) -> bool {
+        self.as_ptr() == unsafe { ffi::Py_None() }
+    }
 }
 
 /// PyObject implements the `==` operator using reference equality:

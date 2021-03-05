@@ -31,6 +31,7 @@ pub use self::capsule::PyCapsule;
 pub use self::dict::PyDict;
 pub use self::iterator::PyIterator;
 pub use self::list::PyList;
+pub use self::none::PyNone;
 #[cfg(feature = "python27-sys")]
 pub use self::num::PyInt;
 #[cfg(feature = "python3-sys")]
@@ -139,6 +140,7 @@ pub mod exc;
 mod iterator;
 mod list;
 mod module;
+mod none;
 mod num;
 mod object;
 mod sequence;

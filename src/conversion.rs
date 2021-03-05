@@ -224,7 +224,7 @@ where
     T: FromPyObject<'s>,
 {
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
-        if obj.as_ptr() == unsafe { ffi::Py_None() } {
+        if obj.is_none(py) {
             Ok(None)
         } else {
             match T::extract(py, obj) {
@@ -242,7 +242,7 @@ where T: ExtractPyObject<'prepared>
     type Prepared = Option<T::Prepared>;
 
     fn prepare_extract(py: Python, obj: &PyObject) -> PyResult<Self::Prepared> {
-        if obj.as_ptr() == unsafe { ffi::Py_None() } {
+        if obj.is_none(py) {
             Ok(None)
         } else {
             Ok(Some(T::prepare_extract(py, obj)?))
