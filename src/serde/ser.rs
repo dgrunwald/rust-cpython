@@ -108,10 +108,12 @@ impl PyCollectItems for BuildDict {
 // ------- Serde APIs -------
 
 impl<'a> Serializer<'a> {
+    #[allow(clippy::unnecessary_wraps)]
     fn serialize<T: ToPyObject>(&self, obj: T) -> Result<PyObject> {
         Ok(obj.into_py_object(self.py).into_object())
     }
 
+    #[allow(clippy::wrong_self_convention)]
     fn to_object<T: Serialize + ?Sized>(py: Python, value: &T) -> Result<PyObject> {
         let serializer = Serializer { py };
         value.serialize(&serializer)

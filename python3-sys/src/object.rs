@@ -202,7 +202,9 @@ pub type vectorcallfunc = unsafe extern "C" fn(
 
 #[cfg(Py_LIMITED_API)]
 #[repr(C)]
-pub struct PyTypeObject { _private: [u8; 0] }
+pub struct PyTypeObject {
+    _private: [u8; 0],
+}
 
 #[cfg(not(Py_LIMITED_API))]
 mod typeobject {

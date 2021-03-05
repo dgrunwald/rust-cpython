@@ -28,7 +28,7 @@ macro_rules! py_expect_exception {
         let res = $py.run($code, None, Some(&d));
         let err = res.unwrap_err();
         if !err.matches($py, $py.get_type::<exc::$err>()) {
-            panic!(format!("Expected {} but got {:?}", stringify!($err), err))
+            panic!("Expected {} but got {:?}", stringify!($err), err)
         }
     }};
 }

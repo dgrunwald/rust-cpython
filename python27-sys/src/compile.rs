@@ -11,13 +11,13 @@ pub struct PyFutureFeatures {
     pub ff_lineno: c_int,
 }
 
-pub const FUTURE_NESTED_SCOPES: &'static str = "nested_scopes";
-pub const FUTURE_GENERATORS: &'static str = "generators";
-pub const FUTURE_DIVISION: &'static str = "division";
-pub const FUTURE_ABSOLUTE_IMPORT: &'static str = "absolute_import";
-pub const FUTURE_WITH_STATEMENT: &'static str = "with_statement";
-pub const FUTURE_PRINT_FUNCTION: &'static str = "print_function";
-pub const FUTURE_UNICODE_LITERALS: &'static str = "unicode_literals";
+pub const FUTURE_NESTED_SCOPES: &str = "nested_scopes";
+pub const FUTURE_GENERATORS: &str = "generators";
+pub const FUTURE_DIVISION: &str = "division";
+pub const FUTURE_ABSOLUTE_IMPORT: &str = "absolute_import";
+pub const FUTURE_WITH_STATEMENT: &str = "with_statement";
+pub const FUTURE_PRINT_FUNCTION: &str = "print_function";
+pub const FUTURE_UNICODE_LITERALS: &str = "unicode_literals";
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

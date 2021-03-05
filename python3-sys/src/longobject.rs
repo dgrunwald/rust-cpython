@@ -4,7 +4,9 @@ use crate::object::*;
 use crate::pyport::Py_ssize_t;
 
 #[repr(C)]
-pub struct PyLongObject { _private: [u8; 0] }
+pub struct PyLongObject {
+    _private: [u8; 0],
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

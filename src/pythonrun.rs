@@ -118,14 +118,14 @@ impl GILGuard {
         }
         let gstate = unsafe { ffi::PyGILState_Ensure() }; // acquire GIL
         GILGuard {
-            gstate: gstate,
+            gstate,
             no_send: marker::PhantomData,
         }
     }
 
     /// Retrieves the marker type that proves that the GIL was acquired.
     #[inline]
-    pub fn python<'p>(&'p self) -> Python<'p> {
+    pub fn python(&self) -> Python<'_> {
         unsafe { Python::assume_gil_acquired() }
     }
 }
@@ -160,16 +160,8 @@ unsafe impl<T: Send> Sync for GILProtected<T> {}
 impl<T> GILProtected<T> {
     /// Creates a new instance of `GILProtected`.
     #[inline]
-    #[cfg(feature = "nightly")]
     pub const fn new(data: T) -> GILProtected<T> {
-        GILProtected { data: data }
-    }
-
-    /// Creates a new instance of `GILProtected`.
-    #[inline]
-    #[cfg(not(feature = "nightly"))]
-    pub fn new(data: T) -> GILProtected<T> {
-        GILProtected { data: data }
+        GILProtected { data }
     }
 
     /// Returns a shared reference to the data stored in the `GILProtected`.

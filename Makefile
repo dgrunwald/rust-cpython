@@ -56,6 +56,9 @@ endif
 doc: build
 	cargo doc --no-deps $(CARGO_FLAGS)
 
+clippy:
+	cargo clippy $(CARGO_FLAGS)
+
 extensions: build
 	make -C extensions/tests PY=$(PY)
 

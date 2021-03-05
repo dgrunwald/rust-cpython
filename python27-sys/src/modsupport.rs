@@ -24,10 +24,12 @@ extern "C" {
         ...
     ) -> c_int;
     pub fn Py_BuildValue(format: *const c_char, ...) -> *mut PyObject;
-    //fn _Py_BuildValue_SizeT(arg1: *const c_char, ...)
-    // -> *mut PyObject;
-    //fn _PyArg_NoKeywords(funcname: *const c_char,
-    //                     kw: *mut PyObject) -> c_int;
+
+    ignore! {
+        fn _Py_BuildValue_SizeT(arg1: *const c_char, ...) -> *mut PyObject;
+        fn _PyArg_NoKeywords(funcname: *const c_char, kw: *mut PyObject) -> c_int;
+    }
+
     pub fn PyModule_AddObject(
         module: *mut PyObject,
         name: *const c_char,

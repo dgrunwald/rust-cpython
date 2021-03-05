@@ -91,10 +91,10 @@ impl PythonObject for PyObject {
 
 impl PythonObjectWithCheckedDowncast for PyObject {
     #[inline]
-    fn downcast_from<'p>(
-        _py: Python<'p>,
+    fn downcast_from(
+        _py: Python<'_>,
         obj: PyObject,
-    ) -> Result<PyObject, PythonObjectDowncastError<'p>> {
+    ) -> Result<PyObject, PythonObjectDowncastError<'_>> {
         Ok(obj)
     }
 
@@ -180,7 +180,7 @@ impl PyObject {
     /// Transmutes an FFI pointer to `&PyObject`.
     /// Undefined behavior if the pointer is NULL or invalid.
     #[inline]
-    pub unsafe fn borrow_from_ptr<'a>(ptr: &'a *mut ffi::PyObject) -> &'a PyObject {
+    pub unsafe fn borrow_from_ptr(ptr: &*mut ffi::PyObject) -> &PyObject {
         debug_assert!(!ptr.is_null());
         mem::transmute(ptr)
     }
@@ -188,7 +188,7 @@ impl PyObject {
     /// Transmutes a slice of owned FFI pointers to `&[PyObject]`.
     /// Undefined behavior if any pointer in the slice is NULL or invalid.
     #[inline]
-    pub unsafe fn borrow_from_owned_ptr_slice<'a>(ptr: &'a [*mut ffi::PyObject]) -> &'a [PyObject] {
+    pub unsafe fn borrow_from_owned_ptr_slice(ptr: &[*mut ffi::PyObject]) -> &[PyObject] {
         mem::transmute(ptr)
     }
 
@@ -218,7 +218,7 @@ impl PyObject {
     /// Fails with `PythonObjectDowncastError` if the object is not of the expected type.
     /// This is a wrapper function around `PythonObjectWithCheckedDowncast::downcast_from()`.
     #[inline]
-    pub fn cast_into<'p, T>(self, py: Python<'p>) -> Result<T, PythonObjectDowncastError<'p>>
+    pub fn cast_into<T>(self, py: Python<'_>) -> Result<T, PythonObjectDowncastError<'_>>
     where
         T: PythonObjectWithCheckedDowncast,
     {
@@ -229,7 +229,7 @@ impl PyObject {
     /// Causes undefined behavior if the object is not of the expected type.
     /// This is a wrapper function around `PythonObject::unchecked_downcast_borrow_from()`.
     #[inline]
-    pub unsafe fn unchecked_cast_as<'s, T>(&'s self) -> &'s T
+    pub unsafe fn unchecked_cast_as<T>(&self) -> &T
     where
         T: PythonObject,
     {

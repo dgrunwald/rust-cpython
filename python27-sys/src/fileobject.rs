@@ -17,7 +17,7 @@ pub unsafe fn PyFile_CheckExact(op: *mut PyObject) -> c_int {
     (Py_TYPE(op) == &mut PyFile_Type) as c_int
 }
 
-pub const PY_STDIOTEXTMODE: &'static str = "b";
+pub const PY_STDIOTEXTMODE: &str = "b";
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -36,8 +36,10 @@ extern "C" {
         arg4: Option<unsafe extern "C" fn(arg1: *mut FILE) -> c_int>,
     ) -> *mut PyObject;
     pub fn PyFile_AsFile(arg1: *mut PyObject) -> *mut FILE;
-    //pub fn PyFile_IncUseCount(arg1: *mut PyFileObject);
-    //pub fn PyFile_DecUseCount(arg1: *mut PyFileObject);
+    ignore! {
+        pub fn PyFile_IncUseCount(arg1: *mut PyFileObject);
+        pub fn PyFile_DecUseCount(arg1: *mut PyFileObject);
+    }
     pub fn PyFile_Name(arg1: *mut PyObject) -> *mut PyObject;
     pub fn PyFile_GetLine(arg1: *mut PyObject, arg2: c_int) -> *mut PyObject;
     pub fn PyFile_WriteObject(arg1: *mut PyObject, arg2: *mut PyObject, arg3: c_int) -> c_int;

@@ -17,10 +17,14 @@
 // DEALINGS IN THE SOFTWARE.
 
 #![cfg_attr(feature="nightly", feature(
-    const_fn, // for GILProtected::new (#24111)
     specialization, // for impl FromPyObject<'s> for Vec<...> (#31844)
 ))]
-#![allow(unused_imports)] // because some imports are only necessary with python 2.x or 3.x
+#![allow(
+    unused_imports, // because some imports are only necessary with python 2.x or 3.x
+    clippy::missing_safety_doc,
+    clippy::manual_strip,
+    clippy::match_like_matches_macro
+)]
 
 //! Rust bindings to the Python interpreter.
 //!

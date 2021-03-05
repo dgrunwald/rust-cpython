@@ -3,7 +3,9 @@ use libc::c_int;
 use crate::object::*;
 
 #[repr(C)]
-pub struct PyWeakReference { _private: [u8; 0] }
+pub struct PyWeakReference {
+    _private: [u8; 0],
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

@@ -1,5 +1,3 @@
-use libc;
-
 #[cfg(Py_3_9)]
 use crate::frameobject::PyFrameObject;
 use crate::moduleobject::PyModuleDef;
@@ -9,10 +7,14 @@ use crate::object::PyObject;
 pub const MAX_CO_EXTRA_USERS: libc::c_int = 255;
 
 #[repr(C)]
-pub struct PyInterpreterState { _private: [u8; 0] }
+pub struct PyInterpreterState {
+    _private: [u8; 0],
+}
 
 #[repr(C)]
-pub struct PyThreadState { _private: [u8; 0] }
+pub struct PyThreadState {
+    _private: [u8; 0],
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -27,9 +29,10 @@ extern "C" {
     pub fn PyInterpreterState_GetID(arg1: *mut PyInterpreterState) -> i64;
     pub fn PyState_FindModule(arg1: *mut PyModuleDef) -> *mut PyObject;
     pub fn PyThreadState_New(arg1: *mut PyInterpreterState) -> *mut PyThreadState;
-    //fn _PyThreadState_Prealloc(arg1: *mut PyInterpreterState)
-    // -> *mut PyThreadState;
-    //fn _PyThreadState_Init(arg1: *mut PyThreadState) -> ();
+    ignore! {
+        fn _PyThreadState_Prealloc(arg1: *mut PyInterpreterState) -> *mut PyThreadState;
+        fn _PyThreadState_Init(arg1: *mut PyThreadState) -> ();
+    }
     pub fn PyThreadState_Clear(arg1: *mut PyThreadState) -> ();
     pub fn PyThreadState_Delete(arg1: *mut PyThreadState) -> ();
     #[cfg(any(Py_3_7, py_sys_config = "WITH_THREAD"))]

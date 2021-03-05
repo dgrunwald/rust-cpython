@@ -80,7 +80,7 @@ impl PyModule {
     ///
     /// May fail if the module does not have a `__file__` attribute.
     #[allow(deprecated)]
-    pub fn filename<'a>(&'a self, py: Python) -> PyResult<&'a str> {
+    pub fn filename(&self, py: Python) -> PyResult<&str> {
         unsafe { self.str_from_ptr(py, ffi::PyModule_GetFilename(self.0.as_ptr())) }
     }
 
@@ -88,7 +88,7 @@ impl PyModule {
     ///
     /// May fail if the module does not have a `__file__` attribute.
     #[cfg(feature = "python3-sys")]
-    pub fn filename_object<'a>(&'a self, py: Python) -> PyResult<PyObject> {
+    pub fn filename_object(&self, py: Python) -> PyResult<PyObject> {
         let ptr = unsafe { ffi::PyModule_GetFilenameObject(self.0.as_ptr()) };
         if ptr.is_null() {
             Err(PyErr::fetch(py))
@@ -151,7 +151,7 @@ impl PyModule {
     /// This is a convenience function that initializes the `py_class!()`,
     /// sets `new_type.__module__` to this module's name,
     /// and adds the type to this module.
-    pub fn add_class<'p, T>(&self, py: Python<'p>) -> PyResult<()>
+    pub fn add_class<T>(&self, py: Python<'_>) -> PyResult<()>
     where
         T: PythonObjectFromPyClassMacro,
     {

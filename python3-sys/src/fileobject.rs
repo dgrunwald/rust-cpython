@@ -2,7 +2,7 @@ use libc::{c_char, c_int};
 
 use crate::object::PyObject;
 
-pub const PY_STDIOTEXTMODE: &'static str = "b";
+pub const PY_STDIOTEXTMODE: &str = "b";
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

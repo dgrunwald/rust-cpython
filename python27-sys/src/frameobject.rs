@@ -63,10 +63,12 @@ pub unsafe fn PyFrame_Check(op: *mut PyObject) -> c_int {
     ((*op).ob_type == &mut PyFrame_Type) as c_int
 }
 
-//#[inline]
-//pub unsafe fn PyFrame_IsRestricted(f: *mut PyFrameObject) -> c_int {
-//     ((*f).f_builtins != (*(*(*f).f_tstate).interp).builtins) as c_int
-//}
+ignore! {
+    #[inline]
+    pub unsafe fn PyFrame_IsRestricted(f: *mut PyFrameObject) -> c_int {
+        ((*f).f_builtins != (*(*(*f).f_tstate).interp).builtins) as c_int
+    }
+}
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

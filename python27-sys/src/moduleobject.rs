@@ -10,7 +10,9 @@ extern "C" {
     pub fn PyModule_GetDict(module: *mut PyObject) -> *mut PyObject;
     pub fn PyModule_GetName(module: *mut PyObject) -> *mut c_char;
     pub fn PyModule_GetFilename(module: *mut PyObject) -> *mut c_char;
-//fn _PyModule_Clear(arg1: *mut PyObject);
+    ignore! {
+        fn _PyModule_Clear(arg1: *mut PyObject);
+    }
 }
 
 #[inline(always)]

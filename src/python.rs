@@ -80,10 +80,7 @@ impl<'p> PythonObjectDowncastError<'p> {
 /// Trait implemented by Python object types that allow a checked downcast.
 pub trait PythonObjectWithCheckedDowncast: PythonObject {
     /// Cast from PyObject to a concrete Python object type.
-    fn downcast_from<'p>(
-        py: Python<'p>,
-        obj: PyObject,
-    ) -> Result<Self, PythonObjectDowncastError<'p>>;
+    fn downcast_from(py: Python<'_>, obj: PyObject) -> Result<Self, PythonObjectDowncastError<'_>>;
 
     /// Cast from PyObject to a concrete Python object type.
     fn downcast_borrow_from<'a, 'p>(
@@ -119,10 +116,7 @@ where
 {
     #[inline]
     fn clone_ref(&self, py: Python) -> Option<T> {
-        match *self {
-            Some(ref v) => Some(v.clone_ref(py)),
-            None => None,
-        }
+        self.as_ref().map(|v| v.clone_ref(py))
     }
 }
 
@@ -149,9 +143,8 @@ where
 {
     #[inline]
     fn release_ref(self, py: Python) {
-        match self {
-            Some(v) => v.release_ref(py),
-            None => {}
+        if let Some(v) = self {
+            v.release_ref(py)
         }
     }
 }
@@ -314,7 +307,7 @@ impl<'p> Python<'p> {
             };
 
             let res_ptr =
-                ffi::PyRun_StringFlags(code.as_ptr(), start, globals, locals, 0 as *mut _);
+                ffi::PyRun_StringFlags(code.as_ptr(), start, globals, locals, std::ptr::null_mut());
 
             err::result_from_owned_ptr(self, res_ptr)
         }

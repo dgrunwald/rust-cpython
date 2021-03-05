@@ -69,6 +69,7 @@ extern "C" {
     pub fn PyList_Sort(list: *mut PyObject) -> c_int;
     pub fn PyList_Reverse(list: *mut PyObject) -> c_int;
     pub fn PyList_AsTuple(list: *mut PyObject) -> *mut PyObject;
-//fn _PyList_Extend(arg1: *mut PyListObject, arg2: *mut PyObject)
-//-> *mut PyObject;
+    ignore! {
+        fn _PyList_Extend(arg1: *mut PyListObject, arg2: *mut PyObject) -> *mut PyObject;
+    }
 }

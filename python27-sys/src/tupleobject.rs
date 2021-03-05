@@ -64,6 +64,8 @@ extern "C" {
     pub fn PyTuple_GetSlice(p: *mut PyObject, low: Py_ssize_t, high: Py_ssize_t) -> *mut PyObject;
     pub fn _PyTuple_Resize(p: *mut *mut PyObject, newsize: Py_ssize_t) -> c_int;
     pub fn PyTuple_Pack(n: Py_ssize_t, ...) -> *mut PyObject;
-    //pub fn _PyTuple_MaybeUntrack(arg1: *mut PyObject);
+    ignore! {
+        pub fn _PyTuple_MaybeUntrack(arg1: *mut PyObject);
+    }
     pub fn PyTuple_ClearFreeList() -> c_int;
 }
