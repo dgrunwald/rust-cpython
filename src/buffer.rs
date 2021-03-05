@@ -16,7 +16,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use libc;
 use std::ffi::CStr;
 use std::{cell, mem, slice};
 

@@ -57,10 +57,10 @@ pub use PyString as PyUnicode;
 #[cfg(feature = "python27-sys")]
 impl crate::python::PythonObjectWithCheckedDowncast for PyString {
     #[inline]
-    fn downcast_from<'p>(
-        py: Python<'p>,
+    fn downcast_from(
+        py: Python<'_>,
         obj: PyObject,
-    ) -> Result<PyString, PythonObjectDowncastError<'p>> {
+    ) -> Result<PyString, PythonObjectDowncastError<'_>> {
         if is_base_string(&obj) {
             Ok(PyString(obj))
         } else {
@@ -296,10 +296,16 @@ impl PyString {
             let data = ffi::PyUnicode_DATA(ptr);
             let kind = ffi::PyUnicode_KIND(ptr);
             match kind {
-                ffi::PyUnicode_1BYTE_KIND => PyStringData::Latin1(std::slice::from_raw_parts(data as *const u8, size)),
-                ffi::PyUnicode_2BYTE_KIND => PyStringData::Utf16(std::slice::from_raw_parts(data as *const u16, size)),
-                ffi::PyUnicode_4BYTE_KIND => PyStringData::Utf32(std::slice::from_raw_parts(data as *const u32, size)),
-                _ => panic!("Unknown PyUnicode_KIND")
+                ffi::PyUnicode_1BYTE_KIND => {
+                    PyStringData::Latin1(std::slice::from_raw_parts(data as *const u8, size))
+                }
+                ffi::PyUnicode_2BYTE_KIND => {
+                    PyStringData::Utf16(std::slice::from_raw_parts(data as *const u16, size))
+                }
+                ffi::PyUnicode_4BYTE_KIND => {
+                    PyStringData::Utf32(std::slice::from_raw_parts(data as *const u32, size))
+                }
+                _ => panic!("Unknown PyUnicode_KIND"),
             }
         }
     }
@@ -323,15 +329,15 @@ impl PyString {
             let mut size: ffi::Py_ssize_t = 0;
             let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size);
             if data.is_null() {
-                return Err(PyErr::fetch(py));
+                Err(PyErr::fetch(py))
             } else {
                 let slice = std::slice::from_raw_parts(data as *const u8, size as usize);
-                return Ok(Cow::Borrowed(std::str::from_utf8_unchecked(slice)));
+                Ok(Cow::Borrowed(std::str::from_utf8_unchecked(slice)))
             }
         }
         #[cfg(feature = "python27-sys")]
         {
-            return self.data(py).to_string(py);
+            self.data(py).to_string(py)
         }
     }
 
@@ -559,9 +565,9 @@ impl RefFromPyObject for [u8] {
 
 #[cfg(test)]
 mod test {
+    use super::{PyString, PyStringData};
     use crate::conversion::{RefFromPyObject, ToPyObject};
     use crate::python::{Python, PythonObject};
-    use super::{PyString, PyStringData};
 
     #[test]
     fn test_non_bmp() {
@@ -652,7 +658,10 @@ mod test {
         let gil = Python::acquire_gil();
         let py = gil.python();
         let py_string = py.eval("u'x=\\ud800'", None, None).unwrap();
-        let result = py_string.cast_as::<PyString>(py).unwrap().to_string_lossy(py);
+        let result = py_string
+            .cast_as::<PyString>(py)
+            .unwrap()
+            .to_string_lossy(py);
         assert_eq!("x=\u{fffd}", result);
     }
 }

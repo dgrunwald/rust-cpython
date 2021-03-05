@@ -38,7 +38,7 @@ impl<'p> PyIterator<'p> {
         obj: PyObject,
     ) -> Result<PyIterator<'p>, PythonObjectDowncastError<'p>> {
         if unsafe { ffi::PyIter_Check(obj.as_ptr()) != 0 } {
-            Ok(PyIterator { py: py, iter: obj })
+            Ok(PyIterator { py, iter: obj })
         } else {
             Err(PythonObjectDowncastError::new(
                 py,

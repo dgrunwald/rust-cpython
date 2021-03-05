@@ -16,7 +16,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use libc;
 use std::mem;
 
 use crate::ffi;
@@ -103,8 +102,8 @@ where
     let guard = AbortOnDrop(location);
     let py = Python::assume_gil_acquired();
     let visit = VisitProc {
-        visit: visit,
-        arg: arg,
+        visit,
+        arg,
         _py: py,
     };
     let slf = PyObject::from_borrowed_ptr(py, slf).unchecked_cast_into::<C>();

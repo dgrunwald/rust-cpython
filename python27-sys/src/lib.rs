@@ -3,7 +3,11 @@
     non_camel_case_types,
     non_upper_case_globals,
     non_snake_case,
-    unused_parens
+    unused_parens,
+    clippy::missing_safety_doc,
+    clippy::transmute_ptr_to_ptr,
+    clippy::unused_unit,
+    clippy::identity_op,
 )]
 
 pub use crate::boolobject::*;

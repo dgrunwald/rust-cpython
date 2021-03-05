@@ -95,7 +95,7 @@ impl PyList {
     #[inline]
     pub fn iter<'a, 'p>(&'a self, py: Python<'p>) -> PyListIterator<'a, 'p> {
         PyListIterator {
-            py: py,
+            py,
             list: self,
             index: 0,
         }

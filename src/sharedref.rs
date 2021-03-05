@@ -126,8 +126,8 @@ impl<'a, T: ?Sized> PySharedRef<'a, T> {
     #[doc(hidden)]
     pub unsafe fn new(py: Python<'a>, owner: &'a PyObject, data: &'a PySharedRefCell<T>) -> Self {
         Self {
-            py: py,
-            owner: owner,
+            py,
+            owner,
             state: &data.state,
             data: &data.data,
         }

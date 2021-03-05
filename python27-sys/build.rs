@@ -25,15 +25,15 @@ impl fmt::Display for PythonVersion {
     }
 }
 
-const CFG_KEY: &'static str = "py_sys_config";
+const CFG_KEY: &str = "py_sys_config";
 
 // windows' python writes out lines with the windows crlf sequence;
 // posix platforms and mac os should write out lines with just lf.
 #[cfg(target_os = "windows")]
-static NEWLINE_SEQUENCE: &'static str = "\r\n";
+static NEWLINE_SEQUENCE: &str = "\r\n";
 
 #[cfg(not(target_os = "windows"))]
-static NEWLINE_SEQUENCE: &'static str = "\n";
+static NEWLINE_SEQUENCE: &str = "\n";
 
 // A list of python interpreter compile-time preprocessor defines that
 // we will pick up and pass to rustc via --cfg=py_sys_config={varname};
@@ -48,7 +48,7 @@ static NEWLINE_SEQUENCE: &'static str = "\n";
 // (hrm, this is sort of re-implementing what distutils does, except
 // by passing command line args instead of referring to a python.h)
 #[cfg(not(target_os = "windows"))]
-static SYSCONFIG_FLAGS: [&'static str; 7] = [
+static SYSCONFIG_FLAGS: [&str; 7] = [
     "Py_USING_UNICODE",
     "Py_UNICODE_WIDE",
     "WITH_THREAD",
@@ -58,7 +58,7 @@ static SYSCONFIG_FLAGS: [&'static str; 7] = [
     "COUNT_ALLOCS",
 ];
 
-static SYSCONFIG_VALUES: [&'static str; 1] = [
+static SYSCONFIG_VALUES: [&str; 1] = [
     // cfg doesn't support flags with values, just bools - so flags
     // below are translated into bools as {varname}_{val}
     //
@@ -70,7 +70,7 @@ static SYSCONFIG_VALUES: [&'static str; 1] = [
 /// the interpreter and printing variables of interest from
 /// sysconfig.get_config_vars.
 #[cfg(not(target_os = "windows"))]
-fn get_config_vars(python_path: &String) -> Result<HashMap<String, String>, String> {
+fn get_config_vars(python_path: &str) -> Result<HashMap<String, String>, String> {
     let mut script = "import sysconfig; \
                       config = sysconfig.get_config_vars();"
         .to_owned();
@@ -81,7 +81,7 @@ fn get_config_vars(python_path: &String) -> Result<HashMap<String, String>, Stri
             k,
             if is_value(k) { "None" } else { "0" }
         ));
-        script.push_str(";");
+        script.push(';');
     }
 
     let mut cmd = Command::new(python_path);
@@ -93,7 +93,7 @@ fn get_config_vars(python_path: &String) -> Result<HashMap<String, String>, Stri
 
     if !out.status.success() {
         let stderr = String::from_utf8(out.stderr).unwrap();
-        let mut msg = format!("python script failed with stderr:\n\n");
+        let mut msg = "python script failed with stderr:\n\n".to_string();
         msg.push_str(&stderr);
         return Err(msg);
     }
@@ -105,15 +105,14 @@ fn get_config_vars(python_path: &String) -> Result<HashMap<String, String>, Stri
             "python stdout len didn't return expected number of lines:
 {}",
             split_stdout.len()
-        )
-        .to_string());
+        ));
     }
     let all_vars = SYSCONFIG_FLAGS.iter().chain(SYSCONFIG_VALUES.iter());
     // let var_map: HashMap<String, String> = HashMap::new();
     Ok(all_vars.zip(split_stdout.iter()).fold(
         HashMap::new(),
         |mut memo: HashMap<String, String>, (&k, &v)| {
-            if !(v.to_owned() == "None" && is_value(k)) {
+            if !(v == "None" && is_value(k)) {
                 memo.insert(k.to_owned(), v.to_owned());
             }
             memo
@@ -122,7 +121,7 @@ fn get_config_vars(python_path: &String) -> Result<HashMap<String, String>, Stri
 }
 
 #[cfg(target_os = "windows")]
-fn get_config_vars(_: &String) -> Result<HashMap<String, String>, String> {
+fn get_config_vars(_: &str) -> Result<HashMap<String, String>, String> {
     // sysconfig is missing all the flags on windows, so we can't actually
     // query the interpreter directly for its build flags.
     //
@@ -151,7 +150,7 @@ fn get_config_vars(_: &String) -> Result<HashMap<String, String>, String> {
 }
 
 fn is_value(key: &str) -> bool {
-    SYSCONFIG_VALUES.iter().find(|x| **x == key).is_some()
+    SYSCONFIG_VALUES.iter().any(|x| *x == key)
 }
 
 fn cfg_line_for_var(key: &str, val: &str) -> Option<String> {
@@ -185,17 +184,17 @@ fn run_python_script(interpreter: &str, script: &str) -> Result<String, String> 
 
     if !out.status.success() {
         let stderr = String::from_utf8(out.stderr).unwrap();
-        let mut msg = format!("python script failed with stderr:\n\n");
+        let mut msg = "python script failed with stderr:\n\n".to_string();
         msg.push_str(&stderr);
         return Err(msg);
     }
 
-    let out = String::from_utf8(out.stdout).unwrap();
-    return Ok(out);
+    Ok(String::from_utf8(out.stdout).unwrap())
 }
 
 #[cfg(not(target_os = "macos"))]
 #[cfg(not(target_os = "windows"))]
+#[allow(clippy::unnecessary_wraps)]
 fn get_rustc_link_lib(
     _: &PythonVersion,
     ld_version: &str,
@@ -278,7 +277,7 @@ fn find_interpreter_and_get_config(
         let (executable, interpreter_version, lines) =
             get_config_from_interpreter(interpreter_path)?;
         if matching_version(expected_version, &interpreter_version) {
-            return Ok((interpreter_version, executable.to_owned(), lines));
+            return Ok((interpreter_version, executable, lines));
         } else {
             return Err(format!(
                 "Wrong python version in PYTHON_SYS_EXECUTABLE={}\n\
@@ -297,11 +296,11 @@ fn find_interpreter_and_get_config(
     }
 
     for name in possible_names.iter() {
-        if let Some((executable, interpreter_version, lines)) =
-            get_config_from_interpreter(name).ok()
+        if let Ok((executable, interpreter_version, lines)) =
+            get_config_from_interpreter(name)
         {
             if matching_version(expected_version, &interpreter_version) {
-                return Ok((interpreter_version, executable.to_owned(), lines));
+                return Ok((interpreter_version, executable, lines));
             }
         }
     }
@@ -371,20 +370,18 @@ fn configure_from_path(expected_version: &PythonVersion) -> Result<String, Strin
                 println!("cargo:rustc-link-search=native={}\\libs", exec_prefix);
             }
         }
-    } else if link_mode_unresolved_static {
-        if cfg!(target_os = "windows") {
-            // static-nobundle requires a Nightly rustc up to at least
-            // Rust 1.39 (https://github.com/rust-lang/rust/issues/37403).
-            //
-            // We need to use static linking on Windows to prevent symbol
-            // name mangling. Otherwise Rust will prefix extern {} symbols
-            // with __imp_. But if we used normal "static," we need a
-            // pythonXY.lib at build time to package into the rlib.
-            //
-            // static-nobundle removes the build-time library requirement,
-            // allowing a downstream consumer to provide the pythonXY library.
-            println!("cargo:rustc-link-lib=static-nobundle=pythonXY");
-        }
+    } else if link_mode_unresolved_static && cfg!(target_os = "windows") {
+        // static-nobundle requires a Nightly rustc up to at least
+        // Rust 1.39 (https://github.com/rust-lang/rust/issues/37403).
+        //
+        // We need to use static linking on Windows to prevent symbol
+        // name mangling. Otherwise Rust will prefix extern {} symbols
+        // with __imp_. But if we used normal "static," we need a
+        // pythonXY.lib at build time to package into the rlib.
+        //
+        // static-nobundle removes the build-time library requirement,
+        // allowing a downstream consumer to provide the pythonXY library.
+        println!("cargo:rustc-link-lib=static-nobundle=pythonXY");
     }
 
     if let PythonVersion {
@@ -402,7 +399,7 @@ fn configure_from_path(expected_version: &PythonVersion) -> Result<String, Strin
         }
     }
 
-    return Ok(interpreter_path);
+    Ok(interpreter_path)
 }
 
 /// Determine the python version we're supposed to be building
@@ -418,17 +415,11 @@ fn version_from_env() -> Result<PythonVersion, String> {
     let mut vars = env::vars().collect::<Vec<_>>();
     vars.sort_by(|a, b| b.cmp(a));
     for (key, _) in vars {
-        match re.captures(&key) {
-            Some(cap) => {
-                return Ok(PythonVersion {
-                    major: cap.get(1).unwrap().as_str().parse().unwrap(),
-                    minor: match cap.get(3) {
-                        Some(s) => Some(s.as_str().parse().unwrap()),
-                        None => None,
-                    },
-                })
-            }
-            None => (),
+        if let Some(cap) = re.captures(&key) {
+            return Ok(PythonVersion {
+                major: cap.get(1).unwrap().as_str().parse().unwrap(),
+                minor: cap.get(3).map(|s| s.as_str().parse().unwrap()),
+            });
         }
     }
     Err(
@@ -459,9 +450,8 @@ fn main() {
         config_map.insert("Py_REF_DEBUG".to_owned(), "1".to_owned()); // Py_TRACE_REFS implies Py_REF_DEBUG.
     }
     for (key, val) in &config_map {
-        match cfg_line_for_var(key, val) {
-            Some(line) => println!("{}", line),
-            None => (),
+        if let Some(line) = cfg_line_for_var(key, val) {
+            println!("{}", line);
         }
     }
 
@@ -489,7 +479,7 @@ fn main() {
     });
     println!(
         "cargo:python_flags={}",
-        if flags.len() > 0 {
+        if !flags.is_empty() {
             &flags[..flags.len() - 1]
         } else {
             ""

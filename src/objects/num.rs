@@ -16,6 +16,8 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#![allow(clippy::float_cmp)]
+
 use libc::{c_double, c_long};
 use num_traits::cast::cast;
 
@@ -174,7 +176,7 @@ macro_rules! int_fits_larger_int(
     )
 );
 
-fn err_if_invalid_value<'p, T: PartialEq>(
+fn err_if_invalid_value<T: PartialEq>(
     py: Python,
     invalid_value: T,
     actual_value: T,

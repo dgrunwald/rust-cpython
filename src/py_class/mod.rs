@@ -21,6 +21,7 @@ pub mod gc;
 #[doc(hidden)]
 pub mod members;
 
+#[allow(clippy::module_inception)]
 mod py_class;
 
 #[cfg(feature = "python27-sys")]
@@ -34,7 +35,6 @@ mod py_class_impl3;
 #[doc(hidden)]
 pub mod slots;
 
-use libc;
 use std::{cell, mem, ptr};
 
 use crate::err::{self, PyResult};
@@ -83,7 +83,7 @@ pub fn data_new_size<T>(base_size: usize) -> usize {
 #[inline]
 #[doc(hidden)]
 pub unsafe fn data_get<'a, T>(_py: Python<'a>, obj: &'a PyObject, offset: usize) -> &'a T {
-    let ptr = (obj.as_ptr() as *const u8).offset(offset as isize) as *const T;
+    let ptr = (obj.as_ptr() as *const u8).add(offset) as *const T;
     &*ptr
 }
 
@@ -93,14 +93,14 @@ pub unsafe fn data_init<'a, T>(_py: Python<'a>, obj: &'a PyObject, offset: usize
 where
     T: Send + 'static,
 {
-    let ptr = (obj.as_ptr() as *mut u8).offset(offset as isize) as *mut T;
+    let ptr = (obj.as_ptr() as *mut u8).add(offset) as *mut T;
     ptr::write(ptr, value)
 }
 
 #[inline]
 #[doc(hidden)]
-pub unsafe fn data_drop<'a, T>(_py: Python<'a>, obj: *mut ffi::PyObject, offset: usize) {
-    let ptr = (obj as *mut u8).offset(offset as isize) as *mut T;
+pub unsafe fn data_drop<T>(_py: Python<'_>, obj: *mut ffi::PyObject, offset: usize) {
+    let ptr = (obj as *mut u8).add(offset) as *mut T;
     ptr::drop_in_place(ptr)
 }
 

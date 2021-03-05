@@ -17,7 +17,7 @@ pub unsafe fn PyFile_CheckExact(op: *mut PyObject) -> c_int {
     (Py_TYPE(op) == &mut PyFile_Type) as c_int
 }
 
-pub const PY_STDIOTEXTMODE: &'static str = "b";
+pub const PY_STDIOTEXTMODE: &str = "b";
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {

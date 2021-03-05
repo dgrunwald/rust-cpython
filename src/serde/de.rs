@@ -59,7 +59,7 @@ impl<'gil> Deserializer<'gil> {
                 //
                 // Special case: for PyDict, call the "items" method first to get
                 // an iterator of (key, value) instead of just keys.
-                let iter = if let Ok(_) = self.extract::<PyDict>() {
+                let iter = if self.extract::<PyDict>().is_ok() {
                     let items = self.obj.call_method(self.py, "items", NoArgs, None)?;
                     items.iter(self.py)?
                 } else {
@@ -99,9 +99,7 @@ impl<'de, 'a, 'gil> de::Deserializer<'de> for &'a mut Deserializer<'gil> {
             self.deserialize_bool(v)
         } else if self.extract::<PyDict>().is_ok() {
             self.deserialize_map(v)
-        } else if self.extract::<PyList>().is_ok() {
-            self.deserialize_seq(v)
-        } else if self.extract::<PyTuple>().is_ok() {
+        } else if self.extract::<PyList>().is_ok() || self.extract::<PyTuple>().is_ok() {
             self.deserialize_seq(v)
         } else if self.extract::<PyBytes>().is_ok() {
             self.deserialize_bytes(v)

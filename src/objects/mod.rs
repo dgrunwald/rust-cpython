@@ -16,6 +16,8 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#![allow(clippy::transmute_ptr_to_ptr)]
+
 pub use self::module::PyModule;
 pub use self::object::PyObject;
 pub use self::typeobject::PyType;

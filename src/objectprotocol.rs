@@ -16,7 +16,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use libc;
 use std::cmp::Ordering;
 use std::fmt;
 
@@ -106,13 +105,7 @@ pub trait ObjectProtocol: PythonObject {
         ) -> PyResult<Ordering> {
             let mut result = -1;
             err::error_on_minusone(py, ffi::PyObject_Cmp(a, b, &mut result))?;
-            Ok(if result < 0 {
-                Ordering::Less
-            } else if result > 0 {
-                Ordering::Greater
-            } else {
-                Ordering::Equal
-            })
+            Ok(result.cmp(&0))
         }
 
         #[cfg(feature = "python3-sys")]
@@ -139,10 +132,10 @@ pub trait ObjectProtocol: PythonObject {
             } else if result < 0 {
                 return Err(PyErr::fetch(py));
             }
-            return Err(PyErr::new::<crate::exc::TypeError, _>(
+            Err(PyErr::new::<crate::exc::TypeError, _>(
                 py,
                 "ObjectProtocol::compare(): All comparisons returned false",
-            ));
+            ))
         }
 
         other.with_borrowed_ptr(py, |other| unsafe { do_compare(py, self.as_ptr(), other) })

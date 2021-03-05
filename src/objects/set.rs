@@ -170,7 +170,7 @@ mod test {
         let mut v = HashSet::new();
         v.insert(7);
         let set = v.to_py_object(py);
-        assert!(true, set.contains(py, 7i32).unwrap());
+        assert_eq!(true, set.contains(py, 7i32).unwrap());
         assert_eq!(false, set.contains(py, 8i32).unwrap());
     }
 

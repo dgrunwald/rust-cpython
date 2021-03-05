@@ -23,7 +23,7 @@ impl fmt::Display for Error {
             .0
             .pvalue
             .as_ref()
-            .unwrap_or_else(|| &self.0.ptype)
+            .unwrap_or(&self.0.ptype)
             .repr(py)
             .map(|s| s.to_string_lossy(py).to_string())
             .unwrap_or_else(|_| "<error in repr>".into());
