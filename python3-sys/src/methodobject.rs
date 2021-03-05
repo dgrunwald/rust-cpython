@@ -94,7 +94,7 @@ extern "C" {
         arg2: *mut PyObject,
         arg3: *mut PyObject,
     ) -> *mut PyObject;
-    
+
     #[cfg(Py_3_9)]
     pub fn PyCMethod_New(
         arg1: *mut PyMethodDef,

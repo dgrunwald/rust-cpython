@@ -112,3 +112,13 @@ rustflags = [
 ```
 
 For `setup.py` integration, see https://github.com/PyO3/setuptools-rust
+
+# Development
+
+To build the crate, run: `make build`
+
+To test the crate, run: `make test`
+
+Note: This crate has several files that are auto-generated using scripts. Using the Makefile ensures that these
+files are re-generated as needed.
+>>>>>>> 9ce2de8 (Add comment explaining how to regenerate)

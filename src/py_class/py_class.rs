@@ -25,7 +25,9 @@ instances of that Python class from Rust.
 # Syntax
 `py_class!(pub class MyType |py| { ... })`
 
-* `pub` makes the generated Rust struct visible outside the current module. It has no effect on the visibility from Python.
+* `pub` makes the generated Rust struct visible outside the current module. It has no effect on
+the visibility from Python. You may use any Rust visibility keyword. For example, `pub(crate)`
+would also be valid.
 * `MyType` is the name of the Python class.
 * `py` is an identifier that will be made available as a variable of type `Python`
 in all function bodies.
@@ -89,6 +91,7 @@ impl MyType {
 * The generated type implements a number of traits from the `cpython` crate.
 * The inherent `create_instance` method can create new Python objects
   given the values for the data fields.
+    - Note: Any visibility keyword on the class will also be used for this method.
 * Private accessors functions are created for the data fields.
 * All functions callable from Python are also exposed as public Rust functions.
 * To convert from `MyType` to `PyObject`, use `as_object()` or `into_object()` (from the `PythonObject` trait).
@@ -139,6 +142,7 @@ impl MyType {
 
 ## Instance methods
 `def method_name(&self, parameter-list) -> PyResult<...> { ... }`
+`pub(crate) def method_name(&self, parameter-list) -> PyResult<...> { ... }`
 
 Declares an instance method callable from Python.
 
@@ -146,9 +150,13 @@ Declares an instance method callable from Python.
   be a shared reference (`&self`).
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Class methods
 `@classmethod def method_name(cls, parameter-list) -> PyResult<...> { ... }`
+`@classmethod pub(crate) def method_name(cls, parameter-list) -> PyResult<...> { ... }`
 
 Declares a class method callable from Python.
 
@@ -157,14 +165,21 @@ Declares a class method callable from Python.
 * The first parameter implicitly has type `&PyType`. This type must not be explicitly specified.
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Static methods
 `@staticmethod def method_name(parameter-list) -> PyResult<...> { ... }`
+`@staticmethod pub(crate) def method_name(parameter-list) -> PyResult<...> { ... }`
 
 Declares a static method callable from Python.
 
 * For details on `parameter-list`, see the documentation of `py_argparse!()`.
 * The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
+* Visibility of the method in Rust defaults to `pub`. You may specify a visibility keyword
+  before the `def` to change the visibility, for example, to `pub(crate)`. Changing visibility
+  in Rust does not affect visibility in Python.
 
 ## Properties
 `@property def property_name(&self) -> PyResult<...> { ... }`
@@ -475,14 +490,14 @@ macro_rules! py_class {
             /* props: */ { [ /* getters */ ] [ /* setters */ ] }
         }
     );
-    (pub class $class:ident |$py: ident| { $( $body:tt )* }) => (
+    ($visibility:vis class $class:ident |$py: ident| { $( $body:tt )* }) => (
         $crate::py_class_impl! {
             { $( $body )* }
             $class $py
             /* info: */ {
                 /* base_type: */ $crate::PyObject,
                 /* size: */ <$crate::PyObject as $crate::py_class::BaseObject>::size(),
-                /* class_visibility: */ {pub},
+                /* class_visibility: */ {$visibility},
                 /* gc: */ {
                     /* traverse_proc: */ None,
                     /* traverse_data: */ [ /*name*/ ]
@@ -510,11 +525,11 @@ macro_rules! py_class {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_class_impl_item {
-    { $class:ident, $py:ident, $name:ident( $( $selfarg:tt )* )
+    { $class:ident, $py:ident, $visibility:vis, $name:ident( $( $selfarg:tt )* )
         $res_type:ty; $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
     } => { $crate::py_coerce_item! {
         impl $class {
-            pub fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
+            $visibility fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
             -> $res_type $body
         }
     }}

@@ -139,7 +139,7 @@ base_case = '''
         $($imp)*
         $crate::py_coerce_item! {
             impl $class {
-                fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
+                $($class_visibility)* fn create_instance(py: $crate::Python $( , $data_name : $init_ty )* ) -> $crate::PyResult<$class> {
                     let obj = unsafe {
                         <$class as $crate::py_class::BaseObject>::alloc(
                             py, &py.get_type::<$class>(), ( $($data_name,)* )
@@ -429,27 +429,33 @@ def generate_class_method(special_name=None, decoration='',
         slot=None, add_member=False, value_macro=None, value_args=None):
     name_pattern = special_name or '$name:ident'
     name_use = special_name or '$name'
-    def impl(with_params, with_docs):
+    def impl(with_params, with_docs, with_visibility):
         if with_docs:
             doc_prefix = '$(#[doc=$doc:expr])*'
             value_suffix = ', { concat!($($doc, "\\n"),*) }'
         else:
             doc_prefix = value_suffix = ''
+        if with_visibility:
+            visibility_capture = '$visibility:vis'
+            visibility_expansion = '$visibility'
+        else:
+            visibility_capture = ''
+            visibility_expansion = 'pub'
         if with_params:
             param_pattern = ', $($p:tt)+'
             impl = '''$crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, %s($cls: &$crate::PyType,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, %s, %s($cls: &$crate::PyType,) $res_type; { $($body)* } }
                 [] ($($p)+,)
-            }''' % name_use
+            }''' % (visibility_expansion, name_use)
             value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = '$crate::py_class_impl_item! { $class, $py,%s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
-                % name_use
+            impl = '$crate::py_class_impl_item! { $class, $py, %s, %s($cls: &$crate::PyType,) $res_type; { $($body)* } [] }' \
+                % (visibility_expansion,name_use)
             value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
-        pattern = '%s def %s ($cls:ident%s) -> $res_type:ty { $( $body:tt )* }' \
-            % (doc_prefix + decoration, name_pattern, param_pattern)
+        pattern = '%s %s def %s ($cls:ident%s) -> $res_type:ty { $( $body:tt )* }' \
+            % (doc_prefix + decoration, visibility_capture, name_pattern, param_pattern)
         slots = []
         if slot is not None:
             slots.append((slot, value))
@@ -461,7 +467,8 @@ def generate_class_method(special_name=None, decoration='',
     # Special methods can't handle docs.
     with_docs = (value_macro == 'py_class_class_method')
     for with_params in (False, True):
-        impl(with_params, with_docs)
+        for with_visibility in (False, True):
+            impl(with_params, with_docs, with_visibility)
 
 def traverse_and_clear():
     generate_case('def __traverse__(&$slf:tt, $visit:ident) $body:block',
@@ -514,27 +521,33 @@ def generate_instance_method(special_name=None, decoration='',
         slot=None, add_member=False, value_macro=None, value_args=None):
     name_pattern = special_name or '$name:ident'
     name_use = special_name or '$name'
-    def impl(with_params, with_docs):
+    def impl(with_params, with_docs, with_visibility):
         if with_docs:
             doc_prefix = '$(#[doc=$doc:expr])*'
             value_suffix = ', { concat!($($doc, "\\n"),*) }'
         else:
             doc_prefix = value_suffix = ''
+        if with_visibility:
+            visibility_capture = '$visibility:vis'
+            visibility_expansion = '$visibility'
+        else:
+            visibility_capture = ''
+            visibility_expansion = 'pub'
         if with_params:
             param_pattern = ', $($p:tt)+'
             impl = '''$crate::py_argparse_parse_plist_impl!{
-                py_class_impl_item { $class, $py, %s(&$slf,) $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, %s, %s(&$slf,) $res_type; { $($body)* } }
                 [] ($($p)+,)
-            }''' % name_use
+            }''' % (visibility_expansion, name_use)
             value = '$crate::py_argparse_parse_plist_impl!{%s {%s} [] ($($p)+,)}' \
                     % (value_macro, value_args + value_suffix)
         else:
             param_pattern = ''
-            impl = '$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [] }' \
-                % name_use
+            impl = '$crate::py_class_impl_item! { $class, $py, %s, %s(&$slf,) $res_type; { $($body)* } [] }' \
+                % (visibility_expansion, name_use)
             value = '$crate::%s!{%s []}' % (value_macro, value_args + value_suffix)
-        pattern = '%s def %s (&$slf:ident%s) -> $res_type:ty { $( $body:tt )* }' \
-            % (doc_prefix + decoration, name_pattern, param_pattern)
+        pattern = '%s %s def %s (&$slf:ident%s) -> $res_type:ty { $( $body:tt )* }' \
+            % (doc_prefix + decoration, visibility_capture, name_pattern, param_pattern)
         slots = []
         if slot is not None:
             slots.append((slot, value))
@@ -546,17 +559,26 @@ def generate_instance_method(special_name=None, decoration='',
     # Special methods can't handle docs.
     with_docs = (value_macro == 'py_class_instance_method')
     for with_params in (False, True):
-        impl(with_params, with_docs)
+        for with_visibility in (False, True):
+            impl(with_params, with_docs, with_visibility)
 
 def static_method():
-    generate_case(
-        '$(#[doc=$doc:expr])* @staticmethod def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* }',
+    def impl(with_visibility):
+        if with_visibility:
+            visibility_capture = '$visibility:vis'
+            visibility_expansion = '$visibility'
+        else:
+            visibility_capture = ''
+            visibility_expansion = 'pub'
+
+        generate_case(
+        '$(#[doc=$doc:expr])* @staticmethod %s def $name:ident ($($p:tt)*) -> $res_type:ty { $( $body:tt )* }' % (visibility_capture,),
         new_impl='''
             $crate::py_argparse_parse_plist!{
-                py_class_impl_item { $class, $py, $name() $res_type; { $($body)* } }
+                py_class_impl_item { $class, $py, %s, $name() $res_type; { $($body)* } }
                 ($($p)*)
             }
-        ''',
+        ''' % (visibility_expansion,),
         new_members=[('$name', '''
             $crate::py_argparse_parse_plist!{
                 py_class_static_method {$py, $class::$name, {
@@ -566,27 +588,41 @@ def static_method():
             }
         ''')])
 
+    for with_visibility in (False, True):
+        impl(with_visibility)
+
 def static_data():
     generate_case('static $name:ident = $init:expr;',
         new_members=[('$name', '$init')])
 
 def property_method():
-    generate_case('$(#[doc=$doc:expr])* @property def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $name(&$slf,) $res_type; { $($body)* } [] }',
-        new_props=([('concat!($($doc, "\\n"),*)', '$name', '$res_type')], [])
-    )
-    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }',
-        new_props=([], [('$name', 'Option<&$value_type>', '$setter_name')])
-    )
-    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }',
-        new_props=([], [('$name', '&$value_type', '$setter_name')])
-    )
-    generate_case('@$name:ident.setter def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }',
-        new_impl='$crate::py_class_impl_item! { $class, $py, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }',
-        new_props=([], [('$name', '$value_type', '$setter_name')])
-    )
+    def impl(with_visibility):
+        if with_visibility:
+            visibility_capture = '$visibility:vis'
+            visibility_expansion = '$visibility'
+        else:
+            visibility_capture = ''
+            visibility_expansion = 'pub'
+
+        generate_case('$(#[doc=$doc:expr])* @property %s def $name:ident(&$slf:ident) -> $res_type:ty { $( $body:tt )* }' % (visibility_capture,),
+            new_impl='$crate::py_class_impl_item! { $class, $py, %s, $name(&$slf,) $res_type; { $($body)* } [] }' % (visibility_expansion,),
+            new_props=([('concat!($($doc, "\\n"),*)', '$name', '$res_type')], [])
+        )
+        generate_case('@$name:ident.setter %s def $setter_name:ident(&$slf:ident, $value:ident : Option<Option<&$value_type:ty>> ) -> $res_type:ty { $( $body:tt )* }' % (visibility_capture,),
+            new_impl='$crate::py_class_impl_item! { $class, $py, %s, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<Option<&$value_type>> = {} }] }' % (visibility_expansion,),
+            new_props=([], [('$name', 'Option<&$value_type>', '$setter_name')])
+        )
+        generate_case('@$name:ident.setter %s def $setter_name:ident(&$slf:ident, $value:ident : Option<&$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }' % (visibility_capture,),
+            new_impl='$crate::py_class_impl_item! { $class, $py, %s, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<&$value_type> = {} }] }' % (visibility_expansion,),
+            new_props=([], [('$name', '&$value_type', '$setter_name')])
+        )
+        generate_case('@$name:ident.setter %s def $setter_name:ident(&$slf:ident, $value:ident : Option<$value_type:ty> ) -> $res_type:ty { $( $body:tt )* }' % (visibility_capture,),
+            new_impl='$crate::py_class_impl_item! { $class, $py, %s, $setter_name(&$slf,) $res_type; { $($body)* } [{ $value: Option<$value_type> = {} }] }' % (visibility_expansion,),
+            new_props=([], [('$name', '$value_type', '$setter_name')])
+        )
+
+    for with_visibility in (False, True):
+        impl(with_visibility)
 
 macro_end = '''
 }
@@ -689,7 +725,7 @@ def operator_impl(special_name, slot, args, res_type, res_conv, res_ffi_type, ad
         raise ValueError('Unsupported argument count')
     generate_case(
         pattern='def %s(&$slf:ident%s) -> $res_type:ty { $($body:tt)* }' % (special_name, arg_pattern),
-        new_impl='$crate::py_class_impl_item! { $class, $py, %s(&$slf,) $res_type; { $($body)* } [%s] }'
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s(&$slf,) $res_type; { $($body)* } [%s] }'
                  % (special_name, ' '.join(param_list)),
         new_slots=new_slots + list(additional_slots)
     )
@@ -707,7 +743,7 @@ def binary_numeric_operator(special_name, slot):
     generate_case(
         pattern='def %s($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* }'
             % special_name,
-        new_impl='$crate::py_class_impl_item! { $class, $py, %s() $res_type; { $($body)* } ' % special_name
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s() $res_type; { $($body)* } ' % special_name
                 +'[ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }',
         new_slots=[(slot, '$crate::py_class_binary_numeric_slot!($class::%s)' % special_name)]
     )
@@ -885,6 +921,8 @@ def main():
     print('// THIS IS A GENERATED FILE !!')
     print('//       DO NOT MODIFY      !!')
     print('// !!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    print('//')
+    print('// REGENERATE USING THE MAKEFILE IN ROOT OF REPOSITORY: make build')
     print(macro_start)
     print(base_case)
     data_decl()
