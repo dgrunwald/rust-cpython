@@ -135,14 +135,14 @@ fn opt_args() {
     });
 
     assert_eq!(
-        obj.call(py, (py.None(), "string"), None)
+        obj.call(py, (PyNone, "string"), None)
             .unwrap()
             .extract::<String>(py)
             .unwrap(),
         r#"a: None  b: "string"  c: None"#,
     );
     assert_eq!(
-        obj.call(py, ("double", "string", py.None()), None)
+        obj.call(py, ("double", "string", PyNone), None)
             .unwrap()
             .extract::<String>(py)
             .unwrap(),

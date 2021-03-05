@@ -21,7 +21,7 @@ fn func(_: Python, a: &str, b: i32) -> PyResult<String> {
     Ok(format!("func({}, {})", a, b))
 }
 
-fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyObject> {
+fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyNone> {
     println!("Rust says: Hello Python!");
     for arg in args.iter(py) {
         println!("Rust got {}", arg);
@@ -31,5 +31,5 @@ fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyObject
             println!("{} = {}", key, val);
         }
     }
-    Ok(py.None())
+    Ok(PyNone)
 }

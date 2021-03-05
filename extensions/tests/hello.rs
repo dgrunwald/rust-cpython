@@ -1,6 +1,6 @@
 #![crate_type = "dylib"]
 
-use cpython::{PyObject, PyResult, Python, PyTuple, PyDict, py_module_initializer, py_fn};
+use cpython::{py_fn, py_module_initializer, PyDict, PyNone, PyResult, PyTuple, Python};
 
 py_module_initializer!(hello, |py, m| {
     m.add(py, "__doc__", "Module documentation string")?;
@@ -9,7 +9,7 @@ py_module_initializer!(hello, |py, m| {
     Ok(())
 });
 
-fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyObject> {
+fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyNone> {
     println!("Rust says: Hello Python!");
     for arg in args.iter(py) {
         println!("Rust got {}", arg);
@@ -19,10 +19,9 @@ fn run(py: Python, args: &PyTuple, kwargs: Option<&PyDict>) -> PyResult<PyObject
             println!("{} = {}", key, val);
         }
     }
-    Ok(py.None())
+    Ok(PyNone)
 }
 
 fn val(_: Python) -> PyResult<i32> {
     Ok(42)
 }
-
