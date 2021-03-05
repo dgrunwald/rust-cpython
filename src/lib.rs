@@ -17,7 +17,6 @@
 // DEALINGS IN THE SOFTWARE.
 
 #![cfg_attr(feature="nightly", feature(
-    const_fn, // for GILProtected::new (#24111)
     specialization, // for impl FromPyObject<'s> for Vec<...> (#31844)
 ))]
 #![allow(
