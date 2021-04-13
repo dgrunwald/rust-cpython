@@ -1,4 +1,5 @@
 use std::env;
+use std::ffi::OsString;
 
 const CFG_KEY: &str = "py_sys_config";
 
@@ -8,10 +9,15 @@ const PYTHONSYS_ENV_VAR: &str = "DEP_PYTHON27_PYTHON_FLAGS";
 #[cfg(feature = "python3-sys")]
 const PYTHONSYS_ENV_VAR: &str = "DEP_PYTHON3_PYTHON_FLAGS";
 
+fn watched_var_os(key: &str) -> Option<OsString> {
+    println!("cargo:rerun-if-env-changed={}", key);
+    env::var_os(key)
+}
+
 fn main() {
     if cfg!(feature = "python27-sys")
-        && (env::var_os("CARGO_FEATURE_PY_LINK_MODE_DEFAULT").is_some()
-            || env::var_os("CARGO_FEATURE_PY_LINK_MODE_UNRESOLVED_STATIC").is_some())
+        && (watched_var_os("CARGO_FEATURE_PY_LINK_MODE_DEFAULT").is_some()
+            || watched_var_os("CARGO_FEATURE_PY_LINK_MODE_UNRESOLVED_STATIC").is_some())
     {
         eprintln!("Cannot use link mode control with Python 2.7");
         std::process::exit(1);
