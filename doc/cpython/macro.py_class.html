@@ -1,16 +1,21 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_class"><title>cpython::py_class - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>cpython</a></p><script>window.sidebarCurrent = {name: 'py_class', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cpython/py_class/py_class.rs.html#447-508' title='goto source code'>[src]</a></span><span class='in-band'>Macro <a href='index.html'>cpython</a>::<wbr><a class="macro" href=''>py_class</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_class` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_class"><title>cpython::py_class - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings"></script><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class="location"><a href="index.html">cpython</a></p><div id="sidebar-vars" data-name="py_class" data-ty="macro" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Macro <a href="index.html">cpython</a>::<wbr><a class="macro" href="">py_class</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/cpython/py_class/py_class.rs.html#462-523" title="goto source code">[src]</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_class</span> {
     (<span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> { ... };
-    (<span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> { ... };
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">visibility</span>:<span class="ident">vis</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">class</span>:<span class="ident">ident</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>: <span class="ident">ident</span><span class="op">|</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span> )<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> { ... };
 }</pre></div>
-</div><div class='docblock'><p>Defines new python extension class.
+</div><div class="docblock"><p>Defines new python extension class.
 A <code>py_class!</code> macro invocation generates code that declares a new Python class.
 Additionally, it generates a Rust struct of the same name, which allows accessing
 instances of that Python class from Rust.</p>
 <h1 id="syntax" class="section-header"><a href="#syntax">Syntax</a></h1>
 <p><code>py_class!(pub class MyType |py| { ... })</code></p>
 <ul>
-<li><code>pub</code> makes the generated Rust struct visible outside the current module. It has no effect on the visibility from Python.</li>
+<li><code>pub</code> makes the generated Rust struct visible outside the current module. It has no effect on
+the visibility from Python. You may use any Rust visibility keyword. For example, <code>pub(crate)</code>
+would also be valid.</li>
 <li><code>MyType</code> is the name of the Python class.</li>
 <li><code>py</code> is an identifier that will be made available as a variable of type <code>Python</code>
 in all function bodies.</li>
@@ -41,7 +46,7 @@ in all function bodies.</li>
 <h1 id="generated-rust-type" class="section-header"><a href="#generated-rust-type">Generated Rust type</a></h1>
 <p>The above example generates the following Rust type:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">struct</span> <span class="ident">MyType</span> { ... }
 
 <span class="kw">impl</span> <span class="ident">ToPythonObject</span> <span class="kw">for</span> <span class="ident">MyType</span> { ... }
@@ -69,7 +74,11 @@ in all function bodies.</li>
 <ul>
 <li>The generated type implements a number of traits from the <code>cpython</code> crate.</li>
 <li>The inherent <code>create_instance</code> method can create new Python objects
-given the values for the data fields.</li>
+given the values for the data fields.
+<ul>
+<li>Note: Any visibility keyword on the class will also be used for this method.</li>
+</ul>
+</li>
 <li>Private accessors functions are created for the data fields.</li>
 <li>All functions callable from Python are also exposed as public Rust functions.</li>
 <li>To convert from <code>MyType</code> to <code>PyObject</code>, use <code>as_object()</code> or <code>into_object()</code> (from the <code>PythonObject</code> trait).</li>
@@ -91,7 +100,7 @@ to read the section &quot;Garbage Collector Integration&quot;.</p>
 <p>Data declarations are not accessible from Python.
 On the Rust side, data is accessed through the automatically generated accessor functions:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">impl</span> <span class="ident">MyType</span> {
     <span class="kw">fn</span> <span class="ident">data_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">data_type</span> { ... }
 }</pre></div>
@@ -102,21 +111,26 @@ A data field of this type can be borrowed immutably by another Python object
 such as a Python iterator. See <a href="struct.PySharedRefCell.html">PySharedRefCell</a> documentation for details.</p>
 <p>On the Rust side, data is accessed through the automatically generated accessor functions:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">impl</span> <span class="ident">MyType</span> {
     <span class="kw">fn</span> <span class="ident">data_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PySharedRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">data_type</span><span class="op">&gt;</span> { ... }
 }</pre></div>
 <h2 id="instance-methods" class="section-header"><a href="#instance-methods">Instance methods</a></h2>
-<p><code>def method_name(&amp;self, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
+<p><code>def method_name(&amp;self, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code>
+<code>pub(crate) def method_name(&amp;self, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 <p>Declares an instance method callable from Python.</p>
 <ul>
 <li>Because Python objects are potentially shared, the self parameter must always
 be a shared reference (<code>&amp;self</code>).</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
+<li>Visibility of the method in Rust defaults to <code>pub</code>. You may specify a visibility keyword
+before the <code>def</code> to change the visibility, for example, to <code>pub(crate)</code>. Changing visibility
+in Rust does not affect visibility in Python.</li>
 </ul>
 <h2 id="class-methods" class="section-header"><a href="#class-methods">Class methods</a></h2>
-<p><code>@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
+<p><code>@classmethod def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code>
+<code>@classmethod pub(crate) def method_name(cls, parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 <p>Declares a class method callable from Python.</p>
 <ul>
 <li>The first parameter is the type object of the class on which the method is called.
@@ -124,13 +138,20 @@ This may be the type object of a derived class.</li>
 <li>The first parameter implicitly has type <code>&amp;PyType</code>. This type must not be explicitly specified.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
+<li>Visibility of the method in Rust defaults to <code>pub</code>. You may specify a visibility keyword
+before the <code>def</code> to change the visibility, for example, to <code>pub(crate)</code>. Changing visibility
+in Rust does not affect visibility in Python.</li>
 </ul>
 <h2 id="static-methods" class="section-header"><a href="#static-methods">Static methods</a></h2>
-<p><code>@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
+<p><code>@staticmethod def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code>
+<code>@staticmethod pub(crate) def method_name(parameter-list) -&gt; PyResult&lt;...&gt; { ... }</code></p>
 <p>Declares a static method callable from Python.</p>
 <ul>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>py_argparse!()</code>.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>ToPyObject</code>.</li>
+<li>Visibility of the method in Rust defaults to <code>pub</code>. You may specify a visibility keyword
+before the <code>def</code> to change the visibility, for example, to <code>pub(crate)</code>. Changing visibility
+in Rust does not affect visibility in Python.</li>
 </ul>
 <h2 id="properties" class="section-header"><a href="#properties">Properties</a></h2>
 <p><code>@property def property_name(&amp;self) -&gt; PyResult&lt;...&gt; { ... }</code></p>
@@ -427,4 +448,5 @@ the implementation of <code>FromPyObject</code> for your type may document addit
 errors).</li>
 <li>If a method panics in Rust, a Python <code>SystemError</code> will be raised.</li>
 </ul>
-</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "cpython";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="cpython"></div>
+    <script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
