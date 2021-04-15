@@ -4,6 +4,7 @@
 use regex::Regex;
 use std::collections::HashMap;
 use std::env;
+use std::ffi::OsString;
 use std::fmt;
 use std::process::Command;
 
@@ -65,6 +66,11 @@ static SYSCONFIG_VALUES: [&str; 1] = [
     // for example, Py_UNICODE_SIZE_2 or Py_UNICODE_SIZE_4
     "Py_UNICODE_SIZE", // note - not present on python 3.3+, which is always wide
 ];
+
+fn watched_var_os(key: &str) -> Option<OsString> {
+    println!("cargo:rerun-if-env-changed={}", key);
+    env::var_os(key)
+}
 
 /// Examine python's compile flags to pass to cfg by launching
 /// the interpreter and printing variables of interest from
@@ -270,7 +276,7 @@ fn matching_version(expected_version: &PythonVersion, actual_version: &PythonVer
 fn find_interpreter_and_get_config(
     expected_version: &PythonVersion,
 ) -> Result<(PythonVersion, String, Vec<String>), String> {
-    if let Some(sys_executable) = env::var_os("PYTHON_SYS_EXECUTABLE") {
+    if let Some(sys_executable) = watched_var_os("PYTHON_SYS_EXECUTABLE") {
         let interpreter_path = sys_executable
             .to_str()
             .expect("Unable to get PYTHON_SYS_EXECUTABLE value");
@@ -341,10 +347,10 @@ fn configure_from_path(expected_version: &PythonVersion) -> Result<String, Strin
     let ld_version: &str = &lines[2];
     let exec_prefix: &str = &lines[3];
 
-    let is_extension_module = env::var_os("CARGO_FEATURE_EXTENSION_MODULE").is_some();
-    let mut link_mode_default = env::var_os("CARGO_FEATURE_LINK_MODE_DEFAULT").is_some();
+    let is_extension_module = watched_var_os("CARGO_FEATURE_EXTENSION_MODULE").is_some();
+    let mut link_mode_default = watched_var_os("CARGO_FEATURE_LINK_MODE_DEFAULT").is_some();
     let link_mode_unresolved_static =
-        env::var_os("CARGO_FEATURE_LINK_MODE_UNRESOLVED_STATIC").is_some();
+        watched_var_os("CARGO_FEATURE_LINK_MODE_UNRESOLVED_STATIC").is_some();
 
     if link_mode_default && link_mode_unresolved_static {
         return Err(
@@ -387,7 +393,7 @@ fn configure_from_path(expected_version: &PythonVersion) -> Result<String, Strin
         minor: some_minor,
     } = interpreter_version
     {
-        if env::var_os("CARGO_FEATURE_PEP_384").is_some() {
+        if watched_var_os("CARGO_FEATURE_PEP_384").is_some() {
             println!("cargo:rustc-cfg=Py_LIMITED_API");
         }
         if let Some(minor) = some_minor {
