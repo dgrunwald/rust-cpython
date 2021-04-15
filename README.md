@@ -8,7 +8,7 @@ rust-cpython [![Build Status](https://travis-ci.org/dgrunwald/rust-cpython.svg?b
 
 ---
 
-Copyright (c) 2015-2020 Daniel Grunwald.
+Copyright (c) 2015-2021 Daniel Grunwald.
 Rust-cpython is licensed under the [MIT license](http://opensource.org/licenses/MIT).
 Python is licensed under the [Python License](https://docs.python.org/2/license.html).
 
@@ -24,7 +24,7 @@ To use `cpython`, add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cpython = "0.5"
+cpython = "0.6"
 ```
 
 #### Example program displaying the value of `sys.version`:
@@ -70,7 +70,7 @@ name = "rust2py"
 crate-type = ["cdylib"]
 
 [dependencies.cpython]
-version = "0.5"
+version = "0.6"
 features = ["extension-module"]
 ```
 
@@ -121,4 +121,3 @@ To test the crate, run: `make test`
 
 Note: This crate has several files that are auto-generated using scripts. Using the Makefile ensures that these
 files are re-generated as needed.
->>>>>>> 9ce2de8 (Add comment explaining how to regenerate)

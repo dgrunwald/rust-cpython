@@ -2,7 +2,18 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.5.2...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.6.0...HEAD
+
+## 0.6.0 - 2021-04-15
+- the minimum supported Rust version is now 1.41.1
+- on Python 3, [strings now directly use the UTF-8 representation stored inside the Python string][247]
+- [visibility keywords are now permitted on classes and functions][250] (PR by [@tdyas])
+- [the `PyNone` type can be used as a marker representing None in Python][253] (PR by [@markbt])
+
+[247]: https://github.com/dgrunwald/rust-cpython/pull/247
+[250]: https://github.com/dgrunwald/rust-cpython/pull/250
+[@tdyas]: https://github.com/tdyas
+[253]: https://github.com/dgrunwald/rust-cpython/pull/253
 
 ## 0.5.2 - 2020-12-16
 - [add a way to disable converting `PyString` to unicode on Python 2][240] (PR by [@quark-zju])
