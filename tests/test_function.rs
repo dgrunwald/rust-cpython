@@ -181,6 +181,30 @@ fn none_return() {
     assert_eq!(CALL_COUNT.load(Relaxed), 1);
 }
 
+/// When Python calls a Rust function, an unhandled Rust panic is turned into
+/// a Python `SystemError` exception. The exception’s value is a string that
+/// contains the panic’s payload, if that payload was a string.
+#[test]
+fn panicking() {
+    fn f(_py: Python) -> PyResult<PyNone> {
+        panic!("panicking because {}", "reasons")
+    }
+
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let obj = py_fn!(py, f());
+
+    assert_eq!(
+        obj.call(py, NoArgs, None)
+            .unwrap_err() // Expect an exception
+            .instance(py)
+            .str(py)
+            .unwrap()
+            .to_string_lossy(py),
+        "Rust panic: panicking because reasons"
+    );
+}
+
 /* TODO: reimplement flexible sig support
 #[test]
 fn flexible_sig() {
