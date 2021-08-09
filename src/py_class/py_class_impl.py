@@ -838,7 +838,7 @@ special_names = {
     '__add__': binary_numeric_operator('nb_add'),
     '__sub__': binary_numeric_operator('nb_subtract'),
     '__mul__': binary_numeric_operator('nb_multiply'),
-    '__matmul__': unimplemented(),
+    '__matmul__': binary_numeric_operator('nb_matrix_multiply') if not PY2 else unimplemented(),
     '__div__': unimplemented(),
     '__truediv__': unimplemented(),
     '__floordiv__': unimplemented(),

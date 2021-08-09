@@ -25,6 +25,10 @@ use crate::ffi;
 use crate::objects::{PyDict, PyObject, PyString, PyTuple};
 use crate::python::{Python, PythonObject, ToPythonPointer};
 
+mod number;
+
+pub use self::number::NumberProtocol;
+
 /// Trait that contains methods
 pub trait ObjectProtocol: PythonObject {
     /// Determines whether this object has the given attribute.

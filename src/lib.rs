@@ -25,6 +25,10 @@
     clippy::manual_strip,
     clippy::match_like_matches_macro
 )]
+#![warn(
+    // TODO: We need to fix this
+    macro_expanded_macro_exports_accessed_by_absolute_paths,
+)]
 
 //! Rust bindings to the Python interpreter.
 //!
@@ -210,13 +214,14 @@ pub mod buffer;
 mod conversion;
 mod err;
 mod function;
-mod objectprotocol;
 mod objects;
 mod python;
 mod pythonrun;
 //pub mod rustobject;
+#[macro_use]
 pub mod py_class;
 mod sharedref;
+mod objectprotocol;
 
 #[cfg(feature = "serde-convert")]
 pub mod serde;
