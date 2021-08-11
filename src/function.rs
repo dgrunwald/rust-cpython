@@ -224,7 +224,7 @@ where
     });
     match ret {
         Ok(r) => r,
-        Err(ref err) => {
+        Err(err) => {
             // Protect against panics in C::error_value() causing UB
             let guard = AbortOnDrop("handle_panic() / C::error_value()");
             handle_panic(Python::assume_gil_acquired(), err);
@@ -235,8 +235,29 @@ where
     }
 }
 
-fn handle_panic(_py: Python, _panic: &dyn any::Any) {
-    let msg = cstr!("Rust panic");
+// This only needs `&dyn Any`, but we keep a `Box` all the way to avoid the
+// risk of a subtle bug in the caller where `&Box<dyn Any>` is coerced to
+// `&dyn Any` by unsizing with another layer of vtable and wide pointer,
+// instead of the expected auto-deref.
+fn handle_panic(_py: Python, panic: Box<dyn any::Any>) {
+    let panic_str = if let Some(s) = panic.downcast_ref::<String>() {
+        Some(s.as_str())
+    } else if let Some(s) = panic.downcast_ref::<&'static str>() {
+        Some(*s)
+    } else {
+        None
+    };
+    let panic_cstring = panic_str.and_then(|s| {
+        let result = CString::new(format!("Rust panic: {}", s));
+        // Give up on representing the panic payload if it contains a null byte
+        // TODO: use PyErr_SetObject instead, so a `char*` string isn’t needed?
+        result.ok()
+    });
+    let msg = if let Some(s) = &panic_cstring {
+        s.as_c_str()
+    } else {
+        cstr!("Rust panic")
+    };
     unsafe {
         ffi::PyErr_SetString(ffi::PyExc_SystemError, msg.as_ptr());
     }
