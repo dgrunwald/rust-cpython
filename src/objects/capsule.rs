@@ -347,28 +347,27 @@ macro_rules! py_capsule {
     (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident for $ruststruct: ident ) => (
         mod $rustmod {
             use super::*;
-            use std::sync::Once;
+            use $crate::_detail::OnceCell;
+            use $crate::GILProtected;
             use $crate::PyClone;
 
-            static mut CAPS_DATA: Option<$crate::PyResult<&$ruststruct>> = None;
-
-            static INIT: Once = Once::new();
+            static CAPS_DATA: GILProtected<OnceCell<$crate::PyResult<&$ruststruct>>> =
+                GILProtected::new(OnceCell::new());
 
             pub type RawPyObject = $crate::_detail::ffi::PyObject;
 
             pub unsafe fn retrieve<'a>(py: $crate::Python) -> $crate::PyResult<&'a $ruststruct> {
-                INIT.call_once(|| {
+                let ref_to_result = CAPS_DATA.get(py).get_or_init(|| {
                     let caps_name =
                         std::ffi::CStr::from_bytes_with_nul_unchecked(
                             concat!($( stringify!($capsmod), "."),*,
                                     stringify!($capsname),
                                     "\0").as_bytes());
-                    CAPS_DATA = Some($crate::PyCapsule::import_data(py, caps_name));
+                    $crate::PyCapsule::import_data(py, caps_name)
                 });
-                match CAPS_DATA {
-                    Some(Ok(d)) => Ok(d),
-                    Some(Err(ref e)) => Err(e.clone_ref(py)),
-                    _ => panic!("Uninitialized"), // can't happen
+                match ref_to_result {
+                    &Ok(ref x) => Ok(x),
+                    &Err(ref e) => Err(e.clone_ref(py))
                 }
             }
         }
@@ -397,7 +396,7 @@ macro_rules! py_capsule {
 /// ```ignore
 /// mod $rustmod {
 ///     pub type CapsuleFn = unsafe extern "C" (args) -> ret_type ;
-///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsuleFn) { ... }
+///     pub unsafe fn retrieve<'a>(py: Python) -> PyResult<CapsuleFn> { ... }
 /// }
 /// ```
 /// - a `RawPyObject` type suitable for signatures that involve Python C objects;
@@ -482,15 +481,15 @@ macro_rules! py_capsule_fn {
     (from $($capsmod:ident).+ import $capsname:ident as $rustmod:ident signature $( $sig: tt)* ) => (
         mod $rustmod {
             use super::*;
-            use std::sync::Once;
+            use $crate::_detail::OnceCell;
+            use $crate::GILProtected;
             use $crate::PyClone;
 
             pub type CapsuleFn = unsafe extern "C" fn $( $sig )*;
             pub type RawPyObject = $crate::_detail::ffi::PyObject;
 
-            static mut CAPS_FN: Option<$crate::PyResult<CapsuleFn>> = None;
-
-            static INIT: Once = Once::new();
+            static CAPS_FN: GILProtected<OnceCell<$crate::PyResult<CapsuleFn>>> =
+                GILProtected::new(OnceCell::new());
 
             fn import(py: $crate::Python) -> $crate::PyResult<CapsuleFn> {
                 unsafe {
@@ -504,12 +503,9 @@ macro_rules! py_capsule_fn {
             }
 
             pub fn retrieve(py: $crate::Python) -> $crate::PyResult<CapsuleFn> {
-                unsafe {
-                    INIT.call_once(|| { CAPS_FN = Some(import(py)) });
-                    match CAPS_FN.as_ref().unwrap() {
-                        &Ok(f) => Ok(f),
-                        &Err(ref e) => Err(e.clone_ref(py)),
-                    }
+                match CAPS_FN.get(py).get_or_init(|| import(py)) {
+                    &Ok(f) => Ok(f),
+                    &Err(ref e) => Err(e.clone_ref(py)),
                 }
             }
         }

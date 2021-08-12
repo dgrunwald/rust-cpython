@@ -235,6 +235,7 @@ pub mod _detail {
         handle_callback, py_fn_impl, AbortOnDrop, PyObjectCallbackConverter,
         PythonObjectCallbackConverter,
     };
+    pub use once_cell::unsync::OnceCell;
     pub use paste;
 }
 
