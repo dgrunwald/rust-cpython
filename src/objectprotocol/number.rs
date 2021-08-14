@@ -112,7 +112,7 @@ pub trait NumberProtocol: ObjectProtocol {
     #[inline]
     fn div_floor(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {       
         other.with_borrowed_ptr(py, |other| unsafe {
-            err::result_from_owned_ptr(py, ffi::PyNumber_TrueDivide(self.as_ptr(), other))
+            err::result_from_owned_ptr(py, ffi::PyNumber_FloorDivide(self.as_ptr(), other))
         })
     }
     /// Return the remainder of dividing `self` by `other`,
@@ -262,7 +262,7 @@ pub trait NumberProtocol: ObjectProtocol {
     #[inline]
     fn as_int_index(&self, py: Python) -> PyResult<PyLong> {
         let obj = unsafe {
-            err::result_from_owned_ptr(py, ffi::PyNumber_Long(self.as_ptr()))?
+            err::result_from_owned_ptr(py, ffi::PyNumber_Index(self.as_ptr()))?
         };
         Ok(obj.cast_into::<PyLong>(py)?)
     }
