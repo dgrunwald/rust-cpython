@@ -68,10 +68,10 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// Invokes the `__pow__` magic-method
     ///
-    /// See also [NumberProtocol::pow_mod].
+    /// See also [NumberProtocol::power_modulo].
     #[inline]
-    fn pow(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
-        self.pow_mod(py, other, py.None())
+    fn power(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
+        self.power_modulo(py, other, py.None())
     }   
     /// Perform exponentiation modulo an integer,
     /// mathematically equivalent to `self ** other % mod`
@@ -85,7 +85,7 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// Invokes the `__pow__` magic-method
     #[inline]
-    fn pow_mod(&self, py: Python, exp: impl ToPyObject, z: impl ToPyObject) -> PyResult<PyObject> {       
+    fn power_modulo(&self, py: Python, exp: impl ToPyObject, z: impl ToPyObject) -> PyResult<PyObject> {
         exp.with_borrowed_ptr(py, |exp| {
             z.with_borrowed_ptr(py, |z| unsafe {
                 err::result_from_owned_ptr(py, ffi::PyNumber_Power(self.as_ptr(), exp, z))
@@ -97,7 +97,7 @@ pub trait NumberProtocol: ObjectProtocol {
     /// 
     /// Invokes the `__truediv__` magic-method.
     #[inline]   
-    fn true_div(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
+    fn true_divide(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
         other.with_borrowed_ptr(py, |other| unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_TrueDivide(self.as_ptr(), other))
         })
@@ -110,7 +110,7 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// Invokes the `__floordiv__` magic-method.
     #[inline]
-    fn div_floor(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {       
+    fn floor_divide(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
         other.with_borrowed_ptr(py, |other| unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_FloorDivide(self.as_ptr(), other))
         })
@@ -120,7 +120,7 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// Invokes the `__mod__` magic-method.
     #[inline]
-    fn remainder(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {       
+    fn modulo(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> { 
         other.with_borrowed_ptr(py, |other| unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_Remainder(self.as_ptr(), other))
         })
