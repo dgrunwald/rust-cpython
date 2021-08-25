@@ -128,6 +128,13 @@ impl GILGuard {
     pub fn python(&self) -> Python<'_> {
         unsafe { Python::assume_gil_acquired() }
     }
+
+    /// Checks if the current thread holds the GIL.
+    #[cfg(Py_3_4)]
+    pub fn check() -> bool {
+        let gstate = unsafe { ffi::PyGILState_Check() };
+        gstate == 1
+    }
 }
 
 /// Mutex-like wrapper object for data that is protected by the Python GIL.

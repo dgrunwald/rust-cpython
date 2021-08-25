@@ -62,6 +62,8 @@ pub enum PyGILState_STATE {
 #[cfg(any(Py_3_7, py_sys_config = "WITH_THREAD"))]
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(Py_3_4)]
+    pub fn PyGILState_Check() -> libc::c_int;
     pub fn PyGILState_Ensure() -> PyGILState_STATE;
     pub fn PyGILState_Release(arg1: PyGILState_STATE) -> ();
     pub fn PyGILState_GetThisThreadState() -> *mut PyThreadState;
