@@ -31,7 +31,7 @@ use crate::python::{Python, ToPythonPointer};
 ///
 /// Note: this example is a lower-level version of the [`py_capsule!`] example. Only the
 /// capsule retrieval actually differs.
-/// ```
+/// ```no_run
 /// use cpython::{Python, PyCapsule};
 /// use libc::{c_void, c_char, c_int};
 /// use std::ffi::{CStr, CString};
@@ -229,7 +229,7 @@ pyobject_newtype!(PyCapsule, PyCapsule_CheckExact, PyCapsule_Type);
 ///
 /// In this case, as with all capsules from the Python standard library, the capsule data
 /// is an array (`static struct`) with constants and function pointers.
-/// ```
+/// ```no_run
 /// use cpython::{Python, PyCapsule, py_capsule};
 /// use libc::{c_char, c_int};
 /// use std::ffi::{c_void, CStr, CString};
