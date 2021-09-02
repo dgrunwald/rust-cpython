@@ -1,8 +1,11 @@
-use libc::{c_char, c_int};
+use libc::{c_char, c_schar, c_int};
 
 use crate::code::{PyCodeObject, CO_MAXBLOCKS};
 use crate::object::*;
 use crate::pystate::PyThreadState;
+
+#[cfg(not(Py_LIMITED_API))]
+pub type PyFrameState = c_schar;
 
 #[cfg(not(Py_LIMITED_API))]
 #[repr(C)]
@@ -33,8 +36,11 @@ pub struct PyFrameObject {
     /* Next free slot in f_valuestack.  Frame creation sets to f_valuestack.
     Frame evaluation usually NULLs it, but a frame that yields sets it
     to the current stack top. */
+    #[cfg(not(Py_3_10))]
     pub f_stacktop: *mut *mut PyObject,
     pub f_trace: *mut PyObject, /* Trace function */
+    #[cfg(Py_3_10)]
+    pub f_stackdepth: c_int,
 
     #[cfg(not(Py_3_7))]
     pub f_exc_type: *mut PyObject,
@@ -60,10 +66,12 @@ pub struct PyFrameObject {
      active (i.e. when f_trace is set).  At other times we use
      PyCode_Addr2Line to calculate the line from the current
     bytecode index. */
-    pub f_lineno: c_int, /* Current line number */
+    pub f_lineno: c_int, /* Current line number. Only valid if non-zero */
     pub f_iblock: c_int, /* index in f_blockstack */
-    #[cfg(Py_3_4)]
+    #[cfg(all(Py_3_4, not(Py_3_10)))]
     pub f_executing: c_char, /* whether the frame is still executing */
+    #[cfg(Py_3_10)]
+    pub f_state: PyFrameState,  /* What state the frame is in */
     pub f_blockstack: [PyTryBlock; CO_MAXBLOCKS], /* for try and loop blocks */
     pub f_localsplus: [*mut PyObject; 1], /* locals+stack, dynamically sized */
 }

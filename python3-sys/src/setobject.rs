@@ -16,6 +16,12 @@ pub unsafe fn PyFrozenSet_CheckExact(ob: *mut PyObject) -> c_int {
 }
 
 #[inline]
+pub unsafe fn PyFrozenSet_Check(ob: *mut PyObject) -> c_int {
+    (Py_TYPE(ob) == &mut PyFrozenSet_Type
+        || PyType_IsSubtype(Py_TYPE(ob), &mut PyFrozenSet_Type) != 0) as c_int
+}
+
+#[inline]
 pub unsafe fn PyAnySet_CheckExact(ob: *mut PyObject) -> c_int {
     (Py_TYPE(ob) == &mut PySet_Type || Py_TYPE(ob) == &mut PyFrozenSet_Type) as c_int
 }
@@ -28,14 +34,13 @@ pub unsafe fn PyAnySet_Check(ob: *mut PyObject) -> c_int {
 }
 
 #[inline]
-pub unsafe fn PySet_Check(ob: *mut PyObject) -> c_int {
-    (Py_TYPE(ob) == &mut PySet_Type || PyType_IsSubtype(Py_TYPE(ob), &mut PySet_Type) != 0) as c_int
+pub unsafe fn PySet_CheckExact(ob: *mut PyObject) -> c_int {
+    (Py_TYPE(ob) == &mut PySet_Type) as c_int
 }
 
 #[inline]
-pub unsafe fn PyFrozenSet_Check(ob: *mut PyObject) -> c_int {
-    (Py_TYPE(ob) == &mut PyFrozenSet_Type
-        || PyType_IsSubtype(Py_TYPE(ob), &mut PyFrozenSet_Type) != 0) as c_int
+pub unsafe fn PySet_Check(ob: *mut PyObject) -> c_int {
+    (Py_TYPE(ob) == &mut PySet_Type || PyType_IsSubtype(Py_TYPE(ob), &mut PySet_Type) != 0) as c_int
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]

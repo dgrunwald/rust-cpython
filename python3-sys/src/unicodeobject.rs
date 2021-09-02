@@ -96,7 +96,7 @@ extern "C" {
         index: Py_ssize_t,
         character: Py_UCS4,
     ) -> c_int;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_10)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3 / PEP 393")]
     pub fn PyUnicode_GetMax() -> Py_UNICODE;
     pub fn PyUnicode_Resize(unicode: *mut *mut PyObject, length: Py_ssize_t) -> c_int;
@@ -111,6 +111,7 @@ extern "C" {
     }
     pub fn PyUnicode_FromFormat(format: *const c_char, ...) -> *mut PyObject;
     pub fn PyUnicode_InternInPlace(arg1: *mut *mut PyObject) -> ();
+    #[deprecated(since = "0.6.1", note = "Deprecated since Python 3.10")]
     pub fn PyUnicode_InternImmortal(arg1: *mut *mut PyObject) -> ();
     pub fn PyUnicode_InternFromString(u: *const c_char) -> *mut PyObject;
     pub fn PyUnicode_FromWideChar(w: *const wchar_t, size: Py_ssize_t) -> *mut PyObject;
@@ -430,7 +431,8 @@ extern "C" {
     pub fn PyUnicode_Format(format: *mut PyObject, args: *mut PyObject) -> *mut PyObject;
     pub fn PyUnicode_Contains(container: *mut PyObject, element: *mut PyObject) -> c_int;
     pub fn PyUnicode_IsIdentifier(s: *mut PyObject) -> c_int;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_10)))]
+    #[deprecated(since = "0.6.1", note = "Deprecated since Python 3.3; removed in 3.10")]
     pub fn PyUnicode_AsUnicodeCopy(unicode: *mut PyObject) -> *mut Py_UNICODE;
 
     #[cfg(not(Py_LIMITED_API))]

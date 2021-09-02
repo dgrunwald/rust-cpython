@@ -142,6 +142,8 @@ extern "C" {
     pub static mut PyExc_ImportWarning: *mut PyObject;
     pub static mut PyExc_UnicodeWarning: *mut PyObject;
     pub static mut PyExc_BytesWarning: *mut PyObject;
+    #[cfg(Py_3_10)]
+    pub static mut PyExc_EncodingWarning: *mut PyObject;
     pub static mut PyExc_ResourceWarning: *mut PyObject;
 
     pub fn PyErr_BadArgument() -> c_int;
@@ -190,6 +192,8 @@ extern "C" {
     pub fn PyErr_WriteUnraisable(arg1: *mut PyObject) -> ();
     pub fn PyErr_CheckSignals() -> c_int;
     pub fn PyErr_SetInterrupt() -> ();
+    #[cfg(Py_3_10)]
+    pub fn PyErr_SetInterruptEx(signum: c_int) -> c_int;
     pub fn PyErr_SyntaxLocation(filename: *const c_char, lineno: c_int) -> ();
     pub fn PyErr_SyntaxLocationEx(filename: *const c_char, lineno: c_int, col_offset: c_int) -> ();
     pub fn PyErr_ProgramText(filename: *const c_char, lineno: c_int) -> *mut PyObject;

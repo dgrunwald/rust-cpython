@@ -37,7 +37,10 @@ pub struct PyCodeObject {
     pub co_name: *mut PyObject,
     #[cfg(not(Py_3_6))]
     pub co_firstlineno: c_int,
+    #[cfg(not(Py_3_10))]
     pub co_lnotab: *mut PyObject,
+    #[cfg(Py_3_10)]
+    pub co_linetable: *mut PyObject,
     pub co_zombieframe: *mut c_void,
     pub co_weakreflist: *mut PyObject,
     #[cfg(Py_3_6)]

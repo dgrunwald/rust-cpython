@@ -134,9 +134,22 @@ extern "C" {
 extern "C" {
     pub fn PyObject_Format(obj: *mut PyObject, format_spec: *mut PyObject) -> *mut PyObject;
     pub fn PyObject_GetIter(arg1: *mut PyObject) -> *mut PyObject;
+    #[cfg(Py_3_10)]
+    pub fn PyObject_GetAiter(arg1: *mut PyObject) -> *mut PyObject;
+
+    // Note: prior to 3.8, PyIter_Check was a macro instead
+    #[cfg(Py_3_8)]
+    pub fn PyIter_Check(o: *mut PyObject) -> c_int;
+
+    #[cfg(Py_3_10)]
+    pub fn PyAiter_Check(o: *mut PyObject) -> c_int;
+
+    pub fn PyIter_Next(arg1: *mut PyObject) -> *mut PyObject;
+    #[cfg(Py_3_10)]
+    pub fn PyIter_Send(iter: *mut PyObject, arg: *mut PyObject, result: *mut *mut PyObject) -> PySendResult;
 }
 
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(not(Py_3_8))]
 #[inline]
 pub unsafe fn PyIter_Check(o: *mut PyObject) -> c_int {
     (match (*(*o).ob_type).tp_iternext {
@@ -150,11 +163,6 @@ pub unsafe fn PyIter_Check(o: *mut PyObject) -> c_int {
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
-    pub fn PyIter_Next(arg1: *mut PyObject) -> *mut PyObject;
-    // Note: without Py_LIMITED_API, PyIter_Check is a macro instead
-    #[cfg(all(Py_3_8, Py_LIMITED_API))]
-    pub fn PyIter_Check(o: *mut PyObject) -> c_int;
-
     pub fn PyNumber_Check(o: *mut PyObject) -> c_int;
     pub fn PyNumber_Add(o1: *mut PyObject, o2: *mut PyObject) -> *mut PyObject;
     pub fn PyNumber_Subtract(o1: *mut PyObject, o2: *mut PyObject) -> *mut PyObject;

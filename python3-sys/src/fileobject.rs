@@ -19,6 +19,7 @@ extern "C" {
     pub fn PyFile_GetLine(arg1: *mut PyObject, arg2: c_int) -> *mut PyObject;
     pub fn PyFile_WriteObject(arg1: *mut PyObject, arg2: *mut PyObject, arg3: c_int) -> c_int;
     pub fn PyFile_WriteString(arg1: *const c_char, arg2: *mut PyObject) -> c_int;
+    pub fn PyObject_AsFileDescriptor(o: *mut PyObject) -> c_int;
 
     pub static mut Py_FileSystemDefaultEncoding: *const c_char;
     #[cfg(Py_3_6)]

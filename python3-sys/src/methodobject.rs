@@ -124,7 +124,7 @@ slot like sq_contains. */
 
 pub const METH_COEXIST: c_int = 0x0040;
 
-#[cfg(all(Py_3_6, not(Py_LIMITED_API)))]
+#[cfg(any(Py_3_10, all(Py_3_6, not(Py_LIMITED_API))))]
 pub const METH_FASTCALL: c_int = 0x0080;
 
 // METH_STACKLESS: This bit is preserved for Stackless Python

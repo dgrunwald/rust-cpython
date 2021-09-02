@@ -84,3 +84,5 @@ pub const Py_am_aiter: c_int = 78;
 pub const Py_am_anext: c_int = 79;
 #[cfg(Py_3_5)]
 pub const Py_tp_finalize: c_int = 80;
+#[cfg(Py_3_10)]
+pub const Py_am_send: c_int = 81;

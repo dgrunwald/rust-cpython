@@ -10,6 +10,7 @@ extern "C" {
     pub fn PyOS_AfterFork_Child() -> ();
 
     pub fn PyOS_InterruptOccurred() -> c_int;
+    #[cfg(not(Py_3_10))]
     pub fn PyOS_InitInterrupts() -> ();
     pub fn PyOS_AfterFork() -> ();
 }

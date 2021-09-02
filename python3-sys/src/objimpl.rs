@@ -33,6 +33,12 @@ extern "C" {
     pub fn _PyObject_NewVar(arg1: *mut PyTypeObject, arg2: Py_ssize_t) -> *mut PyVarObject;
 
     pub fn PyGC_Collect() -> Py_ssize_t;
+    #[cfg(Py_3_10)]
+    pub fn PyGC_Enable() -> c_int;
+    #[cfg(Py_3_10)]
+    pub fn PyGC_Disable() -> c_int;
+    #[cfg(Py_3_10)]
+    pub fn PyGC_InEnabled() -> c_int;
 }
 
 #[cfg(all(py_sys_config = "Py_DEBUG", not(Py_3_4)))]

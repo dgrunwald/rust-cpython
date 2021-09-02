@@ -25,3 +25,13 @@ pub unsafe fn Py_False() -> *mut PyObject {
 pub unsafe fn Py_True() -> *mut PyObject {
     &mut _Py_TrueStruct as *mut PyLongObject as *mut PyObject
 }
+
+#[inline(always)]
+pub unsafe fn Py_IsFalse(obj: *mut PyObject) -> c_int {
+    (obj == Py_False()) as c_int
+}
+
+#[inline(always)]
+pub unsafe fn Py_IsTrue(obj: *mut PyObject) -> c_int {
+    (obj == Py_True()) as c_int
+}

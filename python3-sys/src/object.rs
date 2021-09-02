@@ -211,6 +211,7 @@ mod typeobject {
     use libc::{c_char, c_uint, c_ulong, c_void};
 
     use crate::pyport::Py_ssize_t;
+    use super::PyObject;
 
     #[repr(C)]
     #[derive(Copy)]
@@ -387,6 +388,8 @@ mod typeobject {
         mp_subscript: None,
         mp_ass_subscript: None,
     };
+    #[cfg(Py_3_10)]
+    pub type sendfunc = unsafe extern "C" fn(iter: *mut PyObject, value: *mut PyObject, result: *mut *mut PyObject) -> super::PySendResult;
     #[repr(C)]
     #[derive(Copy)]
     #[cfg(Py_3_5)]
@@ -394,6 +397,8 @@ mod typeobject {
         pub am_await: Option<crate::object::unaryfunc>,
         pub am_aiter: Option<crate::object::unaryfunc>,
         pub am_anext: Option<crate::object::unaryfunc>,
+        #[cfg(Py_3_10)]
+        pub am_send: Option<sendfunc>,
     }
     #[cfg(Py_3_5)]
     impl Clone for PyAsyncMethods {
@@ -414,6 +419,8 @@ mod typeobject {
         am_await: None,
         am_aiter: None,
         am_anext: None,
+        #[cfg(Py_3_10)]
+        am_send: None
     };
     #[repr(C)]
     #[derive(Copy)]
@@ -845,6 +852,15 @@ extern "C" {
 // Flag bits for printing:
 pub const Py_PRINT_RAW: c_int = 1; // No string quotes etc.
 
+/// Disallow creating instances of the type: set tp_new to NULL and don't create
+/// the "__new__" key in the type dictionary.
+#[cfg(Py_3_10)]
+pub const Py_TPFLAGS_DISALLOW_INSTANTIATION: c_ulong = (1 << 7);
+
+/// Set if the type object is immutable: type attributes cannot be set nor deleted
+#[cfg(Py_3_10)]
+pub const Py_TPFLAGS_IMMUTABLETYPE: c_ulong = (1 << 8);
+
 /// Set if the type object is dynamically allocated
 pub const Py_TPFLAGS_HEAPTYPE: c_ulong = (1 << 9);
 
@@ -868,8 +884,7 @@ const Py_TPFLAGS_HAVE_STACKLESS_EXTENSION: c_ulong = 0;
 #[cfg(Py_3_8)]
 pub const Py_TPFLAGS_METHOD_DESCRIPTOR: c_ulong = (1 << 17);
 
-/// Objects support type attribute cache
-pub const Py_TPFLAGS_HAVE_VERSION_TAG: c_ulong = (1 << 18);
+/// Object has up-to-date type attribute cache
 pub const Py_TPFLAGS_VALID_VERSION_TAG: c_ulong = (1 << 19);
 
 /* Type is abstract and cannot be instantiated */
@@ -885,10 +900,17 @@ pub const Py_TPFLAGS_DICT_SUBCLASS: c_ulong = (1 << 29);
 pub const Py_TPFLAGS_BASE_EXC_SUBCLASS: c_ulong = (1 << 30);
 pub const Py_TPFLAGS_TYPE_SUBCLASS: c_ulong = (1 << 31);
 
+#[cfg(not(Py_3_10))]
 pub const Py_TPFLAGS_DEFAULT: c_ulong =
     (Py_TPFLAGS_HAVE_STACKLESS_EXTENSION | Py_TPFLAGS_HAVE_VERSION_TAG | 0);
 
+#[cfg(Py_3_10)]
+pub const Py_TPFLAGS_DEFAULT: c_ulong =
+    (Py_TPFLAGS_HAVE_STACKLESS_EXTENSION | 0);
+
+
 pub const Py_TPFLAGS_HAVE_FINALIZE: c_ulong = (1 << 0);
+pub const Py_TPFLAGS_HAVE_VERSION_TAG: c_ulong = (1 << 18);
 
 #[inline(always)]
 #[cfg(Py_LIMITED_API)]
@@ -962,6 +984,11 @@ extern "C" {
     pub fn Py_IncRef(o: *mut PyObject);
     pub fn Py_DecRef(o: *mut PyObject);
 
+    #[cfg(Py_3_10)]
+    pub fn Py_NewRef(o: *mut PyObject) -> *mut PyObject;
+    #[cfg(Py_3_10)]
+    pub fn Py_XNewRef(o: *mut PyObject) -> *mut PyObject;
+
     static mut _Py_NoneStruct: PyObject;
     static mut _Py_NotImplementedStruct: PyObject;
 }
@@ -969,6 +996,11 @@ extern "C" {
 #[inline(always)]
 pub unsafe fn Py_None() -> *mut PyObject {
     &mut _Py_NoneStruct
+}
+
+#[inline(always)]
+pub unsafe fn Py_IsNone(x: *mut PyObject) -> c_int {
+    (x == Py_None()) as c_int
 }
 
 #[inline(always)]
@@ -983,3 +1015,12 @@ pub const Py_EQ: c_int = 2;
 pub const Py_NE: c_int = 3;
 pub const Py_GT: c_int = 4;
 pub const Py_GE: c_int = 5;
+
+/* Result of calling PyIter_Send */
+#[cfg(Py_3_10)]
+#[repr(C)]
+pub enum PySendResult {
+    PYGEN_RETURN = 0,
+    PYGEN_ERROR = -1,
+    PYGEN_NEXT = 1,
+}

@@ -32,10 +32,16 @@ extern "C" {
         pub fn _Py_BuildValue_SizeT(arg1: *const c_char, ...) -> *mut PyObject;
         pub fn Py_VaBuildValue(arg1: *const c_char, arg2: va_list) -> *mut PyObject;
     }
+    #[cfg(Py_3_10)]
+    pub fn PyModule_AddObjectRef(
+        module: *mut PyObject,
+        name: *const c_char,
+        value: *mut PyObject,
+    ) -> c_int;
     pub fn PyModule_AddObject(
-        arg1: *mut PyObject,
-        arg2: *const c_char,
-        arg3: *mut PyObject,
+        module: *mut PyObject,
+        name: *const c_char,
+        value: *mut PyObject,
     ) -> c_int;
     pub fn PyModule_AddIntConstant(arg1: *mut PyObject, arg2: *const c_char, arg3: c_long)
         -> c_int;
@@ -47,9 +53,9 @@ extern "C" {
     #[cfg(Py_3_9)]
     pub fn PyModule_AddType(module: *mut PyObject, ty: *mut PyTypeObject) -> c_int;
     #[cfg(Py_3_5)]
-    pub fn PyModule_SetDocString(arg1: *mut PyObject, arg2: *const c_char) -> c_int;
+    pub fn PyModule_SetDocString(module: *mut PyObject, value: *const c_char) -> c_int;
     #[cfg(Py_3_5)]
-    pub fn PyModule_AddFunctions(arg1: *mut PyObject, arg2: *mut PyMethodDef) -> c_int;
+    pub fn PyModule_AddFunctions(module: *mut PyObject, methods: *mut PyMethodDef) -> c_int;
     #[cfg(Py_3_5)]
     pub fn PyModule_ExecDef(module: *mut PyObject, def: *mut PyModuleDef) -> c_int;
 }

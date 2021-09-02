@@ -93,7 +93,7 @@ mod pyport;
 // contains nothing of interest for Rust
 // mod pymath;
 
-// contains nothing of interest
+// contains nothing of interest; moved to cpython/pytime.h in 3.10
 // [cfg(not(Py_LIMITED_API))]
 // mod pytime;
 
