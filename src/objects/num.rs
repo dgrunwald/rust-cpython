@@ -26,7 +26,7 @@ use super::object::PyObject;
 use crate::conversion::{FromPyObject, ToPyObject};
 use crate::err::{self, PyErr, PyResult};
 use crate::ffi;
-use crate::python::{PyClone, Python, PythonObject};
+use crate::python::{PyClone, PyDrop, Python, PythonObject};
 
 /// Represents a Python `int` object.
 ///
@@ -133,7 +133,17 @@ macro_rules! int_fits_c_long(
             /// Returns OverflowError if the input integer does not fit the Rust type;
             /// or TypeError if the input is not an integer.
             py => {
-                let val = unsafe { ffi::PyLong_AsLong(obj.as_ptr()) };
+                let ptr = obj.as_ptr();
+                let val;
+                unsafe {
+                    if ffi::PyLong_Check(ptr) != 0 {
+                        val = ffi::PyLong_AsLong(obj.as_ptr());
+                    } else {
+                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Index(ptr))?;
+                        val = ffi::PyLong_AsLong(num.as_ptr());
+                        num.release_ref(py);
+                    }
+                };
                 if val == -1 && PyErr::occurred(py) {
                     return Err(PyErr::fetch(py));
                 }
@@ -236,8 +246,10 @@ macro_rules! int_convert_u64_or_i64 (
                             None => Err(overflow_error(py))
                         }
                     } else {
-                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr))?;
-                        err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()))
+                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Index(ptr))?;
+                        let res = err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()));
+                        num.release_ref(py);
+                        res
                     }
                 }
             }
@@ -249,8 +261,10 @@ macro_rules! int_convert_u64_or_i64 (
                     if ffi::PyLong_Check(ptr) != 0 {
                         err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(ptr))
                     } else {
-                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Long(ptr))?;
-                        err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()))
+                        let num = err::result_from_owned_ptr(py, ffi::PyNumber_Index(ptr))?;
+                        let res = err_if_invalid_value(py, !0, $pylong_as_ull_or_ull(num.as_ptr()));
+                        num.release_ref(py);
+                        res
                     }
                 }
             }
@@ -339,6 +353,7 @@ extract!(
 
 #[cfg(test)]
 mod test {
+    use crate::exc;
     use crate::conversion::ToPyObject;
     use crate::python::{Python, PythonObject};
 
@@ -367,11 +382,49 @@ mod test {
     num_to_py_object_and_back!(to_from_u64, u64, u64);
     num_to_py_object_and_back!(to_from_isize, isize, isize);
     num_to_py_object_and_back!(to_from_usize, usize, usize);
-    num_to_py_object_and_back!(float_to_i32, f64, i32);
-    num_to_py_object_and_back!(float_to_u32, f64, u32);
-    num_to_py_object_and_back!(float_to_i64, f64, i64);
-    num_to_py_object_and_back!(float_to_u64, f64, u64);
     num_to_py_object_and_back!(int_to_float, i32, f64);
+
+
+    macro_rules! float_to_int_fails (
+        ($func_name:ident, $t:ty) => (
+            #[test]
+            fn $func_name() {
+                let gil = Python::acquire_gil();
+                let py = gil.python();
+                let obj = (1.0f64).to_py_object(py).into_object();
+                let err = obj.extract::<$t>(py).unwrap_err();
+                assert!(err.matches(py, py.get_type::<exc::TypeError>()));
+            }
+        )
+    );
+    float_to_int_fails!(float_to_i32, i32);
+    float_to_int_fails!(float_to_u32, u32);
+    float_to_int_fails!(float_to_i64, i64);
+    float_to_int_fails!(float_to_u64, u64);
+
+    macro_rules! str_to_int_fails (
+        ($func_name:ident, $t:ty) => (
+            #[test]
+            fn $func_name() {
+                let gil = Python::acquire_gil();
+                let py = gil.python();
+                // empty string
+                let obj = "".to_py_object(py).into_object();
+                let err = obj.extract::<$t>(py).unwrap_err();
+                assert!(err.matches(py, py.get_type::<exc::TypeError>()));
+
+                // numeric-looking string
+                let obj = "1".to_py_object(py).into_object();
+                let err = obj.extract::<$t>(py).unwrap_err();
+                assert!(err.matches(py, py.get_type::<exc::TypeError>()));
+            }
+        )
+    );
+
+    str_to_int_fails!(str_to_i32, i32);
+    str_to_int_fails!(str_to_u32, u32);
+    str_to_int_fails!(str_to_i64, i64);
+    str_to_int_fails!(str_to_u64, u64);
 
     #[test]
     fn test_u32_max() {
