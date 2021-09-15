@@ -739,15 +739,23 @@ def call_operator(special_name, slot):
         value_args='$class::%s' % special_name)
 
 @special_method
-def binary_numeric_operator(special_name, slot):
+def numeric_operator(special_name, arity, slot):
+    if arity == 'binary':
+      argnames = ['left', 'right']
+    elif arity == 'ternary':
+      argnames = ['left', 'right', 'ex']
+    else:
+      error("Invalid arity %s" % arity)
+    def_args_str = ', '.join("$%s:ident" % name for name in argnames)
+    impl_args_str = ' '.join("{ $%s : &$crate::PyObject = {} }" % name for name in argnames)
     generate_case(
-        pattern='def %s($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* }'
-            % special_name,
-        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s() $res_type; { $($body)* } ' % special_name
-                +'[ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }',
-        new_slots=[(slot, '$crate::py_class_binary_numeric_slot!($class::%s)' % special_name)]
+        pattern='def %s(%s) -> $res_type:ty { $($body:tt)* }'
+            % (special_name, def_args_str),
+        new_impl='$crate::py_class_impl_item! { $class, $py, pub, %s() $res_type; { $($body)* } [ %s ] }'
+            % (special_name, impl_args_str),
+        new_slots=[(slot, '$crate::py_class_numeric_slot!(%s $class::%s)' % (arity, special_name))]
     )
-    error('Invalid signature for binary numeric operator %s' % special_name)(special_name)
+    error('Invalid signature for %s numeric operator %s' % (arity, special_name))(special_name)
 
 @special_method
 def reflected_numeric_operator(special_name):
@@ -835,21 +843,21 @@ special_names = {
     '__contains__': operator('sq_contains', args=[Argument('item')]),
 
     # Emulating numeric types
-    '__add__': binary_numeric_operator('nb_add'),
-    '__sub__': binary_numeric_operator('nb_subtract'),
-    '__mul__': binary_numeric_operator('nb_multiply'),
-    '__matmul__': unimplemented(),
+    '__add__': numeric_operator('binary', 'nb_add'),
+    '__sub__': numeric_operator('binary', 'nb_subtract'),
+    '__mul__': numeric_operator('binary', 'nb_multiply'),
+    '__matmul__': numeric_operator('binary', 'nb_matrix_multiply'),
     '__div__': unimplemented(),
-    '__truediv__': unimplemented(),
-    '__floordiv__': unimplemented(),
-    '__mod__': unimplemented(),
-    '__divmod__': unimplemented(),
-    '__pow__': unimplemented(),
-    '__lshift__': binary_numeric_operator('nb_lshift'),
-    '__rshift__': binary_numeric_operator('nb_rshift'),
-    '__and__': binary_numeric_operator('nb_and'),
-    '__xor__': binary_numeric_operator('nb_xor'),
-    '__or__': binary_numeric_operator('nb_or'),
+    '__truediv__': numeric_operator('binary', 'nb_true_divide'),
+    '__floordiv__': numeric_operator('binary', 'nb_floor_divide'),
+    '__mod__': numeric_operator('binary', 'nb_remainder'),
+    '__divmod__': numeric_operator('binary', 'nb_divmod'),
+    '__pow__': numeric_operator('ternary', 'nb_power'),
+    '__lshift__': numeric_operator('binary', 'nb_lshift'),
+    '__rshift__': numeric_operator('binary', 'nb_rshift'),
+    '__and__': numeric_operator('binary', 'nb_and'),
+    '__xor__': numeric_operator('binary', 'nb_xor'),
+    '__or__': numeric_operator('binary', 'nb_or'),
 
     # Emulating numeric types - reflected
     '__radd__': reflected_numeric_operator(),
@@ -877,7 +885,7 @@ special_names = {
     '__itruediv__': inplace_numeric_operator('nb_inplace_true_divide'),
     '__ifloordiv__': inplace_numeric_operator('nb_inplace_floor_divide'),
     '__imod__': inplace_numeric_operator('nb_inplace_remainder'),
-    '__ipow__': unimplemented(),
+    '__ipow__': inplace_numeric_operator('nb_inplace_power'),
     '__ilshift__': inplace_numeric_operator('nb_inplace_lshift'),
     '__irshift__': inplace_numeric_operator('nb_inplace_rshift'),
     '__iand__': inplace_numeric_operator('nb_inplace_and'),
@@ -894,7 +902,7 @@ special_names = {
     '__long__': unimplemented(),
     '__float__': unimplemented(),
     '__round__': unimplemented(),
-    '__index__': unimplemented(),
+    '__index__': operator('nb_index'),
     '__coerce__': unimplemented(),
 
     # With statement context managers

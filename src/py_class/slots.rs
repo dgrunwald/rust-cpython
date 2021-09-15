@@ -514,8 +514,8 @@ pub fn type_error_to_false(py: Python, e: PyErr) -> PyResult<bool> {
 
 #[macro_export]
 #[doc(hidden)]
-macro_rules! py_class_binary_numeric_slot {
-    ($class:ident :: $f:ident) => {{
+macro_rules! py_class_numeric_slot {
+    (binary $class:ident :: $f:ident) => {{
         unsafe extern "C" fn binary_numeric(
             lhs: *mut $crate::_detail::ffi::PyObject,
             rhs: *mut $crate::_detail::ffi::PyObject,
@@ -528,13 +528,37 @@ macro_rules! py_class_binary_numeric_slot {
                     let lhs = $crate::PyObject::from_borrowed_ptr(py, lhs);
                     let rhs = $crate::PyObject::from_borrowed_ptr(py, rhs);
                     let ret = $class::$f(py, &lhs, &rhs);
-                    $crate::PyDrop::release_ref(lhs, py);
                     $crate::PyDrop::release_ref(rhs, py);
+                    $crate::PyDrop::release_ref(lhs, py);
                     ret
                 },
             )
         }
         Some(binary_numeric)
+    }};
+    (ternary $class:ident :: $f:ident) => {{
+        unsafe extern "C" fn ternary_numeric(
+            lhs: *mut $crate::_detail::ffi::PyObject,
+            rhs: *mut $crate::_detail::ffi::PyObject,
+            ex: *mut $crate::_detail::ffi::PyObject,
+        ) -> *mut $crate::_detail::ffi::PyObject {
+            const LOCATION: &'static str = concat!(stringify!($class), ".", stringify!($f), "()");
+            $crate::_detail::handle_callback(
+                LOCATION,
+                $crate::_detail::PyObjectCallbackConverter,
+                |py| {
+                    let lhs = $crate::PyObject::from_borrowed_ptr(py, lhs);
+                    let rhs = $crate::PyObject::from_borrowed_ptr(py, rhs);
+                    let ex = $crate::PyObject::from_borrowed_ptr(py, ex);
+                    let ret = $class::$f(py, &lhs, &rhs, &ex);
+                    $crate::PyDrop::release_ref(ex, py);
+                    $crate::PyDrop::release_ref(rhs, py);
+                    $crate::PyDrop::release_ref(lhs, py);
+                    ret
+                },
+            )
+        }
+        Some(ternary_numeric)
     }};
 }
 
