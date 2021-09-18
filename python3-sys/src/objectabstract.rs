@@ -135,14 +135,14 @@ extern "C" {
     pub fn PyObject_Format(obj: *mut PyObject, format_spec: *mut PyObject) -> *mut PyObject;
     pub fn PyObject_GetIter(arg1: *mut PyObject) -> *mut PyObject;
     #[cfg(Py_3_10)]
-    pub fn PyObject_GetAiter(arg1: *mut PyObject) -> *mut PyObject;
+    pub fn PyObject_GetAIter(arg1: *mut PyObject) -> *mut PyObject;
 
     // Note: prior to 3.8, PyIter_Check was a macro instead
     #[cfg(Py_3_8)]
     pub fn PyIter_Check(o: *mut PyObject) -> c_int;
 
     #[cfg(Py_3_10)]
-    pub fn PyAiter_Check(o: *mut PyObject) -> c_int;
+    pub fn PyAIter_Check(o: *mut PyObject) -> c_int;
 
     pub fn PyIter_Next(arg1: *mut PyObject) -> *mut PyObject;
     #[cfg(Py_3_10)]
