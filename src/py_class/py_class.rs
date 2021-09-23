@@ -416,6 +416,9 @@ py_class!(class MyIterator |py| {
     If you can't handle the combination of types you've been given,
     you should return `Ok(py.NotImplemented())`.
 
+    Note also that `__truediv__`, `__floordiv__`, and `__matmul__` are currently
+    only available with Python 3 builds.
+
   * `def __iadd__(&self, other: impl FromPyObject) -> PyResult<impl ToPyObject>`
   * `def __isub__(&self, other: impl FromPyObject) -> PyResult<impl ToPyObject>`
   * `def __imul__(&self, other: impl FromPyObject) -> PyResult<impl ToPyObject>`

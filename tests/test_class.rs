@@ -1385,18 +1385,6 @@ py_class!(class NumberExt |py| {
         Ok("BA")
     }
 
-    def __truediv__(lhs, rhs) -> PyResult<String> {
-        Ok(format!("{:?} / {:?}", lhs, rhs))
-    }
-
-    def __floordiv__(lhs, rhs) -> PyResult<String> {
-        Ok(format!("{:?} // {:?}", lhs, rhs))
-    }
-
-    def __matmul__(lhs, rhs) -> PyResult<String> {
-        Ok(format!("{:?} @ {:?}", lhs, rhs))
-    }
-
     def __mod__(lhs, rhs) -> PyResult<String> {
         Ok(format!("{:?} % {:?}", lhs, rhs))
     }
@@ -1420,16 +1408,6 @@ fn number_extensions() {
     let py = gil.python();
 
     let c = NumberExt::create_instance(py).unwrap();
-    py_run!(py, c, "assert c / c == 'BA / BA'");
-    py_run!(py, c, "assert c / 1 == 'BA / 1'");
-    py_run!(py, c, "assert 1 / c == '1 / BA'");
-    py_run!(py, c, "assert c // c == 'BA // BA'");
-    py_run!(py, c, "assert c // 1 == 'BA // 1'");
-    py_run!(py, c, "assert 1 // c == '1 // BA'");
-    py_run!(py, c, "assert c @ c == 'BA @ BA'");
-    py_run!(py, c, "assert c @ 1 == 'BA @ 1'");
-    py_run!(py, c, "assert 1 @ c == '1 @ BA'");
-
     py_run!(py, c, "assert c % 1 == 'BA % 1'");
     py_run!(py, c, "assert 1 % c == '1 % BA'");
     py_run!(py, c, "assert divmod(c,1) == 'divmod(BA,1)'");
@@ -1443,4 +1421,41 @@ fn number_extensions() {
     py_run!(py, c, "assert pow(1,c,2) == 'pow(1,BA,2)'");
 
     py_run!(py, c, "import operator; assert operator.index(c) == 69");
+}
+
+#[cfg(feature = "python3-sys")]
+py_class!(class Py3Number |py| {
+    def __repr__(&self) -> PyResult<&'static str> {
+        Ok("BA")
+    }
+
+    def __matmul__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} @ {:?}", lhs, rhs))
+    }
+
+    def __truediv__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} / {:?}", lhs, rhs))
+    }
+
+    def __floordiv__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} // {:?}", lhs, rhs))
+    }
+});
+
+#[test]
+#[cfg(feature = "python3-sys")]
+fn python3_numbers() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = Py3Number::create_instance(py).unwrap();
+    py_run!(py, c, "assert c @ c == 'BA @ BA'");
+    py_run!(py, c, "assert c @ 1 == 'BA @ 1'");
+    py_run!(py, c, "assert 1 @ c == '1 @ BA'");
+    py_run!(py, c, "assert c / c == 'BA / BA'");
+    py_run!(py, c, "assert c / 1 == 'BA / 1'");
+    py_run!(py, c, "assert 1 / c == '1 / BA'");
+    py_run!(py, c, "assert c // c == 'BA // BA'");
+    py_run!(py, c, "assert c // 1 == 'BA // 1'");
+    py_run!(py, c, "assert 1 // c == '1 // BA'");
 }

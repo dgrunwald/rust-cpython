@@ -846,7 +846,7 @@ special_names = {
     '__add__': numeric_operator('binary', 'nb_add'),
     '__sub__': numeric_operator('binary', 'nb_subtract'),
     '__mul__': numeric_operator('binary', 'nb_multiply'),
-    '__matmul__': numeric_operator('binary', 'nb_matrix_multiply'),
+    '__matmul__': unimplemented() if PY2 else numeric_operator('binary', 'nb_matrix_multiply'),
     '__div__': unimplemented(),
     '__truediv__': numeric_operator('binary', 'nb_true_divide'),
     '__floordiv__': numeric_operator('binary', 'nb_floor_divide'),
