@@ -220,7 +220,7 @@ pub trait NumberProtocol: ObjectProtocol {
     /// Throws an exception if unable to perform
     /// the conversion.
     #[inline]
-    fn as_int(&self, py: Python) -> PyResult<PyLong> {
+    fn to_int(&self, py: Python) -> PyResult<PyLong> {
         let obj = unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_Long(self.as_ptr()))?
         };
@@ -234,7 +234,7 @@ pub trait NumberProtocol: ObjectProtocol {
     /// Throws an exception if unable to perform
     /// the conversion.
     #[inline]
-    fn as_float(&self, py: Python) -> PyResult<PyFloat> {
+    fn to_float(&self, py: Python) -> PyResult<PyFloat> {
         let obj = unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_Float(self.as_ptr()))?
         };
@@ -250,7 +250,7 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// See also: [Documentation on the corresponding magic-method](https://docs.python.org/3/reference/datamodel.html?highlight=__index__#object.__index__)
     #[inline]
-    fn as_int_index(&self, py: Python) -> PyResult<PyLong> {
+    fn to_index(&self, py: Python) -> PyResult<PyLong> {
         let obj = unsafe {
             err::result_from_owned_ptr(py, ffi::PyNumber_Index(self.as_ptr()))?
         };
