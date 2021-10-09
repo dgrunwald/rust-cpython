@@ -43,25 +43,15 @@ pub trait NumberProtocol: ObjectProtocol {
     ///
     /// Invokes the `__matmul__` magic-method
     ///
-    /// This was added in Python 3.5, and will unconditionally
-    /// throw an exception on any version before that.
+    /// This method is only available with Python 3.
     ///
     /// See [PEP 0456](https://www.python.org/dev/peps/pep-0465/) for details.
     #[inline]
+    #[cfg(feature = "python3-sys")]
     fn matrix_multiply(&self, py: Python, other: impl ToPyObject) -> PyResult<PyObject> {
-        #[cfg(not(any(feature = "python3-4", feature = "python2-sys")))] {
-            other.with_borrowed_ptr(py, |other| unsafe {
-                err::result_from_owned_ptr(py, ffi::PyNumber_MatrixMultiply(self.as_ptr(), other))
-            })
-        }
-        #[cfg(any(feature = "python3-4", feature = "python2-sys"))] {
-
-            drop(other);
-            Err(crate::PyErr::new::<crate::exc::TypeError, _>(
-                py,
-                "Matrix multiplication is unsupported before Python 3.5"
-            ))
-        }
+        other.with_borrowed_ptr(py, |other| unsafe {
+            err::result_from_owned_ptr(py, ffi::PyNumber_MatrixMultiply(self.as_ptr(), other))
+        })
     }
     /// Perform exponentiation, equivalent to the Python expression `self ** other`,
     /// or the two-argument form of the builtin method pow: `pow(self, other)`
@@ -284,37 +274,6 @@ mod test {
         let i2 = (12i32).to_py_object(py).into_object();
         let actual_res = i1.add(py, i2).unwrap();
         let expected_res = (17i32).to_py_object(py).into_object();
-        assert_eq!(
-            actual_res.compare(py, expected_res).unwrap(),
-            Ordering::Equal
-        );
-    }
-
-    py_class!(class DummyMatMul |py| {
-        data number: i32;
-        def __new__(_cls, arg: i32) -> PyResult<DummyMatMul> {
-            DummyMatMul::create_instance(py, arg)
-        }
-        def __matmul__(left, other) -> PyResult<PyObject> {
-            // Do a dummy operation that can be easily tested
-            left.cast_as::<Self>(py)?.number(py)
-                .to_py_object(py)
-                .into_object()
-                .multiply(py, other)?
-                .add(py, 3)
-        }
-    });
-
-    #[test]
-    #[cfg_attr(any(feature = "python3-4", feature = "python2-sys"), should_panic)]
-    fn matrix_multiply() {
-        let guard = Python::acquire_gil();
-        let py = guard.python();
-        let first = DummyMatMul::create_instance(py, 5).unwrap().into_object();
-        let seven = (7i32).to_py_object(py).into_object();
-        let actual_res = first.matrix_multiply(py, seven).unwrap();
-        // 5 * 7 + 3 => 38
-        let expected_res = (38i32).to_py_object(py).into_object();
         assert_eq!(
             actual_res.compare(py, expected_res).unwrap(),
             Ordering::Equal

@@ -1459,3 +1459,35 @@ fn python3_numbers() {
     py_run!(py, c, "assert c // 1 == 'BA // 1'");
     py_run!(py, c, "assert 1 // c == '1 // BA'");
 }
+
+#[cfg(feature = "python3-sys")]
+py_class!(class DummyMatMul |py| {
+    data number: i32;
+    def __new__(_cls, arg: i32) -> PyResult<DummyMatMul> {
+        DummyMatMul::create_instance(py, arg)
+    }
+    def __matmul__(left, other) -> PyResult<PyObject> {
+        // Do a dummy operation that can be easily tested
+        left.cast_as::<Self>(py)?.number(py)
+            .to_py_object(py)
+            .into_object()
+            .multiply(py, other)?
+            .add(py, 3)
+    }
+});
+
+#[test]
+#[cfg(feature = "python3-sys")]
+fn matrix_multiply() {
+    let guard = Python::acquire_gil();
+    let py = guard.python();
+    let first = DummyMatMul::create_instance(py, 5).unwrap().into_object();
+    let seven = (7i32).to_py_object(py).into_object();
+    let actual_res = first.matrix_multiply(py, seven).unwrap();
+    // 5 * 7 + 3 => 38
+    let expected_res = (38i32).to_py_object(py).into_object();
+    assert_eq!(
+        actual_res.compare(py, expected_res).unwrap(),
+        std::cmp::Ordering::Equal
+    );
+}
