@@ -1,5 +1,5 @@
 
-// Copyright (c) 2016 Daniel Grunwald
+// Copyright (c) 2016-2021 Daniel Grunwald
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -1749,87 +1749,9 @@ macro_rules! py_class_impl {
     { { def __ior__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "Invalid signature for operator __ior__" }
     };
-    { { def __ipow__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
-        $class:ident $py:ident $info:tt
-        /* slots: */ {
-            $type_slots:tt
-            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
-            $as_sequence:tt $as_mapping:tt $setdelitem:tt
-        }
-        { $( $imp:item )* }
-        $members:tt $props:tt
-    } => { $crate::py_class_impl! {
-        { $($tail)* }
-        $class $py $info
-        /* slots: */ {
-            $type_slots
-            /* as_number */ [
-                $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_power: $crate::py_class_binary_slot!($class::__ipow__, [Option<&$other_name>], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
-            ]
-            $as_sequence $as_mapping $setdelitem
-        }
-        /* impl: */ {
-            $($imp)*
-            $crate::py_class_impl_item! { $class, $py, pub, __ipow__(&$slf,) $res_type; { $($body)* } [{ $other : Option<&$other_name> = {} }] }
-        }
-        $members $props
-    }};
-    { { def __ipow__(&$slf:ident, $other:ident : &$other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
-        $class:ident $py:ident $info:tt
-        /* slots: */ {
-            $type_slots:tt
-            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
-            $as_sequence:tt $as_mapping:tt $setdelitem:tt
-        }
-        { $( $imp:item )* }
-        $members:tt $props:tt
-    } => { $crate::py_class_impl! {
-        { $($tail)* }
-        $class $py $info
-        /* slots: */ {
-            $type_slots
-            /* as_number */ [
-                $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_power: $crate::py_class_binary_slot!($class::__ipow__, [&$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
-            ]
-            $as_sequence $as_mapping $setdelitem
-        }
-        /* impl: */ {
-            $($imp)*
-            $crate::py_class_impl_item! { $class, $py, pub, __ipow__(&$slf,) $res_type; { $($body)* } [{ $other : &$other_name = {} }] }
-        }
-        $members $props
-    }};
-    { { def __ipow__(&$slf:ident, $other:ident : $other_name:ty) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
-        $class:ident $py:ident $info:tt
-        /* slots: */ {
-            $type_slots:tt
-            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
-            $as_sequence:tt $as_mapping:tt $setdelitem:tt
-        }
-        { $( $imp:item )* }
-        $members:tt $props:tt
-    } => { $crate::py_class_impl! {
-        { $($tail)* }
-        $class $py $info
-        /* slots: */ {
-            $type_slots
-            /* as_number */ [
-                $( $nb_slot_name : $nb_slot_value, )*
-                nb_inplace_power: $crate::py_class_binary_slot!($class::__ipow__, [$other_name], *mut $crate::_detail::ffi::PyObject, $crate::_detail::PyObjectCallbackConverter),
-            ]
-            $as_sequence $as_mapping $setdelitem
-        }
-        /* impl: */ {
-            $($imp)*
-            $crate::py_class_impl_item! { $class, $py, pub, __ipow__(&$slf,) $res_type; { $($body)* } [{ $other : $other_name = {} }] }
-        }
-        $members $props
-    }};
 
     { { def __ipow__ $($tail:tt)* } $( $stuff:tt )* } => {
-        $crate::py_error! { "Invalid signature for operator __ipow__" }
+        $crate::py_error! { "__ipow__ is not supported by py_class! yet." }
     };
     { { def __irshift__(&$slf:ident, $other:ident : Option<&$other_name:ty>) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt

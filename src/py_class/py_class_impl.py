@@ -4,13 +4,12 @@
 This python script generates the py_class_impl! macro.
 """
 
-from collections import namedtuple
 import sys, os
 
 PY2 = (os.getenv('PY') == '2')
 
 header = '''
-// Copyright (c) 2016 Daniel Grunwald
+// Copyright (c) 2016-2021 Daniel Grunwald
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -885,7 +884,7 @@ special_names = {
     '__itruediv__': inplace_numeric_operator('nb_inplace_true_divide'),
     '__ifloordiv__': inplace_numeric_operator('nb_inplace_floor_divide'),
     '__imod__': inplace_numeric_operator('nb_inplace_remainder'),
-    '__ipow__': inplace_numeric_operator('nb_inplace_power'),
+    '__ipow__': unimplemented(),
     '__ilshift__': inplace_numeric_operator('nb_inplace_lshift'),
     '__irshift__': inplace_numeric_operator('nb_inplace_rshift'),
     '__iand__': inplace_numeric_operator('nb_inplace_and'),
