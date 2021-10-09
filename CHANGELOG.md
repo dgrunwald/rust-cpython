@@ -3,6 +3,17 @@
 ## [Unreleased]
 
 [Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.6.0...HEAD
+- Added support for Python 3.10.
+- Removed support for Python 3.3 and 3.4.
+- [Consistently use `__index__` when converting Python values to Rust integers][270]
+  - Breaking change: A function declared with a `i: i32` parameter no longer accepts Python floating-point values.
+- [Rust panic messages now are included in Python exception message][264] (PR by [@SimonSapin])
+- [Allow more arithmetic methods in `py_class!`][272] (PR by [@fsh])
+- [Add `NumberProtocol` trait][267] (PR by [@Techcable])
+
+[@SimonSapin]: https://github.com/SimonSapin
+[@fsh]: https://github.com/fsh
+[@Techcable]: https://github.com/Techcable
 
 ## 0.6.0 - 2021-04-15
 - the minimum supported Rust version is now 1.41.1
