@@ -3,6 +3,7 @@ use libc::{c_char, c_int, wchar_t, FILE};
 
 use crate::object::*;
 #[cfg(not(Py_LIMITED_API))]
+#[cfg(not(Py_3_10))]
 use crate::pyarena::PyArena;
 use crate::pystate::PyThreadState;
 
@@ -36,7 +37,7 @@ pub struct PyCompilerFlags {
     pub cf_feature_version: c_int,
 }
 
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_10)))]
 #[repr(C)]
 pub struct _mod {
     _private: [u8; 0],
@@ -79,6 +80,7 @@ extern "C" {
         filename: *const c_char,
         flags: *mut PyCompilerFlags,
     ) -> c_int;
+    #[cfg(not(Py_3_10))]
     pub fn PyParser_ASTFromString(
         s: *const c_char,
         filename: *const c_char,
@@ -86,7 +88,7 @@ extern "C" {
         flags: *mut PyCompilerFlags,
         arena: *mut PyArena,
     ) -> *mut _mod;
-    #[cfg(Py_3_4)]
+    #[cfg(all(Py_3_4, not(Py_3_10)))]
     pub fn PyParser_ASTFromStringObject(
         s: *const c_char,
         filename: *mut PyObject,
@@ -94,6 +96,7 @@ extern "C" {
         flags: *mut PyCompilerFlags,
         arena: *mut PyArena,
     ) -> *mut _mod;
+    #[cfg(not(Py_3_10))]
     pub fn PyParser_ASTFromFile(
         fp: *mut FILE,
         filename: *const c_char,
@@ -105,7 +108,7 @@ extern "C" {
         errcode: *mut c_int,
         arena: *mut PyArena,
     ) -> *mut _mod;
-    #[cfg(Py_3_4)]
+    #[cfg(all(Py_3_4, not(Py_3_10)))]
     pub fn PyParser_ASTFromFileObject(
         fp: *mut FILE,
         filename: *mut PyObject,
@@ -120,16 +123,19 @@ extern "C" {
 }
 
 #[repr(C)]
+#[cfg(not(Py_3_10))]
 pub struct symtable {
     _private: [u8; 0],
 }
 
 #[repr(C)]
+#[cfg(not(Py_3_10))]
 pub struct _node {
     _private: [u8; 0],
 }
 
 #[inline]
+#[cfg(not(Py_3_10))]
 #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
 pub unsafe fn PyParser_SimpleParseString(s: *const c_char, b: c_int) -> *mut _node {
     #[allow(deprecated)]
@@ -137,6 +143,7 @@ pub unsafe fn PyParser_SimpleParseString(s: *const c_char, b: c_int) -> *mut _no
 }
 
 #[cfg(not(Py_LIMITED_API))]
+#[cfg(not(Py_3_10))]
 #[inline]
 #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
 pub unsafe fn PyParser_SimpleParseFile(fp: *mut FILE, s: *const c_char, b: c_int) -> *mut _node {
@@ -147,12 +154,14 @@ pub unsafe fn PyParser_SimpleParseFile(fp: *mut FILE, s: *const c_char, b: c_int
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
     #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
+    #[cfg(not(Py_3_10))]
     pub fn PyParser_SimpleParseStringFlags(
         arg1: *const c_char,
         arg2: c_int,
         arg3: c_int,
     ) -> *mut _node;
     #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
+    #[cfg(not(Py_3_10))]
     pub fn PyParser_SimpleParseStringFlagsFilename(
         arg1: *const c_char,
         arg2: *const c_char,
@@ -161,6 +170,7 @@ extern "C" {
     ) -> *mut _node;
     #[cfg(not(Py_LIMITED_API))]
     #[deprecated(since = "0.5.2", note = "Deprecated since Python 3.9")]
+    #[cfg(not(Py_3_10))]
     pub fn PyParser_SimpleParseFileFlags(
         arg1: *mut FILE,
         arg2: *const c_char,
@@ -222,6 +232,7 @@ extern "C" {
         flags: *mut PyCompilerFlags,
         optimize: c_int,
     ) -> *mut PyObject;
+    #[cfg(not(Py_3_10))]
     pub fn Py_SymtableString(
         str: *const c_char,
         filename: *const c_char,
@@ -229,6 +240,7 @@ extern "C" {
     ) -> *mut symtable;
     #[cfg(not(Py_LIMITED_API))]
     #[cfg(Py_3_4)]
+    #[cfg(not(Py_3_10))]
     pub fn Py_SymtableStringObject(
         str: *const c_char,
         filename: *mut PyObject,
