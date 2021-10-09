@@ -130,7 +130,9 @@ impl GILGuard {
     }
 
     /// Checks if the current thread holds the GIL.
-    #[cfg(Py_3_4)]
+    /// 
+    /// This method is only available with Python 3.
+    #[cfg(feature = "python3-sys")]
     pub fn check() -> bool {
         let gstate = unsafe { ffi::PyGILState_Check() };
         gstate == 1
