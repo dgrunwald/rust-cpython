@@ -4,7 +4,7 @@
 
 [Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.7.0...HEAD
 
-## 0.7.0 - 2021-04-15
+## 0.7.0 - 2021-10-09
 - Added support for Python 3.10.
 - Removed support for Python 3.3 and 3.4.
 - [Consistently use `__index__` when converting Python values to Rust integers][270]
