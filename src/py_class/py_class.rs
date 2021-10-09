@@ -390,6 +390,12 @@ py_class!(class MyIterator |py| {
   * `def __add__(lhs, rhs) -> PyResult<impl ToPyObject>`
   * `def __sub__(lhs, rhs) -> PyResult<impl ToPyObject>`
   * `def __mul__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __matmul__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __truediv__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __floordiv__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __mod__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __divmod__(lhs, rhs) -> PyResult<impl ToPyObject>`
+  * `def __pow__(lhs, rhs, exp) -> PyResult<impl ToPyObject>`
   * `def __lshift__(lhs, rhs) -> PyResult<impl ToPyObject>`
   * `def __rshift__(lhs, rhs) -> PyResult<impl ToPyObject>`
   * `def __and__(lhs, rhs) -> PyResult<impl ToPyObject>`
@@ -399,14 +405,19 @@ py_class!(class MyIterator |py| {
     The parameters `lhs` and `rhs` must not be given an explicit type.
     Within the method bodies, both parameters will implicitly have type `&PyObject`.
 
-    There are no separate "reversed" versions of these methods (`__radd__()`, etc.)
-    Instead, if the first operand cannot perform the operation,
-    the same method of the second operand is called, with the operands in the same order.
+    There are no separate "reversed" versions of these methods (`__radd__()`,
+    etc.) Instead, if the first operand cannot perform the operation, the same
+    method of the second operand is called, with the operands in the same order.
+    For `__pow__()` the third parameter will be `PyNone` if invoked as a binary
+    operator (e.g. `a**b`).
 
     This means that you can't rely on the first parameter of these methods being `self`
     or being the correct type, and you should test the types of both operands before deciding what to do.
     If you can't handle the combination of types you've been given,
     you should return `Ok(py.NotImplemented())`.
+
+    Note also that `__truediv__`, `__floordiv__`, and `__matmul__` are currently
+    only available with Python 3 builds.
 
   * `def __iadd__(&self, other: impl FromPyObject) -> PyResult<impl ToPyObject>`
   * `def __isub__(&self, other: impl FromPyObject) -> PyResult<impl ToPyObject>`
@@ -447,6 +458,11 @@ py_class!(class MyIterator |py| {
     For details on `parameter-list`, see the documentation of `py_argparse!()`.
     The return type must be `PyResult<T>` for some `T` that implements `ToPyObject`.
 
+  * `def __index__(&self) -> PyResult<impl ToPyObject>`
+
+    This method is invoked by Python whenever it needs to losslessly convert an
+    object to an integer, so the returned value _must_ convert into a Python
+    `int` object.
 
 # Errors
 

@@ -1379,3 +1379,83 @@ fn class_with_visibility() {
     py.run("assert obj.instance_method() == 12345", None, Some(&d))
         .unwrap();
 }
+
+py_class!(class NumberExt |py| {
+    def __repr__(&self) -> PyResult<&'static str> {
+        Ok("BA")
+    }
+
+    def __mod__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} % {:?}", lhs, rhs))
+    }
+
+    def __divmod__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("divmod({:?},{:?})", lhs, rhs))
+    }
+
+    def __pow__(lhs, rhs, exp) -> PyResult<String> {
+        Ok(format!("pow({:?},{:?},{:?})", lhs, rhs, exp))
+    }
+
+    def __index__(&self) -> PyResult<i64> {
+        Ok(69)
+    }
+});
+
+#[test]
+fn number_extensions() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = NumberExt::create_instance(py).unwrap();
+    py_run!(py, c, "assert c % 1 == 'BA % 1'");
+    py_run!(py, c, "assert 1 % c == '1 % BA'");
+    py_run!(py, c, "assert divmod(c,1) == 'divmod(BA,1)'");
+    py_run!(py, c, "assert divmod(1,c) == 'divmod(1,BA)'");
+
+    py_run!(py, c, "assert c**c == 'pow(BA,BA,None)'");
+    py_run!(py, c, "assert c**1 == 'pow(BA,1,None)'");
+    py_run!(py, c, "assert 1**c == 'pow(1,BA,None)'");
+    py_run!(py, c, "assert pow(c,c,2) == 'pow(BA,BA,2)'");
+    py_run!(py, c, "assert pow(c,1,2) == 'pow(BA,1,2)'");
+    py_run!(py, c, "assert pow(1,c,2) == 'pow(1,BA,2)'");
+
+    py_run!(py, c, "import operator; assert operator.index(c) == 69");
+}
+
+#[cfg(feature = "python3-sys")]
+py_class!(class Py3Number |py| {
+    def __repr__(&self) -> PyResult<&'static str> {
+        Ok("BA")
+    }
+
+    def __matmul__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} @ {:?}", lhs, rhs))
+    }
+
+    def __truediv__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} / {:?}", lhs, rhs))
+    }
+
+    def __floordiv__(lhs, rhs) -> PyResult<String> {
+        Ok(format!("{:?} // {:?}", lhs, rhs))
+    }
+});
+
+#[test]
+#[cfg(feature = "python3-sys")]
+fn python3_numbers() {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+
+    let c = Py3Number::create_instance(py).unwrap();
+    py_run!(py, c, "assert c @ c == 'BA @ BA'");
+    py_run!(py, c, "assert c @ 1 == 'BA @ 1'");
+    py_run!(py, c, "assert 1 @ c == '1 @ BA'");
+    py_run!(py, c, "assert c / c == 'BA / BA'");
+    py_run!(py, c, "assert c / 1 == 'BA / 1'");
+    py_run!(py, c, "assert 1 / c == '1 / BA'");
+    py_run!(py, c, "assert c // c == 'BA // BA'");
+    py_run!(py, c, "assert c // 1 == 'BA // 1'");
+    py_run!(py, c, "assert 1 // c == '1 // BA'");
+}
