@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.7.0...HEAD
+
+## 0.7.0 - 2021-04-15
 - Added support for Python 3.10.
 - Removed support for Python 3.3 and 3.4.
 - [Consistently use `__index__` when converting Python values to Rust integers][270]
@@ -10,10 +12,16 @@
 - [Rust panic messages now are included in Python exception message][264] (PR by [@SimonSapin])
 - [Allow more arithmetic methods in `py_class!`][272] (PR by [@fsh])
 - [Add `NumberProtocol` trait][267] (PR by [@Techcable])
+- [Add `GILGuard::check`][269] (PR by [@DurhamG])
 
+[270]: https://github.com/dgrunwald/rust-cpython/pull/270
+[264]: https://github.com/dgrunwald/rust-cpython/pull/264
+[272]: https://github.com/dgrunwald/rust-cpython/pull/272
+[267]: https://github.com/dgrunwald/rust-cpython/pull/267
 [@SimonSapin]: https://github.com/SimonSapin
 [@fsh]: https://github.com/fsh
 [@Techcable]: https://github.com/Techcable
+[@DurhamG]: https://github.com/DurhamG
 
 ## 0.6.0 - 2021-04-15
 - the minimum supported Rust version is now 1.41.1
