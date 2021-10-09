@@ -1,3 +1,5 @@
+#![allow(unused_imports)]  // imports only used in some configurations
+
 use libc::{c_char, c_int};
 
 use crate::code::*;
@@ -42,7 +44,9 @@ pub const FUTURE_ANNOTATIONS: &str = "annotations";
 #[cfg(not(Py_LIMITED_API))]
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(not(Py_3_10))]
     pub fn PyNode_Compile(arg1: *mut _node, arg2: *const c_char) -> *mut PyCodeObject;
+    #[cfg(not(Py_3_10))]
     pub fn PyAST_CompileEx(
         _mod: *mut _mod,
         filename: *const c_char,
@@ -50,7 +54,7 @@ extern "C" {
         optimize: c_int,
         arena: *mut PyArena,
     ) -> *mut PyCodeObject;
-    #[cfg(Py_3_4)]
+    #[cfg(all(Py_3_4, not(Py_3_10)))]
     pub fn PyAST_CompileObject(
         _mod: *mut _mod,
         filename: *mut PyObject,
@@ -58,8 +62,9 @@ extern "C" {
         optimize: c_int,
         arena: *mut PyArena,
     ) -> *mut PyCodeObject;
+    #[cfg(not(Py_3_10))]
     pub fn PyFuture_FromAST(_mod: *mut _mod, filename: *const c_char) -> *mut PyFutureFeatures;
-    #[cfg(Py_3_4)]
+    #[cfg(all(Py_3_4, not(Py_3_10)))]
     pub fn PyFuture_FromASTObject(
         _mod: *mut _mod,
         filename: *mut PyObject,

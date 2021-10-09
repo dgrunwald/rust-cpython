@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        py: [ "2.7", "3.5", "3.7", "3.8", "3.9" ]
+        py: [ "2.7", "3.5", "3.7", "3.8", "3.9", "3.10" ]
         rust: [ "1.41.1", "stable", "nightly" ]
 
     steps:
@@ -52,7 +52,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ]
-        py: [ "2.7", "3.5", "3.7", "3.8", "3.9" ]
+        py: [ "2.7", "3.5", "3.7", "3.8", "3.9", "3.10" ]
         rust: [ "1.41.1", "stable" ]
 
     steps:
