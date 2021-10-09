@@ -101,7 +101,7 @@ pub use ffi::Py_ssize_t;
 
 pub use crate::conversion::{FromPyObject, RefFromPyObject, ToPyObject};
 pub use crate::err::{PyErr, PyResult};
-pub use crate::objectprotocol::ObjectProtocol;
+pub use crate::objectprotocol::{ObjectProtocol, NumberProtocol};
 pub use crate::objects::*;
 pub use crate::py_class::CompareOp;
 pub use crate::python::{
