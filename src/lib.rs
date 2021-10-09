@@ -16,6 +16,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#![cfg_attr(feature="nightly", allow(incomplete_features))]
 #![cfg_attr(feature="nightly", feature(
     specialization, // for impl FromPyObject<'s> for Vec<...> (#31844)
 ))]

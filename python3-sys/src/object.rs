@@ -211,6 +211,7 @@ mod typeobject {
     use libc::{c_char, c_uint, c_ulong, c_void};
 
     use crate::pyport::Py_ssize_t;
+    #[cfg(Py_3_10)]
     use super::PyObject;
 
     #[repr(C)]

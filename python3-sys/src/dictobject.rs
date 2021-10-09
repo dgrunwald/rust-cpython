@@ -1,4 +1,4 @@
-use libc::{c_char, c_int, c_void};
+use libc::{c_char, c_int};
 
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
@@ -81,5 +81,5 @@ extern "C" {
     ) -> c_int;
     pub fn PyDict_DelItemString(dp: *mut PyObject, key: *const c_char) -> c_int;
     #[cfg(Py_3_10)]
-    pub fn PyObject_GenericGetDict(obj: *mut PyObject, context: *mut c_void) -> *mut PyObject;
+    pub fn PyObject_GenericGetDict(obj: *mut PyObject, context: *mut libc::c_void) -> *mut PyObject;
 }
