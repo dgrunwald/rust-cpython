@@ -1,4 +1,6 @@
 use libc::{c_schar, c_int};
+#[cfg(not(Py_3_11))]
+use libc::c_char;
 
 use crate::code::{PyCodeObject};
 #[cfg(not(Py_3_11))]
