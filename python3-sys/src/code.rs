@@ -9,9 +9,18 @@ use crate::pyport::Py_ssize_t;
 pub struct _PyOpcache {
     _private: [u8; 0],
 }
+#[derive(Copy)]
+#[repr(C)]
+#[cfg(Py_3_11)] 
+pub struct PyCodeObject {
+    _private: [u8; 0],
+}
 
 #[repr(C)]
 #[derive(Copy)]
+// So many fields (and there orderings) have changed in 3.11,
+// it's best to just make it opaque
+#[cfg(not(Py_3_11))] 
 pub struct PyCodeObject {
     pub ob_base: PyObject,
     pub co_argcount: c_int,
@@ -127,6 +136,8 @@ extern "C" {
         name: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
+        #[cfg(Py_3_11)]
+        exceptiontable: *mut PyObject,
     ) -> *mut PyCodeObject;
 
     #[cfg(Py_3_8)]
@@ -147,6 +158,8 @@ extern "C" {
         name: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
+        #[cfg(Py_3_11)]
+        exceptiontable: *mut PyObject,
     ) -> *mut PyCodeObject;
 
     pub fn PyCode_NewEmpty(
@@ -155,6 +168,17 @@ extern "C" {
         firstlineno: c_int,
     ) -> *mut PyCodeObject;
     pub fn PyCode_Addr2Line(arg1: *mut PyCodeObject, arg2: c_int) -> c_int;
+    #[cfg(Py_3_11)]
+    pub fn PyCode_Addr2Location(
+        co: *mut PyCodeObject,
+        byte_offset: c_int,
+        start_line: *mut c_int,
+        start_column: *mut c_int,
+        end_line: *mut c_int,
+        end_column: *mut c_int
+    ) -> c_int;
+    #[cfg(Py_3_11)]
+    pub fn PyCode_GetCode(co: *mut PyCodeObject) -> *mut PyObject;
     pub fn PyCode_Optimize(
         code: *mut PyObject,
         consts: *mut PyObject,
@@ -169,6 +193,7 @@ pub unsafe fn PyCode_Check(op: *mut PyObject) -> c_int {
 }
 
 #[inline]
+#[cfg(not(Py_3_11))] // TODO: Implemengt again (fields are private)
 pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
     crate::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
 }
