@@ -9,17 +9,44 @@ use crate::pyport::Py_ssize_t;
 pub struct _PyOpcache {
     _private: [u8; 0],
 }
+
 #[derive(Copy)]
 #[repr(C)]
-#[cfg(Py_3_11)] 
+#[cfg(Py_3_11)]
+// The field orderings have completely changed in 3.11,
+// so we seperate it out into a different type declaration
+// 
+// the justification for the reordering was "optimization"
 pub struct PyCodeObject {
-    _private: [u8; 0],
+    pub ob_base: PyObject,
+    pub co_consts: *mut PyObject,
+    pub co_names: *mut PyObject,
+    pub co_exceptiontable: *mut PyObject,
+    pub co_flags: c_int,
+    pub co_warmup: c_int,
+    pub co_argcount: c_int,
+    pub co_posonlyargcount: c_int,
+    pub co_kwonlyargcount: c_int,
+    pub co_stacksize: c_int,
+    pub co_firstlineno: c_int,
+    pub co_nlocalsplus: c_int,
+    pub co_nlocals: c_int,
+    pub co_nplaincellvars: c_int,
+    pub co_ncellvars: c_int,
+    pub co_nfreevars: c_int,
+    pub co_localsplusnames: *mut PyObject,
+    pub co_localspluskinds: *mut PyObject,
+    pub co_filename: *mut PyObject,
+    pub co_name: *mut PyObject,
+    pub co_qualname: *mut PyObject,
+    pub co_linetable: *mut PyObject,
+    pub co_weakreflist: *mut PyObject,
+    pub co_extra: *mut c_void,
+    pub co_code_adaptive: [c_char; 1],
 }
 
 #[repr(C)]
 #[derive(Copy)]
-// So many fields (and there orderings) have changed in 3.11,
-// it's best to just make it opaque
 #[cfg(not(Py_3_11))] 
 pub struct PyCodeObject {
     pub ob_base: PyObject,
