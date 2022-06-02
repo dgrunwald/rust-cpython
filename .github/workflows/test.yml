@@ -36,12 +36,10 @@ jobs:
         PYTHON_LIB=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
         echo "PYTHON_LIB=$PYTHON_LIB"
         echo "LIBRARY_PATH=$LIBRARY_PATH:$PYTHON_LIB" >> "$GITHUB_ENV"
-    - name: Check versions and paths (Windows)
-      if: ${{ runner.os == 'Windows' }}
+    - name: Remove Cargo.lock
+      if: ${{ matrix.rust == 'stable' || matrix.rust == 'nightly' }}
       run: |
-        python -V
-        rustc -V
-        echo PATH=$env:path
+        rm Cargo.lock
     - name: Build and test
       run: |
         make test extensions
@@ -71,6 +69,10 @@ jobs:
         python -V
         rustc -V
         echo PATH=$env:path
+    - name: Remove Cargo.lock
+      if: ${{ matrix.rust == 'stable' || matrix.rust == 'nightly' }}
+      run: |
+        del Cargo.lock
     - name: Build and test
       run: |
         make test
