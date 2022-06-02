@@ -285,7 +285,7 @@ pub mod _detail {
 /// ```bash
 /// cp ./target/debug/libhello.so ./hello.so
 /// ```
-/// (Note: on Mac OS you will have to rename `libhello.dynlib` to `libhello.so`)
+/// (Note: on Mac OS you will have to rename `libhello.dynlib` to `hello.so`)
 ///
 /// The extension module can then be imported into Python:
 ///
