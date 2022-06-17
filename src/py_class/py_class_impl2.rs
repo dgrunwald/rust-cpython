@@ -78,7 +78,7 @@ macro_rules! py_class_impl {
 
         impl $crate::PythonObjectWithCheckedDowncast for $class {
             #[inline]
-            fn downcast_from<'p>(py: $crate::Python<'p>, obj: $crate::PyObject) -> Result<$class, $crate::PythonObjectDowncastError<'p>> {
+            fn downcast_from<'p>(py: $crate::Python<'p>, obj: $crate::PyObject) -> $crate::_detail::Result<$class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, &obj) {
                     Ok($class { _unsafe_inner: obj })
                 } else {
@@ -91,7 +91,7 @@ macro_rules! py_class_impl {
             }
 
             #[inline]
-            fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
+            fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> $crate::_detail::Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, obj) {
                     unsafe { Ok(std::mem::transmute(obj)) }
                 } else {
@@ -332,7 +332,7 @@ macro_rules! py_class_impl {
                     fn __traverse__(&$slf,
                     $py: $crate::Python,
                     $visit: $crate::py_class::gc::VisitProc)
-                    -> Result<(), $crate::py_class::gc::TraverseError>
+                    -> $crate::_detail::Result<(), $crate::py_class::gc::TraverseError>
                     $body
                 }
             }

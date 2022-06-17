@@ -40,7 +40,7 @@ macro_rules! exc_type(
         impl PythonObjectWithCheckedDowncast for $name {
             #[inline]
             fn downcast_from<'p>(py: Python<'p>, obj : PyObject)
-                -> Result<$name, PythonObjectDowncastError<'p>>
+                -> $crate::_detail::Result<$name, PythonObjectDowncastError<'p>>
             {
                 unsafe {
                     if ffi::PyObject_TypeCheck(obj.as_ptr(), ffi::$exc_name as *mut ffi::PyTypeObject) != 0 {
@@ -57,7 +57,7 @@ macro_rules! exc_type(
 
             #[inline]
             fn downcast_borrow_from<'a, 'p>(py: Python<'p>, obj: &'a PyObject)
-                -> Result<&'a $name, PythonObjectDowncastError<'p>>
+                -> $crate::_detail::Result<&'a $name, PythonObjectDowncastError<'p>>
             {
                 unsafe {
                     if ffi::PyObject_TypeCheck(obj.as_ptr(), ffi::$exc_name as *mut ffi::PyTypeObject) != 0 {

@@ -80,7 +80,7 @@ macro_rules! pyobject_newtype(
 
         impl crate::python::PythonObjectWithCheckedDowncast for $name {
             #[inline]
-            fn downcast_from<'p>(py: crate::python::Python<'p>, obj: crate::objects::object::PyObject) -> Result<$name, crate::python::PythonObjectDowncastError<'p>> {
+            fn downcast_from<'p>(py: crate::python::Python<'p>, obj: crate::objects::object::PyObject) -> $crate::_detail::Result<$name, crate::python::PythonObjectDowncastError<'p>> {
                 unsafe {
                     if crate::ffi::$checkfunction(obj.as_ptr()) != 0 {
                         Ok($name(obj))
@@ -95,7 +95,7 @@ macro_rules! pyobject_newtype(
             }
 
             #[inline]
-            fn downcast_borrow_from<'a, 'p>(py: crate::python::Python<'p>, obj: &'a crate::objects::object::PyObject) -> Result<&'a $name, crate::python::PythonObjectDowncastError<'p>> {
+            fn downcast_borrow_from<'a, 'p>(py: crate::python::Python<'p>, obj: &'a crate::objects::object::PyObject) -> $crate::_detail::Result<&'a $name, crate::python::PythonObjectDowncastError<'p>> {
                 unsafe {
                     if crate::ffi::$checkfunction(obj.as_ptr()) != 0 {
                         Ok(std::mem::transmute(obj))
