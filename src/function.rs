@@ -152,8 +152,11 @@ macro_rules! py_fn_impl {
         }
     }};
     // Form 2: inline function definition
-    { $py:ident, $f:ident, $ret:ty, $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ] } => {{
-        fn $f($py: $crate::Python $( , $pname : $ptype )* ) -> $ret $body
+    { $py:ident, $f:ident, $ret:ty, {$($body:tt)*} [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ] } => {{
+        fn $f($py: $crate::Python $( , $pname : $ptype )* ) -> $ret {
+            let _ = $py;
+            $($body)*
+        }
         $crate::py_fn_impl!($py, $f [ $( { $pname : $ptype = $detail } )* ])
     }}
 }

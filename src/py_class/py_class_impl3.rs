@@ -296,7 +296,7 @@ macro_rules! py_class_impl {
         }
         $members $props
     }};
-    { { def __traverse__(&$slf:tt, $visit:ident) $body:block $($tail:tt)* }
+    { { def __traverse__(&$slf:tt, $visit:ident) {$($body:tt)*} $($tail:tt)* }
         $class:ident $py:ident
         /* info: */ {
             $base_type: ty,
@@ -332,14 +332,16 @@ macro_rules! py_class_impl {
                     fn __traverse__(&$slf,
                     $py: $crate::Python,
                     $visit: $crate::py_class::gc::VisitProc)
-                    -> Result<(), $crate::py_class::gc::TraverseError>
-                    $body
+                    -> Result<(), $crate::py_class::gc::TraverseError> {
+                        let _ = $py;
+                        $($body)*
+                    }
                 }
             }
         }
         $members $props
     }};
-    { { def __clear__ (&$slf:ident) $body:block $($tail:tt)* }
+    { { def __clear__ (&$slf:ident) {$($body:tt)*} $($tail:tt)* }
         $class:ident $py:ident $info:tt
         /* slots: */ {
             /* type_slots */ [ $( $tp_slot_name:ident : $tp_slot_value:expr, )* ]
@@ -361,7 +363,10 @@ macro_rules! py_class_impl {
             $($imp)*
             $crate::py_coerce_item!{
                 impl $class {
-                    fn __clear__(&$slf, $py: $crate::Python) $body
+                    fn __clear__(&$slf, $py: $crate::Python) {
+                        let _ = $py;
+                        $($body)*
+                    }
                 }
             }
         }

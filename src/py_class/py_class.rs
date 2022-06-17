@@ -542,11 +542,14 @@ macro_rules! py_class {
 #[doc(hidden)]
 macro_rules! py_class_impl_item {
     { $class:ident, $py:ident, $visibility:vis, $name:ident( $( $selfarg:tt )* )
-        $res_type:ty; $body:block [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
+        $res_type:ty; {$($body:tt)*} [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
     } => { $crate::py_coerce_item! {
         impl $class {
             $visibility fn $name($( $selfarg )* $py: $crate::Python $( , $pname: $ptype )* )
-            -> $res_type $body
+            -> $res_type {
+                let _ = $py;
+                $($body)*
+            }
         }
     }}
 }

@@ -166,8 +166,8 @@ pub fn parse_args(
 /// from the generated argument-parsing code).
 #[macro_export]
 macro_rules! py_argparse {
-    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, $plist:tt $body:block) => {
-        $crate::py_argparse_parse_plist! { py_argparse_impl { $py, $fname, $args, $kwargs, $body, } $plist }
+    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, $plist:tt {$($body:tt)*}) => {
+        $crate::py_argparse_parse_plist! { py_argparse_impl { $py, $fname, $args, $kwargs, {$($body)*}, } $plist }
     };
 }
 
@@ -339,7 +339,7 @@ macro_rules! py_argparse_parse_plist_impl {
 macro_rules! py_argparse_impl {
     // special case: function signature is (*args, **kwargs),
     // so we can directly pass along our inputs without calling parse_args().
-    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, $body:block,
+    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, {$($body:tt)*},
         [
             { $pargs:ident   : $pargs_type:ty   = [ {*}  {} {} ] }
             { $pkwargs:ident : $pkwargs_type:ty = [ {**} {} {} ] }
@@ -349,11 +349,11 @@ macro_rules! py_argparse_impl {
         // TODO: use extract() to be more flexible in which type is expected
         let $pargs: $pargs_type = $args;
         let $pkwargs: $pkwargs_type = $kwargs;
-        $body
+        $($body)*
     }};
 
     // normal argparse logic
-    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, $body:block,
+    ($py:expr, $fname:expr, $args:expr, $kwargs:expr, {$($body:tt)*},
         [ $( { $pname:ident : $ptype:ty = $detail:tt } )* ]
     ) => {{
         const PARAMS: &'static [$crate::argparse::ParamDescription<'static>] = &[
@@ -372,7 +372,7 @@ macro_rules! py_argparse_impl {
                 // We'll have to generate a bunch of nested `match` statements
                 // (at least until we can use ? + catch, assuming that will be hygienic wrt. macros),
                 // so use a recursive helper macro for that:
-                let val = $crate::py_argparse_extract!( py, _iter, $body,
+                let val = $crate::py_argparse_extract!( py, _iter, {$($body)*},
                     [ $( { $pname : $ptype = $detail } )* ]);
                 val
             },
@@ -385,11 +385,11 @@ macro_rules! py_argparse_impl {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! py_argparse_raw {
-    ($py:ident, $fname:expr, $args:expr, $kwargs:expr, $plist:tt $body:block) => {{
+    ($py:ident, $fname:expr, $args:expr, $kwargs:expr, $plist:tt {$($body:tt)*}) => {{
         let args: $crate::PyTuple =
             $crate::PyObject::from_borrowed_ptr($py, $args).unchecked_cast_into();
         let kwargs: Option<$crate::PyDict> = $crate::argparse::get_kwargs($py, $kwargs);
-        let ret = $crate::py_argparse_impl!($py, $fname, &args, kwargs.as_ref(), $body, $plist);
+        let ret = $crate::py_argparse_impl!($py, $fname, &args, kwargs.as_ref(), {$($body)*}, $plist);
         $crate::PyDrop::release_ref(args, $py);
         $crate::PyDrop::release_ref(kwargs, $py);
         ret
@@ -429,40 +429,40 @@ macro_rules! py_argparse_param_description {
 #[doc(hidden)]
 macro_rules! py_argparse_extract {
     // base case
-    ( $py:expr, $iter:expr, $body:block, [] ) => { $body };
+    ( $py:expr, $iter:expr, {$($body:tt)*}, [] ) => {{ $($body)* }};
     // normal parameter
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {} {} {} ] } $($tail:tt)* ]
     ) => {
         // First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         // second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).
         match <$ptype as $crate::FromPyObject>::extract($py, $iter.next().unwrap().as_ref().unwrap()) {
-            Ok($pname) => $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
+            Ok($pname) => $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*]),
             Err(e) => Err(e)
         }
     };
     // normal parameter with reference extraction
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {} {} {$rtype:ty} ] } $($tail:tt)* ]
     ) => {
         // First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         // second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).
         match <$rtype as $crate::RefFromPyObject>::with_extracted($py,
             $iter.next().unwrap().as_ref().unwrap(),
-            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*])
+            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*])
         ) {
             Ok(v) => v,
             Err(e) => Err(e)
         }
     };
     // maybe none parameter with reference extraction
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {opt} {} {$rtype:ty} ] } $($tail:tt)* ]
     ) => {{
         // First unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         // second unwrap() asserts the parameter was not missing (which fn parse_args already checked for).
         let v = $iter.next().unwrap().as_ref().unwrap();
-        let mut c = |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]);
+        let mut c = |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*]);
         let r = if v.is_none($py) {
             Ok(c(None))
         } else {
@@ -474,32 +474,32 @@ macro_rules! py_argparse_extract {
         }
     }};
     // optional parameter
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {} {$default:expr} {} ] } $($tail:tt)* ]
     ) => {
         match $iter.next().unwrap().as_ref().map(|obj| obj.extract::<_>($py)).unwrap_or(Ok($default)) {
-            Ok($pname) => $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
+            Ok($pname) => $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*]),
             Err(e) => Err(e)
         }
     };
     // optional parameter with reference extraction
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {} {$default:expr} {$rtype:ty} ] } $($tail:tt)* ]
     ) => {
         //unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         $crate::argparse::with_extracted_or_default($py,
             $iter.next().unwrap().as_ref(),
-            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
+            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*]),
             $default)
     };
     // maybe none optional parameter with reference extraction
-    ( $py:expr, $iter:expr, $body:block,
+    ( $py:expr, $iter:expr, {$($body:tt)*},
         [ { $pname:ident : $ptype:ty = [ {opt} {$default:expr} {$rtype:ty} ] } $($tail:tt)* ]
     ) => {
         //unwrap() asserts the iterated sequence is long enough (which should be guaranteed);
         $crate::argparse::with_extracted_optional_or_default($py,
             $iter.next().unwrap().as_ref(),
-            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, $body, [$($tail)*]),
+            |$pname: $ptype| $crate::py_argparse_extract!($py, $iter, {$($body)*}, [$($tail)*]),
             $default)
     };
 }

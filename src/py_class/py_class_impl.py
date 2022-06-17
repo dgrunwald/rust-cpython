@@ -470,7 +470,7 @@ def generate_class_method(special_name=None, decoration='',
             impl(with_params, with_docs, with_visibility)
 
 def traverse_and_clear():
-    generate_case('def __traverse__(&$slf:tt, $visit:ident) $body:block',
+    generate_case('def __traverse__(&$slf:tt, $visit:ident) {$($body:tt)*}',
         old_info = '''
         /* info: */ {
             $base_type: ty,
@@ -501,17 +501,22 @@ def traverse_and_clear():
                     fn __traverse__(&$slf,
                         $py: $crate::Python,
                         $visit: $crate::py_class::gc::VisitProc)
-                    -> Result<(), $crate::py_class::gc::TraverseError>
-                    $body
+                    -> Result<(), $crate::py_class::gc::TraverseError> {
+                        let _ = $py;
+                        $($body)*
+                    }
                 }
             }
         ''')
-    generate_case('def __clear__ (&$slf:ident) $body:block',
+    generate_case('def __clear__ (&$slf:ident) {$($body:tt)*}',
         new_slots=[('tp_clear', '$crate::py_class_tp_clear!($class)')],
         new_impl='''
             $crate::py_coerce_item!{
                 impl $class {
-                    fn __clear__(&$slf, $py: $crate::Python) $body
+                    fn __clear__(&$slf, $py: $crate::Python) {
+                        let _ = $py;
+                        $($body)*
+                    }
                 }
             }
         ''')
