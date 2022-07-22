@@ -320,13 +320,13 @@ impl PyString {
     /// not valid UTF-8).
     pub fn to_string(&self, py: Python) -> PyResult<Cow<str>> {
         #[cfg(feature = "python3-sys")]
+        let mut size: ffi::Py_ssize_t = 0;
         unsafe {
             // On Python 3, we can use the UTF-8 representation stored
             // inside the Python string.
             // This should produce identical results to
             // `self.data(py).to_string(py)` but avoids
             // re-encoding the string on every to_string call.
-            let mut size: ffi::Py_ssize_t = 0;
             let data = ffi::PyUnicode_AsUTF8AndSize(self.as_ptr(), &mut size);
             if data.is_null() {
                 Err(PyErr::fetch(py))

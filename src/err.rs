@@ -204,8 +204,8 @@ impl PyErr {
             Some(obj) => obj.steal_ptr(),
         };
 
+        let null_terminated_name = CString::new(name).unwrap();
         unsafe {
-            let null_terminated_name = CString::new(name).unwrap();
             let ptr: *mut ffi::PyObject =
                 ffi::PyErr_NewException(null_terminated_name.as_ptr() as *mut c_char, base, dict);
             PyObject::from_borrowed_ptr(py, ptr).unchecked_cast_into::<PyType>()

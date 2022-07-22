@@ -33,8 +33,8 @@ pyobject_newtype!(PyTuple, PyTuple_Check, PyTuple_Type);
 impl PyTuple {
     /// Construct a new tuple with the given elements.
     pub fn new(py: Python, elements: &[PyObject]) -> PyTuple {
+        let len = elements.len();
         unsafe {
-            let len = elements.len();
             let ptr = ffi::PyTuple_New(len as Py_ssize_t);
             let t = err::result_cast_from_owned_ptr::<PyTuple>(py, ptr).unwrap();
             for (i, e) in elements.iter().enumerate() {
@@ -78,8 +78,8 @@ impl PyTuple {
         // This is safe because PyObject has the same memory layout as *mut ffi::PyObject,
         // and because tuples are immutable.
         // (We don't even need a Python token, thanks to immutability)
+        let ptr = self.0.as_ptr() as *mut ffi::PyTupleObject;
         unsafe {
-            let ptr = self.0.as_ptr() as *mut ffi::PyTupleObject;
             PyObject::borrow_from_owned_ptr_slice(slice::from_raw_parts(
                 (*ptr).ob_item.as_ptr(),
                 self.len(py),

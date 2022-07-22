@@ -62,8 +62,8 @@ impl PyDict {
     where
         K: ToPyObject,
     {
-        key.with_borrowed_ptr(py, |key| unsafe {
-            match ffi::PyDict_Contains(self.0.as_ptr(), key) {
+        key.with_borrowed_ptr(py, |key| {
+            match unsafe { ffi::PyDict_Contains(self.0.as_ptr(), key) } {
                 1 => Ok(true),
                 0 => Ok(false),
                 _ => Err(PyErr::fetch(py)),

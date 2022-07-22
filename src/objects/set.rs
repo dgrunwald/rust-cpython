@@ -69,8 +69,8 @@ impl PySet {
     where
         V: ToPyObject,
     {
-        value.with_borrowed_ptr(py, |key| unsafe {
-            match ffi::PySet_Contains(self.0.as_ptr(), key) {
+        value.with_borrowed_ptr(py, |key| {
+            match unsafe { ffi::PySet_Contains(self.0.as_ptr(), key) } {
                 1 => Ok(true),
                 0 => Ok(false),
                 _ => Err(PyErr::fetch(py)),

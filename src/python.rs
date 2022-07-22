@@ -237,12 +237,12 @@ impl<'p> Python<'p> {
     {
         // The `Send` bound on the closure prevents the user from
         // transferring the `Python` token into the closure.
-        unsafe {
-            let save = ffi::PyEval_SaveThread();
+        
+            let save = unsafe { ffi::PyEval_SaveThread() };
             let result = f();
-            ffi::PyEval_RestoreThread(save);
+            unsafe { ffi::PyEval_RestoreThread(save) };
             result
-        }
+        
     }
 
     /// Evaluates a Python expression in the given context and returns the result.
@@ -287,14 +287,14 @@ impl<'p> Python<'p> {
     ) -> PyResult<PyObject> {
         let code = CString::new(code).unwrap();
 
-        unsafe {
-            let mptr = ffi::PyImport_AddModule("__main__\0".as_ptr() as *const _);
+        
+            let mptr = unsafe { ffi::PyImport_AddModule("__main__\0".as_ptr() as *const _) };
 
             if mptr.is_null() {
                 return Err(PyErr::fetch(self));
             }
 
-            let mdict = ffi::PyModule_GetDict(mptr);
+            let mdict = unsafe { ffi::PyModule_GetDict(mptr) };
 
             let globals = match globals {
                 Some(g) => g.as_ptr(),
@@ -307,10 +307,10 @@ impl<'p> Python<'p> {
             };
 
             let res_ptr =
-                ffi::PyRun_StringFlags(code.as_ptr(), start, globals, locals, std::ptr::null_mut());
+                unsafe { ffi::PyRun_StringFlags(code.as_ptr(), start, globals, locals, std::ptr::null_mut()) };
 
-            err::result_from_owned_ptr(self, res_ptr)
-        }
+            unsafe { err::result_from_owned_ptr(self, res_ptr) }
+        
     }
 
     /// Gets the Python builtin value `None`.

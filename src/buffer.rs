@@ -163,15 +163,15 @@ fn validate(b: &ffi::Py_buffer) {
 impl PyBuffer {
     /// Get the underlying buffer from the specified python object.
     pub fn get(py: Python, obj: &PyObject) -> PyResult<PyBuffer> {
-        unsafe {
-            let mut buf = Box::new(mem::zeroed::<ffi::Py_buffer>());
+        
+            let mut buf = unsafe { Box::new(mem::zeroed::<ffi::Py_buffer>()) };
             err::error_on_minusone(
                 py,
-                ffi::PyObject_GetBuffer(obj.as_ptr(), &mut *buf, ffi::PyBUF_FULL_RO),
+                unsafe { ffi::PyObject_GetBuffer(obj.as_ptr(), &mut *buf, ffi::PyBUF_FULL_RO) },
             )?;
             validate(&buf);
             Ok(PyBuffer(buf))
-        }
+        
     }
 
     /// Gets the pointer to the start of the buffer memory.
