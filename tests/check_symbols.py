@@ -57,14 +57,14 @@ for name in interesting_config_values:
     cfgs += ['--cfg', 'py_sys_config="{}_{}"'.format(name, sysconfig.get_config_var(name))]
 
 subprocess.call(cargo_cmd + ['--'] + cfgs)
-output = subprocess.check_output(['nm', '-C', '-u', '../target/debug/libpython{}_sys.rlib'.format(3 if sys.version_info.major == 3 else 27)])
+output = subprocess.check_output(['nm', '-C', '-g', '../target/debug/libpython{}_sys.rlib'.format(3 if sys.version_info.major == 3 else 27)])
 lines = output.decode('ascii').split('\n')
 foreign_symbols = set()
 
 for line in lines:
-    if ' U ' in line:
-        symb = line.split(' U ')[-1]
-        foreign_symbols.add(symb)
+    parts = line.split(' ')
+    if len(parts) > 1:
+        foreign_symbols.add(parts[-1])
 
 print(lines[:25])
 print(len(foreign_symbols))
