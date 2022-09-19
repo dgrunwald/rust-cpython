@@ -66,8 +66,10 @@ for line in lines:
         symb = line.split(' U ')[-1]
         foreign_symbols.add(symb)
 
-assert 'PyList_Type' in foreign_symbols, "Failed getting statics from rustc -Z unpretty=ast-tree,expanded"
-assert 'PyList_New' in foreign_symbols, "Failed getting functions from rustc -Z unpretty=ast-tree,expanded"
+print(lines[:25])
+print(len(foreign_symbols))
+assert 'PyList_Type' in foreign_symbols, "Failed getting statics from nm"
+assert 'PyList_New' in foreign_symbols, "Failed getting functions from nm"
 
 names = sorted(foreign_symbols - so_symbols)
 if names:
