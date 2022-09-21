@@ -1,7 +1,7 @@
 #!/usr/bin/env python
+import re
 import sysconfig
 import subprocess
-import json
 import os
 import sys
 import platform
@@ -58,29 +58,46 @@ for name in interesting_config_values:
     cfgs += ['--cfg', 'py_sys_config="{}_{}"'.format(name, sysconfig.get_config_var(name))]
 
 
-json_output = subprocess.check_output(cargo_cmd + ['--', '-Z', 'ast-json'] + cfgs)
-doc = json.loads(json_output.decode('utf-8'))
-foreign_symbols = set()
-def visit(node, foreign):
-    if isinstance(node, dict):
-        kind_node = node.get('kind', None)
-        if isinstance(kind_node, dict) and kind_node.get('variant') in ('Static', 'Fn') and foreign:
-            foreign_symbols.add(node['ident']['name'])
-        if isinstance(kind_node, dict) and kind_node.get('variant') == 'ForeignMod':
-            foreign = True
-        for v in node.values():
-            visit(v, foreign)
-    elif isinstance(node, list):
-        for v in node:
-            visit(v, foreign)
-    elif isinstance(node, (int, type(u''), bool, type(None))):
-        pass
-    else:
-        raise Exception('Unsupported node type {}'.format(type(node)))
-visit(doc, foreign=False)
+def match_braces(text):
+    stack = []
+    locs = dict()
+    for i, c in enumerate(asttree):
+        if c == '{':
+            stack.append(i)
+        elif c == '}':
+            try:
+                locs[stack.pop()] = i
+            except IndexError:
+                break
+    return locs
 
-assert 'PyList_Type' in foreign_symbols, "Failed getting statics from rustc -Z ast-json"
-assert 'PyList_New' in foreign_symbols, "Failed getting functions from rustc -Z ast-json"
+
+foreignsig = 'ForeignMod {'
+foreign_sections = []
+foreign_symbols = set()
+
+output = subprocess.check_output(cargo_cmd + ['--', '-Z', 'unpretty=ast-tree,expanded'] + cfgs)
+asttree = output.decode('ascii')
+while asttree:
+    idx = asttree.find(foreignsig)
+    if idx < 0:
+        break
+    asttree = asttree[asttree.find(foreignsig):]
+    locs = match_braces(asttree)
+    if locs:
+        endpos = locs[len(foreignsig) - 1] + 1
+        foreign_sections.append(asttree[:endpos])
+        asttree = asttree[endpos:]
+
+for section in foreign_sections:
+    lines = section.split('\n')
+    for idx in range(len(lines)):
+        line = lines[idx]
+        if ('kind: Fn(' in line) or ('kind: Static(' in line):
+            foreign_symbols.add(re.sub(r'\s*ident: (.*)#[0-9]*,', r'\1', lines[idx-1]))
+
+assert 'PyList_Type' in foreign_symbols, "Failed getting statics from rustc -Z unpretty=ast-tree,expanded"
+assert 'PyList_New' in foreign_symbols, "Failed getting functions from rustc -Z unpretty=ast-tree,expanded"
 
 names = sorted(foreign_symbols - so_symbols)
 if names:
@@ -89,4 +106,3 @@ if names:
     sys.exit(1)
 else:
     print('Symbols in {} OK.'.format(so_file))
-
