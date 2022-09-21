@@ -237,6 +237,7 @@ pub mod _detail {
         PythonObjectCallbackConverter,
     };
     pub use paste;
+    pub use std::result::Result;
 }
 
 /// Expands to an `extern "C"` function that allows Python to load

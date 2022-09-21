@@ -78,7 +78,7 @@ macro_rules! py_class_impl {
 
         impl $crate::PythonObjectWithCheckedDowncast for $class {
             #[inline]
-            fn downcast_from<'p>(py: $crate::Python<'p>, obj: $crate::PyObject) -> Result<$class, $crate::PythonObjectDowncastError<'p>> {
+            fn downcast_from<'p>(py: $crate::Python<'p>, obj: $crate::PyObject) -> $crate::_detail::Result<$class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, &obj) {
                     Ok($class { _unsafe_inner: obj })
                 } else {
@@ -91,7 +91,7 @@ macro_rules! py_class_impl {
             }
 
             #[inline]
-            fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
+            fn downcast_borrow_from<'a, 'p>(py: $crate::Python<'p>, obj: &'a $crate::PyObject) -> $crate::_detail::Result<&'a $class, $crate::PythonObjectDowncastError<'p>> {
                 if py.get_type::<$class>().is_instance(py, obj) {
                     unsafe { Ok(std::mem::transmute(obj)) }
                 } else {
@@ -332,7 +332,7 @@ macro_rules! py_class_impl {
                     fn __traverse__(&$slf,
                     $py: $crate::Python,
                     $visit: $crate::py_class::gc::VisitProc)
-                    -> Result<(), $crate::py_class::gc::TraverseError> {
+                    -> $crate::_detail::Result<(), $crate::py_class::gc::TraverseError> {
                         let _ = $py;
                         $($body)*
                     }
@@ -494,7 +494,7 @@ macro_rules! py_class_impl {
             $type_slots
             /* as_number */ [
                 $( $nb_slot_name : $nb_slot_value, )*
-                nb_nonzero: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
+                nb_bool: $crate::py_class_unary_slot!($class::__bool__, $crate::_detail::libc::c_int, $crate::py_class::slots::BoolConverter),
             ]
             $as_sequence $as_mapping $setdelitem
         }
@@ -2191,9 +2191,35 @@ macro_rules! py_class_impl {
     { { def __lt__ $($tail:tt)* } $( $stuff:tt )* } => {
         $crate::py_error! { "__lt__ is not supported by py_class! use __richcmp__ instead." }
     };
+    { { def __matmul__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
+        $class:ident $py:ident $info:tt
+        /* slots: */ {
+            $type_slots:tt
+            /* as_number */ [ $( $nb_slot_name:ident : $nb_slot_value:expr, )* ]
+            $as_sequence:tt $as_mapping:tt $setdelitem:tt
+        }
+        { $( $imp:item )* }
+        $members:tt $props:tt
+    } => { $crate::py_class_impl! {
+        { $($tail)* }
+        $class $py $info
+        /* slots: */ {
+            $type_slots
+            /* as_number */ [
+                $( $nb_slot_name : $nb_slot_value, )*
+                nb_matrix_multiply: $crate::py_class_numeric_slot!(binary $class::__matmul__),
+            ]
+            $as_sequence $as_mapping $setdelitem
+        }
+        /* impl: */ {
+            $($imp)*
+            $crate::py_class_impl_item! { $class, $py, pub, __matmul__() $res_type; { $($body)* } [ { $left : &$crate::PyObject = {} } { $right : &$crate::PyObject = {} } ] }
+        }
+        $members $props
+    }};
 
     { { def __matmul__ $($tail:tt)* } $( $stuff:tt )* } => {
-        $crate::py_error! { "__matmul__ is not supported by py_class! yet." }
+        $crate::py_error! { "Invalid signature for binary numeric operator __matmul__" }
     };
     { { def __mod__($left:ident, $right:ident) -> $res_type:ty { $($body:tt)* } $($tail:tt)* }
         $class:ident $py:ident $info:tt

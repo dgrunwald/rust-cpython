@@ -78,7 +78,7 @@ macro_rules! py_exception {
             fn downcast_from<'p>(
                 py: $crate::Python<'p>,
                 obj: $crate::PyObject,
-            ) -> Result<$name, $crate::PythonObjectDowncastError<'p>> {
+            ) -> $crate::_detail::Result<$name, $crate::PythonObjectDowncastError<'p>> {
                 if <$name as $crate::PythonObjectWithTypeObject>::type_object(py)
                     .is_instance(py, &obj)
                 {
@@ -96,7 +96,7 @@ macro_rules! py_exception {
             fn downcast_borrow_from<'a, 'p>(
                 py: $crate::Python<'p>,
                 obj: &'a $crate::PyObject,
-            ) -> Result<&'a $name, $crate::PythonObjectDowncastError<'p>> {
+            ) -> $crate::_detail::Result<&'a $name, $crate::PythonObjectDowncastError<'p>> {
                 if <$name as $crate::PythonObjectWithTypeObject>::type_object(py)
                     .is_instance(py, obj)
                 {
