@@ -746,6 +746,12 @@ extern "C" {
 
     #[cfg(Py_3_9)]
     pub fn PyType_GetModuleState(arg1: *mut PyTypeObject) -> *mut c_void;
+
+    #[cfg(Py_3_11)]
+    pub fn PyType_GetName(arg1: *mut PyTypeObject) -> *mut PyObject;
+
+    #[cfg(Py_3_11)]
+    pub fn PyType_GetQualName(arg1: *mut PyTypeObject) -> *mut PyObject;
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]

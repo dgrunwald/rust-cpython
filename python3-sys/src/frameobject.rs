@@ -1,6 +1,10 @@
-use libc::{c_char, c_schar, c_int};
+use libc::{c_schar, c_int};
+#[cfg(not(Py_3_11))]
+use libc::c_char;
 
-use crate::code::{PyCodeObject, CO_MAXBLOCKS};
+use crate::code::{PyCodeObject};
+#[cfg(not(Py_3_11))]
+use crate::code::CO_MAXBLOCKS;
 use crate::object::*;
 use crate::pystate::PyThreadState;
 
@@ -16,13 +20,17 @@ pub struct PyTryBlock {
     pub b_level: c_int,
 }
 
-#[cfg(Py_LIMITED_API)]
+/// In Python > 3.11, frame object internals are always private
+///
+/// This improves performance by creating frame object lazily.
+/// There are now getter methods to get info from the frame.
+#[cfg(any(Py_LIMITED_API, Py_3_11))]
 #[repr(C)]
 pub struct PyFrameObject {
     _private: [u8; 0],
 }
 
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct PyFrameObject {
@@ -98,12 +106,14 @@ extern "C" {
         locals: *mut PyObject,
     ) -> *mut PyFrameObject;
 
+    #[cfg(not(Py_3_11))]
     pub fn PyFrame_BlockSetup(
         f: *mut PyFrameObject,
         _type: c_int,
         handler: c_int,
         level: c_int,
     ) -> ();
+    #[cfg(not(Py_3_11))]
     pub fn PyFrame_BlockPop(f: *mut PyFrameObject) -> *mut PyTryBlock;
 
     pub fn PyFrame_LocalsToFast(f: *mut PyFrameObject, clear: c_int) -> ();
@@ -113,7 +123,26 @@ extern "C" {
 
     #[cfg(not(Py_3_9))]
     pub fn PyFrame_ClearFreeList() -> c_int;
-}
+
+    #[cfg(Py_3_9)]
+    pub fn PyFrame_GetBack(frame: *mut PyFrameObject) -> *mut PyFrameObject;
+
+    #[cfg(Py_3_11)]
+    pub fn PyFrame_GetBuiltins(frame: *mut PyFrameObject) -> *mut PyObject;
+
+    #[cfg(Py_3_11)]
+    pub fn PyFrame_GetGenerator(frame: *mut PyFrameObject) -> *mut PyObject;
+
+
+    #[cfg(Py_3_11)]
+    pub fn PyFrame_GetGlobals(frame: *mut PyFrameObject) -> *mut PyObject;
+
+   #[cfg(Py_3_11)]
+    pub fn PyFrame_GetLasti(frame: *mut PyFrameObject) -> c_int;
+
+   #[cfg(Py_3_11)]
+    pub fn PyFrame_GetLocals(frame: *mut PyFrameObject) -> *mut PyObject;
+}   
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
