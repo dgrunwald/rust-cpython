@@ -161,6 +161,8 @@ extern "C" {
         cellvars: *mut PyObject,
         filename: *mut PyObject,
         name: *mut PyObject,
+        #[cfg(Py_3_11)]
+        qualname: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
         #[cfg(Py_3_11)]
@@ -183,6 +185,8 @@ extern "C" {
         cellvars: *mut PyObject,
         filename: *mut PyObject,
         name: *mut PyObject,
+        #[cfg(Py_3_11)]
+        qualname: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
         #[cfg(Py_3_11)]

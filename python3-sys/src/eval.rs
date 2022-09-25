@@ -5,9 +5,9 @@ use crate::object::PyObject;
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
     pub fn PyEval_EvalCode(
-        arg1: *mut PyObject,
-        arg2: *mut PyObject,
-        arg3: *mut PyObject,
+        co: *mut PyObject,
+        globals: *mut PyObject,
+        locals: *mut PyObject,
     ) -> *mut PyObject;
     pub fn PyEval_EvalCodeEx(
         co: *mut PyObject,

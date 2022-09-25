@@ -83,51 +83,13 @@ extern "C" {
     ) -> c_int;
 }
 
+// This is the old version of PyObject_CheckBuffer that was implemented as a macro.
+// The new version is in pybuffer.rs.
 #[cfg(all(not(Py_LIMITED_API), not(Py_3_9)))]
 #[inline]
 pub unsafe fn PyObject_CheckBuffer(o: *mut PyObject) -> c_int {
     let tp_as_buffer = (*(*o).ob_type).tp_as_buffer;
     (!tp_as_buffer.is_null() && (*tp_as_buffer).bf_getbuffer.is_some()) as c_int
-}
-
-// Python 3.8 moved these from Include/abstract.h to Include/cpython/abstract.h
-#[cfg(not(Py_LIMITED_API))]
-#[cfg_attr(windows, link(name = "pythonXY"))]
-extern "C" {
-    #[cfg(Py_3_9)]
-    pub fn PyObject_CheckBuffer(o: *mut PyObject) -> c_int;
-    pub fn PyObject_GetBuffer(obj: *mut PyObject, view: *mut Py_buffer, flags: c_int) -> c_int;
-    pub fn PyBuffer_GetPointer(view: *mut Py_buffer, indices: *mut Py_ssize_t) -> *mut c_void;
-    pub fn PyBuffer_ToContiguous(
-        buf: *mut c_void,
-        view: *mut Py_buffer,
-        len: Py_ssize_t,
-        order: c_char,
-    ) -> c_int;
-    pub fn PyBuffer_FromContiguous(
-        view: *mut Py_buffer,
-        buf: *mut c_void,
-        len: Py_ssize_t,
-        order: c_char,
-    ) -> c_int;
-    pub fn PyObject_CopyData(dest: *mut PyObject, src: *mut PyObject) -> c_int;
-    pub fn PyBuffer_IsContiguous(view: *const Py_buffer, fort: c_char) -> c_int;
-    pub fn PyBuffer_FillContiguousStrides(
-        ndims: c_int,
-        shape: *mut Py_ssize_t,
-        strides: *mut Py_ssize_t,
-        itemsize: c_int,
-        fort: c_char,
-    ) -> ();
-    pub fn PyBuffer_FillInfo(
-        view: *mut Py_buffer,
-        o: *mut PyObject,
-        buf: *mut c_void,
-        len: Py_ssize_t,
-        readonly: c_int,
-        flags: c_int,
-    ) -> c_int;
-    pub fn PyBuffer_Release(view: *mut Py_buffer) -> ();
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]

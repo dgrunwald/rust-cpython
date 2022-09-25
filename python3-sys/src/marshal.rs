@@ -12,6 +12,7 @@ pub const Py_MARSHAL_VERSION: c_int = 2;
 #[cfg(Py_3_4)]
 pub const Py_MARSHAL_VERSION: c_int = 4;
 
+#[cfg(any(not(Py_3_11), not(Py_LIMITED_API)))] // moved to limited ABI in 3.11
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
     pub fn PyMarshal_WriteLongToFile(arg1: c_long, arg2: *mut FILE, arg3: c_int);
