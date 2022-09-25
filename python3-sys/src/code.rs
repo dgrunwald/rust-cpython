@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use libc::{c_char, c_int, c_uchar, c_void};
+use libc::{c_char, c_short, c_int, c_uchar, c_void};
 
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
@@ -18,12 +18,13 @@ pub struct _PyOpcache {
 // 
 // the justification for the reordering was "optimization"
 pub struct PyCodeObject {
-    pub ob_base: PyObject,
+    pub ob_base: PyVarObject,
     pub co_consts: *mut PyObject,
     pub co_names: *mut PyObject,
     pub co_exceptiontable: *mut PyObject,
     pub co_flags: c_int,
-    pub co_warmup: c_int,
+    pub co_warmup: c_short,
+    co_linearray_entry_size: c_short,
     pub co_argcount: c_int,
     pub co_posonlyargcount: c_int,
     pub co_kwonlyargcount: c_int,
@@ -41,8 +42,7 @@ pub struct PyCodeObject {
     pub co_qualname: *mut PyObject,
     pub co_linetable: *mut PyObject,
     pub co_weakreflist: *mut PyObject,
-    pub co_extra: *mut c_void,
-    pub co_code_adaptive: [c_char; 1],
+    // Intently omitting some internal fields at the end of this structure
 }
 
 #[repr(C)]
@@ -220,7 +220,13 @@ pub unsafe fn PyCode_Check(op: *mut PyObject) -> c_int {
 }
 
 #[inline]
-#[cfg(not(Py_3_11))] // TODO: Implemengt again (fields are private)
+#[cfg(Py_3_11)]
+pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
+    (*op).co_nfreevars as Py_ssize_t
+}
+
+#[inline]
+#[cfg(not(Py_3_11))]
 pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
     crate::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
 }
