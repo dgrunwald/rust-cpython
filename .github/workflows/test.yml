@@ -18,15 +18,15 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python ${{ matrix.py }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.py }}
     - name: Setup Rust ${{ matrix.rust }}
-      uses: ATiltedTree/setup-rust@v1
+      uses: dtolnay/rust-toolchain@master
       with:
-        rust-version: ${{ matrix.rust }}
+        toolchain: ${{ matrix.rust }}
     - name: Check versions and paths
       run: |
         python -V ; rustc -V
@@ -55,15 +55,15 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python ${{ matrix.py }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.py }}
     - name: Setup Rust ${{ matrix.rust }}
-      uses: ATiltedTree/setup-rust@v1
+      uses: dtolnay/rust-toolchain@master
       with:
-        rust-version: ${{ matrix.rust }}
+        toolchain: ${{ matrix.rust }}
     - name: Check versions and paths
       run: |
         python -V
