@@ -8,7 +8,7 @@
 - [Fix error with Result in py_class! macro][281] (PR by [@dtolnay])
 
 [279]: https://github.com/dgrunwald/rust-cpython/pull/279
-[280]: https://github.com/dgrunwald/rust-cpython/pull/280
+[281]: https://github.com/dgrunwald/rust-cpython/pull/281
 [284]: https://github.com/dgrunwald/rust-cpython/pull/284
 [@tschorr]: https://github.com/tschorr
 [@Techcable]: https://github.com/Techcable
@@ -28,6 +28,7 @@
 [264]: https://github.com/dgrunwald/rust-cpython/pull/264
 [272]: https://github.com/dgrunwald/rust-cpython/pull/272
 [267]: https://github.com/dgrunwald/rust-cpython/pull/267
+[269]: https://github.com/dgrunwald/rust-cpython/pull/269
 [@SimonSapin]: https://github.com/SimonSapin
 [@fsh]: https://github.com/fsh
 [@Techcable]: https://github.com/Techcable
