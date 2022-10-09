@@ -37,6 +37,7 @@ extern "C" {
     pub fn PyObject_CheckBuffer(obj: *mut PyObject) -> c_int;
     pub fn PyObject_GetBuffer(obj: *mut PyObject, view: *mut Py_buffer, flags: c_int) -> c_int;
     pub fn PyBuffer_GetPointer(view: *mut Py_buffer, indices: *mut Py_ssize_t) -> *mut c_void;
+    #[cfg(any(Py_3_11, all(not(Py_LIMITED_API), Py_3_9)))]
     pub fn PyBuffer_SizeFromFormat(format: *const c_char) -> Py_ssize_t;
     pub fn PyBuffer_ToContiguous(
         buf: *mut c_void,
