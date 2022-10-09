@@ -3,6 +3,16 @@
 ## [Unreleased]
 
 [Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.7.0...HEAD
+- Added support for Python 3.11. (based on [PR 279][279] by [@Techcable])
+- [Fix CI with nightly Rust][284] (PR by [@tschorr])
+- [Fix error with Result in py_class! macro][281] (PR by [@dtolnay])
+
+[279]: https://github.com/dgrunwald/rust-cpython/pull/279
+[280]: https://github.com/dgrunwald/rust-cpython/pull/280
+[284]: https://github.com/dgrunwald/rust-cpython/pull/284
+[@tschorr]: https://github.com/tschorr
+[@Techcable]: https://github.com/Techcable
+[@dtolnay]: https://github.com/dtolnay
 
 ## 0.7.0 - 2021-10-09
 - Added support for Python 3.10.
