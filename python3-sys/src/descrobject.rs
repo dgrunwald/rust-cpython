@@ -40,6 +40,7 @@ extern "C" {
     pub static mut PyMethodDescr_Type: PyTypeObject;
     pub static mut PyWrapperDescr_Type: PyTypeObject;
     pub static mut PyDictProxy_Type: PyTypeObject;
+    pub static mut PyProperty_Type: PyTypeObject;
 
     pub fn PyDescr_NewMethod(arg1: *mut PyTypeObject, arg2: *mut PyMethodDef) -> *mut PyObject;
     pub fn PyDescr_NewClassMethod(arg1: *mut PyTypeObject, arg2: *mut PyMethodDef)
@@ -48,6 +49,4 @@ extern "C" {
     pub fn PyDescr_NewGetSet(arg1: *mut PyTypeObject, arg2: *mut PyGetSetDef) -> *mut PyObject;
     pub fn PyDictProxy_New(arg1: *mut PyObject) -> *mut PyObject;
     pub fn PyWrapper_New(arg1: *mut PyObject, arg2: *mut PyObject) -> *mut PyObject;
-
-    pub static mut PyProperty_Type: PyTypeObject;
 }

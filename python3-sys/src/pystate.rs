@@ -46,6 +46,10 @@ extern "C" {
     pub fn PyThreadState_SetAsyncExc(arg1: libc::c_ulong, arg2: *mut PyObject) -> libc::c_int;
     #[cfg(Py_3_9)]
     pub fn PyThreadState_GetInterpreter(tstate: *mut PyThreadState) -> *mut PyInterpreterState;
+    #[cfg(Py_3_11)]
+    pub fn PyThreadState_EnterTracing(state: *mut PyThreadState);
+        #[cfg(Py_3_11)]
+    pub fn PyThreadState_LeaveTracing(state: *mut PyThreadState);
     #[cfg(Py_3_9)]
     pub fn PyThreadState_GetFrame(tstate: *mut PyThreadState) -> *mut PyFrameObject;
     #[cfg(Py_3_9)]

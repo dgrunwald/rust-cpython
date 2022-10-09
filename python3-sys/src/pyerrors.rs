@@ -21,6 +21,10 @@ extern "C" {
         arg2: *mut *mut PyObject,
         arg3: *mut *mut PyObject,
     ) -> ();
+    #[cfg(Py_3_11)]
+    pub fn PyErr_GetHandledException() -> *mut PyObject;
+    #[cfg(Py_3_11)]
+    pub fn PyErr_SetHandledException(exc: *mut PyObject);
     pub fn PyErr_SetExcInfo(arg1: *mut PyObject, arg2: *mut PyObject, arg3: *mut PyObject) -> ();
     pub fn Py_FatalError(message: *const c_char) -> !;
     pub fn PyErr_GivenExceptionMatches(arg1: *mut PyObject, arg2: *mut PyObject) -> c_int;
@@ -68,6 +72,8 @@ extern "C" {
 
     pub static mut PyExc_BaseException: *mut PyObject;
     pub static mut PyExc_Exception: *mut PyObject;
+    #[cfg(Py_3_11)]
+    pub static mut PyExc_BaseExceptionGroup: *mut PyObject;
     #[cfg(Py_3_5)]
     pub static mut PyExc_StopAsyncIteration: *mut PyObject;
     pub static mut PyExc_StopIteration: *mut PyObject;

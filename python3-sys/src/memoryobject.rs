@@ -2,6 +2,7 @@ use libc::{c_char, c_int};
 
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
+use crate::pybuffer::Py_buffer;
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
@@ -21,6 +22,8 @@ extern "C" {
         size: Py_ssize_t,
         flags: c_int,
     ) -> *mut PyObject;
+    #[cfg(any(Py_3_11, not(Py_LIMITED_API)))]
+    pub fn PyMemoryView_FromBuffer(info: *mut Py_buffer) -> *mut PyObject;
     pub fn PyMemoryView_GetContiguous(
         base: *mut PyObject,
         buffertype: c_int,

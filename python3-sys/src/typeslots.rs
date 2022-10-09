@@ -1,5 +1,7 @@
 use libc::c_int;
 
+pub const Py_bf_getbuffer: c_int = 1;
+pub const Py_bf_releasebuffer: c_int = 2;
 pub const Py_mp_ass_subscript: c_int = 3;
 pub const Py_mp_length: c_int = 4;
 pub const Py_mp_subscript: c_int = 5;

@@ -59,6 +59,8 @@ pub use crate::objimpl::*;
 #[cfg(Py_3_6)]
 pub use crate::osmodule::*;
 pub use crate::pyarena::*;
+#[cfg(any(Py_3_11, not(Py_LIMITED_API)))]
+pub use crate::pybuffer::*;
 pub use crate::pycapsule::*;
 pub use crate::pydebug::*;
 pub use crate::pyerrors::*;
@@ -98,6 +100,9 @@ mod pyport;
 // mod pytime;
 
 mod pymem;
+
+#[cfg(any(Py_3_11, not(Py_LIMITED_API)))]
+mod pybuffer;
 
 mod object;
 

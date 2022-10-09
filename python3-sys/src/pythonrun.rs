@@ -1,5 +1,6 @@
 use core::ptr;
-use libc::{c_char, c_int, wchar_t, FILE};
+#[allow(unused_imports)]
+use libc::{c_char, c_int, c_ulong, wchar_t, FILE};
 
 use crate::object::*;
 #[cfg(not(Py_LIMITED_API))]
@@ -267,4 +268,6 @@ extern "C" {
     pub fn Py_GetCopyright() -> *const c_char;
     pub fn Py_GetCompiler() -> *const c_char;
     pub fn Py_GetBuildInfo() -> *const c_char;
+    #[cfg(Py_3_11)]
+    pub static Py_Version: c_ulong;
 }

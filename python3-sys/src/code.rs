@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use libc::{c_char, c_int, c_uchar, c_void};
+use libc::{c_char, c_short, c_int, c_uchar, c_void};
 
 use crate::object::*;
 use crate::pyport::Py_ssize_t;
@@ -10,8 +10,44 @@ pub struct _PyOpcache {
     _private: [u8; 0],
 }
 
+#[derive(Copy)]
+#[repr(C)]
+#[cfg(Py_3_11)]
+// The field orderings have completely changed in 3.11,
+// so we seperate it out into a different type declaration
+// 
+// the justification for the reordering was "optimization"
+pub struct PyCodeObject {
+    pub ob_base: PyVarObject,
+    pub co_consts: *mut PyObject,
+    pub co_names: *mut PyObject,
+    pub co_exceptiontable: *mut PyObject,
+    pub co_flags: c_int,
+    pub co_warmup: c_short,
+    co_linearray_entry_size: c_short,
+    pub co_argcount: c_int,
+    pub co_posonlyargcount: c_int,
+    pub co_kwonlyargcount: c_int,
+    pub co_stacksize: c_int,
+    pub co_firstlineno: c_int,
+    pub co_nlocalsplus: c_int,
+    pub co_nlocals: c_int,
+    pub co_nplaincellvars: c_int,
+    pub co_ncellvars: c_int,
+    pub co_nfreevars: c_int,
+    pub co_localsplusnames: *mut PyObject,
+    pub co_localspluskinds: *mut PyObject,
+    pub co_filename: *mut PyObject,
+    pub co_name: *mut PyObject,
+    pub co_qualname: *mut PyObject,
+    pub co_linetable: *mut PyObject,
+    pub co_weakreflist: *mut PyObject,
+    // Intently omitting some internal fields at the end of this structure
+}
+
 #[repr(C)]
 #[derive(Copy)]
+#[cfg(not(Py_3_11))] 
 pub struct PyCodeObject {
     pub ob_base: PyObject,
     pub co_argcount: c_int,
@@ -125,8 +161,12 @@ extern "C" {
         cellvars: *mut PyObject,
         filename: *mut PyObject,
         name: *mut PyObject,
+        #[cfg(Py_3_11)]
+        qualname: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
+        #[cfg(Py_3_11)]
+        exceptiontable: *mut PyObject,
     ) -> *mut PyCodeObject;
 
     #[cfg(Py_3_8)]
@@ -145,8 +185,12 @@ extern "C" {
         cellvars: *mut PyObject,
         filename: *mut PyObject,
         name: *mut PyObject,
+        #[cfg(Py_3_11)]
+        qualname: *mut PyObject,
         firstlineno: c_int,
         lnotab: *mut PyObject,
+        #[cfg(Py_3_11)]
+        exceptiontable: *mut PyObject,
     ) -> *mut PyCodeObject;
 
     pub fn PyCode_NewEmpty(
@@ -155,6 +199,17 @@ extern "C" {
         firstlineno: c_int,
     ) -> *mut PyCodeObject;
     pub fn PyCode_Addr2Line(arg1: *mut PyCodeObject, arg2: c_int) -> c_int;
+    #[cfg(Py_3_11)]
+    pub fn PyCode_Addr2Location(
+        co: *mut PyCodeObject,
+        byte_offset: c_int,
+        start_line: *mut c_int,
+        start_column: *mut c_int,
+        end_line: *mut c_int,
+        end_column: *mut c_int
+    ) -> c_int;
+    #[cfg(Py_3_11)]
+    pub fn PyCode_GetCode(co: *mut PyCodeObject) -> *mut PyObject;
     pub fn PyCode_Optimize(
         code: *mut PyObject,
         consts: *mut PyObject,
@@ -169,6 +224,13 @@ pub unsafe fn PyCode_Check(op: *mut PyObject) -> c_int {
 }
 
 #[inline]
+#[cfg(Py_3_11)]
+pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
+    (*op).co_nfreevars as Py_ssize_t
+}
+
+#[inline]
+#[cfg(not(Py_3_11))]
 pub unsafe fn PyCode_GetNumFree(op: *mut PyCodeObject) -> Py_ssize_t {
     crate::tupleobject::PyTuple_GET_SIZE((*op).co_freevars)
 }

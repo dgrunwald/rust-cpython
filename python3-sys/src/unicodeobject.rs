@@ -148,8 +148,8 @@ extern "C" {
         encoding: *const c_char,
         errors: *const c_char,
     ) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
-    #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3 / PEP 393")]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
+    #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3 / PEP 393, removed in Python 3.11")]
     pub fn PyUnicode_Encode(
         s: *const Py_UNICODE,
         size: Py_ssize_t,
@@ -191,7 +191,7 @@ extern "C" {
         errors: *const c_char,
         consumed: *mut Py_ssize_t,
     ) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeUTF7(
         data: *const Py_UNICODE,
@@ -212,7 +212,7 @@ extern "C" {
         consumed: *mut Py_ssize_t,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsUTF8String(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeUTF8(
         data: *const Py_UNICODE,
@@ -233,7 +233,7 @@ extern "C" {
         consumed: *mut Py_ssize_t,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsUTF32String(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeUTF32(
         data: *const Py_UNICODE,
@@ -255,7 +255,7 @@ extern "C" {
         consumed: *mut Py_ssize_t,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsUTF16String(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeUTF16(
         data: *const Py_UNICODE,
@@ -269,7 +269,7 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsUnicodeEscapeString(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeUnicodeEscape(
         data: *const Py_UNICODE,
@@ -281,7 +281,7 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsRawUnicodeEscapeString(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeRawUnicodeEscape(
         data: *const Py_UNICODE,
@@ -293,7 +293,7 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsLatin1String(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeLatin1(
         data: *const Py_UNICODE,
@@ -306,7 +306,7 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
     pub fn PyUnicode_AsASCIIString(unicode: *mut PyObject) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeASCII(
         data: *const Py_UNICODE,
@@ -323,7 +323,7 @@ extern "C" {
         unicode: *mut PyObject,
         mapping: *mut PyObject,
     ) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeCharmap(
         data: *const Py_UNICODE,
@@ -331,7 +331,7 @@ extern "C" {
         mapping: *mut PyObject,
         errors: *const c_char,
     ) -> *mut PyObject;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_TranslateCharmap(
         data: *const Py_UNICODE,
@@ -340,7 +340,7 @@ extern "C" {
         errors: *const c_char,
     ) -> *mut PyObject;
 
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_EncodeDecimal(
         s: *mut Py_UNICODE,
@@ -348,7 +348,7 @@ extern "C" {
         output: *mut c_char,
         errors: *const c_char,
     ) -> c_int;
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     #[deprecated(since = "0.2.1", note = "Deprecated since Python 3.3")]
     pub fn PyUnicode_TransformDecimalToASCII(
         s: *mut Py_UNICODE,

@@ -88,6 +88,10 @@ pub struct _frozen {
     pub name: *const c_char,
     pub code: *const c_uchar,
     pub size: c_int,
+    #[cfg(Py_3_11)]
+    pub is_package: c_int,
+    #[cfg(Py_3_11)]
+    pub get_code: Option<unsafe extern "C" fn() -> *mut PyObject>,
 }
 
 #[cfg(not(Py_LIMITED_API))]
@@ -103,6 +107,7 @@ extern "C" {
     #[cfg(all(Py_3_7, not(Py_3_9)))]
     pub fn _PyImport_FindBuiltin(name: *const c_char, modules: *mut PyObject) -> *mut PyObject;
 
+    #[cfg(not(Py_3_11))]
     pub fn _PyImport_FindExtensionObject(
         name: *mut PyObject,
         filename: *mut PyObject,

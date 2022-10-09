@@ -76,80 +76,14 @@ pub type objobjargproc =
     unsafe extern "C" fn(arg1: *mut PyObject, arg2: *mut PyObject, arg3: *mut PyObject) -> c_int;
 
 #[cfg(not(Py_LIMITED_API))]
-mod bufferinfo {
-    use libc::{c_char, c_int, c_void};
-
-    use crate::pyport::Py_ssize_t;
-
-    #[repr(C)]
-    #[derive(Copy)]
-    pub struct Py_buffer {
-        pub buf: *mut c_void,
-        pub obj: *mut crate::object::PyObject,
-        pub len: Py_ssize_t,
-        pub itemsize: Py_ssize_t,
-        pub readonly: c_int,
-        pub ndim: c_int,
-        pub format: *mut c_char,
-        pub shape: *mut Py_ssize_t,
-        pub strides: *mut Py_ssize_t,
-        pub suboffsets: *mut Py_ssize_t,
-        pub internal: *mut c_void,
-    }
-    impl Clone for Py_buffer {
-        #[inline]
-        fn clone(&self) -> Self {
-            *self
-        }
-    }
-    impl Default for Py_buffer {
-        #[inline]
-        fn default() -> Self {
-            unsafe { core::mem::zeroed() }
-        }
-    }
-
-    pub type getbufferproc = extern "C" fn(
+pub type getbufferproc = extern "C" fn(
         arg1: *mut crate::object::PyObject,
-        arg2: *mut Py_buffer,
+        arg2: *mut crate::pybuffer::Py_buffer,
         arg3: c_int,
     ) -> c_int;
-    pub type releasebufferproc =
-        extern "C" fn(arg1: *mut crate::object::PyObject, arg2: *mut Py_buffer) -> ();
-
-    /// Maximum number of dimensions
-    pub const PyBUF_MAX_NDIM: c_int = 64;
-
-    /* Flags for getting buffers */
-    pub const PyBUF_SIMPLE: c_int = 0;
-    pub const PyBUF_WRITABLE: c_int = 0x0001;
-    /*  we used to include an E, backwards compatible alias  */
-    pub const PyBUF_WRITEABLE: c_int = PyBUF_WRITABLE;
-    pub const PyBUF_FORMAT: c_int = 0x0004;
-    pub const PyBUF_ND: c_int = 0x0008;
-    pub const PyBUF_STRIDES: c_int = (0x0010 | PyBUF_ND);
-    pub const PyBUF_C_CONTIGUOUS: c_int = (0x0020 | PyBUF_STRIDES);
-    pub const PyBUF_F_CONTIGUOUS: c_int = (0x0040 | PyBUF_STRIDES);
-    pub const PyBUF_ANY_CONTIGUOUS: c_int = (0x0080 | PyBUF_STRIDES);
-    pub const PyBUF_INDIRECT: c_int = (0x0100 | PyBUF_STRIDES);
-
-    pub const PyBUF_CONTIG: c_int = (PyBUF_ND | PyBUF_WRITABLE);
-    pub const PyBUF_CONTIG_RO: c_int = (PyBUF_ND);
-
-    pub const PyBUF_STRIDED: c_int = (PyBUF_STRIDES | PyBUF_WRITABLE);
-    pub const PyBUF_STRIDED_RO: c_int = (PyBUF_STRIDES);
-
-    pub const PyBUF_RECORDS: c_int = (PyBUF_STRIDES | PyBUF_WRITABLE | PyBUF_FORMAT);
-    pub const PyBUF_RECORDS_RO: c_int = (PyBUF_STRIDES | PyBUF_FORMAT);
-
-    pub const PyBUF_FULL: c_int = (PyBUF_INDIRECT | PyBUF_WRITABLE | PyBUF_FORMAT);
-    pub const PyBUF_FULL_RO: c_int = (PyBUF_INDIRECT | PyBUF_FORMAT);
-
-    pub const PyBUF_READ: c_int = 0x100;
-    pub const PyBUF_WRITE: c_int = 0x200;
-}
 #[cfg(not(Py_LIMITED_API))]
-pub use self::bufferinfo::*;
+pub type releasebufferproc =
+    extern "C" fn(arg1: *mut crate::object::PyObject, arg2: *mut crate::pybuffer::Py_buffer) -> ();
 
 pub type objobjproc = unsafe extern "C" fn(arg1: *mut PyObject, arg2: *mut PyObject) -> c_int;
 pub type visitproc = unsafe extern "C" fn(object: *mut PyObject, arg: *mut c_void) -> c_int;
@@ -661,6 +595,10 @@ mod typeobject {
         pub ht_cached_keys: *mut c_void,
         #[cfg(Py_3_9)]
         pub ht_module: *mut crate::object::PyObject,
+        #[cfg(Py_3_11)]
+        _ht_tpname: *mut c_char,
+        #[cfg(Py_3_11)]
+        _spec_cache: *mut c_void,
     }
     impl Clone for PyHeapTypeObject {
         #[inline]
@@ -676,6 +614,7 @@ mod typeobject {
     }
 
     #[inline]
+    #[cfg(not(Py_3_11))]
     pub unsafe fn PyHeapType_GET_MEMBERS(
         etype: *mut PyHeapTypeObject,
     ) -> *mut crate::structmember::PyMemberDef {
@@ -746,6 +685,12 @@ extern "C" {
 
     #[cfg(Py_3_9)]
     pub fn PyType_GetModuleState(arg1: *mut PyTypeObject) -> *mut c_void;
+
+    #[cfg(Py_3_11)]
+    pub fn PyType_GetName(arg1: *mut PyTypeObject) -> *mut PyObject;
+
+    #[cfg(Py_3_11)]
+    pub fn PyType_GetQualName(arg1: *mut PyTypeObject) -> *mut PyObject;
 }
 
 #[cfg_attr(windows, link(name = "pythonXY"))]

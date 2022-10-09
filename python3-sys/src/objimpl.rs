@@ -101,9 +101,9 @@ extern "C" {
 
     pub fn _PyObject_GC_Resize(arg1: *mut PyVarObject, arg2: Py_ssize_t) -> *mut PyVarObject;
 
-    #[cfg(not(Py_LIMITED_API))]
+    #[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
     pub fn _PyObject_GC_Malloc(size: size_t) -> *mut PyObject;
-    #[cfg(all(not(Py_LIMITED_API), Py_3_5))]
+    #[cfg(all(not(Py_LIMITED_API), Py_3_5, not(Py_3_11)))]
     pub fn _PyObject_GC_Calloc(size: size_t) -> *mut PyObject;
     pub fn _PyObject_GC_New(arg1: *mut PyTypeObject) -> *mut PyObject;
     pub fn _PyObject_GC_NewVar(arg1: *mut PyTypeObject, arg2: Py_ssize_t) -> *mut PyVarObject;
@@ -119,7 +119,7 @@ extern "C" {
 
 /// Test if a type supports weak references
 #[inline(always)]
-#[cfg(not(Py_LIMITED_API))]
+#[cfg(all(not(Py_LIMITED_API), not(Py_3_11)))]
 pub unsafe fn PyType_SUPPORTS_WEAKREFS(t: *mut PyTypeObject) -> c_int {
     ((*t).tp_weaklistoffset > 0) as c_int
 }
@@ -133,6 +133,8 @@ pub unsafe fn PyObject_GET_WEAKREFS_LISTPTR(o: *mut PyObject) -> *mut *mut PyObj
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
+    #[cfg(all(not(Py_LIMITED_API), Py_3_11))]
+    pub fn PyType_SUPPORTS_WEAKREFS(t: *mut PyTypeObject) -> c_int;
     #[cfg(all(not(Py_LIMITED_API), Py_3_9))]
     pub fn PyObject_GET_WEAKREFS_LISTPTR(o: *mut PyObject) -> *mut *mut PyObject;
 }

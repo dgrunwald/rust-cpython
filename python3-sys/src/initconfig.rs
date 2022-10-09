@@ -108,10 +108,14 @@ pub struct PyConfig {
     pub _use_peg_parser: c_int,
     pub tracemalloc: c_int,
     pub import_time: c_int,
+    #[cfg(Py_3_11)]
+    pub code_debug_ranges: c_int,
     pub show_ref_count: c_int,
     #[cfg(not(Py_3_9))]
     pub show_alloc_count: c_int,
     pub dump_refs: c_int,
+    #[cfg(Py_3_11)]
+    pub dump_refs_file: *mut wchar_t,
     pub malloc_stats: c_int,
     pub filesystem_encoding: *mut wchar_t,
     pub filesystem_errors: *mut wchar_t,
@@ -143,6 +147,11 @@ pub struct PyConfig {
     #[cfg(windows)]
     pub legacy_windows_stdio: c_int,
     pub check_hash_pycs_mode: *mut wchar_t,
+    #[cfg(Py_3_11)]
+    pub use_frozen_modules: c_int,
+    #[cfg(Py_3_11)]
+    pub safe_path: c_int,
+    // Path configuration inputs:
     pub pathconfig_warnings: c_int,
     #[cfg(Py_3_10)]
     pub program_name: *mut wchar_t,
@@ -150,8 +159,11 @@ pub struct PyConfig {
     pub home: *mut wchar_t,
     #[cfg(Py_3_10)]
     pub platlibdir: *mut wchar_t,
+    // Path configuration outputs:
     pub module_search_paths_set: c_int,
     pub module_search_paths: PyWideStringList,
+    #[cfg(Py_3_11)]
+    pub stdlib_dir: *mut wchar_t,
     pub executable: *mut wchar_t,
     pub base_executable: *mut wchar_t,
     pub prefix: *mut wchar_t,
@@ -160,16 +172,20 @@ pub struct PyConfig {
     pub base_exec_prefix: *mut wchar_t,
     #[cfg(all(Py_3_9, not(Py_3_10)))]
     pub platlibdir: *mut wchar_t,
+    // Parameter only used by Py_Main():
     pub skip_source_first_line: c_int,
     pub run_command: *mut wchar_t,
     pub run_module: *mut wchar_t,
     pub run_filename: *mut wchar_t,
+    // Private fields
     pub _install_importlib: c_int,
     pub _init_main: c_int,
     #[cfg(Py_3_9)]
     pub _isolated_interpreter: c_int,
     #[cfg(all(Py_3_9, not(Py_3_10)))]
     pub _orig_argv: PyWideStringList,
+    #[cfg(Py_3_11)]
+    pub _is_python_build: c_int,
 }
 
 impl Default for PyConfig {
