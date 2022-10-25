@@ -2,7 +2,7 @@ name: Build and Test
 
 on:
   push:
-    branches: [ master, py3.11, github-actions ]
+    branches: [ master, github-actions ]
   pull_request:
     branches: [ master ]
 
@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11.0-rc.2" ]
+        py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11" ]
         rust: [ "1.41.1", "stable", "nightly" ]
 
     steps:
@@ -50,7 +50,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ]
-        py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11.0-rc.2"]
+        py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11"]
         rust: [ "1.41.1", "stable" ]
 
     steps:
