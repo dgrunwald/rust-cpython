@@ -320,7 +320,7 @@ print(sys.version_info[0:2]); \
 print(sysconfig.get_config_var('LIBDIR')); \
 print(sysconfig.get_config_var('Py_ENABLE_SHARED')); \
 print(sysconfig.get_config_var('LDVERSION') or '%s%s' % (sysconfig.get_config_var('py_version_short'), sysconfig.get_config_var('DEBUG_EXT') or '')); \
-print(sys.exec_prefix);";
+print(sys.base_prefix);";
     let out = run_python_script(interpreter, script)?;
     let mut lines: Vec<String> = out
         .split(NEWLINE_SEQUENCE)
