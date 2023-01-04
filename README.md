@@ -1,4 +1,4 @@
-rust-cpython [![Build Status](https://travis-ci.org/dgrunwald/rust-cpython.svg?branch=master)](https://travis-ci.org/dgrunwald/rust-cpython)
+rust-cpython [![Build Status](https://github.com/dgrunwald/rust-cpython/actions/workflows/test.yml/badge.svg)](https://github.com/dgrunwald/rust-cpython/actions/workflows/test.yml)
 ====================
 
 [Rust](http://www.rust-lang.org/) bindings for the [python](https://www.python.org/) interpreter.
