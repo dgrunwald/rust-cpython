@@ -24,10 +24,10 @@ jobs:
       with:
         python-version: ${{ matrix.py }}
     - name: Setup Rust ${{ matrix.rust }}
-      if: ${{ matrix.rust == "1.41.1" }}
+      if: ${{ matrix.rust == '1.41.1' }}
       uses: dtolnay/rust-toolchain@1.41.1
     - name: Setup Rust ${{ matrix.rust }}
-      if: ${{ matrix.rust != "1.41.1" }}
+      if: ${{ matrix.rust != '1.41.1' }}
       uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
