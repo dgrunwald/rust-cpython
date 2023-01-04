@@ -67,6 +67,10 @@ jobs:
             os: macos-latest
             py: "3.11"
             allowfail: true
+          - rust: "1.42.0"
+            os: macos-latest
+            py: "3.7"
+            allowfail: true
 
     steps:
     - name: Checkout code
