@@ -9,12 +9,64 @@ on:
 jobs:
   unix:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.allowfail }}
 
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
         py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11" ]
-        rust: [ "1.41.1", "stable", "nightly" ]
+        rust: [ "stable", "nightly" ]
+        allowfail: [false]
+        include:
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "2.7"
+            allowfail: true
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "3.7"
+            allowfail: true
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "3.8"
+            allowfail: true
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "3.9"
+            allowfail: true
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "3.10"
+            allowfail: true
+          - rust: "1.41.1"
+            os: ubuntu-latest
+            py: "3.11"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "2.7"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "3.7"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "3.8"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "3.9"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "3.10"
+            allowfail: true
+          - rust: "1.41.1"
+            os: macos-latest
+            py: "3.11"
+            allowfail: true
 
     steps:
     - name: Checkout code
@@ -24,10 +76,6 @@ jobs:
       with:
         python-version: ${{ matrix.py }}
     - name: Setup Rust ${{ matrix.rust }}
-      if: ${{ matrix.rust == '1.41.1' }}
-      uses: dtolnay/rust-toolchain@1.41.1
-    - name: Setup Rust ${{ matrix.rust }}
-      if: ${{ matrix.rust != '1.41.1' }}
       uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
