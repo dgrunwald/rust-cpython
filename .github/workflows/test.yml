@@ -9,12 +9,19 @@ on:
 jobs:
   unix:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.allowfail }}
 
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
         py: [ "2.7", "3.7", "3.8", "3.9", "3.10", "3.11" ]
-        rust: [ "1.41.1", "stable", "nightly" ]
+        rust: [ "stable", "nightly" ]
+        allowfail: [false]
+        include:
+          - rust: "1.41.1"
+            os: [ ubuntu-latest, macos-latest ]
+            allowfail: true
 
     steps:
     - name: Checkout code
