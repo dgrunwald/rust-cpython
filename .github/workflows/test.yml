@@ -31,7 +31,13 @@ jobs:
       with:
         python-version: ${{ matrix.py }}
     - name: Setup Rust ${{ matrix.rust }}
-      uses: dtolnay/rust-toolchain@${{ matrix.rust }}
+      if: ${{ matrix.allowfail }}
+      uses: dtolnay/rust-toolchain@1.41.1
+    - name: Setup Rust ${{ matrix.rust }}
+      if: ${{ ! matrix.allowfail }}
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ matrix.rust }}
     - name: Check versions and paths
       run: |
         python -V ; rustc -V
