@@ -1,6 +1,9 @@
 rust-cpython [![Build Status](https://travis-ci.org/dgrunwald/rust-cpython.svg?branch=master)](https://travis-ci.org/dgrunwald/rust-cpython)
 ====================
 
+Warning: this package is no longer actively maintained. Python 3.12 is not supported and likely will not be supported.
+Please switch to [PyO3](https://github.com/PyO3/pyo3) instead.
+
 [Rust](http://www.rust-lang.org/) bindings for the [python](https://www.python.org/) interpreter.
 
 * [Documentation](http://dgrunwald.github.io/rust-cpython/doc/cpython/)
@@ -15,6 +18,9 @@ Python is licensed under the [Python License](https://docs.python.org/2/license.
 Supported Python versions:
 * Python 2.7
 * Python 3.7 to 3.11
+
+Warning: this package is no longer actively maintained. Python 3.12 is not supported and likely will not be supported.
+Please switch to [PyO3](https://github.com/PyO3/pyo3) instead.
 
 Requires Rust 1.41.1 or later.
 
