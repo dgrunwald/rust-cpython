@@ -9,10 +9,23 @@ use crate::pythonrun::*;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
+#[cfg(Py_3_12)]
+pub struct _PyCompilerSrcLocation {
+    pub lineno: c_int,
+    pub end_lineno: c_int,
+    pub col_offset: c_int,
+    pub end_col_offset: c_int,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
 #[cfg(not(Py_LIMITED_API))]
 pub struct PyFutureFeatures {
     pub ff_features: c_int,
+    #[cfg(not(Py_3_12))]
     pub ff_lineno: c_int,
+    #[cfg(Py_3_12)]
+    pub ff_location: _PyCompilerSrcLocation,
 }
 
 // TODO: PyCF_MASK etc. constants
