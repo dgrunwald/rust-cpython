@@ -152,6 +152,7 @@ pub const CO_MAXBLOCKS: usize = 20;
 extern "C" {
     pub static mut PyCode_Type: PyTypeObject;
 
+    #[cfg_attr(Py_3_12, link_name = "PyUnstable_Code_New")]
     pub fn PyCode_New(
         argcount: c_int,
         kwonlyargcount: c_int,
@@ -175,6 +176,7 @@ extern "C" {
     ) -> *mut PyCodeObject;
 
     #[cfg(Py_3_8)]
+    #[cfg_attr(Py_3_12, link_name = "PyUnstable_Code_NewWithPosOnlyArgs")]
     pub fn PyCode_NewWithPosOnlyArgs(
         argcount: c_int,
         posonlyargcount: c_int,

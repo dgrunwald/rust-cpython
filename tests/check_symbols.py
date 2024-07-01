@@ -89,12 +89,19 @@ while asttree:
         foreign_sections.append(asttree[:endpos])
         asttree = asttree[endpos:]
 
+renames = {}
+if sys.version_info >= (3, 12):
+    # Those renames were declared by cfg_attr(Py_3_12, link_name = ...) but it's hard to parse them from AST.
+    renames.update({"PyCode_New": "PyUnstable_Code_New", "PyCode_NewWithPosOnlyArgs": "PyUnstable_Code_NewWithPosOnlyArgs"})
+
 for section in foreign_sections:
     lines = section.split('\n')
     for idx in range(len(lines)):
         line = lines[idx]
         if ('kind: Fn(' in line) or ('kind: Static(' in line):
-            foreign_symbols.add(re.sub(r'\s*ident: (.*)#[0-9]*,', r'\1', lines[idx-1]))
+            name = re.sub(r'\s*ident: (.*)#[0-9]*,', r'\1', lines[idx-1])
+            name = renames.get(name) or name
+            foreign_symbols.add(name)
 
 assert 'PyList_Type' in foreign_symbols, "Failed getting statics from rustc -Z unpretty=ast-tree,expanded"
 assert 'PyList_New' in foreign_symbols, "Failed getting functions from rustc -Z unpretty=ast-tree,expanded"
