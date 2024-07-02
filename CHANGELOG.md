@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.7.1...HEAD
+[Unreleased]: https://github.com/dgrunwald/rust-cpython/compare/0.7.2...HEAD
+
+## 0.7.2 - 2024-07-02
+
+- [Added support for Python 3.12][295] (PR by [@quark-zju])
+
+[295]: https://github.com/dgrunwald/rust-cpython/pull/295
 
 ## 0.7.1 - 2022-10-25
 - Added support for Python 3.11. (based on [PR 279][279] by [@Techcable])

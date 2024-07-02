@@ -1,6 +1,6 @@
 [package]
 name = "python3-sys"
-version = "0.7.1"
+version = "0.7.2"
 description = "FFI Declarations for Python 3"
 readme = "README.md"
 keywords = [
