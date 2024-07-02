@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["cpython"] = [{"text":"impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.119/serde/de/trait.Error.html\" title=\"trait serde::de::Error\">Error</a> for <a class=\"struct\" href=\"cpython/serde/struct.Error.html\" title=\"struct cpython::serde::Error\">Error</a>","synthetic":false,"types":["cpython::serde::error::Error"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

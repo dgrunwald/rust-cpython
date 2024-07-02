@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["CompareOp",""]],"mod":[["gc",""]],"trait":[["BaseObject","A PythonObject that is usable as a base type with the `py_class!()` macro."],["PythonObjectFromPyClassMacro","Trait implemented by the types produced by the `py_class!()` macro."]]});
+window.SIDEBAR_ITEMS = {"enum":["CompareOp"],"mod":["gc"],"trait":["BaseObject","PythonObjectFromPyClassMacro"]};

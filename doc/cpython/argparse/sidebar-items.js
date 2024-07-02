@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["parse_args","Parse argument list"]],"struct":[["ParamDescription","Description of a python parameter; used for `parse_args()`."]]});
+window.SIDEBAR_ITEMS = {"fn":["parse_args"],"struct":["ParamDescription"]};

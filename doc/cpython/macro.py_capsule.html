@@ -1,141 +1,131 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `py_capsule` macro in crate `cpython`."><meta name="keywords" content="rust, rustlang, rust-lang, py_capsule"><title>cpython::py_capsule - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings"></script><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc macro"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../cpython/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class="location"><a href="index.html">cpython</a></p><div id="sidebar-vars" data-name="py_capsule" data-ty="macro" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Macro <a href="index.html">cpython</a>::<wbr><a class="macro" href="">py_capsule</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/cpython/objects/capsule.rs.html#346-376" title="goto source code">[src]</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><div class="example-wrap"><pre class="rust macro">
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_capsule</span> {
-    (<span class="ident">from</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">capsmod</span>:<span class="ident">ident</span>).<span class="op">+</span> <span class="ident">import</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">capsname</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rustmod</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ruststruct</span>: <span class="ident">ident</span> ) <span class="op">=</span><span class="op">&gt;</span> { ... };
-}</pre></div>
-</div><div class="docblock"><p>Macro to retrieve a Python capsule pointing to an array of data, with a layer of caching.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Macro to retrieve a Python capsule pointing to an array of data, with a layer of caching."><title>py_capsule in cpython - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="cpython" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-e32f0c247825364d.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../cpython/index.html">cpython</a><span class="version">0.7.2</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../cpython/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="index.html">cpython</a>::<wbr><a class="macro" href="#">py_capsule</a><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><span class="out-of-band"><a class="src" href="../src/cpython/objects/capsule.rs.html#346-376">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules!</span> py_capsule {
+    (from $(<span class="macro-nonterminal">$capsmod</span>:ident).+ import <span class="macro-nonterminal">$capsname</span>:ident <span class="kw">as </span><span class="macro-nonterminal">$rustmod</span>:ident <span class="kw">for </span><span class="macro-nonterminal">$ruststruct</span>: ident ) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Macro to retrieve a Python capsule pointing to an array of data, with a layer of caching.</p>
 <p>For more details on capsules, see <a href="struct.PyCapsule.html"><code>PyCapsule</code></a></p>
 <p>The caller has to define an appropriate <code>repr(C)</code> <code>struct</code> first, and put it in
 scope (<code>use</code>) if needed along the macro invocation.</p>
-<h1 id="usage" class="section-header"><a href="#usage">Usage</a></h1>
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
-  <span class="macro">py_capsule</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">some</span>.<span class="ident">python</span>.<span class="ident">module</span> <span class="ident">import</span> <span class="ident">capsulename</span> <span class="kw">as</span> <span class="ident">rustmodule</span> <span class="kw">for</span> <span class="ident">CapsuleStruct</span>)</pre></div>
+<h2 id="usage"><a class="doc-anchor" href="#usage">§</a>Usage</h2>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code>  <span class="macro">py_capsule!</span>(from some.python.module import capsulename <span class="kw">as </span>rustmodule <span class="kw">for </span>CapsuleStruct)</code></pre></div>
 <p>where <code>CapsuleStruct</code> is the above mentioned <code>struct</code> defined by the caller.</p>
 <p>The macro defines a Rust module named <code>rustmodule</code>, as specified by the caller.
 This module provides a retrieval function with the following signature:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
-<span class="kw">mod</span> <span class="ident">rustmodule</span> {
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">retrieve</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CapsuleStruct</span><span class="op">&gt;</span> { ... }
-}</pre></div>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">mod </span>rustmodule {
+    <span class="kw">pub unsafe fn </span>retrieve&lt;<span class="lifetime">'a</span>&gt;(py: Python) -&gt; PyResult&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>CapsuleStruct&gt; { ... }
+}</code></pre></div>
 <p>The <code>retrieve()</code> function is unsafe for the same reasons as <a href="struct.PyCapsule.html#method.import_data"><code>PyCapsule::import_data</code></a>,
 upon which it relies.</p>
 <p>The newly defined module also contains a <code>RawPyObject</code> type suitable to represent C-level
 Python objects. It can be used in <code>cpython</code> public API involving raw FFI pointers, such as
 [<code>from_owned_ptr</code>].</p>
-<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1><h2 id="using-a-capsule-from-the-standard-library" class="section-header"><a href="#using-a-capsule-from-the-standard-library">Using a capsule from the standard library</a></h2>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2><h3 id="using-a-capsule-from-the-standard-library"><a class="doc-anchor" href="#using-a-capsule-from-the-standard-library">§</a>Using a capsule from the standard library</h3>
 <p>This retrieves and uses one of the simplest capsules in the Python standard library, found in
 the <code>unicodedata</code> module. The C API enclosed in this capsule is the same for all Python
 versions supported by this crate.</p>
 <p>In this case, as with all capsules from the Python standard library, the capsule data
 is an array (<code>static struct</code>) with constants and function pointers.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">Python</span>, <span class="ident">PyCapsule</span>, <span class="ident">py_capsule</span>};
-<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::{<span class="ident">c_void</span>, <span class="ident">CStr</span>, <span class="ident">CString</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>cpython::{Python, PyCapsule, py_capsule};
+<span class="kw">use </span>libc::{c_char, c_int};
+<span class="kw">use </span>std::ffi::{c_void, CStr, CString};
+<span class="kw">use </span>std::mem;
+<span class="kw">use </span>std::ptr::null;
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
-<span class="kw">type</span> <span class="ident">Py_UCS4</span> <span class="op">=</span> <span class="ident">u32</span>;
-<span class="kw">const</span> <span class="ident">UNICODE_NAME_MAXLEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">256</span>;
+<span class="attr">#[allow(non_camel_case_types)]
+</span><span class="kw">type </span>Py_UCS4 = u32;
+<span class="kw">const </span>UNICODE_NAME_MAXLEN: usize = <span class="number">256</span>;
 
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">unicode_name_CAPI</span> {
-    <span class="comment">// the `ucd` signature arguments are actually optional (can be `NULL`) FFI PyObject</span>
-    <span class="comment">// pointers used to pass alternate (former) versions of Unicode data.</span>
-    <span class="comment">// We won&#39;t need to use them with an actual value in these examples, so it&#39;s enough to</span>
-    <span class="comment">// specify them as `const c_void`, and it spares us a direct reference to the lower</span>
-    <span class="comment">// level Python FFI bindings.</span>
-    <span class="ident">size</span>: <span class="ident">c_int</span>,
-    <span class="ident">getname</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
-        <span class="ident">ucd</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
-        <span class="ident">code</span>: <span class="ident">Py_UCS4</span>,
-        <span class="ident">buffer</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
-        <span class="ident">buflen</span>: <span class="ident">c_int</span>,
-        <span class="ident">with_alias_and_seq</span>: <span class="ident">c_int</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_int</span>,
-    <span class="ident">getcode</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
-        <span class="ident">ucd</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
-        <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
-        <span class="ident">namelen</span>: <span class="ident">c_int</span>,
-        <span class="ident">code</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Py_UCS4</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_int</span>,
+<span class="attr">#[repr(C)]
+</span><span class="kw">pub struct </span>unicode_name_CAPI {
+    <span class="comment">// the `ucd` signature arguments are actually optional (can be `NULL`) FFI PyObject
+    // pointers used to pass alternate (former) versions of Unicode data.
+    // We won't need to use them with an actual value in these examples, so it's enough to
+    // specify them as `const c_void`, and it spares us a direct reference to the lower
+    // level Python FFI bindings.
+    </span>size: c_int,
+    getname: <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(
+        ucd: <span class="kw-2">*const </span>c_void,
+        code: Py_UCS4,
+        buffer: <span class="kw-2">*const </span>c_char,
+        buflen: c_int,
+        with_alias_and_seq: c_int,
+    ) -&gt; c_int,
+    getcode: <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(
+        ucd: <span class="kw-2">*const </span>c_void,
+        name: <span class="kw-2">*const </span>c_char,
+        namelen: c_int,
+        code: <span class="kw-2">*const </span>Py_UCS4,
+    ) -&gt; c_int,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UnicodeDataError</span> {
-    <span class="ident">InvalidCode</span>,
-    <span class="ident">UnknownName</span>,
+<span class="attr">#[derive(Debug, PartialEq)]
+</span><span class="kw">pub enum </span>UnicodeDataError {
+    InvalidCode,
+    UnknownName,
 }
 
-<span class="kw">impl</span> <span class="ident">unicode_name_CAPI</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">code</span>: <span class="ident">Py_UCS4</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CString</span>, <span class="ident">UnicodeDataError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">c_char</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">UNICODE_NAME_MAXLEN</span>);
-        <span class="kw">let</span> <span class="ident">buf_ptr</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_mut_ptr</span>();
-        <span class="kw">if</span> <span class="kw">unsafe</span> {
-          ((<span class="kw-2">*</span><span class="self">self</span>).<span class="ident">getname</span>)(<span class="ident">null</span>(), <span class="ident">code</span>, <span class="ident">buf_ptr</span>, <span class="ident">UNICODE_NAME_MAXLEN</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="number">0</span>)
-        } <span class="op">!</span><span class="op">=</span> <span class="number">1</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">UnicodeDataError</span>::<span class="ident">InvalidCode</span>);
+<span class="kw">impl </span>unicode_name_CAPI {
+    <span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>, code: Py_UCS4) -&gt; <span class="prelude-ty">Result</span>&lt;CString, UnicodeDataError&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>buf: Vec&lt;c_char&gt; = Vec::with_capacity(UNICODE_NAME_MAXLEN);
+        <span class="kw">let </span>buf_ptr = buf.as_mut_ptr();
+        <span class="kw">if unsafe </span>{
+          ((<span class="kw-2">*</span><span class="self">self</span>).getname)(null(), code, buf_ptr, UNICODE_NAME_MAXLEN <span class="kw">as </span>c_int, <span class="number">0</span>)
+        } != <span class="number">1 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(UnicodeDataError::InvalidCode);
         }
-        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">buf</span>);
-        <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> { <span class="ident">CString</span>::<span class="ident">from_raw</span>(<span class="ident">buf_ptr</span>) })
+        mem::forget(buf);
+        <span class="prelude-val">Ok</span>(<span class="kw">unsafe </span>{ CString::from_raw(buf_ptr) })
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">CStr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Py_UCS4</span>, <span class="ident">UnicodeDataError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">namelen</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_bytes</span>().<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">c_int</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">code</span>: [<span class="ident">Py_UCS4</span>; <span class="number">1</span>] <span class="op">=</span> [<span class="number">0</span>; <span class="number">1</span>];
-        <span class="kw">if</span> <span class="kw">unsafe</span> {
-            ((<span class="kw-2">*</span><span class="self">self</span>).<span class="ident">getcode</span>)(<span class="ident">null</span>(), <span class="ident">name</span>.<span class="ident">as_ptr</span>(), <span class="ident">namelen</span>, <span class="ident">code</span>.<span class="ident">as_mut_ptr</span>())
-        } <span class="op">!</span><span class="op">=</span> <span class="number">1</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">UnicodeDataError</span>::<span class="ident">UnknownName</span>);
+    <span class="kw">pub fn </span>get_code(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>CStr) -&gt; <span class="prelude-ty">Result</span>&lt;Py_UCS4, UnicodeDataError&gt; {
+        <span class="kw">let </span>namelen = name.to_bytes().len() <span class="kw">as </span>c_int;
+        <span class="kw">let </span><span class="kw-2">mut </span>code: [Py_UCS4; <span class="number">1</span>] = [<span class="number">0</span>; <span class="number">1</span>];
+        <span class="kw">if unsafe </span>{
+            ((<span class="kw-2">*</span><span class="self">self</span>).getcode)(null(), name.as_ptr(), namelen, code.as_mut_ptr())
+        } != <span class="number">1 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(UnicodeDataError::UnknownName);
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">code</span>[<span class="number">0</span>])
+        <span class="prelude-val">Ok</span>(code[<span class="number">0</span>])
     }
 }
 
-<span class="macro">py_capsule</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">unicodedata</span> <span class="ident">import</span> <span class="ident">ucnhash_CAPI</span> <span class="kw">as</span> <span class="ident">capsmod</span> <span class="kw">for</span> <span class="ident">unicode_name_CAPI</span>);
+<span class="macro">py_capsule!</span>(from unicodedata import ucnhash_CAPI <span class="kw">as </span>capsmod <span class="kw">for </span>unicode_name_CAPI);
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
-    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>gil = Python::acquire_gil();
+    <span class="kw">let </span>py = gil.python();
 
-    <span class="kw">let</span> <span class="ident">capi</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">capsmod</span>::<span class="ident">retrieve</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>() };
-    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">capi</span>.<span class="ident">get_name</span>(<span class="number">32</span>).<span class="ident">unwrap</span>().<span class="ident">to_str</span>(), <span class="prelude-val">Ok</span>(<span class="string">&quot;SPACE&quot;</span>));
-    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">capi</span>.<span class="ident">get_name</span>(<span class="number">0</span>), <span class="prelude-val">Err</span>(<span class="ident">UnicodeDataError</span>::<span class="ident">InvalidCode</span>));
+    <span class="kw">let </span>capi = <span class="kw">unsafe </span>{ capsmod::retrieve(py).unwrap() };
+    <span class="macro">assert_eq!</span>(capi.get_name(<span class="number">32</span>).unwrap().to_str(), <span class="prelude-val">Ok</span>(<span class="string">"SPACE"</span>));
+    <span class="macro">assert_eq!</span>(capi.get_name(<span class="number">0</span>), <span class="prelude-val">Err</span>(UnicodeDataError::InvalidCode));
 
-    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">capi</span>.<span class="ident">get_code</span>(<span class="ident">CStr</span>::<span class="ident">from_bytes_with_nul</span>(<span class="string">b&quot;COMMA\0&quot;</span>).<span class="ident">unwrap</span>()), <span class="prelude-val">Ok</span>(<span class="number">44</span>));
-    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">capi</span>.<span class="ident">get_code</span>(<span class="ident">CStr</span>::<span class="ident">from_bytes_with_nul</span>(<span class="string">b&quot;\0&quot;</span>).<span class="ident">unwrap</span>()),
-               <span class="prelude-val">Err</span>(<span class="ident">UnicodeDataError</span>::<span class="ident">UnknownName</span>));
-}</pre></div>
-<h2 id="with-python-objects" class="section-header"><a href="#with-python-objects">With Python objects</a></h2>
+    <span class="macro">assert_eq!</span>(capi.get_code(CStr::from_bytes_with_nul(<span class="string">b"COMMA\0"</span>).unwrap()), <span class="prelude-val">Ok</span>(<span class="number">44</span>));
+    <span class="macro">assert_eq!</span>(capi.get_code(CStr::from_bytes_with_nul(<span class="string">b"\0"</span>).unwrap()),
+               <span class="prelude-val">Err</span>(UnicodeDataError::UnknownName));
+}</code></pre></div>
+<h3 id="with-python-objects"><a class="doc-anchor" href="#with-python-objects">§</a>With Python objects</h3>
 <p>In this example, we lend a Python object and receive a new one of which we take ownership.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">cpython</span>::{<span class="ident">PyCapsule</span>, <span class="ident">PyObject</span>, <span class="ident">PyResult</span>, <span class="ident">Python</span>, <span class="ident">py_capsule</span>};
-<span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_void</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>cpython::{PyCapsule, PyObject, PyResult, Python, py_capsule};
+<span class="kw">use </span>libc::c_void;
 
-<span class="comment">// In the struct, we still have to use c_void for C-level Python objects.</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">spawn_CAPI</span> {
-    <span class="ident">spawnfrom</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
+<span class="comment">// In the struct, we still have to use c_void for C-level Python objects.
+</span><span class="attr">#[repr(C)]
+</span><span class="kw">pub struct </span>spawn_CAPI {
+    spawnfrom: <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(obj: <span class="kw-2">*const </span>c_void) -&gt; <span class="kw-2">*mut </span>c_void,
 }
 
-<span class="macro">py_capsule</span><span class="macro">!</span>(<span class="ident">from</span> <span class="ident">some</span>.<span class="kw">mod</span> <span class="ident">import</span> <span class="ident">CAPI</span> <span class="kw">as</span> <span class="ident">capsmod</span> <span class="kw">for</span> <span class="ident">spawn_CAPI</span>);
+<span class="macro">py_capsule!</span>(from some.<span class="kw">mod </span>import CAPI <span class="kw">as </span>capsmod <span class="kw">for </span>spawn_CAPI);
 
-<span class="kw">impl</span> <span class="ident">spawn_CAPI</span> {
-   <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spawn_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
-       <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">obj</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>;
-       <span class="prelude-val">Ok</span>(<span class="kw">unsafe</span> {
-           <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(
-               <span class="ident">py</span>,
-               ((<span class="kw-2">*</span><span class="self">self</span>).<span class="ident">spawnfrom</span>)(<span class="ident">raw</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">capsmod</span>::<span class="ident">RawPyObject</span>)
+<span class="kw">impl </span>spawn_CAPI {
+   <span class="kw">pub fn </span>spawn_from(<span class="kw-2">&amp;</span><span class="self">self</span>, py: Python, obj: PyObject) -&gt; PyResult&lt;PyObject&gt; {
+       <span class="kw">let </span>raw = obj.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>c_void;
+       <span class="prelude-val">Ok</span>(<span class="kw">unsafe </span>{
+           PyObject::from_owned_ptr(
+               py,
+               ((<span class="kw-2">*</span><span class="self">self</span>).spawnfrom)(raw) <span class="kw">as </span><span class="kw-2">*mut </span>capsmod::RawPyObject)
        })
    }
 }
-</pre></div>
-</div></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="cpython"></div>
-    <script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
+</code></pre></div>
+</div></details></section></div></main></body></html>

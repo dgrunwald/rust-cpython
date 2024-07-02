@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"cpython":[["impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/1.79.0/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.79.0/core/ops/deref/trait.DerefMut.html\" title=\"trait core::ops::deref::DerefMut\">DerefMut</a> for <a class=\"struct\" href=\"cpython/struct.PyLeakedRefMut.html\" title=\"struct cpython::PyLeakedRefMut\">PyLeakedRefMut</a>&lt;'a, T&gt;"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"cpython":[["impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.130/serde/de/trait.Error.html\" title=\"trait serde::de::Error\">Error</a> for <a class=\"struct\" href=\"cpython/serde/struct.Error.html\" title=\"struct cpython::serde::Error\">Error</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

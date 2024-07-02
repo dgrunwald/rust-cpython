@@ -1,839 +1,837 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cpython/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-<span id="237">237</span>
-<span id="238">238</span>
-<span id="239">239</span>
-<span id="240">240</span>
-<span id="241">241</span>
-<span id="242">242</span>
-<span id="243">243</span>
-<span id="244">244</span>
-<span id="245">245</span>
-<span id="246">246</span>
-<span id="247">247</span>
-<span id="248">248</span>
-<span id="249">249</span>
-<span id="250">250</span>
-<span id="251">251</span>
-<span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
-<span id="288">288</span>
-<span id="289">289</span>
-<span id="290">290</span>
-<span id="291">291</span>
-<span id="292">292</span>
-<span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
-<span id="303">303</span>
-<span id="304">304</span>
-<span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-<span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-<span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
-<span id="364">364</span>
-<span id="365">365</span>
-<span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
-<span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="comment">// Copyright (c) 2016 Daniel Grunwald</span>
-<span class="comment">//</span>
-<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
-<span class="comment">// software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
-<span class="comment">// without restriction, including without limitation the rights to use, copy, modify, merge,</span>
-<span class="comment">// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons</span>
-<span class="comment">// to whom the Software is furnished to do so, subject to the following conditions:</span>
-<span class="comment">//</span>
-<span class="comment">// The above copyright notice and this permission notice shall be included in all copies or</span>
-<span class="comment">// substantial portions of the Software.</span>
-<span class="comment">//</span>
-<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
-<span class="comment">// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
-<span class="comment">// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE</span>
-<span class="comment">// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
-<span class="comment">// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class="comment">// DEALINGS IN THE SOFTWARE.</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cpython" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../cpython/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+</pre></div><pre class="rust"><code><span class="comment">// Copyright (c) 2016 Daniel Grunwald
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
+// software and associated documentation files (the "Software"), to deal in the Software
+// without restriction, including without limitation the rights to use, copy, modify, merge,
+// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
 
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;nightly&quot;</span>, <span class="ident">feature</span>(
-    <span class="ident">specialization</span>, <span class="comment">// for impl FromPyObject&lt;&#39;s&gt; for Vec&lt;...&gt; (#31844)</span>
-))]</span>
-<span class="attribute">#![<span class="ident">allow</span>(
-    <span class="ident">unused_imports</span>, <span class="comment">// because some imports are only necessary with python 2.x or 3.x</span>
-    <span class="ident">clippy</span>::<span class="ident">missing_safety_doc</span>,
-    <span class="ident">clippy</span>::<span class="ident">manual_strip</span>,
-    <span class="ident">clippy</span>::<span class="ident">match_like_matches_macro</span>
-)]</span>
+</span><span class="attr">#![cfg_attr(feature=<span class="string">"nightly"</span>, allow(incomplete_features))]
+#![cfg_attr(feature=<span class="string">"nightly"</span>, feature(
+    specialization, <span class="comment">// for impl FromPyObject&lt;'s&gt; for Vec&lt;...&gt; (#31844)
+</span>))]
+#![allow(
+    unused_imports, <span class="comment">// because some imports are only necessary with python 2.x or 3.x
+    </span>clippy::missing_safety_doc,
+    clippy::manual_strip,
+    clippy::match_like_matches_macro
+)]
 
-<span class="doccomment">//! Rust bindings to the Python interpreter.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Ownership and Lifetimes</span>
-<span class="doccomment">//! In Python, all objects are implicitly reference counted.</span>
-<span class="doccomment">//! In rust, we will use the `PyObject` type to represent a reference to a Python object.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The method `clone_ref()` (from trait `PyClone`) can be used to create additional</span>
-<span class="doccomment">//! references to the same Python object.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Because all Python objects potentially have multiple owners, the</span>
-<span class="doccomment">//! concept of Rust mutability does not apply to Python objects.</span>
-<span class="doccomment">//! As a result, this API will allow mutating Python objects even if they are not stored</span>
-<span class="doccomment">//! in a mutable Rust variable.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The Python interpreter uses a global interpreter lock (GIL)</span>
-<span class="doccomment">//! to ensure thread-safety.</span>
-<span class="doccomment">//! This API uses a zero-sized `struct Python&lt;&#39;p&gt;` as a token to indicate</span>
-<span class="doccomment">//! that a function can assume that the GIL is held.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! You obtain a `Python` instance by acquiring the GIL,</span>
-<span class="doccomment">//! and have to pass it into all operations that call into the Python runtime.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Python 2.7</span>
-<span class="doccomment">//! The library will use the python3 bindings by default. To use the python2 bindings</span>
-<span class="doccomment">//! you must specific the `python27` feature explicitly in your `Cargo.toml`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```ignore</span>
-<span class="doccomment">//! [dependencies.cpython]</span>
-<span class="doccomment">//! version = &quot;*&quot;</span>
-<span class="doccomment">//! default-features = false</span>
-<span class="doccomment">//! features = [&quot;python27-sys&quot;]</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Error Handling</span>
-<span class="doccomment">//! The vast majority of operations in this library will return `PyResult&lt;...&gt;`.</span>
-<span class="doccomment">//! This is an alias for the type `Result&lt;..., PyErr&gt;`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A `PyErr` represents a Python exception. Errors within the rust-cpython library are</span>
-<span class="doccomment">//! also exposed as Python exceptions.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Example</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! use cpython::{Python, PyDict, PyResult};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() {</span>
-<span class="doccomment">//!     let gil = Python::acquire_gil();</span>
-<span class="doccomment">//!     hello(gil.python()).unwrap();</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn hello(py: Python) -&gt; PyResult&lt;()&gt; {</span>
-<span class="doccomment">//!     let sys = py.import(&quot;sys&quot;)?;</span>
-<span class="doccomment">//!     let version: String = sys.get(py, &quot;version&quot;)?.extract(py)?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     let locals = PyDict::new(py);</span>
-<span class="doccomment">//!     locals.set_item(py, &quot;os&quot;, py.import(&quot;os&quot;)?)?;</span>
-<span class="doccomment">//!     let user: String = py.eval(&quot;os.getenv(&#39;USER&#39;) or os.getenv(&#39;USERNAME&#39;)&quot;, None, Some(&amp;locals))?.extract(py)?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     println!(&quot;Hello {}, I&#39;m Python {}&quot;, user, version);</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
+</span><span class="doccomment">//! Rust bindings to the Python interpreter.
+//!
+//! # Ownership and Lifetimes
+//! In Python, all objects are implicitly reference counted.
+//! In rust, we will use the `PyObject` type to represent a reference to a Python object.
+//!
+//! The method `clone_ref()` (from trait `PyClone`) can be used to create additional
+//! references to the same Python object.
+//!
+//! Because all Python objects potentially have multiple owners, the
+//! concept of Rust mutability does not apply to Python objects.
+//! As a result, this API will allow mutating Python objects even if they are not stored
+//! in a mutable Rust variable.
+//!
+//! The Python interpreter uses a global interpreter lock (GIL)
+//! to ensure thread-safety.
+//! This API uses a zero-sized `struct Python&lt;'p&gt;` as a token to indicate
+//! that a function can assume that the GIL is held.
+//!
+//! You obtain a `Python` instance by acquiring the GIL,
+//! and have to pass it into all operations that call into the Python runtime.
+//!
+//! # Python 2.7
+//! The library will use the python3 bindings by default. To use the python2 bindings
+//! you must specific the `python27` feature explicitly in your `Cargo.toml`.
+//!
+//! ```ignore
+//! [dependencies.cpython]
+//! version = "*"
+//! default-features = false
+//! features = ["python27-sys"]
+//! ```
+//!
+//! # Error Handling
+//! The vast majority of operations in this library will return `PyResult&lt;...&gt;`.
+//! This is an alias for the type `Result&lt;..., PyErr&gt;`.
+//!
+//! A `PyErr` represents a Python exception. Errors within the rust-cpython library are
+//! also exposed as Python exceptions.
+//!
+//! # Example
+//! ```
+//! use cpython::{Python, PyDict, PyResult};
+//!
+//! fn main() {
+//!     let gil = Python::acquire_gil();
+//!     hello(gil.python()).unwrap();
+//! }
+//!
+//! fn hello(py: Python) -&gt; PyResult&lt;()&gt; {
+//!     let sys = py.import("sys")?;
+//!     let version: String = sys.get(py, "version")?.extract(py)?;
+//!
+//!     let locals = PyDict::new(py);
+//!     locals.set_item(py, "os", py.import("os")?)?;
+//!     let user: String = py.eval("os.getenv('USER') or os.getenv('USERNAME')", None, Some(&amp;locals))?.extract(py)?;
+//!
+//!     println!("Hello {}, I'm Python {}", user, version);
+//!     Ok(())
+//! }
+//! ```
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">ptr</span>};
+</span><span class="kw">use </span>std::{mem, ptr};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">python27_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
+<span class="attr">#[cfg(feature = <span class="string">"python27-sys"</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>python27_sys <span class="kw">as </span>ffi;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">python3_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
+<span class="attr">#[cfg(feature = <span class="string">"python3-sys"</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>python3_sys <span class="kw">as </span>ffi;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span>;
+<span class="kw">pub use </span>ffi::Py_ssize_t;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">RefFromPyObject</span>, <span class="ident">ToPyObject</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objects</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">py_class</span>::<span class="ident">CompareOp</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{
-    <span class="ident">PyClone</span>, <span class="ident">PyDrop</span>, <span class="ident">Python</span>, <span class="ident">PythonObject</span>, <span class="ident">PythonObjectDowncastError</span>,
-    <span class="ident">PythonObjectWithCheckedDowncast</span>, <span class="ident">PythonObjectWithTypeObject</span>,
+<span class="kw">pub use </span><span class="kw">crate</span>::conversion::{FromPyObject, RefFromPyObject, ToPyObject};
+<span class="kw">pub use </span><span class="kw">crate</span>::err::{PyErr, PyResult};
+<span class="kw">pub use </span><span class="kw">crate</span>::objectprotocol::{ObjectProtocol, NumberProtocol};
+<span class="kw">pub use </span><span class="kw">crate</span>::objects::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::py_class::CompareOp;
+<span class="kw">pub use </span><span class="kw">crate</span>::python::{
+    PyClone, PyDrop, Python, PythonObject, PythonObjectDowncastError,
+    PythonObjectWithCheckedDowncast, PythonObjectWithTypeObject,
 };
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>::{<span class="ident">prepare_freethreaded_python</span>, <span class="ident">GILGuard</span>, <span class="ident">GILProtected</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sharedref</span>::{
-    <span class="ident">PyLeakedRef</span>, <span class="ident">PyLeakedRefMut</span>, <span class="ident">PySharedRef</span>, <span class="ident">PySharedRefCell</span>, <span class="ident">UnsafePyLeaked</span>,
+<span class="kw">pub use </span><span class="kw">crate</span>::pythonrun::{prepare_freethreaded_python, GILGuard, GILProtected};
+<span class="kw">pub use </span><span class="kw">crate</span>::sharedref::{
+    PyLeakedRef, PyLeakedRefMut, PySharedRef, PySharedRefCell, UnsafePyLeaked,
 };
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Py_hash_t</span> <span class="op">=</span> <span class="ident">libc</span>::<span class="ident">c_long</span>;
+<span class="attr">#[cfg(feature = <span class="string">"python27-sys"</span>)]
+#[allow(non_camel_case_types)]
+</span><span class="kw">pub type </span>Py_hash_t = libc::c_long;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Py_hash_t</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_hash_t</span>;
+<span class="attr">#[cfg(feature = <span class="string">"python3-sys"</span>)]
+#[allow(non_camel_case_types)]
+</span><span class="kw">pub type </span>Py_hash_t = ffi::Py_hash_t;
 
-<span class="doccomment">/// Constructs a `&amp;&#39;static CStr` literal.</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">cstr</span>(
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>: <span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> (
-        <span class="comment">// TODO: verify that $s is a string literal without nuls</span>
-        <span class="kw">unsafe</span> {
-            <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CStr</span>::<span class="ident">from_ptr</span>(<span class="macro">concat</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>, <span class="string">&quot;\0&quot;</span>).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>)
+<span class="doccomment">/// Constructs a `&amp;'static CStr` literal.
+</span><span class="macro">macro_rules!</span> cstr(
+    (<span class="macro-nonterminal">$s</span>: tt) =&gt; (
+        <span class="comment">// TODO: verify that $s is a string literal without nuls
+        </span><span class="kw">unsafe </span>{
+            std::ffi::CStr::from_ptr(<span class="macro">concat!</span>(<span class="macro-nonterminal">$s</span>, <span class="string">"\0"</span>).as_ptr() <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_</span>)
         }
     );
 );
 
-<span class="comment">// AST coercion macros (https://danielkeep.github.io/tlborm/book/blk-ast-coercion.html)</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_coerce_expr</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>
-    };
+<span class="comment">// AST coercion macros (https://danielkeep.github.io/tlborm/book/blk-ast-coercion.html)
+</span><span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> py_coerce_expr {
+    (<span class="macro-nonterminal">$s</span>:expr) =&gt; {
+        <span class="macro-nonterminal">$s
+    </span>};
 }
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_coerce_item</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>:<span class="ident">item</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>
-    };
-}
-
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_replace_expr</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">_t</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sub</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sub</span>
-    };
+<span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> py_coerce_item {
+    (<span class="macro-nonterminal">$s</span>:item) =&gt; {
+        <span class="macro-nonterminal">$s
+    </span>};
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_impl_to_py_object_for_python_object</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>: <span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="doccomment">/// Identity conversion: allows using existing `PyObject` instances where</span>
-        <span class="doccomment">/// `T: ToPyObject` is expected.</span>
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ToPyObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
-            <span class="kw">type</span> <span class="ident">ObjectType</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>;
+<span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> py_replace_expr {
+    (<span class="macro-nonterminal">$_t</span>:tt <span class="macro-nonterminal">$sub</span>:expr) =&gt; {
+        <span class="macro-nonterminal">$sub
+    </span>};
+}
 
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">to_py_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
-                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyClone</span>::<span class="ident">clone_ref</span>(<span class="self">self</span>, <span class="ident">py</span>)
+<span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> py_impl_to_py_object_for_python_object {
+    (<span class="macro-nonterminal">$T</span>: ty) =&gt; {
+        <span class="doccomment">/// Identity conversion: allows using existing `PyObject` instances where
+        /// `T: ToPyObject` is expected.
+        </span><span class="kw">impl </span><span class="macro-nonterminal">$crate::ToPyObject </span><span class="kw">for </span><span class="macro-nonterminal">$T </span>{
+            <span class="kw">type </span>ObjectType = <span class="macro-nonterminal">$T</span>;
+
+            <span class="attr">#[inline]
+            </span><span class="kw">fn </span>to_py_object(<span class="kw-2">&amp;</span><span class="self">self</span>, py: <span class="macro-nonterminal">$crate::Python</span>) -&gt; <span class="macro-nonterminal">$T </span>{
+                <span class="macro-nonterminal">$crate::PyClone::clone_ref</span>(<span class="self">self</span>, py)
             }
 
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">into_py_object</span>(<span class="self">self</span>, <span class="ident">_py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
-                <span class="self">self</span>
-            }
+            <span class="attr">#[inline]
+            </span><span class="kw">fn </span>into_py_object(<span class="self">self</span>, _py: <span class="macro-nonterminal">$crate::Python</span>) -&gt; <span class="macro-nonterminal">$T </span>{
+                <span class="self">self
+            </span>}
 
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">with_borrowed_ptr</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">R</span>
-            <span class="kw">where</span>
-                <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">R</span>,
+            <span class="attr">#[inline]
+            </span><span class="kw">fn </span>with_borrowed_ptr&lt;F, R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _py: <span class="macro-nonterminal">$crate::Python</span>, f: F) -&gt; R
+            <span class="kw">where
+                </span>F: FnOnce(<span class="kw-2">*mut </span><span class="macro-nonterminal">$crate::_detail::ffi::PyObject</span>) -&gt; R,
             {
-                <span class="ident">f</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PythonObject</span>::<span class="ident">as_object</span>(<span class="self">self</span>).<span class="ident">as_ptr</span>())
+                f(<span class="macro-nonterminal">$crate::PythonObject::as_object</span>(<span class="self">self</span>).as_ptr())
             }
         }
     };
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_impl_from_py_object_for_python_object</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span> {
-                <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyClone</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">obj</span>.<span class="ident">clone_ref</span>(<span class="ident">py</span>).<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span>(<span class="ident">py</span>)<span class="question-mark">?</span>)
+<span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> py_impl_from_py_object_for_python_object {
+    (<span class="macro-nonterminal">$T</span>:ty) =&gt; {
+        <span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; <span class="macro-nonterminal">$crate::FromPyObject</span>&lt;<span class="lifetime">'s</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
+            <span class="attr">#[inline]
+            </span><span class="kw">fn </span>extract(py: <span class="macro-nonterminal">$crate::Python</span>, obj: <span class="kw-2">&amp;</span><span class="lifetime">'s </span><span class="macro-nonterminal">$crate::PyObject</span>) -&gt; <span class="macro-nonterminal">$crate::PyResult</span>&lt;<span class="macro-nonterminal">$T</span>&gt; {
+                <span class="kw">use </span><span class="macro-nonterminal">$crate::PyClone</span>;
+                <span class="prelude-val">Ok</span>(obj.clone_ref(py).cast_into::&lt;<span class="macro-nonterminal">$T</span>&gt;(py)<span class="question-mark">?</span>)
             }
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>, <span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span> {
-                <span class="prelude-val">Ok</span>(<span class="ident">obj</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span>(<span class="ident">py</span>)<span class="question-mark">?</span>)
+        <span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; <span class="macro-nonterminal">$crate::FromPyObject</span>&lt;<span class="lifetime">'s</span>&gt; <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'s </span><span class="macro-nonterminal">$T </span>{
+            <span class="attr">#[inline]
+            </span><span class="kw">fn </span>extract(py: <span class="macro-nonterminal">$crate::Python</span>, obj: <span class="kw-2">&amp;</span><span class="lifetime">'s </span><span class="macro-nonterminal">$crate::PyObject</span>) -&gt; <span class="macro-nonterminal">$crate::PyResult</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'s </span><span class="macro-nonterminal">$T</span>&gt; {
+                <span class="prelude-val">Ok</span>(obj.cast_as::&lt;<span class="macro-nonterminal">$T</span>&gt;(py)<span class="question-mark">?</span>)
             }
         }
     };
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">argparse</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">buffer</span>;
-<span class="kw">mod</span> <span class="ident">conversion</span>;
-<span class="kw">mod</span> <span class="ident">err</span>;
-<span class="kw">mod</span> <span class="ident">function</span>;
-<span class="kw">mod</span> <span class="ident">objectprotocol</span>;
-<span class="kw">mod</span> <span class="ident">objects</span>;
-<span class="kw">mod</span> <span class="ident">python</span>;
-<span class="kw">mod</span> <span class="ident">pythonrun</span>;
-<span class="comment">//pub mod rustobject;</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">py_class</span>;
-<span class="kw">mod</span> <span class="ident">sharedref</span>;
+<span class="kw">pub mod </span>argparse;
+<span class="kw">pub mod </span>buffer;
+<span class="kw">mod </span>conversion;
+<span class="kw">mod </span>err;
+<span class="kw">mod </span>function;
+<span class="kw">mod </span>objectprotocol;
+<span class="kw">mod </span>objects;
+<span class="kw">mod </span>python;
+<span class="kw">mod </span>pythonrun;
+<span class="comment">//pub mod rustobject;
+</span><span class="kw">pub mod </span>py_class;
+<span class="kw">mod </span>sharedref;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-convert&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">serde</span>;
+<span class="attr">#[cfg(feature = <span class="string">"serde-convert"</span>)]
+</span><span class="kw">pub mod </span>serde;
 
-<span class="doccomment">/// Private re-exports for macros. Do not use.</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">_detail</span> {
-    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span> {
-        <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::<span class="kw-2">*</span>;
+<span class="doccomment">/// Private re-exports for macros. Do not use.
+</span><span class="attr">#[doc(hidden)]
+</span><span class="kw">pub mod </span>_detail {
+    <span class="kw">pub mod </span>ffi {
+        <span class="kw">pub use </span><span class="kw">crate</span>::ffi::<span class="kw-2">*</span>;
     }
-    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">libc</span> {
-        <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>, <span class="ident">c_void</span>};
+    <span class="kw">pub mod </span>libc {
+        <span class="kw">pub use </span>libc::{c_char, c_int, c_void};
     }
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">from_owned_ptr_or_panic</span>, <span class="ident">result_from_owned_ptr</span>};
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">function</span>::{
-        <span class="ident">handle_callback</span>, <span class="ident">py_fn_impl</span>, <span class="ident">AbortOnDrop</span>, <span class="ident">PyObjectCallbackConverter</span>,
-        <span class="ident">PythonObjectCallbackConverter</span>,
+    <span class="kw">pub use </span><span class="kw">crate</span>::err::{from_owned_ptr_or_panic, result_from_owned_ptr};
+    <span class="kw">pub use </span><span class="kw">crate</span>::function::{
+        handle_callback, py_fn_impl, AbortOnDrop, PyObjectCallbackConverter,
+        PythonObjectCallbackConverter,
     };
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">paste</span>;
+    <span class="kw">pub use </span>paste;
+    <span class="kw">pub use </span>std::result::Result;
 }
 
-<span class="doccomment">/// Expands to an `extern &quot;C&quot;` function that allows Python to load</span>
-<span class="doccomment">/// the rust code as a Python extension module.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Macro syntax: `py_module_initializer!($name, |$py, $m| $body)`</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 1. `name`: The module name as a Rust identifier.</span>
-<span class="doccomment">/// 2. A lambda of type `Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;`.</span>
-<span class="doccomment">///    This function will be called when the module is imported, and is responsible</span>
-<span class="doccomment">///    for adding the module&#39;s members.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For backwards compatibilty with older versions of rust-cpython,</span>
-<span class="doccomment">/// two additional name identifiers (for py2 and py3 initializer names)</span>
-<span class="doccomment">/// can be provided, but they will be ignored.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use cpython::{Python, PyResult, PyObject, py_module_initializer, py_fn};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// py_module_initializer!(hello, |py, m| {</span>
-<span class="doccomment">///     m.add(py, &quot;__doc__&quot;, &quot;Module documentation string&quot;)?;</span>
-<span class="doccomment">///     m.add(py, &quot;run&quot;, py_fn!(py, run()))?;</span>
-<span class="doccomment">///     Ok(())</span>
-<span class="doccomment">/// });</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn run(py: Python) -&gt; PyResult&lt;PyObject&gt; {</span>
-<span class="doccomment">///     println!(&quot;Rust says: Hello Python!&quot;);</span>
-<span class="doccomment">///     Ok(py.None())</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # fn main() {}</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// In your `Cargo.toml`, use the `extension-module` feature for the `cpython` dependency:</span>
-<span class="doccomment">/// ```cargo</span>
-<span class="doccomment">/// [dependencies.cpython]</span>
-<span class="doccomment">/// version = &quot;*&quot;</span>
-<span class="doccomment">/// features = [&quot;extension-module&quot;]</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// The full example project can be found at:</span>
-<span class="doccomment">///   https://github.com/dgrunwald/rust-cpython/tree/master/extensions/hello</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Rust will compile the code into a file named `libhello.so`, but we have to</span>
-<span class="doccomment">/// rename the file in order to use it with Python:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```bash</span>
-<span class="doccomment">/// cp ./target/debug/libhello.so ./hello.so</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// (Note: on Mac OS you will have to rename `libhello.dynlib` to `libhello.so`)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The extension module can then be imported into Python:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```python</span>
-<span class="doccomment">/// &gt;&gt;&gt; import hello</span>
-<span class="doccomment">/// &gt;&gt;&gt; hello.run()</span>
-<span class="doccomment">/// Rust says: Hello Python!</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_module_initializer</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">_py2</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">_py3</span>: <span class="ident">ident</span>, )<span class="question-mark">?</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py_id</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m_id</span>: <span class="ident">ident</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>: <span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">paste</span>::<span class="macro">item</span><span class="macro">!</span> {
-            <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-            <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> [<span class="op">&lt;</span> <span class="ident">init</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&gt;</span>]() {
-                <span class="comment">// Nest init function so that $body isn&#39;t in unsafe context</span>
-                <span class="kw">fn</span> <span class="ident">init</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py_id</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m_id</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyModule</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
-                }
-                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>), <span class="string">&quot;\0&quot;</span>).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_module_initializer_impl</span>(<span class="ident">name</span>, <span class="ident">init</span>)
+<span class="doccomment">/// Expands to an `extern "C"` function that allows Python to load
+/// the rust code as a Python extension module.
+///
+/// Macro syntax: `py_module_initializer!($name, |$py, $m| $body)`
+///
+/// 1. `name`: The module name as a Rust identifier.
+/// 2. A lambda of type `Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;`.
+///    This function will be called when the module is imported, and is responsible
+///    for adding the module's members.
+///
+/// For backwards compatibilty with older versions of rust-cpython,
+/// two additional name identifiers (for py2 and py3 initializer names)
+/// can be provided, but they will be ignored.
+///
+/// # Example
+/// ```
+/// use cpython::{Python, PyResult, PyObject, py_module_initializer, py_fn};
+///
+/// py_module_initializer!(hello, |py, m| {
+///     m.add(py, "__doc__", "Module documentation string")?;
+///     m.add(py, "run", py_fn!(py, run()))?;
+///     Ok(())
+/// });
+///
+/// fn run(py: Python) -&gt; PyResult&lt;PyObject&gt; {
+///     println!("Rust says: Hello Python!");
+///     Ok(py.None())
+/// }
+/// # fn main() {}
+/// ```
+///
+/// In your `Cargo.toml`, use the `extension-module` feature for the `cpython` dependency:
+/// ```cargo
+/// [dependencies.cpython]
+/// version = "*"
+/// features = ["extension-module"]
+/// ```
+/// The full example project can be found at:
+///   https://github.com/dgrunwald/rust-cpython/tree/master/extensions/hello
+///
+/// Rust will compile the code into a file named `libhello.so`, but we have to
+/// rename the file in order to use it with Python:
+///
+/// ```bash
+/// cp ./target/debug/libhello.so ./hello.so
+/// ```
+/// (Note: on Mac OS you will have to rename `libhello.dynlib` to `hello.so`)
+///
+/// The extension module can then be imported into Python:
+///
+/// ```python
+/// &gt;&gt;&gt; import hello
+/// &gt;&gt;&gt; hello.run()
+/// Rust says: Hello Python!
+/// ```
+///
+</span><span class="attr">#[macro_export]
+#[cfg(feature = <span class="string">"python27-sys"</span>)]
+</span><span class="macro">macro_rules!</span> py_module_initializer {
+    (<span class="macro-nonterminal">$name</span>: ident, $( <span class="macro-nonterminal">$_py2</span>: ident, <span class="macro-nonterminal">$_py3</span>: ident, )<span class="question-mark">? </span>|<span class="macro-nonterminal">$py_id</span>: ident, <span class="macro-nonterminal">$m_id</span>: ident| <span class="macro-nonterminal">$body</span>: tt) =&gt; {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::_detail::paste::item!</span> {
+            <span class="attr">#[<span class="macro-nonterminal">no_mangle</span>]
+            #[allow(non_snake_case)]
+            </span><span class="kw">pub unsafe extern </span><span class="string">"C" </span><span class="kw">fn </span>[&lt; init <span class="macro-nonterminal">$name </span>&gt;]() {
+                <span class="comment">// Nest init function so that $body isn't in unsafe context
+                </span><span class="kw">fn </span>init(<span class="macro-nonterminal">$py_id</span>: <span class="macro-nonterminal">$crate::Python</span>, <span class="macro-nonterminal">$m_id</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$crate::PyModule</span>) -&gt; <span class="macro-nonterminal">$crate::PyResult</span>&lt;()&gt; {
+                    <span class="macro-nonterminal">$body
+                </span>}
+                <span class="kw">let </span>name = <span class="macro">concat!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>), <span class="string">"\0"</span>).as_ptr() <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_</span>;
+                <span class="macro-nonterminal">$crate::py_module_initializer_impl</span>(name, init)
             }
         }
     };
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python27-sys&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">py_module_initializer_impl</span>(
-    <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">libc</span>::<span class="ident">c_char</span>,
-    <span class="ident">init</span>: <span class="kw">fn</span>(<span class="ident">Python</span>, <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
+<span class="attr">#[doc(hidden)]
+#[cfg(feature = <span class="string">"python27-sys"</span>)]
+</span><span class="kw">pub unsafe fn </span>py_module_initializer_impl(
+    name: <span class="kw-2">*const </span>libc::c_char,
+    init: <span class="kw">fn</span>(Python, <span class="kw-2">&amp;</span>PyModule) -&gt; PyResult&lt;()&gt;,
 ) {
-    <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">function</span>::<span class="ident">AbortOnDrop</span>(<span class="string">&quot;py_module_initializer&quot;</span>);
-    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>();
-    <span class="ident">ffi</span>::<span class="ident">PyEval_InitThreads</span>();
-    <span class="kw">let</span> <span class="ident">module</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_InitModule</span>(<span class="ident">name</span>, <span class="ident">ptr</span>::<span class="ident">null_mut</span>());
-    <span class="kw">if</span> <span class="ident">module</span>.<span class="ident">is_null</span>() {
-        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
+    <span class="kw">let </span>guard = function::AbortOnDrop(<span class="string">"py_module_initializer"</span>);
+    <span class="kw">let </span>py = Python::assume_gil_acquired();
+    ffi::PyEval_InitThreads();
+    <span class="kw">let </span>module = ffi::Py_InitModule(name, ptr::null_mut());
+    <span class="kw">if </span>module.is_null() {
+        mem::forget(guard);
         <span class="kw">return</span>;
     }
 
-    <span class="kw">let</span> <span class="ident">module</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="ident">module</span>).<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PyModule</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">m</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="ident">PyErr</span>::<span class="ident">from</span>(<span class="ident">e</span>).<span class="ident">restore</span>(<span class="ident">py</span>);
-            <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
+    <span class="kw">let </span>module = <span class="kw">match </span>PyObject::from_borrowed_ptr(py, module).cast_into::&lt;PyModule&gt;(py) {
+        <span class="prelude-val">Ok</span>(m) =&gt; m,
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            PyErr::from(e).restore(py);
+            mem::forget(guard);
             <span class="kw">return</span>;
         }
     };
-    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">init</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">module</span>) {
-        <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> (),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>),
+    <span class="kw">let </span>ret = <span class="kw">match </span>init(py, <span class="kw-2">&amp;</span>module) {
+        <span class="prelude-val">Ok</span>(()) =&gt; (),
+        <span class="prelude-val">Err</span>(e) =&gt; e.restore(py),
     };
-    <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
-    <span class="ident">ret</span>
+    mem::forget(guard);
+    ret
 }
 
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_module_initializer</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>, $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">_py2</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">_py3</span>: <span class="ident">ident</span>, )<span class="question-mark">?</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">py_id</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m_id</span>: <span class="ident">ident</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>: <span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">paste</span>::<span class="macro">item</span><span class="macro">!</span> {
-            <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-            <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> [<span class="op">&lt;</span> <span class="ident">PyInit_</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&gt;</span>]() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-                <span class="comment">// Nest init function so that $body isn&#39;t in unsafe context</span>
-                <span class="kw">fn</span> <span class="ident">init</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py_id</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m_id</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyModule</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
-                }
-                <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">MODULE_DEF</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyModuleDef</span> <span class="op">=</span>
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">_detail</span>::<span class="ident">ffi</span>::<span class="ident">PyModuleDef_INIT</span>;
-                <span class="comment">// We can&#39;t convert &amp;&#39;static str to *const c_char within a static initializer,</span>
-                <span class="comment">// so we&#39;ll do it here in the module initialization:</span>
-                <span class="ident">MODULE_DEF</span>.<span class="ident">m_name</span> <span class="op">=</span> <span class="macro">concat</span><span class="macro">!</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>), <span class="string">&quot;\0&quot;</span>).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">py_module_initializer_impl</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">MODULE_DEF</span>, <span class="ident">init</span>)
+<span class="attr">#[macro_export]
+#[cfg(feature = <span class="string">"python3-sys"</span>)]
+</span><span class="macro">macro_rules!</span> py_module_initializer {
+    (<span class="macro-nonterminal">$name</span>: ident, $( <span class="macro-nonterminal">$_py2</span>: ident, <span class="macro-nonterminal">$_py3</span>: ident, )<span class="question-mark">? </span>|<span class="macro-nonterminal">$py_id</span>: ident, <span class="macro-nonterminal">$m_id</span>: ident| <span class="macro-nonterminal">$body</span>: tt) =&gt; {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::_detail::paste::item!</span> {
+            <span class="attr">#[<span class="macro-nonterminal">no_mangle</span>]
+            #[allow(non_snake_case)]
+            </span><span class="kw">pub unsafe extern </span><span class="string">"C" </span><span class="kw">fn </span>[&lt; PyInit_ <span class="macro-nonterminal">$name </span>&gt;]() -&gt; <span class="kw-2">*mut </span><span class="macro-nonterminal">$crate::_detail::ffi::PyObject </span>{
+                <span class="comment">// Nest init function so that $body isn't in unsafe context
+                </span><span class="kw">fn </span>init(<span class="macro-nonterminal">$py_id</span>: <span class="macro-nonterminal">$crate::Python</span>, <span class="macro-nonterminal">$m_id</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$crate::PyModule</span>) -&gt; <span class="macro-nonterminal">$crate::PyResult</span>&lt;()&gt; {
+                    <span class="macro-nonterminal">$body
+                </span>}
+                <span class="kw">static </span><span class="kw-2">mut </span>MODULE_DEF: <span class="macro-nonterminal">$crate::_detail::ffi::PyModuleDef </span>=
+                    <span class="macro-nonterminal">$crate::_detail::ffi::PyModuleDef_INIT</span>;
+                <span class="comment">// We can't convert &amp;'static str to *const c_char within a static initializer,
+                // so we'll do it here in the module initialization:
+                </span>MODULE_DEF.m_name = <span class="macro">concat!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>), <span class="string">"\0"</span>).as_ptr() <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_</span>;
+                <span class="macro-nonterminal">$crate::py_module_initializer_impl</span>(<span class="kw-2">&amp;mut </span>MODULE_DEF, init)
             }
         }
     };
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;python3-sys&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">py_module_initializer_impl</span>(
-    <span class="ident">def</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyModuleDef</span>,
-    <span class="ident">init</span>: <span class="kw">fn</span>(<span class="ident">Python</span>, <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-    <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">function</span>::<span class="ident">AbortOnDrop</span>(<span class="string">&quot;py_module_initializer&quot;</span>);
-    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>();
-    <span class="ident">ffi</span>::<span class="ident">PyEval_InitThreads</span>();
-    <span class="kw">let</span> <span class="ident">module</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyModule_Create</span>(<span class="ident">def</span>);
-    <span class="kw">if</span> <span class="ident">module</span>.<span class="ident">is_null</span>() {
-        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
-        <span class="kw">return</span> <span class="ident">module</span>;
+<span class="attr">#[doc(hidden)]
+#[cfg(feature = <span class="string">"python3-sys"</span>)]
+</span><span class="kw">pub unsafe fn </span>py_module_initializer_impl(
+    def: <span class="kw-2">*mut </span>ffi::PyModuleDef,
+    init: <span class="kw">fn</span>(Python, <span class="kw-2">&amp;</span>PyModule) -&gt; PyResult&lt;()&gt;,
+) -&gt; <span class="kw-2">*mut </span>ffi::PyObject {
+    <span class="kw">let </span>guard = function::AbortOnDrop(<span class="string">"py_module_initializer"</span>);
+    <span class="kw">let </span>py = Python::assume_gil_acquired();
+    ffi::PyEval_InitThreads();
+    <span class="kw">let </span>module = ffi::PyModule_Create(def);
+    <span class="kw">if </span>module.is_null() {
+        mem::forget(guard);
+        <span class="kw">return </span>module;
     }
 
-    <span class="kw">let</span> <span class="ident">module</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">module</span>).<span class="ident">cast_into</span>::<span class="op">&lt;</span><span class="ident">PyModule</span><span class="op">&gt;</span>(<span class="ident">py</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">m</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="ident">PyErr</span>::<span class="ident">from</span>(<span class="ident">e</span>).<span class="ident">restore</span>(<span class="ident">py</span>);
-            <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
-            <span class="kw">return</span> <span class="ident">ptr</span>::<span class="ident">null_mut</span>();
+    <span class="kw">let </span>module = <span class="kw">match </span>PyObject::from_owned_ptr(py, module).cast_into::&lt;PyModule&gt;(py) {
+        <span class="prelude-val">Ok</span>(m) =&gt; m,
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            PyErr::from(e).restore(py);
+            mem::forget(guard);
+            <span class="kw">return </span>ptr::null_mut();
         }
     };
-    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">init</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span><span class="ident">module</span>) {
-        <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">module</span>.<span class="ident">into_object</span>().<span class="ident">steal_ptr</span>(),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
-            <span class="ident">ptr</span>::<span class="ident">null_mut</span>()
+    <span class="kw">let </span>ret = <span class="kw">match </span>init(py, <span class="kw-2">&amp;</span>module) {
+        <span class="prelude-val">Ok</span>(()) =&gt; module.into_object().steal_ptr(),
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            e.restore(py);
+            ptr::null_mut()
         }
     };
-    <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">guard</span>);
-    <span class="ident">ret</span>
+    mem::forget(guard);
+    ret
 }
 
-<span class="comment">// Strip &#39;r#&#39; prefix from stringified raw identifiers.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">strip_raw</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>;
-        <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">starts_with</span>(<span class="string">&quot;r#&quot;</span>) {
-            <span class="kw-2">&amp;</span><span class="ident">s</span>[<span class="number">2</span>..]
-        } <span class="kw">else</span> {
-            <span class="ident">s</span>
+<span class="comment">// Strip 'r#' prefix from stringified raw identifiers.
+</span><span class="attr">#[macro_export]
+#[doc(hidden)]
+</span><span class="macro">macro_rules!</span> strip_raw {
+    (<span class="macro-nonterminal">$s</span>:expr) =&gt; {{
+        <span class="kw">let </span>s = <span class="macro-nonterminal">$s</span>;
+        <span class="kw">if </span>s.starts_with(<span class="string">"r#"</span>) {
+            <span class="kw-2">&amp;</span>s[<span class="number">2</span>..]
+        } <span class="kw">else </span>{
+            s
         }
     }};
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="cpython"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</code></pre></div></section></main></body></html>

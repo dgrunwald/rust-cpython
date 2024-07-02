@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Operations on numeric objects"><title>NumberProtocol in cpython - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="cpython" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-e32f0c247825364d.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../cpython/index.html">cpython</a><span class="version">0.7.2</span></h2></div><h2 class="location"><a href="#">NumberProtocol</a></h2><div class="sidebar-elems"><section><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.absolute">absolute</a></li><li><a href="#method.add">add</a></li><li><a href="#method.bitwise_and">bitwise_and</a></li><li><a href="#method.bitwise_invert">bitwise_invert</a></li><li><a href="#method.bitwise_or">bitwise_or</a></li><li><a href="#method.bitwise_xor">bitwise_xor</a></li><li><a href="#method.div_mod">div_mod</a></li><li><a href="#method.floor_divide">floor_divide</a></li><li><a href="#method.left_shift">left_shift</a></li><li><a href="#method.matrix_multiply">matrix_multiply</a></li><li><a href="#method.modulo">modulo</a></li><li><a href="#method.multiply">multiply</a></li><li><a href="#method.negative">negative</a></li><li><a href="#method.positive">positive</a></li><li><a href="#method.power">power</a></li><li><a href="#method.power_modulo">power_modulo</a></li><li><a href="#method.right_shift">right_shift</a></li><li><a href="#method.subtract">subtract</a></li><li><a href="#method.to_float">to_float</a></li><li><a href="#method.to_index">to_index</a></li><li><a href="#method.to_int">to_int</a></li><li><a href="#method.true_divide">true_divide</a></li></ul><h3><a href="#object-safety">Object Safety</a></h3><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In crate cpython</a></h2></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../cpython/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="index.html">cpython</a>::<wbr><a class="trait" href="#">NumberProtocol</a><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><span class="out-of-band"><a class="src" href="../src/cpython/objectprotocol/number.rs.html#14-259">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait NumberProtocol: <a class="trait" href="trait.ObjectProtocol.html" title="trait cpython::ObjectProtocol">ObjectProtocol</a> {
+<details class="toggle type-contents-toggle"><summary class="hideme"><span>Show 22 methods</span></summary>    // Provided methods
+    fn <a href="#method.add" class="fn">add</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.subtract" class="fn">subtract</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.multiply" class="fn">multiply</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.matrix_multiply" class="fn">matrix_multiply</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.power" class="fn">power</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.power_modulo" class="fn">power_modulo</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        exp: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>,
+        z: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.true_divide" class="fn">true_divide</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.floor_divide" class="fn">floor_divide</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.modulo" class="fn">modulo</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.div_mod" class="fn">div_mod</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.negative" class="fn">negative</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.positive" class="fn">positive</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.absolute" class="fn">absolute</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.bitwise_invert" class="fn">bitwise_invert</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.left_shift" class="fn">left_shift</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        bits: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.right_shift" class="fn">right_shift</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        bits: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.bitwise_and" class="fn">bitwise_and</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.bitwise_xor" class="fn">bitwise_xor</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.bitwise_or" class="fn">bitwise_or</a>(
+        &amp;self,
+        py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+        other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+    ) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.to_int" class="fn">to_int</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyInt.html" title="struct cpython::PyInt">PyLong</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.to_float" class="fn">to_float</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyFloat.html" title="struct cpython::PyFloat">PyFloat</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.to_index" class="fn">to_index</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyInt.html" title="struct cpython::PyInt">PyLong</a>&gt; { ... }
+</details>}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Operations on numeric objects</p>
+</div></details><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.add" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#19-23">source</a><h4 class="code-header">fn <a href="#method.add" class="fn">add</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform addition (self + other)</p>
+<p>Invokes the <code>__add__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.subtract" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#28-32">source</a><h4 class="code-header">fn <a href="#method.subtract" class="fn">subtract</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform subtraction (self - other)</p>
+<p>Invokes the <code>__sub__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.multiply" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#37-41">source</a><h4 class="code-header">fn <a href="#method.multiply" class="fn">multiply</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform multiplication (self * other)</p>
+<p>Invokes the <code>__mul__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.matrix_multiply" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#51-55">source</a><h4 class="code-header">fn <a href="#method.matrix_multiply" class="fn">matrix_multiply</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform matrix multiplication, equivalent to the Python expression <code>self @ other</code></p>
+<p>Invokes the <code>__matmul__</code> magic-method</p>
+<p>This method is only available with Python 3.</p>
+<p>See <a href="https://www.python.org/dev/peps/pep-0465/">PEP 0456</a> for details.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.power" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#63-65">source</a><h4 class="code-header">fn <a href="#method.power" class="fn">power</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform exponentiation, equivalent to the Python expression <code>self ** other</code>,
+or the two-argument form of the builtin method pow: <code>pow(self, other)</code></p>
+<p>Invokes the <code>__pow__</code> magic-method</p>
+<p>See also <a href="trait.NumberProtocol.html#method.power_modulo" title="method cpython::NumberProtocol::power_modulo">NumberProtocol::power_modulo</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.power_modulo" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#78-84">source</a><h4 class="code-header">fn <a href="#method.power_modulo" class="fn">power_modulo</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    exp: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>,
+    z: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform exponentiation modulo an integer,
+mathematically equivalent to <code>self ** other % mod</code>
+but computed much more efficiently.</p>
+<p>Equivalent to invoking the three-argument form
+of the builtin <code>pow</code> method: <code>pow(self, other, z)</code></p>
+<p>Invoking with a <code>None</code> for modulo is equivalent to
+the regular power operation.</p>
+<p>Invokes the <code>__pow__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.true_divide" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#90-94">source</a><h4 class="code-header">fn <a href="#method.true_divide" class="fn">true_divide</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the “true division” operation,
+equivalent to the Python expression <code>self / other</code>,</p>
+<p>Invokes the <code>__truediv__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.floor_divide" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#103-107">source</a><h4 class="code-header">fn <a href="#method.floor_divide" class="fn">floor_divide</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the “floor division” operation,
+equivalent to the Python expression <code>self // other</code>,</p>
+<p>This method was added in Python 3.
+If compiling against Python 2, it unconditional throws an error.</p>
+<p>Invokes the <code>__floordiv__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.modulo" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#113-117">source</a><h4 class="code-header">fn <a href="#method.modulo" class="fn">modulo</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Return the remainder of dividing <code>self</code> by <code>other</code>,
+equivalent to the Python expression <code>self % other</code></p>
+<p>Invokes the <code>__mod__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.div_mod" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#123-127">source</a><h4 class="code-header">fn <a href="#method.div_mod" class="fn">div_mod</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;, other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform combined division and modulo,
+equivalent to the builtin method <code>divmod(self, other)</code></p>
+<p>Invokes the <code>__divmod__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.negative" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#132-136">source</a><h4 class="code-header">fn <a href="#method.negative" class="fn">negative</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the negation of self (-self)</p>
+<p>Invokes the <code>__neg__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.positive" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#142-146">source</a><h4 class="code-header">fn <a href="#method.positive" class="fn">positive</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Invoke the ‘positive’ operation, equivalent to the
+Python expression <code>+self</code></p>
+<p>Invokes the <code>__pos__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.absolute" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#152-156">source</a><h4 class="code-header">fn <a href="#method.absolute" class="fn">absolute</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Return the absolute value of self,
+equivalent to calling the builtin function <code>abs</code></p>
+<p>Invokes the <code>__abs__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.bitwise_invert" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#162-166">source</a><h4 class="code-header">fn <a href="#method.bitwise_invert" class="fn">bitwise_invert</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the bitwise negation of self,
+equivalent to the Python expression <code>~self</code></p>
+<p>Invokes the <code>__invert__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.left_shift" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#172-176">source</a><h4 class="code-header">fn <a href="#method.left_shift" class="fn">left_shift</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    bits: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Shift this value to the left by the specified number of bits,
+equivalent to the Python expression <code>self &lt;&lt; bits</code></p>
+<p>Invokes the <code>__lshift__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.right_shift" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#182-186">source</a><h4 class="code-header">fn <a href="#method.right_shift" class="fn">right_shift</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    bits: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Shift this value to the right by the specified number of bits,
+equivalent to the Python expression <code>self &gt;&gt; bits</code></p>
+<p>Invokes the <code>__rshift__</code> magic-method</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.bitwise_and" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#191-195">source</a><h4 class="code-header">fn <a href="#method.bitwise_and" class="fn">bitwise_and</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the “bitwise and” of <code>self &amp; other</code></p>
+<p>Invokes the <code>__and__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.bitwise_xor" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#201-205">source</a><h4 class="code-header">fn <a href="#method.bitwise_xor" class="fn">bitwise_xor</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the “bitwise exclusive or”,
+equivalent to Python expression <code>self ^ other</code></p>
+<p>Invokes the <code>__xor__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.bitwise_or" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#210-214">source</a><h4 class="code-header">fn <a href="#method.bitwise_or" class="fn">bitwise_or</a>(
+    &amp;self,
+    py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;,
+    other: impl <a class="trait" href="trait.ToPyObject.html" title="trait cpython::ToPyObject">ToPyObject</a>
+) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a>&gt;</h4></section></summary><div class="docblock"><p>Perform the “bitwise or” of <code>self | other</code></p>
+<p>Invokes the <code>__or__</code> magic-method.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.to_int" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#223-228">source</a><h4 class="code-header">fn <a href="#method.to_int" class="fn">to_int</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyInt.html" title="struct cpython::PyInt">PyLong</a>&gt;</h4></section></summary><div class="docblock"><p>Convert this object to an integer,
+equivalent to the builtin function <code>int(self)</code></p>
+<p>Invokes the <code>__int__</code> magic-method.</p>
+<p>Throws an exception if unable to perform
+the conversion.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.to_float" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#237-242">source</a><h4 class="code-header">fn <a href="#method.to_float" class="fn">to_float</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyFloat.html" title="struct cpython::PyFloat">PyFloat</a>&gt;</h4></section></summary><div class="docblock"><p>Convert this object to a float,
+equivalent to the builtin function <code>float(self)</code></p>
+<p>Invokes the <code>__float__</code> magic-method.</p>
+<p>Throws an exception if unable to perform
+the conversion.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.to_index" class="method"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#253-258">source</a><h4 class="code-header">fn <a href="#method.to_index" class="fn">to_index</a>(&amp;self, py: <a class="struct" href="struct.Python.html" title="struct cpython::Python">Python</a>&lt;'_&gt;) -&gt; <a class="type" href="type.PyResult.html" title="type cpython::PyResult">PyResult</a>&lt;<a class="struct" href="struct.PyInt.html" title="struct cpython::PyInt">PyLong</a>&gt;</h4></section></summary><div class="docblock"><p>Losslessly convert this object to an integer index,
+as if calling <code>operator.index()</code></p>
+<p>The presence of this method indicates 
+this object is an integer type.</p>
+<p>Calls the <code>__index__</code> magic-method.</p>
+<p>See also: <a href="https://docs.python.org/3/reference/datamodel.html?highlight=__index__#object.__index__">Documentation on the corresponding magic-method</a></p>
+</div></details></div><h2 id="object-safety" class="section-header">Object Safety<a href="#object-safety" class="anchor">§</a></h2><div class="object-safety-info">This trait is <b>not</b> <a href="https://doc.rust-lang.org/1.79.0/reference/items/traits.html#object-safety">object safe</a>.</div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-NumberProtocol-for-PyObject" class="impl"><a class="src rightside" href="../src/cpython/objectprotocol/number.rs.html#261">source</a><a href="#impl-NumberProtocol-for-PyObject" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.NumberProtocol.html" title="trait cpython::NumberProtocol">NumberProtocol</a> for <a class="struct" href="struct.PyObject.html" title="struct cpython::PyObject">PyObject</a></h3></section></div><script src="../trait.impl/cpython/objectprotocol/number/trait.NumberProtocol.js" async></script></section></div></main></body></html>

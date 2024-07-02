@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TraverseError",""],["VisitProc",""]]});
+window.SIDEBAR_ITEMS = {"struct":["TraverseError","VisitProc"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["from_py_object","Deserialize from Python object."],["to_py_object","Serialize into Python object."]],"struct":[["Error","Error type used by serialization."]]});
+window.SIDEBAR_ITEMS = {"fn":["from_py_object","to_py_object"],"struct":["Error"]};
