@@ -107,6 +107,8 @@ pub struct PyConfig {
     #[cfg(all(Py_3_9, not(Py_3_10)))]
     pub _use_peg_parser: c_int,
     pub tracemalloc: c_int,
+    #[cfg(Py_3_12)]
+    pub perf_profiling: c_int,
     pub import_time: c_int,
     #[cfg(Py_3_11)]
     pub code_debug_ranges: c_int,
@@ -151,6 +153,8 @@ pub struct PyConfig {
     pub use_frozen_modules: c_int,
     #[cfg(Py_3_11)]
     pub safe_path: c_int,
+    #[cfg(Py_3_12)]
+    pub int_max_str_digits: c_int,
     // Path configuration inputs:
     pub pathconfig_warnings: c_int,
     #[cfg(Py_3_10)]
@@ -180,12 +184,12 @@ pub struct PyConfig {
     // Private fields
     pub _install_importlib: c_int,
     pub _init_main: c_int,
-    #[cfg(Py_3_9)]
+    #[cfg(all(Py_3_9, not(Py_3_12)))]
     pub _isolated_interpreter: c_int,
-    #[cfg(all(Py_3_9, not(Py_3_10)))]
-    pub _orig_argv: PyWideStringList,
     #[cfg(Py_3_11)]
     pub _is_python_build: c_int,
+    #[cfg(all(Py_3_9, not(Py_3_10)))]
+    pub _orig_argv: PyWideStringList,
 }
 
 impl Default for PyConfig {

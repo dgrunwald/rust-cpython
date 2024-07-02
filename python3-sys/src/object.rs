@@ -436,6 +436,8 @@ mod typeobject {
         pub tp_finalize: Option<crate::object::destructor>,
         #[cfg(Py_3_8)]
         pub tp_vectorcall: Option<crate::object::vectorcallfunc>,
+        #[cfg(Py_3_12)]
+        pub tp_watched: c_char,
         #[cfg(all(Py_3_8, not(Py_3_9)))]
         pub tp_print: Option<crate::object::printfunc>,
         #[cfg(all(py_sys_config = "COUNT_ALLOCS", not(Py_3_9)))]
@@ -535,7 +537,16 @@ mod typeobject {
         }
     }
 
-    #[cfg(Py_3_9)]
+    #[cfg(Py_3_12)]
+    pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
+        tp_as_async: 0 as *mut PyAsyncMethods,
+        tp_vectorcall_offset: 0,
+        tp_vectorcall: None,
+        tp_finalize: None,
+        tp_watched: 0,
+    );
+
+    #[cfg(all(Py_3_9, not(Py_3_12)))]
     pub const PyTypeObject_INIT: PyTypeObject = py_type_object_init_with_count_allocs!(
         tp_as_async: 0 as *mut PyAsyncMethods,
         tp_vectorcall_offset: 0,

@@ -23,18 +23,23 @@ pub struct PyCodeObject {
     pub co_names: *mut PyObject,
     pub co_exceptiontable: *mut PyObject,
     pub co_flags: c_int,
+    #[cfg(not(Py_3_12))]
     pub co_warmup: c_short,
-    co_linearray_entry_size: c_short,
     pub co_argcount: c_int,
     pub co_posonlyargcount: c_int,
     pub co_kwonlyargcount: c_int,
     pub co_stacksize: c_int,
     pub co_firstlineno: c_int,
     pub co_nlocalsplus: c_int,
+    #[cfg(Py_3_12)]
+    pub co_framesize: c_int,
     pub co_nlocals: c_int,
+    #[cfg(not(Py_3_12))]
     pub co_nplaincellvars: c_int,
     pub co_ncellvars: c_int,
     pub co_nfreevars: c_int,
+    #[cfg(Py_3_12)]
+    pub co_version: u32,
     pub co_localsplusnames: *mut PyObject,
     pub co_localspluskinds: *mut PyObject,
     pub co_filename: *mut PyObject,
@@ -147,6 +152,7 @@ pub const CO_MAXBLOCKS: usize = 20;
 extern "C" {
     pub static mut PyCode_Type: PyTypeObject;
 
+    #[cfg_attr(Py_3_12, link_name = "PyUnstable_Code_New")]
     pub fn PyCode_New(
         argcount: c_int,
         kwonlyargcount: c_int,
@@ -170,6 +176,7 @@ extern "C" {
     ) -> *mut PyCodeObject;
 
     #[cfg(Py_3_8)]
+    #[cfg_attr(Py_3_12, link_name = "PyUnstable_Code_NewWithPosOnlyArgs")]
     pub fn PyCode_NewWithPosOnlyArgs(
         argcount: c_int,
         posonlyargcount: c_int,

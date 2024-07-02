@@ -21,7 +21,7 @@ extern "C" {
     #[cfg(all(py_sys_config = "Py_DEBUG", not(Py_3_4)))]
     pub fn _PyObject_DebugFree(arg1: *mut c_void);
 
-    #[cfg(all(not(Py_LIMITED_API), Py_3_4))]
+    #[cfg(all(not(Py_LIMITED_API), Py_3_4, not(Py_3_11)))]
     pub fn _Py_GetAllocatedBlocks() -> Py_ssize_t;
     pub fn PyObject_Init(arg1: *mut PyObject, arg2: *mut PyTypeObject) -> *mut PyObject;
     pub fn PyObject_InitVar(
