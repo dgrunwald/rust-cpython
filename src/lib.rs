@@ -299,7 +299,7 @@ pub mod _detail {
 #[macro_export]
 #[cfg(feature = "python27-sys")]
 macro_rules! py_module_initializer {
-    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: tt) => {
+    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: expr) => {
         $crate::_detail::paste::item! {
             #[no_mangle]
             #[allow(non_snake_case)]
@@ -349,7 +349,7 @@ pub unsafe fn py_module_initializer_impl(
 #[macro_export]
 #[cfg(feature = "python3-sys")]
 macro_rules! py_module_initializer {
-    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: tt) => {
+    ($name: ident, $( $_py2: ident, $_py3: ident, )? |$py_id: ident, $m_id: ident| $body: expr) => {
         $crate::_detail::paste::item! {
             #[no_mangle]
             #[allow(non_snake_case)]
