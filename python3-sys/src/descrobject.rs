@@ -1,8 +1,9 @@
 use libc::{c_char, c_int, c_void};
 
 use crate::methodobject::PyMethodDef;
-use crate::object::{PyObject, PyTypeObject};
+use crate::object::*;
 use crate::structmember::PyMemberDef;
+use crate::pyport::Py_ssize_t;
 
 pub type getter = unsafe extern "C" fn(slf: *mut PyObject, closure: *mut c_void) -> *mut PyObject;
 
@@ -31,6 +32,18 @@ impl Clone for PyGetSetDef {
         *self
     }
 }
+
+
+#[inline(always)]
+pub unsafe fn PyDictProxy_Check(op: *mut PyObject) -> c_int {
+    PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC)
+}
+
+#[inline(always)]
+pub unsafe fn PyDictProxy_CheckExact(op: *mut PyObject) -> c_int {
+    (Py_TYPE(op) == &mut PyDictProxy_Type) as c_int
+}
+
 
 #[cfg_attr(windows, link(name = "pythonXY"))]
 extern "C" {
