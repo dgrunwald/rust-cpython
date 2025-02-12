@@ -409,8 +409,8 @@ pub unsafe fn py_module_initializer_impl(
 macro_rules! strip_raw {
     ($s:expr) => {{
         let s = $s;
-        if s.starts_with("r#") {
-            &s[2..]
+        if let Some(end) = s.strip_prefix("r#") {
+            end
         } else {
             s
         }
