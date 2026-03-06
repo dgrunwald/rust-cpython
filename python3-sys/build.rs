@@ -385,6 +385,11 @@ fn configure_from_path(expected_version: &PythonVersion) -> Result<String, Strin
         println!("cargo:rustc-link-lib=static-nobundle=pythonXY");
     }
 
+    const MAX_MINOR: u8 = 14;
+    println!("cargo:rustc-check-cfg=cfg(Py_LIMITED_API)");
+    for i in 4..MAX_MINOR {
+        println!("cargo::rustc-check-cfg=cfg(Py_3_{i})");
+    }
     if let PythonVersion {
         major: 3,
         minor: some_minor,
@@ -450,6 +455,10 @@ fn main() {
     if is_not_none_or_zero(config_map.get("Py_TRACE_REFS")) {
         config_map.insert("Py_REF_DEBUG".to_owned(), "1".to_owned()); // Py_TRACE_REFS implies Py_REF_DEBUG.
     }
+    println!(
+        "cargo:rustc-check-cfg=cfg({CFG_KEY}, values({}))",
+        SYSCONFIG_FLAGS.map(|f| format!(r#""{f}""#)).join(",")
+    );
     for (key, val) in &config_map {
         if let Some(line) = cfg_line_for_var(key, val) {
             println!("{}", line);
